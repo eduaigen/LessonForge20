@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/common/Header';
 import { Footer } from '@/components/common/Footer';
 import { Button } from '@/components/ui/button';
@@ -6,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
 } from '@/components/ui/card';
 import {
   FileText,
@@ -18,6 +20,7 @@ import {
   Check,
 } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export default function Home() {
   const features = [
@@ -59,6 +62,61 @@ export default function Home() {
     },
   ];
 
+  const dynamicContent = [
+    {
+      title: (
+        <>
+          <span className="gradient-text">Brilliant Teaching,</span> Made Simple
+        </>
+      ),
+      description:
+        'Eduaigen is your AI-powered partner for creating exceptional learning experiences. Save time on prep, engage students with dynamic content, and teach with renewed confidence.',
+    },
+    {
+      title: (
+        <>
+          <span className="gradient-text">Unlock Creativity,</span> Ignite Minds
+        </>
+      ),
+      description:
+        "Spark curiosity and foster a love for learning with AI-generated content that adapts to your students' needs. Build a more engaging classroom effortlessly.",
+    },
+    {
+      title: (
+        <>
+          <span className="gradient-text">Reclaim Your Time,</span> Reignite
+          Your Passion
+        </>
+      ),
+      description:
+        'Automate the tedious parts of lesson planning and assessment. Spend more time doing what you love—inspiring the next generation of thinkers and leaders.',
+    },
+    {
+      title: (
+        <>
+          <span className="gradient-text">Plan, Create,</span> Inspire
+        </>
+      ),
+      description:
+        'From interactive labs to differentiated lesson plans, get all the tools you need to bring your most ambitious teaching ideas to life.',
+    },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsFading(true);
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % dynamicContent.length);
+        setIsFading(false);
+      }, 500); // Corresponds to the animation duration
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, [dynamicContent.length]);
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
@@ -77,14 +135,21 @@ export default function Home() {
             />
           </div>
           <div className="container mx-auto max-w-7xl px-4 text-center">
-            <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-              <span className="gradient-text">Brilliant Teaching,</span> Made
-              Simple
+            <h1
+              className={cn(
+                'font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl transition-opacity duration-500',
+                isFading ? 'opacity-0' : 'opacity-100'
+              )}
+            >
+              {dynamicContent[currentIndex].title}
             </h1>
-            <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl">
-              Eduaigen is your AI-powered partner for creating exceptional
-              learning experiences. Save time on prep, engage students with
-              dynamic content, and teach with renewed confidence.
+            <p
+              className={cn(
+                'mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl transition-opacity duration-500',
+                isFading ? 'opacity-0' : 'opacity-100'
+              )}
+            >
+              {dynamicContent[currentIndex].description}
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button size="lg" asChild className="shadow-lg shadow-primary/20">
