@@ -22,7 +22,13 @@ export default function PublicAppLayout({
             href="/dashboard"
             className="font-bold text-foreground transition-colors hover:text-foreground/80"
           >
-            Dashboard
+            Free Tools
+          </Link>
+           <Link
+            href="/auth-dashboard"
+            className="text-muted-foreground transition-colors hover:text-foreground/80"
+          >
+            Premium Dashboard
           </Link>
           <Link
             href="/pricing"

@@ -30,16 +30,10 @@ export function Header() {
           >
             Pricing
           </Link>
-          <Link
-            href="/dashboard"
-            className="text-foreground/60 transition-colors hover:text-foreground/80"
-          >
-            Dashboard
-          </Link>
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Login</Link>
+           <Button variant="outline" asChild>
+            <Link href="/dashboard">Try our Free Tools</Link>
           </Button>
           <Button
             asChild
@@ -49,7 +43,7 @@ export function Header() {
             }}
             className="hover:opacity-90"
           >
-            <Link href="/signup">Sign Up</Link>
+            <Link href="/signup">Get Started</Link>
           </Button>
         </div>
       </div>
