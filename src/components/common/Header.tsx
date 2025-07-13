@@ -18,6 +18,12 @@ export function Header() {
           >
             Features
           </Link>
+           <Link
+            href="/curriculum"
+            className="text-foreground/60 transition-colors hover:text-foreground/80"
+          >
+            Curriculum
+          </Link>
           <Link
             href="/pricing"
             className="text-foreground/60 transition-colors hover:text-foreground/80"
