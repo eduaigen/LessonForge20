@@ -1,138 +1,196 @@
-// This is a new file or has been significantly updated.
+
 'use client';
 
+import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
-import Link from 'next/link';
+import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
+const modules = {
+  science: [
+    { id: 'NV_Biology', name: 'NV Biology', description: 'NYS Living Environment curriculum.', icon: <Microscope /> },
+    { id: 'NGSS_Biology', name: 'NGSS Biology (OpenSciEd)', description: 'Inquiry-based biology phenomena.', icon: <Microscope /> },
+    { id: 'NGSS_Chemistry', name: 'NGSS Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: <Microscope /> },
+    { id: 'NGSS_Physics', name: 'NGSS Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: <Microscope /> },
+    { id: 'Earth_Science', name: 'Earth and Space Science', description: 'NYS Physical Setting curriculum.', icon: <Microscope /> },
+    { id: 'Health', name: 'Health', description: 'Promoting well-being & healthy choices.', icon: <Microscope /> },
+  ],
+  math: [
+    { id: 'IM_Algebra_1', name: 'Illustrative Math Algebra 1', description: 'Linear equations, functions, data.', icon: <Sigma /> },
+    { id: 'IM_Algebra_2', name: 'Illustrative Math Algebra 2', description: 'Polynomials, rational, exponential.', icon: <Sigma /> },
+    { id: 'IM_Geometry', name: 'Illustrative Math Geometry', description: 'Transformations, congruence, trig.', icon: <Sigma /> },
+  ],
+  ela: [
+    { id: 'ELA_9', name: 'ELA 9th Grade', description: 'Analytical reading and writing skills.', icon: <Library /> },
+    { id: 'ELA_10', name: 'ELA 10th Grade', description: 'Complex texts and critical analysis.', icon: <Library /> },
+    { id: 'ELA_11', name: 'ELA 11th Grade', description: 'American literature and research.', icon: <Library /> },
+    { id: 'ELA_12', name: 'ELA 12th Grade', description: 'College-level reading and writing.', icon: <Library /> },
+  ],
+  social: [
+    { id: 'Global_History', name: 'Global History I & II', description: 'From ancient civilizations to present.', icon: <History /> },
+    { id: 'US_History', name: 'US History & Government', description: 'American history & constitutional principles.', icon: <History /> },
+    { id: 'Gov_Econ', name: 'Government & Economics', description: 'Study of government and economic principles.', icon: <History /> },
+  ],
+  tools: [
+      { id: 'test_generator', name: 'Test Generator', description: 'Generate comprehensive tests from your curriculum.', icon: <BookCopy /> },
+      { id: 'lab_generator', name: 'Lab Generator', description: 'Instantly create safe and effective lab experiments.', icon: <TestTube /> },
+  ]
+};
+
+const pricing = {
+    base: 19.99,
+    additional: 9.99,
+};
+
+const ModuleCard = ({ module, isSelected, onSelect }: { module: any, isSelected: boolean, onSelect: (id: string) => void }) => (
+    <Card
+        onClick={() => onSelect(module.id)}
+        className={cn(
+            "cursor-pointer transition-all duration-200",
+            isSelected ? "border-primary ring-2 ring-primary shadow-lg" : "hover:shadow-md"
+        )}
+    >
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-lg font-medium">{module.name}</CardTitle>
+            <div className="text-primary">{module.icon}</div>
+        </CardHeader>
+        <CardContent>
+            <p className="text-sm text-muted-foreground">{module.description}</p>
+        </CardContent>
+    </Card>
+);
 
 export default function PricingPage() {
-    const router = useRouter();
-    const { subscribe } = useAuth();
+  const router = useRouter();
+  const { subscribe } = useAuth();
+  const [selectedModules, setSelectedModules] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<keyof typeof modules>('science');
 
-    const handleSubscribe = () => {
-        subscribe();
-        router.push('/auth-dashboard');
+  const handleSelectModule = (id: string) => {
+    setSelectedModules(prev =>
+      prev.includes(id) ? prev.filter(mId => mId !== id) : [...prev, id]
+    );
+  };
+
+  const totalPrice = useMemo(() => {
+    const count = selectedModules.length;
+    if (count === 0) return 0;
+    if (count === 1) return pricing.base;
+    return pricing.base + (count - 1) * pricing.additional;
+  }, [selectedModules]);
+
+  const handleSubscribe = () => {
+    if (selectedModules.length === 0) {
+        // Maybe show a toast message here in a real app
+        alert("Please select at least one module to subscribe.");
+        return;
     }
-
-    const tiers = [
-    {
-      name: 'Single Module',
-      price: '$19.99',
-      priceDescription: '/ month',
-      description:
-        'Focus on a single subject or tool with full access to its features.',
-      features: [
-        'Access to one full subject module OR',
-        'Access to one premium tool (Test Maker or Lab Generator)',
-        'Lesson Plan Generation',
-        'Learning Objective Refiner',
-        'Concept Explainer',
-        'Vocab Deep Dive',
-      ],
-      cta: 'Complete Subscription',
-    },
-    {
-      name: 'Module Bundle',
-      price: '$29.98',
-      priceDescription: '/ month',
-      description: 'Combine two modules and get 50% off the second one.',
-      features: [
-        'Access to two full subject modules',
-        'All standard AI tools included',
-        'Ideal for interdisciplinary teaching',
-        'Priority support',
-      ],
-      cta: 'Complete Subscription',
-      popular: true,
-    },
-    {
-      name: 'Educator Pro',
-      price: '$34.98',
-      priceDescription: '/ month',
-      description: 'The ultimate toolkit with a subject and a premium tool.',
-      features: [
-        'One subject module + one premium tool',
-        'Save on the premium tool bundle',
-        'Full access to all AI features',
-        'Best value for comprehensive planning',
-      ],
-      cta: 'Complete Subscription',
-    },
+    subscribe();
+    router.push('/auth-dashboard');
+  };
+  
+  const subjectTabs = [
+      { key: 'science', label: 'Science', icon: <Microscope className="w-5 h-5 mr-2" /> },
+      { key: 'math', label: 'Mathematics', icon: <Sigma className="w-5 h-5 mr-2" /> },
+      { key: 'ela', label: 'ELA', icon: <Library className="w-5 h-5 mr-2" /> },
+      { key: 'social', label: 'Social Studies', icon: <History className="w-5 h-5 mr-2" /> },
+      { key: 'tools', label: 'Premium Tools', icon: <FileText className="w-5 h-5 mr-2" /> }
   ];
 
   return (
     <div className="flex-1">
-        <section className="container mx-auto max-w-7xl px-4 py-16 text-center sm:py-24">
-          <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
-            Choose Your Plan & Get Started
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Select a plan to unlock our premium AI tools. All plans come with a 7-day free trial.
-          </p>
-        </section>
+      <section className="container mx-auto max-w-7xl px-4 py-16 text-center sm:py-24">
+        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
+          Build Your Perfect Toolkit
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+          Select the subjects and tools you need. The first module is ${pricing.base}/month, and each additional is only ${pricing.additional}/month.
+        </p>
+      </section>
 
-        <section className="container mx-auto max-w-7xl px-4 pb-20">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {tiers.map((tier) => (
-              <Card
-                key={tier.name}
-                className={`flex flex-col ${
-                  tier.popular ? 'border-primary shadow-lg' : ''
-                }`}
-              >
-                <CardHeader className="pb-4">
-                  <CardTitle>{tier.name}</CardTitle>
-                  <CardDescription>{tier.description}</CardDescription>
-                  <div className="flex items-baseline pt-4">
-                    <span className="text-4xl font-bold tracking-tighter">
-                      {tier.price}
-                    </span>
-                    <span className="ml-1 text-muted-foreground">
-                      {tier.priceDescription}
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <ul className="space-y-3">
-                    {tier.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 flex-shrink-0 text-green-500 mt-1" />
-                        <span className="text-muted-foreground">{feature}</span>
-                      </li>
+      <section className="container mx-auto max-w-7xl px-4 pb-20">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+                <Tabs value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as keyof typeof modules)} className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+                        {subjectTabs.map(tab => (
+                            <TabsTrigger key={tab.key} value={tab.key} className="flex items-center">
+                                {tab.icon}{tab.label}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                    {Object.entries(modules).map(([category, mods]) => (
+                        <TabsContent key={category} value={category} className="mt-6">
+                            <div className="grid gap-6 md:grid-cols-2">
+                                {mods.map(module => (
+                                    <ModuleCard 
+                                        key={module.id}
+                                        module={module}
+                                        isSelected={selectedModules.includes(module.id)}
+                                        onSelect={handleSelectModule}
+                                    />
+                                ))}
+                            </div>
+                        </TabsContent>
                     ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    onClick={handleSubscribe}
-                    className="w-full"
-                    style={{
-                      backgroundColor: tier.popular
-                        ? 'hsl(var(--accent))'
-                        : 'hsl(var(--primary))',
-                      color: tier.popular
-                        ? 'hsl(var(--accent-foreground))'
-                        : 'hsl(var(--primary-foreground))',
-                    }}
-                  >
-                    {tier.cta}
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </section>
+                </Tabs>
+            </div>
+            
+            <div className="lg:col-span-1">
+                <Card className="sticky top-24">
+                    <CardHeader>
+                        <CardTitle>Your Subscription</CardTitle>
+                        <CardDescription>Review your selections and proceed to checkout.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <ul className="space-y-2">
+                          {selectedModules.length > 0 ? (
+                            selectedModules.map(moduleId => {
+                                const allModules = Object.values(modules).flat();
+                                const module = allModules.find(m => m.id === moduleId);
+                                return (
+                                    <li key={moduleId} className="flex items-center justify-between text-sm">
+                                        <span>{module?.name || moduleId}</span>
+                                        <Check className="h-5 w-5 text-green-500" />
+                                    </li>
+                                );
+                            })
+                          ) : (
+                            <p className="text-sm text-muted-foreground text-center py-4">Select modules to get started.</p>
+                          )}
+                        </ul>
+                         <div className="border-t pt-4">
+                            <div className="flex items-baseline justify-center text-center">
+                                <span className="text-4xl font-bold tracking-tighter">
+                                    ${totalPrice.toFixed(2)}
+                                </span>
+                                <span className="ml-1 text-muted-foreground">
+                                    / month
+                                </span>
+                            </div>
+                         </div>
+                    </CardContent>
+                    <CardFooter>
+                         <Button onClick={handleSubscribe} className="w-full" size="lg" disabled={selectedModules.length === 0}>
+                            Subscribe Now
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </div>
+        </div>
+      </section>
     </div>
   );
 }
