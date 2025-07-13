@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardContent,
 } from '@/components/ui/card';
 import {
   FileText,
@@ -14,6 +15,7 @@ import {
   BrainCircuit,
   BookOpenText,
   PencilRuler,
+  Check,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -58,63 +60,139 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1">
-        <section className="container mx-auto max-w-7xl px-4 py-20 text-center sm:py-32">
-          <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-            Brilliant Teaching, Made Simple
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Eduaigen is your AI-powered partner for creating exceptional
-            learning experiences. Save time, engage students, and teach with
-            confidence.
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button
-              size="lg"
-              asChild
+        <section className="relative overflow-hidden py-24 sm:py-32">
+          <div
+            aria-hidden="true"
+            className="absolute -top-48 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl"
+          >
+            <div
               style={{
-                backgroundColor: 'hsl(var(--accent))',
-                color: 'hsl(var(--accent-foreground))',
+                clipPath:
+                  'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
               }}
-              className="hover:opacity-90"
-            >
-              <Link href="/dashboard">Get Started Now</Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/pricing">View Pricing</Link>
-            </Button>
+              className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-accent to-primary opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+            />
+          </div>
+          <div className="container mx-auto max-w-7xl px-4 text-center">
+            <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              <span className="gradient-text">Brilliant Teaching,</span> Made
+              Simple
+            </h1>
+            <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl">
+              Eduaigen is your AI-powered partner for creating exceptional
+              learning experiences. Save time on prep, engage students with
+              dynamic content, and teach with renewed confidence.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <Button size="lg" asChild className="shadow-lg shadow-primary/20">
+                <Link href="/dashboard">Get Started for Free</Link>
+              </Button>
+              <Button size="lg" variant="ghost" asChild>
+                <Link href="/#features">
+                  Learn more <span aria-hidden="true">→</span>
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
 
-        <section
-          id="features"
-          className="container mx-auto max-w-7xl px-4 py-16 sm:py-24"
-        >
-          <div className="text-center">
-            <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl">
-              Everything You Need to Plan and Teach
-            </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              A complete suite of AI tools designed for the modern educator.
-            </p>
+        <section id="features" className="bg-background/50 py-24 sm:py-32">
+          <div className="container mx-auto max-w-7xl px-4">
+            <div className="mx-auto max-w-2xl text-center">
+              <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl">
+                Everything You Need to Plan and Teach
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                A complete suite of AI tools designed for the modern educator,
+                from crafting lesson plans to creating engaging activities.
+              </p>
+            </div>
+            <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {features.map((feature, i) => (
+                <Card
+                  key={feature.title}
+                  className="animate-float-up rounded-xl border-transparent bg-card shadow-lg shadow-primary/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
+                  style={{ animationDelay: `${i * 100}ms` }}
+                >
+                  <CardHeader>
+                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                      {feature.icon}
+                    </div>
+                    <CardTitle className="mt-4 text-xl">
+                      {feature.title}
+                    </CardTitle>
+                    <CardDescription className="pt-2">
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
           </div>
-          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <Card
-                key={feature.title}
-                className="bg-card/70 backdrop-blur-sm transition-all hover:shadow-lg"
-              >
-                <CardHeader>
-                  {feature.icon}
-                  <CardTitle className="mt-4">{feature.title}</CardTitle>
-                  <CardDescription className="pt-2">
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
+        </section>
+
+        <section className="py-24 sm:py-32">
+          <div className="container mx-auto max-w-7xl px-4">
+            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div className="lg:pr-8 lg:pt-4">
+                <div className="lg:max-w-lg">
+                  <h2 className="font-headline text-base font-semibold leading-7 text-primary">
+                    For Educators, By Educators
+                  </h2>
+                  <p className="mt-2 font-headline text-3xl font-bold tracking-tight sm:text-4xl">
+                    Focus on What Matters Most
+                  </p>
+                  <p className="mt-6 text-lg leading-8 text-muted-foreground">
+                    We built Eduaigen to handle the heavy lifting of curriculum
+                    planning so you can dedicate your energy to teaching. Our AI
+                    tools are designed with educational best practices at their
+                    core.
+                  </p>
+                  <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-muted-foreground lg:max-w-none">
+                    <div className="relative pl-9">
+                      <dt className="inline font-semibold text-foreground">
+                        <Check className="absolute left-1 top-1 h-5 w-5 text-primary" />
+                        Standards-Aligned.
+                      </dt>{' '}
+                      <dd className="inline">
+                        Quickly generate materials that meet NGSS, state, and
+                        culturally inclusive frameworks.
+                      </dd>
+                    </div>
+                    <div className="relative pl-9">
+                      <dt className="inline font-semibold text-foreground">
+                        <Check className="absolute left-1 top-1 h-5 w-5 text-primary" />
+                        Differentiated Instruction.
+                      </dt>{' '}
+                      <dd className="inline">
+                        Easily adapt content for different grade levels and
+                        learning needs.
+                      </dd>
+                    </div>
+                    <div className="relative pl-9">
+                      <dt className="inline font-semibold text-foreground">
+                        <Check className="absolute left-1 top-1 h-5 w-5 text-primary" />
+                        Time-Saving.
+                      </dt>{' '}
+                      <dd className="inline">
+                        Cut down on planning time and reclaim your weekends.
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+              <img
+                src="https://placehold.co/1024x800"
+                alt="Teacher using a tablet"
+                data-ai-hint="teacher classroom"
+                className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
+                width={2432}
+                height={1442}
+              />
+            </div>
           </div>
         </section>
       </main>

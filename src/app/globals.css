@@ -8,30 +8,30 @@ body {
 
 @layer base {
   :root {
-    --background: 200 93% 94%;
+    --background: 220 20% 97%;
     --foreground: 224 71% 4%;
-    --card: 200 93% 96%;
+    --card: 0 0% 100%;
     --card-foreground: 224 71% 4%;
-    --popover: 200 93% 96%;
+    --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
-    --primary: 197 78% 52%;
+    --primary: 262 80% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 120 73% 75%;
-    --accent-foreground: 120 73% 15%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 330 80% 55%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 197 78% 52%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 80% 50%;
+    --chart-1: 262 80% 50%;
+    --chart-2: 330 80% 55%;
+    --chart-3: 20 90% 50%;
+    --chart-4: 200 80% 50%;
+    --chart-5: 150 75% 45%;
     --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -42,31 +42,32 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
   .dark {
-    --background: 224 71% 4%;
+    --background: 225 20% 12%;
     --foreground: 210 40% 98%;
-    --card: 224 71% 4%;
+    --card: 225 20% 15%;
     --card-foreground: 210 40% 98%;
-    --popover: 224 71% 4%;
+    --popover: 225 20% 12%;
     --popover-foreground: 210 40% 98%;
-    --primary: 197 78% 52%;
+    --primary: 262 85% 65%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 220 15% 20%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 220 15% 20%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 120 73% 75%;
-    --accent-foreground: 120 73% 15%;
+    --accent: 330 85% 60%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 197 78% 52%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 220 15% 25%;
+    --input: 220 15% 25%;
+    --ring: 262 85% 65%;
+    --chart-1: 262 85% 65%;
+    --chart-2: 330 85% 60%;
+    --chart-3: 20 95% 60%;
+    --chart-4: 200 85% 60%;
+    --chart-5: 150 80% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -89,113 +90,154 @@ body {
 
 /* Custom Animations */
 @keyframes brainPulse {
-    0% { 
-        transform: scale(1); 
-        filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.5));
-    }
-    100% { 
-        transform: scale(1.05); 
-        filter: drop-shadow(0 0 20px rgba(244, 114, 182, 0.8));
-    }
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px hsla(var(--primary) / 0.5));
+  }
+  100% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px hsla(var(--primary) / 0.8));
+  }
 }
 
 @keyframes lightning {
-    0%, 100% { 
-        transform: translateY(0px) rotate(0deg); 
-        opacity: 1; 
-    }
-    50% { 
-        transform: translateY(-5px) rotate(5deg); 
-        opacity: 0.8; 
-    }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-5px) rotate(5deg);
+    opacity: 0.8;
+  }
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes energyRing1 {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes energyRing2 {
-    0% { transform: rotate(360deg); }
-    100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 @keyframes particleFloat {
-    0%, 100% { 
-        transform: translateY(0px) translateX(0px); 
-        opacity: 0.3; 
-    }
-    50% { 
-        transform: translateY(-20px) translateX(10px); 
-        opacity: 1; 
-    }
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 1;
+  }
 }
 
 @keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Apply animations */
+.animate-float-up {
+  animation: float-up 0.8s ease-out forwards;
+}
+
 .brain-pulse {
-    animation: brainPulse 2s ease-in-out infinite alternate;
+  animation: brainPulse 2s ease-in-out infinite alternate;
 }
 
 .lightning-bounce {
-    animation: lightning 1.5s ease-in-out infinite;
+  animation: lightning 1.5s ease-in-out infinite;
 }
 
 .energy-ring-1 {
-    animation: energyRing1 3s linear infinite;
+  animation: energyRing1 3s linear infinite;
 }
 
 .energy-ring-2 {
-    animation: energyRing2 2s linear infinite;
+  animation: energyRing2 2s linear infinite;
 }
 
 .particle-float-1 {
-    animation: particleFloat 3s ease-in-out infinite;
-    animation-delay: 0s;
+  animation: particleFloat 3s ease-in-out infinite;
+  animation-delay: 0s;
 }
 
 .particle-float-2 {
-    animation: particleFloat 3s ease-in-out infinite;
-    animation-delay: 1s;
+  animation: particleFloat 3s ease-in-out infinite;
+  animation-delay: 1s;
 }
 
 .particle-float-3 {
-    animation: particleFloat 3s ease-in-out infinite;
-    animation-delay: 2s;
+  animation: particleFloat 3s ease-in-out infinite;
+  animation-delay: 2s;
 }
 
 .particle-float-4 {
-    animation: particleFloat 3s ease-in-out infinite;
-    animation-delay: 1.5s;
+  animation: particleFloat 3s ease-in-out infinite;
+  animation-delay: 1.5s;
 }
 
 .gradient-text {
-    background: linear-gradient(-45deg, #f472b6, #a855f7, #06b6d4, #f472b6);
-    background-size: 400% 400%;
-    animation: gradientShift 3s ease infinite;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  background: linear-gradient(
+    -45deg,
+    hsl(var(--primary)),
+    hsl(var(--accent)),
+    hsl(var(--chart-4)),
+    hsl(var(--primary))
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 5s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .glow-effect {
-    box-shadow: 0 0 50px rgba(244, 114, 182, 0.3);
+  box-shadow: 0 0 50px hsla(var(--primary) / 0.3);
 }
 
 /* Hover effects */
 .logo-container:hover .glow-bg {
-    opacity: 0.6;
+  opacity: 0.6;
 }
 
 .logo-container:hover .brain-icon {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
