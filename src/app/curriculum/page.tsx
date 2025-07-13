@@ -3,7 +3,7 @@ import { Header } from '@/components/common/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { CheckCircle2, FlaskConical, History, Languages, Library, Sigma, Leaf, HeartPulse, Dna, Atom, Magnet, Orbit, Microscope, TestTube, Lightbulb, PencilRuler, BookOpenText, FileText, BrainCircuit, Users, Check, Presentation, GitBranch, Bot } from 'lucide-react';
+import { CheckCircle2, FlaskConical, History, Languages, Library, Sigma, Leaf, HeartPulse, Dna, Atom, Magnet, Orbit, Microscope, TestTube, Lightbulb, PencilRuler, BookOpenText, FileText, BrainCircuit, Users, Check, Presentation, GitBranch, Bot, Sparkles, FolderSync } from 'lucide-react';
 import Link from 'next/link';
 
 const offerings = {
@@ -108,8 +108,24 @@ export default function CurriculumPage() {
           </div>
         </section>
 
+         <section id="subscriber-benefit" className="bg-primary/5 py-20 sm:py-28">
+          <div className="container mx-auto max-w-7xl px-4">
+            <div className="mx-auto max-w-3xl text-center">
+               <h2 className="text-base font-semibold leading-7 text-primary">Exclusive Subscriber Benefit</h2>
+              <p className="mt-2 font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Curriculum Audit Simplification Tool
+              </p>
+              <p className="mt-6 text-lg text-muted-foreground">
+                Take your existing curriculum documents—dense frameworks, lengthy unit plans, or complex pacing guides—and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, concepts, and assessment points.
+              </p>
+              <FolderSync className="mx-auto mt-8 h-16 w-16 text-primary" />
+            </div>
+          </div>
+        </section>
+
+
         {Object.values(offerings).map((subject, i) => (
-          <section key={subject.title} className={cn("py-16 sm:py-20", i % 2 === 0 ? "bg-muted/30" : "bg-background")}>
+          <section key={subject.title} className={cn("py-16 sm:py-20", i % 2 !== 0 ? "bg-muted/30" : "bg-background")}>
             <div className="container mx-auto max-w-7xl px-4">
               <div className="mx-auto max-w-2xl text-center">
                 <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl flex items-center justify-center gap-4">
@@ -134,9 +150,10 @@ export default function CurriculumPage() {
         <section id="ai-tools" className="bg-background py-20 sm:py-28">
           <div className="container mx-auto max-w-7xl px-4">
             <div className="mx-auto max-w-3xl text-center">
-              <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl">
-                Unique Generation &amp; AI Teacher Tools
-              </h2>
+               <h2 className="text-base font-semibold leading-7 text-primary">Powered by AI</h2>
+              <p className="mt-2 font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                 Unique Generation &amp; Teacher Tools
+              </p>
               <p className="mt-4 text-lg text-muted-foreground">
                 Our algorithm ensures that all generated content is unique and tailored for your specific needs. We don't copy from existing curricula; our AI analyzes standards and pedagogical requirements to create original, high-quality material.
               </p>
@@ -158,8 +175,8 @@ export default function CurriculumPage() {
                     Join thousands of educators who are saving time, engaging students, and rediscovering the joy of teaching with Eduaigen.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
-                    <Button size="lg" asChild className="shadow-lg shadow-accent/40" style={{backgroundColor: 'hsl(var(--accent))', color: 'hsl(var(--accent-foreground))'}}>
-                        <Link href="/signup">Sign Up for Free</Link>
+                    <Button size="lg" asChild className="shadow-lg shadow-primary/20">
+                        <Link href="/signup">Sign Up and Get Started</Link>
                     </Button>
                 </div>
             </div>
