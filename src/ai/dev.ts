@@ -8,3 +8,4 @@ import '@/ai/flows/refine-learning-objective.ts';
 import '@/ai/flows/explain-concept.ts';
 import '@/ai/flows/vocab-deep-dive.ts';
 import '@/ai/flows/curriculum-audit.ts';
+import '@/ai/schemas/lesson-plan-schemas.ts';
