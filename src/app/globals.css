@@ -86,3 +86,116 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Animations */
+@keyframes brainPulse {
+    0% { 
+        transform: scale(1); 
+        filter: drop-shadow(0 0 10px rgba(244, 114, 182, 0.5));
+    }
+    100% { 
+        transform: scale(1.05); 
+        filter: drop-shadow(0 0 20px rgba(244, 114, 182, 0.8));
+    }
+}
+
+@keyframes lightning {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: translateY(-5px) rotate(5deg); 
+        opacity: 0.8; 
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes energyRing1 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes energyRing2 {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes particleFloat {
+    0%, 100% { 
+        transform: translateY(0px) translateX(0px); 
+        opacity: 0.3; 
+    }
+    50% { 
+        transform: translateY(-20px) translateX(10px); 
+        opacity: 1; 
+    }
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Apply animations */
+.brain-pulse {
+    animation: brainPulse 2s ease-in-out infinite alternate;
+}
+
+.lightning-bounce {
+    animation: lightning 1.5s ease-in-out infinite;
+}
+
+.energy-ring-1 {
+    animation: energyRing1 3s linear infinite;
+}
+
+.energy-ring-2 {
+    animation: energyRing2 2s linear infinite;
+}
+
+.particle-float-1 {
+    animation: particleFloat 3s ease-in-out infinite;
+    animation-delay: 0s;
+}
+
+.particle-float-2 {
+    animation: particleFloat 3s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.particle-float-3 {
+    animation: particleFloat 3s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+.particle-float-4 {
+    animation: particleFloat 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+.gradient-text {
+    background: linear-gradient(-45deg, #f472b6, #a855f7, #06b6d4, #f472b6);
+    background-size: 400% 400%;
+    animation: gradientShift 3s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.glow-effect {
+    box-shadow: 0 0 50px rgba(244, 114, 182, 0.3);
+}
+
+/* Hover effects */
+.logo-container:hover .glow-bg {
+    opacity: 0.6;
+}
+
+.logo-container:hover .brain-icon {
+    transform: scale(1.1);
+}
