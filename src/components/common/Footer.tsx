@@ -1,8 +1,16 @@
+// This is a new file or has been significantly updated.
+'use client';
+
 import { Logo } from '@/components/common/Logo';
+import { useAuth } from '@/context/AuthContext';
 
 export function Footer() {
+  const { isLoggedIn } = useAuth();
+  
+  if (isLoggedIn) return null;
+
   return (
-    <footer className="border-t border-border/40">
+    <footer className="border-t border-border/40 mt-auto">
       <div className="container flex flex-col items-center justify-center gap-4 py-10 md:h-24 md:flex-row md:py-0">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <Logo />

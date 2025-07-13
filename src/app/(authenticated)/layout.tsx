@@ -1,13 +1,16 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/common/Logo';
+// This is a new file or has been significantly updated.
 import {
   FileText,
   TestTube,
   BookCopy,
   FolderSync,
   PanelLeft,
+  Home,
 } from 'lucide-react';
+import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/common/Logo';
 import {
   Sheet,
   SheetContent,
@@ -20,23 +23,29 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
+
 export default function AuthenticatedAppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+    <div className="flex flex-1 bg-muted/40">
+      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex mt-16">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          <Link
-            href="#"
-            className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-          >
-            <Logo />
-            <span className="sr-only">Eduaigen</span>
-          </Link>
-          <TooltipProvider>
+           <TooltipProvider>
+             <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/auth-dashboard"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                >
+                  <Home className="h-5 w-5" />
+                  <span className="sr-only">Dashboard</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Dashboard</TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
@@ -88,8 +97,8 @@ export default function AuthenticatedAppLayout({
           </TooltipProvider>
         </nav>
       </aside>
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+      <div className="flex flex-col flex-1 sm:pl-14 mt-16">
+        <header className="sticky top-16 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 sm:top-0">
           <Sheet>
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
@@ -100,11 +109,11 @@ export default function AuthenticatedAppLayout({
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
                 <Link
-                  href="/"
-                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
+                  href="/auth-dashboard"
+                  className="flex items-center gap-4 px-2.5 text-foreground"
                 >
-                  <Logo />
-                  <span className="sr-only">Eduaigen</span>
+                  <Home className="h-5 w-5" />
+                  Dashboard
                 </Link>
                 <Link
                   href="/auth-dashboard/lesson-plan-generator"
@@ -136,21 +145,13 @@ export default function AuthenticatedAppLayout({
                 </Link>
                  <Link
                   href="/dashboard"
-                  className="flex items-center gap-4 px-2.5 text-foreground"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   Free Tools
                 </Link>
               </nav>
             </SheetContent>
           </Sheet>
-          <div className="ml-auto flex items-center gap-2">
-            <Button variant="outline" asChild>
-              <Link href="/curriculum">Get More Tools</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/">Log out</Link>
-            </Button>
-          </div>
         </header>
         <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
           {children}

@@ -1,9 +1,29 @@
-import { Footer } from '@/components/common/Footer';
-import { Header } from '@/components/common/Header';
+// This is a new file or has been significantly updated.
+'use client';
+
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { CheckCircle2, FlaskConical, History, Languages, Library, Sigma, Leaf, HeartPulse, Dna, Atom, Magnet, Orbit, Microscope, TestTube, Lightbulb, PencilRuler, BookOpenText, FileText, BrainCircuit, Users, Check, Presentation, GitBranch, Bot, Sparkles, FolderSync } from 'lucide-react';
+import {
+  CheckCircle2,
+  FolderSync,
+  Microscope,
+  Dna,
+  Leaf,
+  Atom,
+  Magnet,
+  Orbit,
+  HeartPulse,
+  Sigma,
+  Library,
+  BookOpenText,
+  History,
+  FileText,
+  Presentation,
+  GitBranch,
+  Users,
+  Bot,
+  Check,
+  PencilRuler,
+} from 'lucide-react';
 import Link from 'next/link';
 
 const offerings = {
@@ -72,8 +92,7 @@ const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; titl
 
 export default function CurriculumPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <Header />
+    <div className="flex flex-1 flex-col bg-background">
       <main className="flex-1">
         <section className="relative overflow-hidden py-20 sm:py-28">
            <div
@@ -124,8 +143,8 @@ export default function CurriculumPage() {
         </section>
 
 
-        {Object.values(offerings).map((subject, i) => (
-          <section key={subject.title} className={cn("py-16 sm:py-20", i % 2 !== 0 ? "bg-muted/30" : "bg-background")}>
+        {Object.entries(offerings).map(([key, subject], i) => (
+          <section key={subject.title} className="py-16 sm:py-20 bg-background even:bg-muted/30">
             <div className="container mx-auto max-w-7xl px-4">
               <div className="mx-auto max-w-2xl text-center">
                 <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl flex items-center justify-center gap-4">
@@ -181,9 +200,7 @@ export default function CurriculumPage() {
                 </div>
             </div>
         </section>
-
       </main>
-      <Footer />
     </div>
   );
 }

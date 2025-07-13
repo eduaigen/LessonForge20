@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Header } from '@/components/common/Header';
-import { Footer } from '@/components/common/Footer';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -119,10 +117,8 @@ export default function Home() {
   }, [dynamicContent.length]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
-      <Header />
-      <main className="flex-1">
-        <section className="relative overflow-hidden py-24 sm:py-32">
+    <div className="flex flex-1 flex-col">
+      <section className="relative overflow-hidden py-24 sm:py-32">
           <div
             aria-hidden="true"
             className="absolute -top-48 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl"
@@ -256,8 +252,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
     </div>
   );
 }

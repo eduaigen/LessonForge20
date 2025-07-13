@@ -1,12 +1,12 @@
-import type { Metadata } from 'next';
+// This is a new file or has been significantly updated.
+'use client';
+
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
-
-export const metadata: Metadata = {
-  title: 'Eduaigen - AI Tools for Educators',
-  description: 'Brilliant Teaching, Made Simple.',
-};
+import { AuthProvider } from '@/context/AuthContext';
+import { AppHeader } from '@/components/common/AppHeader';
+import { Footer } from '@/components/common/Footer';
 
 export default function RootLayout({
   children,
@@ -32,8 +32,16 @@ export default function RootLayout({
         />
       </head>
       <body className={cn('font-body antialiased bg-background')}>
-        {children}
-        <Toaster />
+        <AuthProvider>
+          <div className="flex min-h-screen flex-col">
+            <AppHeader />
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+            <Footer />
+          </div>
+          <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );

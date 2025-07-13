@@ -1,6 +1,7 @@
-import { Header } from '@/components/common/Header';
-import { Footer } from '@/components/common/Footer';
-import { Button } from '@/components/ui/button';
+// This is a new file or has been significantly updated.
+'use client';
+
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -9,11 +10,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
+
 
 export default function PricingPage() {
-  const tiers = [
+    const router = useRouter();
+    const { subscribe } = useAuth();
+
+    const handleSubscribe = () => {
+        subscribe();
+        router.push('/auth-dashboard');
+    }
+
+    const tiers = [
     {
       name: 'Single Module',
       price: '$19.99',
@@ -29,7 +41,6 @@ export default function PricingPage() {
         'Vocab Deep Dive',
       ],
       cta: 'Complete Subscription',
-      href: '/auth-dashboard?subscribed=true',
     },
     {
       name: 'Module Bundle',
@@ -43,7 +54,6 @@ export default function PricingPage() {
         'Priority support',
       ],
       cta: 'Complete Subscription',
-      href: '/auth-dashboard?subscribed=true',
       popular: true,
     },
     {
@@ -58,14 +68,11 @@ export default function PricingPage() {
         'Best value for comprehensive planning',
       ],
       cta: 'Complete Subscription',
-      href: '/auth-dashboard?subscribed=true',
     },
   ];
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1">
+    <div className="flex-1">
         <section className="container mx-auto max-w-7xl px-4 py-16 text-center sm:py-24">
           <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
             Choose Your Plan & Get Started
@@ -108,7 +115,7 @@ export default function PricingPage() {
                 </CardContent>
                 <CardFooter>
                   <Button
-                    asChild
+                    onClick={handleSubscribe}
                     className="w-full"
                     style={{
                       backgroundColor: tier.popular
@@ -119,15 +126,13 @@ export default function PricingPage() {
                         : 'hsl(var(--primary-foreground))',
                     }}
                   >
-                    <Link href={tier.href}>{tier.cta}</Link>
+                    {tier.cta}
                   </Button>
                 </CardFooter>
               </Card>
             ))}
           </div>
         </section>
-      </main>
-      <Footer />
     </div>
   );
 }
