@@ -173,6 +173,24 @@ body {
   }
 }
 
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 hsla(var(--primary) / 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px 5px hsla(var(--primary) / 0.3);
+  }
+}
+
 /* Apply animations */
 .animate-float-up {
   animation: float-up 0.8s ease-out forwards;

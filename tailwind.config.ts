@@ -95,10 +95,21 @@ export default {
             height: '0',
           },
         },
+        'ping-slow': {
+          '0%, 100%': {
+            transform: 'scale(1)',
+            opacity: '0.7',
+          },
+          '50%': {
+            transform: 'scale(1.4)',
+            opacity: '0',
+          }
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'ping-slow': 'ping-slow 4s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
     },
   },
