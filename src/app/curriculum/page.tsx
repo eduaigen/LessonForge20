@@ -174,7 +174,7 @@ export default function CurriculumPage() {
                  Unique Generation &amp; Teacher Tools
               </p>
               <p className="mt-4 text-lg text-muted-foreground">
-                Our algorithm ensures that all generated content is unique and tailored for your specific needs. We don't copy from existing curricula; our AI analyzes standards and pedagogical requirements to create original, high-quality material.
+                Our algorithm ensures that all generated content is unique and tailored for your specific needs. We want to be clear: we **do not copy** information from any publicly available curricula. Instead, our AI analyzes standards and pedagogical requirements to create completely **original and unique**, high-quality material every time.
               </p>
             </div>
             <div className="mt-16 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
