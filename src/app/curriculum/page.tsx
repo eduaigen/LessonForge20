@@ -97,7 +97,7 @@ export default function CurriculumPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-4">
               <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                <Link href="/signup">Get Started Now</Link>
+                <Link href="/pricing">Choose Your Tools & Subscribe</Link>
               </Button>
             </div>
              <div className="mt-8 flex justify-center gap-x-6 text-sm font-semibold text-muted-foreground">
@@ -176,7 +176,7 @@ export default function CurriculumPage() {
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                        <Link href="/signup">Sign Up and Get Started</Link>
+                        <Link href="/pricing">Subscribe Now</Link>
                     </Button>
                 </div>
             </div>

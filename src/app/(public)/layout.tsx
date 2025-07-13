@@ -25,16 +25,16 @@ export default function PublicAppLayout({
             Free Tools
           </Link>
            <Link
-            href="/auth-dashboard"
+            href="/curriculum"
             className="text-muted-foreground transition-colors hover:text-foreground/80"
           >
-            Premium Dashboard
+            Premium Curriculum
           </Link>
           <Link
             href="/pricing"
             className="text-muted-foreground transition-colors hover:text-foreground/80"
           >
-            Subscriptions
+            Pricing
           </Link>
         </nav>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">

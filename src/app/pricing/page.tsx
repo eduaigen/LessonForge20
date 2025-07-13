@@ -28,7 +28,8 @@ export default function PricingPage() {
         'Concept Explainer',
         'Vocab Deep Dive',
       ],
-      cta: 'Choose Plan',
+      cta: 'Complete Subscription',
+      href: '/auth-dashboard?subscribed=true',
     },
     {
       name: 'Module Bundle',
@@ -41,7 +42,8 @@ export default function PricingPage() {
         'Ideal for interdisciplinary teaching',
         'Priority support',
       ],
-      cta: 'Choose Plan',
+      cta: 'Complete Subscription',
+      href: '/auth-dashboard?subscribed=true',
       popular: true,
     },
     {
@@ -55,7 +57,8 @@ export default function PricingPage() {
         'Full access to all AI features',
         'Best value for comprehensive planning',
       ],
-      cta: 'Choose Plan',
+      cta: 'Complete Subscription',
+      href: '/auth-dashboard?subscribed=true',
     },
   ];
 
@@ -65,10 +68,10 @@ export default function PricingPage() {
       <main className="flex-1">
         <section className="container mx-auto max-w-7xl px-4 py-16 text-center sm:py-24">
           <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
-            Find the Plan That&apos;s Right for You
+            Choose Your Plan & Get Started
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Flexible pricing for individual teachers and departments. All plans come with a 7-day free trial.
+            Select a plan to unlock our premium AI tools. All plans come with a 7-day free trial.
           </p>
         </section>
 
@@ -116,7 +119,7 @@ export default function PricingPage() {
                         : 'hsl(var(--primary-foreground))',
                     }}
                   >
-                    <Link href="/signup">{tier.cta}</Link>
+                    <Link href={tier.href}>{tier.cta}</Link>
                   </Button>
                 </CardFooter>
               </Card>
