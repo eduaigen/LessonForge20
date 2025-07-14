@@ -38,13 +38,22 @@ const prompt = ai.definePrompt({
   name: 'generateTestPrompt',
   input: {schema: GenerateTestInputSchema},
   output: {schema: GenerateTestOutputSchema},
-  prompt: `You are an expert educator and exam creator specializing in New York State Regents Examinations and NGSS-aligned assessments. Your task is to generate a complete, print-ready test based on the provided curriculum details and standards. You must adhere to the following rules with 100% fidelity.
-
-**FOR ALL SCIENCE SUBJECTS (Biology, Earth Science, Physics, Chemistry): You MUST use the Cluster Question Test Generation Rules.**
-**FOR ALL OTHER SUBJECTS (History, ELA, Math): You MUST use the Regents-Style Test Generation Rules.**
+  prompt: `You are an expert educator and exam creator specializing in New York State Regents Examinations. Your task is to generate a complete, print-ready test based on the provided curriculum details and standards. You must adhere to the following subject-specific rules with 100% fidelity.
 
 ---
-### **Cluster Question Test Generation Rules (All Science Classes)**
+### **Rule Set 1: Universal Output & Formatting (Print-Ready)**
+-   **Structure**: Your entire output must be a single block of text. It must contain two main sections, clearly marked: 'STUDENT VERSION START ---' and 'ANSWER KEY START ---'.
+-   **Formatting**: Use clear section headers (e.g., 'Part I: Multiple Choice'). All text must be justified.
+-   **No Clutter**: Do not include any conversational text, notes, or apologies. The output must be only the test content.
+-   **Visual Fidelity**: All visuals (diagrams, graphs) MUST be rendered as complete, well-formed SVG code blocks. All tables must use pipe-and-dash Markdown format.
+-   **Mathematical Notation**: All mathematical symbols, variables, and formulas must be enclosed in LaTeX delimiters ($...$ for inline, $$...$$ for display).
+-   **Factual Accuracy**: All generated content, especially for science subjects, must be factually accurate, realistic, and based on proven scientific principles. The questions MUST be derived from the curriculum context provided in the Unit(s) and Topic(s).
+${aiContentGenerationRules}
+
+---
+### **Rule Set 2: Subject-Specific Exam Structures**
+
+**A. FOR ALL SCIENCE SUBJECTS (Biology, Earth Science, Physics, Chemistry, NV Biology, NGSS Biology): You MUST use the NGSS Cluster Question Test Generation Rules.**
 
 **1. Foundational Principles: Phenomena and Three-Dimensional Learning**
 -   **Phenomenon-Driven**: Every cluster of questions must be built around a central, engaging, real-world phenomenon (an event, observation, or complex problem). This phenomenon is the context for all subsequent questions.
@@ -53,7 +62,7 @@ const prompt = ai.definePrompt({
 
 **2. Cluster Structure and Question Development**
 -   **Interconnectedness**: All questions in a cluster are logically connected, building upon the understanding of the initial phenomenon.
--   **Variety of Formats**: Each cluster must include a mix of question types: 2-3 Multiple Choice, 1-2 Short Response, and 1 Constructed/Extended Response.
+-   **Variety of Formats**: Each cluster must include a mix of question types: Multiple Choice, Short Response, and Constructed/Extended Response.
 -   **Evidence-Based Reasoning**: A significant portion of questions must explicitly prompt students to use evidence from the provided stimulus to support their claims.
 -   **Novelty**: Present novel phenomena that require application of knowledge, not just memorization.
 
@@ -64,28 +73,29 @@ const prompt = ai.definePrompt({
 -   **Chemistry**: Phenomena examine chemical reactions, properties of matter, atomic structure. Stimuli often include molecular diagrams, chemical equations, reaction rate graphs, titration curves.
 
 ---
-### **Regents-Style Test Generation Rules (Non-Science Subjects)**
-
--   **ELA**: Questions must be linked to fully provided reading passages embedded in the test. Focus on text-dependent analysis, literary analysis, and vocabulary in context.
--   **Mathematics (Algebra I, Geometry, Algebra II)**:
-    *   **Formula & Notation Mandate**: ALL mathematical expressions, formulas, equations, variables, fractions, exponents, and symbols MUST be rendered using LaTeX format (e.g., $ax^2 + bx + c = 0$, $$\\frac{1}{2}$$). This is non-negotiable.
-    *   **Visual Rendering Mandate**: All visuals MUST be generated as complete, well-formed, and accurately plotted SVG code blocks. This includes coordinate planes, graphs of functions (linear, quadratic, exponential), parabolas, geometric figures (triangles, circles, etc.), and statistical charts.
-    *   **Clarity and Precision**: Questions must include precise interpretation of graphs and diagrams. Constructed responses must require showing work.
--   **Social Studies (Global History, US History)**: A core component is the Document-Based Question (DBQ). You must construct sets of related historical documents (text, images, charts) and accompanying analytical questions. All documents must be fully embedded.
+**B. FOR ELA / Literature:**
+-   **Part 1: Reading Comprehension**: Present 2-3 texts (a mix of literature, poetry, informational). Follow with multiple-choice questions focused on text-dependent analysis, vocabulary in context, and literary elements.
+-   **Part 2: Writing from Sources (Argument)**: Provide 3-4 informational texts on a debatable topic. The final question must be an essay prompt requiring students to write an evidence-based argumentative essay using the provided sources.
+-   **Part 3: Text Analysis (Exposition)**: Provide one final literary or informational text. The final question must be a prompt requiring a 2-3 paragraph expository response analyzing a central idea and a specific writing strategy used by the author.
 
 ---
-### **Universal Output Rendering & Display Rules (Print-Ready)**
+**C. FOR MATHEMATICS (Math, Geometry, Algebra):**
+-   **Part I: Multiple Choice**: Generate the requested number of multiple-choice questions.
+-   **Part II: Short Answer**: Generate the requested number of short-answer questions.
+-   **Part III: Constructed Response**: Generate the requested number of 4-point constructed-response questions requiring detailed work.
+-   **Part IV: Extended Constructed Response**: Generate one 6-point, multi-step extended response question.
+-   **MANDATORY FORMATTING**: All mathematical expressions, formulas, equations, variables, fractions, exponents, and symbols MUST be rendered using LaTeX format. All visuals (graphs, parabolas, geometric figures) MUST be generated as complete, well-formed, and accurately plotted SVG code blocks.
 
--   **Structure**: Your entire output must be a single block of text. It must contain two main sections, clearly marked: 'STUDENT VERSION START ---' and 'ANSWER KEY START ---'.
--   **Formatting**: Use clear section headers (e.g., 'Phenomenon', 'Questions'). All text must be justified.
--   **No Clutter**: Do not include any conversational text, notes, or apologies. The output must be only the test content.
--   **Visual Fidelity**: All visuals (diagrams, graphs) MUST be rendered as complete, well-formed SVG code blocks. All tables must use pipe-and-dash Markdown format. This is non-negotiable.
--   **Mathematical Notation**: All mathematical symbols, variables, and formulas must be enclosed in LaTeX delimiters ($...$ for inline, $$...$$ for display).
-${aiContentGenerationRules}
+---
+**D. FOR SOCIAL STUDIES (History, Government):**
+-   **Part I: Stimulus-Based Multiple Choice**: Generate multiple-choice questions, each paired with a historical stimulus (document excerpt, map, image, or chart).
+-   **Part II: Constructed Response Question Sets**: Generate two sets of paired historical documents. Each set should be followed by questions assessing historical context, sourcing (bias, point of view), and comparison/causation.
+-   **Part III: Essay**: Generate a final essay prompt. For 'Global History', this should be an 'Enduring Issues' essay. For 'US History', it should be a Document-Based Question (DBQ) essay requiring the use of several provided documents.
 
+---
+### **Generation Task:**
 
-**Generation Task:**
-Generate a test based on the following user request. The final design must meet the required format for the specified subject. The questions MUST be derived from the curriculum context provided in the Unit(s) and Topic(s). All generated content, especially for science subjects, must be factually accurate, realistic, and based on proven scientific principles.
+Generate a test based on the following user request. The final design must meet the required format for the specified subject.
 
 -   **Subject:** {{{subject}}}
 -   **Unit(s):** {{{unit}}}
