@@ -18,6 +18,8 @@ import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/a
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { ScrollArea } from '../ui/scroll-area';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -121,114 +123,131 @@ const GeneratorContent = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="space-y-6">
-            <FormField
-              control={form.control}
-              name="unit"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Unit</FormLabel>
-                  <Select onValueChange={(value) => {
-                      field.onChange(value);
-                      form.setValue('topic', '');
-                      form.setValue('lesson', '');
-                  }} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a unit" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {units.map((unit) => (
-                        <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="topic"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Topic</FormLabel>
-                  <Select onValueChange={(value) => {
-                      field.onChange(value);
-                      form.setValue('lesson', '');
-                  }} value={field.value} disabled={!selectedUnit}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a topic" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {topics.map((topic) => (
-                        <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="lesson"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lesson Objective</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value} disabled={!selectedTopic}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a lesson objective" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {lessons.map((lesson) => (
-                        <SelectItem key={lesson} value={lesson}>{lesson}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-             <FormField
-              control={form.control}
-              name="strategy"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>5E Strategy</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a 5E strategy" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {fiveEStrategies.map((strategy) => (
-                        <SelectItem key={strategy} value={strategy}>{strategy}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="additionalInfo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Additional Information (Optional)</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                control={form.control}
+                name="unit"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Unit</FormLabel>
+                    <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        form.setValue('topic', '');
+                        form.setValue('lesson', '');
+                    }} defaultValue={field.value}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a unit" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {units.map((unit) => (
+                            <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="topic"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Topic</FormLabel>
+                    <Select onValueChange={(value) => {
+                        field.onChange(value);
+                        form.setValue('lesson', '');
+                    }} value={field.value} disabled={!selectedUnit}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a topic" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {topics.map((topic) => (
+                            <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+            </div>
+
+            {lessons && lessons.length > 0 && (
+                 <FormField
+                    control={form.control}
+                    name="lesson"
+                    render={({ field }) => (
+                        <FormItem className="space-y-3">
+                        <FormLabel>Lesson Objective</FormLabel>
+                        <FormControl>
+                            <ScrollArea className="h-72 w-full rounded-md border p-4">
+                                <RadioGroup
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                    className="flex flex-col space-y-1"
+                                >
+                                    {lessons.map((lesson, index) => (
+                                    <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
+                                        <FormControl>
+                                            <RadioGroupItem value={lesson.title} />
+                                        </FormControl>
+                                        <FormLabel className="font-normal w-full cursor-pointer">
+                                            <p className="font-semibold">{lesson.title}</p>
+                                            <p className="text-sm text-muted-foreground">{lesson.objective}</p>
+                                        </FormLabel>
+                                    </FormItem>
+                                    ))}
+                                </RadioGroup>
+                            </ScrollArea>
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            )}
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                control={form.control}
+                name="strategy"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>5E Strategy</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a 5E strategy" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                        {fiveEStrategies.map((strategy) => (
+                            <SelectItem key={strategy} value={strategy}>{strategy}</SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="additionalInfo"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Additional Information (Optional)</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+            </div>
           </CardContent>
           <CardFooter>
             <Button type="submit" disabled={isLoading} className="w-full">
