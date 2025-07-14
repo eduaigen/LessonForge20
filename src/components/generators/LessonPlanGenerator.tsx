@@ -56,21 +56,17 @@ const getCurriculumForSubject = async (subject: string) => {
         case 'Health':
             return (await import('@/lib/health-curriculum')).healthCurriculum;
         case 'Global History I & II':
-             return (await import('@/lib/history-curriculum')).historyCurriculum;
+            const gh1 = (await import('@/lib/global-history-1-curriculum')).globalHistory1Curriculum;
+            const gh2 = (await import('@/lib/global-history-2-curriculum')).globalHistory2Curriculum;
+            return { units: { ...gh1.units, ...gh2.units } };
         case 'US History & Government':
-             return (await import('@/lib/history-curriculum')).historyCurriculum;
+             return (await import('@/lib/us-history-curriculum')).usHistoryCurriculum;
         case 'Government & Economics':
-             return (await import('@/lib/history-curriculum')).historyCurriculum;
-        case 'History':
-            return (await import('@/lib/history-curriculum')).historyCurriculum;
+             return (await import('@/lib/government-economics-curriculum')).governmentEconomicsCurriculum;
         case 'Illustrative Math Algebra 1':
-             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'Illustrative Math Algebra 2':
-             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'Illustrative Math Geometry':
              return (await import('@/lib/math-curriculum')).mathCurriculum;
-        case 'Math':
-            return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'ELA 9th Grade':
             return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
         case 'ELA 10th Grade':
