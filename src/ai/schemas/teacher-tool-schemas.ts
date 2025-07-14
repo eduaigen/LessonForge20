@@ -2,9 +2,9 @@ import { z } from 'genkit';
 
 // Define the types of tools available
 const toolTypes = [
-    'worksheet', 'article', 'graph_chart_data', 'diagram_flowchart',
-    'slideshow_outline', 'pedagogical_coach', 'ell_swd_support',
-    'enrichment_activity', 'math_problem_visualizer'
+    'worksheet', 'reading_material', 'comprehension_questions', 'study_sheet',
+    'cluster_questions', 'slideshow_outline', 'ell_swd_scaffolds',
+    'diagram_flowchart', 'math_visualizer', 'teacher_coach'
 ] as const;
 export const toolTypeSchema = z.enum(toolTypes);
 export type ToolType = z.infer<typeof toolTypeSchema>;
