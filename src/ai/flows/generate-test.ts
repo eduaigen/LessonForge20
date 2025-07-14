@@ -67,7 +67,10 @@ const prompt = ai.definePrompt({
 ### **Regents-Style Test Generation Rules (Non-Science Subjects)**
 
 -   **ELA**: Questions must be linked to fully provided reading passages embedded in the test. Focus on text-dependent analysis, literary analysis, and vocabulary in context.
--   **Mathematics (Algebra I, Geometry, Algebra II)**: Formulas and equations must be in LaTeX format (e.g., $ax^2 + bx + c = 0$). Questions must include interpretation of graphs and diagrams. Constructed responses must require showing work.
+-   **Mathematics (Algebra I, Geometry, Algebra II)**:
+    *   **Formula & Notation Mandate**: ALL mathematical expressions, formulas, equations, variables, fractions, exponents, and symbols MUST be rendered using LaTeX format (e.g., $ax^2 + bx + c = 0$, $$\\frac{1}{2}$$). This is non-negotiable.
+    *   **Visual Rendering Mandate**: All visuals MUST be generated as complete, well-formed, and accurately plotted SVG code blocks. This includes coordinate planes, graphs of functions (linear, quadratic, exponential), parabolas, geometric figures (triangles, circles, etc.), and statistical charts.
+    *   **Clarity and Precision**: Questions must include precise interpretation of graphs and diagrams. Constructed responses must require showing work.
 -   **Social Studies (Global History, US History)**: A core component is the Document-Based Question (DBQ). You must construct sets of related historical documents (text, images, charts) and accompanying analytical questions. All documents must be fully embedded.
 
 ---
