@@ -327,162 +327,162 @@ export const curriculumData: {
     },
     Chemistry: {
       units: {
-        "Why are oysters dying, and how can we use chemistry to protect them?": {
+        "Unit 1: Why are oysters dying, and how can we use chemistry to protect them?": {
           topics: {
-            "What large and small-scale processes make water more or less acidic?": {
+            "Lesson Set 1: What large and small-scale processes make water more or less acidic?": {
               lessons: [
-                "What is happening to oysters?",
-                "How can we break down the problem so we can solve it?",
-                "Can carbon dioxide make the ocean more acidic?",
-                "What is it about a substance that determines whether it produces more or fewer H+ or OH- ions when it is added to water?",
-                "How does carbon dioxide move between the atmosphere and ocean systems to cause the water to become more acidic?",
-                "How can acidic water become less acidic again?",
-                "How can we use what we have learned to help protect oysters?",
+                "Lesson 1: What is happening to oysters?",
+                "Lesson 2: How can we break down the problem so we can solve it?",
+                "Lesson 3: Can carbon dioxide make the ocean more acidic?",
+                "Lesson 4: What is it about a substance that determines whether it produces more or fewer H+ or OH- ions when it is added to water?",
+                "Lesson 5: How does carbon dioxide move between the atmosphere and ocean systems to cause the water to become more acidic?",
+                "Lesson 6: How can acidic water become less acidic again?",
+                "Lesson 7: How can we use what we have learned to help protect oysters?",
               ],
             },
-            "What mathematical models can help us determine the scale of the reactions needed to save oysters?": {
+            "Lesson Set 2: What mathematical models can help us determine the scale of the reactions needed to save oysters?": {
               lessons: [
-                "How can we figure out how much of a substance we need to neutralize acid?",
-                "How much NaOH would we need to add to make ocean water safe for oysters?",
-                "How does ocean acidification hurt oysters?",
-                "How can we help oysters build shells quickly?",
+                "Lesson 8: How can we figure out how much of a substance we need to neutralize acid?",
+                "Lesson 9: How much NaOH would we need to add to make ocean water safe for oysters?",
+                "Lesson 10: How does ocean acidification hurt oysters?",
+                "Lesson 11: How can we help oysters build shells quickly?",
               ],
             },
-            "How can engineering design help us determine the best process to save oysters?": {
+            "Lesson Set 3: How can engineering design help us determine the best process to save oysters?": {
               lessons: [
-                "What criteria and constraints do we need to consider when designing solutions to help protect oysters?",
-                "How can we apply our science ideas to develop a solution to help protect oysters?",
-                "How well do our different design solutions address our criteria and constraints?",
-                "How can we apply our learning to other situations?",
+                "Lesson 12: What criteria and constraints do we need to consider when designing solutions to help protect oysters?",
+                "Lesson 13: How can we apply our science ideas to develop a solution to help protect oysters?",
+                "Lesson 14: How well do our different design solutions address our criteria and constraints?",
+                "Lesson 15: How can we apply our learning to other situations?",
               ],
             },
           },
         },
-        "How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
+        "Unit 2: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
           topics: {
-            "Why and how is the sea level rising?": {
+            "Lesson Set 1: Why and how is the sea level rising?": {
               lessons: [
-                "How are sea levels rising and forcing people to move?",
-                "What can the past help us figure out about what is causing sea level rise in the present?",
-                "How does carbon dioxide contribute to climate change?",
-                "What would happen if the Earth's ice melted?",
+                "Lesson 1: How are sea levels rising and forcing people to move?",
+                "Lesson 2: What can the past help us figure out about what is causing sea level rise in the present?",
+                "Lesson 3: How does carbon dioxide contribute to climate change?",
+                "Lesson 4: What would happen if the Earth's ice melted?",
               ],
             },
-            "What solutions could help slow polar ice melt?": {
+            "Lesson Set 2: What solutions could help slow polar ice melt?": {
               lessons: [
-                "How can we best slow or stop the land ice melt?",
-                "Why would some engineers want to sprinkle glass microbeads on the Arctic?",
-                "How do feedback loops affect Earth's systems?",
+                "Lesson 5: How can we best slow or stop the land ice melt?",
+                "Lesson 6: Why would some engineers want to sprinkle glass microbeads on the Arctic?",
+                "Lesson 7: How do feedback loops affect Earth's systems?",
               ],
             },
-            "How well would the berm solution work in the context of Earth systems?": {
+            "Lesson Set 3: How well would the berm solution work in the context of Earth systems?": {
               lessons: [
-                "What is going on where the ice meets the water?",
-                "Why does warm salty water sink to melt a glacier?",
-                "How can we measure the energy transfer a berm prevents?",
-                "How does heat affect the amount of ice melt?",
-                "How can we slow the flow of energy on Earth to protect vulnerable coastal communities?",
-                "How can we model what will happen to Earth's climate if humans make changes?",
+                "Lesson 8: What is going on where the ice meets the water?",
+                "Lesson 9: Why does warm salty water sink to melt a glacier?",
+                "Lesson 10: How can we measure the energy transfer a berm prevents?",
+                "Lesson 11: How does heat affect the amount of ice melt?",
+                "Lesson 12: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?",
+                "Lesson 13: How can we model what will happen to Earth's climate if humans make changes?",
               ],
             },
           },
         },
-        "What causes lightning and why are some places safer than others when it strikes?": {
+        "Unit 3: What causes lightning and why are some places safer than others when it strikes?": {
           topics: {
-            "What is lightning?": {
+            "Lesson Set 1: What is lightning?": {
               lessons: [
-                "When and where does lightning occur and what are its impacts?",
-                "What parts of the (smaller-scale) system might be causing the (smaller-scale) lightning?",
-                "What is the spark in the water dropper system and what else is happening in the system before it appears?",
-                "What happens when we produce static electricity?",
-                "What is happening at a particle level to produce static effects?",
+                "Lesson 1: When and where does lightning occur and what are its impacts?",
+                "Lesson 2: What parts of the (smaller-scale) system might be causing the (smaller-scale) lightning?",
+                "Lesson 3: What is the spark in the water dropper system and what else is happening in the system before it appears?",
+                "Lesson 4: What happens when we produce static electricity?",
+                "Lesson 5: What is happening at a particle level to produce static effects?",
               ],
             },
-            "What causes a lightning strike?": {
+            "Lesson Set 2: What causes a lightning strike?": {
               lessons: [
-                "What causes static in a lightning system?",
-                "How are electrostatic forces between objects affected by the amount of charge and the distance between them?",
-                "How can something that is neutral have an attractive or repulsive interaction with another object without any contact?",
-                "How can we revise our models to explain what we have figured out about the lightning system?",
+                "Lesson 6: What causes static in a lightning system?",
+                "Lesson 7: How are electrostatic forces between objects affected by the amount of charge and the distance between them?",
+                "Lesson 8: How can something that is neutral have an attractive or repulsive interaction with another object without any contact?",
+                "Lesson 9: How can we revise our models to explain what we have figured out about the lightning system?",
               ],
             },
-            "How and why does a lightning strike transfer so much energy?": {
+            "Lesson Set 3: How and why does a lightning strike transfer so much energy?": {
               lessons: [
-                "Where does the energy come from for lightning to strike across miles of air?",
-                "Why do the electrons build up in the cloud and then jump to the ground suddenly?",
+                "Lesson 10: Where does the energy come from for lightning to strike across miles of air?",
+                "Lesson 11: Why do the electrons build up in the cloud and then jump to the ground suddenly?",
               ],
             },
-            "What makes some places safer than others when lightning strikes?": {
+            "Lesson Set 4: What makes some places safer than others when lightning strikes?": {
               lessons: [
-                "Why are some structures safer than others (and safer than being outside)?",
-                "Why are you supposed to get away from water when there is lightning nearby?",
-                "Why are some places safer than others when lightning strikes?",
+                "Lesson 12: Why are some structures safer than others (and safer than being outside)?",
+                "Lesson 13: Why are you supposed to get away from water when there is lightning nearby?",
+                "Lesson 14: Why are some places safer than others when lightning strikes?",
               ],
             },
           },
         },
-        "How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
+        "Unit 4: How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
           topics: {
-            "How do carbon-based fuels release energy?": {
+            "Lesson Set 1: How do carbon-based fuels release energy?": {
               lessons: [
-                "What different fuels have we used, and do we currently use, for transportation?",
-                "What is happening to the fuels inside the engine to make the vehicle move?",
-                "How can diesel engines be working so differently from gasoline engines?",
-                "Why do we need to put energy into the system to start the reaction?",
-                "How and why is energy released when we burn carbon-based fuels?",
-                "How does the amount of energy we put into the reaction system compare to the energy we get out?",
-                "How can fuels release different amounts of energy when they all have bonds breaking and forming?",
-                "How does our understanding of carbon-based fuels inform our decision-making?",
+                "Lesson 1: What different fuels have we used, and do we currently use, for transportation?",
+                "Lesson 2: What is happening to the fuels inside the engine to make the vehicle move?",
+                "Lesson 3: How can diesel engines be working so differently from gasoline engines?",
+                "Lesson 4: Why do we need to put energy into the system to start the reaction?",
+                "Lesson 5: How and why is energy released when we burn carbon-based fuels?",
+                "Lesson 6: How does the amount of energy we put into the reaction system compare to the energy we get out?",
+                "Lesson 7: How can fuels release different amounts of energy when they all have bonds breaking and forming?",
+                "Lesson 8: How does our understanding of carbon-based fuels inform our decision-making?",
               ],
             },
-            "How do fuels that are not carbon based release energy?": {
+            "Lesson Set 2: How do fuels that are not carbon based release energy?": {
               lessons: [
-                "Where is the energy coming from (and what are some trade-offs) when we use batteries to power vehicles?",
-                "How can we use hydrogen as a fuel and what are the impacts?",
-                "Where is the energy coming from when we use uranium as a fuel?",
-                "How can our knowledge of fuel trade-offs support our evaluation of future rocket fuels?",
+                "Lesson 9: Where is the energy coming from (and what are some trade-offs) when we use batteries to power vehicles?",
+                "Lesson 10: How can we use hydrogen as a fuel and what are the impacts?",
+                "Lesson 11: Where is the energy coming from when we use uranium as a fuel?",
+                "Lesson 12: How can our knowledge of fuel trade-offs support our evaluation of future rocket fuels?",
               ],
             },
-            "How can we use what we have learned to improve our transportation system?": {
+            "Lesson Set 3: How can we use what we have learned to improve our transportation system?": {
               lessons: [
-                "Why do we use some fuels rather than others?",
-                "How do we decide on the best transportation options for our future?",
-                "How can we make transportation decisions to benefit our communities and Earth?",
+                "Lesson 13: Why do we use some fuels rather than others?",
+                "Lesson 14: How do we decide on the best transportation options for our future?",
+                "Lesson 15: How can we make transportation decisions to benefit our communities and Earth?",
               ],
             },
           },
         },
-        "How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
+        "Unit 5: How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
           topics: {
-            "How can we find water and other substances we need to survive on other objects in space?": {
+            "Lesson Set 1: How can we find water and other substances we need to survive on other objects in space?": {
               lessons: [
-                "What substances would we need and how would we get them to live and work beyond Earth?",
-                "How does water support life and chemical reactions?",
-                "How can we find evidence of the water we need on the surfaces of other objects in space?",
-                "How and why do water and other liquids interact with materials to make surface features?",
-                "How can we tell what is in the atmosphere (and just below the surface) of objects in space?",
+                "Lesson 1: What substances would we need and how would we get them to live and work beyond Earth?",
+                "Lesson 2: How does water support life and chemical reactions?",
+                "Lesson 3: How can we find evidence of the water we need on the surfaces of other objects in space?",
+                "Lesson 4: How and why do water and other liquids interact with materials to make surface features?",
+                "Lesson 5: How can we tell what is in the atmosphere (and just below the surface) of objects in space?",
               ],
             },
-            "Why do we need certain types of atoms to create the substances we need?": {
+            "Lesson Set 2: Why do we need certain types of atoms to create the substances we need?": {
               lessons: [
-                "What patterns are there between the types of atoms and the number of bonds they form in the resources we need?",
-                "Why is there a difference between the number of electrons an element has and the number of bonds an element forms?",
-                "Could another substance serve as a substitute for water for some of the processes we need to use it for in space?",
-                "How can the ideas we developed be applied to making a possible substitute for another substance?",
+                "Lesson 6: What patterns are there between the types of atoms and the number of bonds they form in the resources we need?",
+                "Lesson 7: Why is there a difference between the number of electrons an element has and the number of bonds an element forms?",
+                "Lesson 8: Could another substance serve as a substitute for water for some of the processes we need to use it for in space?",
+                "Lesson 9: How can the ideas we developed be applied to making a possible substitute for another substance?",
               ],
             },
-            "How can we make the substances we need to survive off of Earth using the existing matter in the solar system?": {
+            "Lesson Set 3: How can we make the substances we need to survive off of Earth using the existing matter in the solar system?": {
               lessons: [
-                "Why do we need water in so many reactions?",
-                "How can we grow food in space?",
-                "Which location(s) in the solar system has the elements we need and what relative amount is required to make any substance?",
+                "Lesson 10: Why do we need water in so many reactions?",
+                "Lesson 11: How can we grow food in space?",
+                "Lesson 12: Which location(s) in the solar system has the elements we need and what relative amount is required to make any substance?",
               ],
             },
-            "How can we be more sustainable in what we use and produce?": {
+            "Lesson Set 4: How can we be more sustainable in what we use and produce?": {
               lessons: [
-                "Why can we recycle some of the substances we need and not others?",
-                "What are some more sustainable approaches we are developing to help us make the things we need off of Earth and on it?",
-                "What is the full impact of going to space?",
+                "Lesson 13: Why can we recycle some of the substances we need and not others?",
+                "Lesson 14: What are some more sustainable approaches we are developing to help us make the things we need off of Earth and on it?",
+                "Lesson 15: What is the full impact of going to space?",
               ],
             },
           },
@@ -491,18 +491,19 @@ export const curriculumData: {
     },
     Physics: {
       units: {
-        'Kinematics': {
+        "Forces in Earth's Interior": {
           topics: {
-            'Displacement, Velocity, and Acceleration': { lessons: ['1D Motion', 'Motion Graphs'] },
-            'Projectile Motion': { lessons: ['Horizontal Launch', 'Angled Launch'] },
-            'Uniform Circular Motion': { lessons: ['Centripetal Force', 'Period and Frequency'] },
-          },
-        },
-        'Electricity & Magnetism': {
-          topics: {
-            "Ohm's Law": { lessons: ['Voltage, Current, Resistance', 'Series Circuits'] },
-            "Kirchhoff's Laws": { lessons: ['Junction Rule', 'Loop Rule'] },
-            "Magnetic Fields": { lessons: ['Forces on Moving Charges', 'Electromagnets'] },
+            "Land Stretching and Breaking": {
+              lessons: [
+                "What is happening in the Afar region?",
+                "What allows a system to remain stable when forces are acting on it, and what causes it to suddenly change?",
+                "What happens to the matter and energy in a system when the magnitude of balanced forces on it increases?",
+                "What is changing in the matter at a particle level before an earthquake, and when a solid elastically deforms or breaks?",
+                "How do we investigate the connection between matter in Earth's interior and surface features above?",
+                "How is temperature related to the behavior of the matter in the mantle?",
+                "Where does the energy that drives convection come from?",
+              ],
+            },
           },
         },
       },
