@@ -13,7 +13,7 @@ const renderContentItem = (item: string, index: number): React.ReactNode => {
 
   // SVG rendering has top priority
   if (trimmedItem.startsWith('<svg') && trimmedItem.endsWith('</svg>')) {
-    return <div key={index} dangerouslySetInnerHTML={{ __html: trimmedItem }} className="my-4" />;
+    return <div key={index} dangerouslySetInnerHTML={{ __html: trimmedItem }} className="my-4 flex justify-center" />;
   }
 
   // LaTeX rendering for items that are exclusively math
@@ -33,17 +33,18 @@ const renderContentItem = (item: string, index: number): React.ReactNode => {
           </p>
       );
   }
-
-  // Table rendering via Markdown
+  
+  // Use a class to identify markdown that should be treated as a table
   if (trimmedItem.includes('|') && trimmedItem.includes('---')) {
-     return <Markdown key={index} className="prose-sm dark:prose-invert max-w-none">{trimmedItem}</Markdown>;
+    return <div key={index} className="markdown-table-wrapper"><Markdown>{trimmedItem}</Markdown></div>;
   }
-
+  
   // Fallback to Markdown for paragraphs, lists, and inline math
-  return <Markdown key={index} className="prose-sm dark:prose-invert max-w-none" components={{
-    p: ({ children }) => <p className="leading-relaxed">{children}</p>,
+  return <Markdown key={index} components={{
+    p: ({ node, ...props }) => <p {...props} />,
     math: (props) => <InlineMath math={props.children as string} />,
     inlineMath: (props) => <InlineMath math={props.children as string} />,
+    table: ({node, ...props}) => <div className="overflow-x-auto"><table {...props} /></div>,
   }}>{trimmedItem}</Markdown>;
 };
 
@@ -79,19 +80,17 @@ const parseContent = (content: string) => {
     
     lines.forEach(line => {
       const trimmedLine = line.trim();
+      
       const isSectionHeader = 
-        trimmedLine.match(/^(\*\*I{1,3}\.\s|\*\*II\.\s|\*\*III\.\s)/) || // **I. **II. **III.
-        trimmedLine.match(/^[A-Z]\.\s/) || // A. B. C.
-        /WORKSHEET SECTION [A-Z]:/.test(trimmedLine) ||
-        /STUDENT (VERSION|LAB HANDOUT) START ---/.test(trimmedLine) ||
-        /ANSWER KEY START ---/.test(trimmedLine) ||
+        /^\*\*\s*I{1,3}\.\s+/.test(trimmedLine) || // **I., **II., **III.
+        /^\*\*[A-H]\.\s+/.test(trimmedLine) || // **A. to **H.
+        /^\*\*\*.*?\*\*\*$/.test(trimmedLine) || // ***Title***
         trimmedLine.startsWith('**');
-
 
       if (isSectionHeader) {
         pushParagraph(); // Push any buffered content before starting new section
-        if(currentSection) sections.push(currentSection);
-        currentSection = { title: trimmedLine.replace(/\*/g, ''), content: [] };
+        if(currentSection && currentSection.content.length > 0) sections.push(currentSection);
+        currentSection = { title: trimmedLine.replace(/\*/g, '').trim(), content: [] };
       } else if (trimmedLine === '') {
         pushParagraph();
       } else {
@@ -104,7 +103,7 @@ const parseContent = (content: string) => {
     });
 
     pushParagraph();
-    if (currentSection) {
+    if (currentSection && currentSection.content.length > 0) {
       sections.push(currentSection);
     }
   };
@@ -115,10 +114,14 @@ const parseContent = (content: string) => {
 };
 
 const renderSection = (section: { title: string; content: string[] }, index: number) => {
+    // Map main sections to h2, and sub-sections to h3
+    const isMainSection = /^(I{1,3}\.\s|LESSON OVERVIEW|LESSON SEQUENCE|DIFFERENTIATION & SUPPORT)/.test(section.title);
+    const HeadingTag = isMainSection ? 'h2' : 'h3';
+    
     return (
-        <div key={index} className="mb-4 break-inside-avoid">
-            <h3 className="font-bold text-lg mt-4 mb-2 border-b pb-1 text-primary">{section.title}</h3>
-            <div className="space-y-2">
+        <div key={index} className="mb-6 break-inside-avoid">
+            <HeadingTag>{section.title}</HeadingTag>
+            <div className="space-y-3">
                 {section.content.map(renderContentItem)}
             </div>
         </div>
@@ -131,11 +134,23 @@ type StyledContentDisplayProps = {
 
 export default function StyledContentDisplay({ content }: StyledContentDisplayProps) {
     if (!content) return null;
-    const sections = parseContent(content);
+    
+    // Quick check to see if the content is likely a full lesson plan
+    const isLessonPlan = content.includes('LESSON OVERVIEW') || content.includes('LESSON SEQUENCE');
 
+    if (isLessonPlan) {
+      const sections = parseContent(content);
+      return (
+          <div className="document-view">
+              {sections.map(renderSection)}
+          </div>
+      );
+    }
+
+    // Fallback for simpler content that doesn't fit the lesson plan structure
     return (
-        <div className="p-4 bg-card text-card-foreground rounded-md shadow-sm styled-content">
-            {sections.map(renderSection)}
-        </div>
+      <div className="p-4 bg-card text-card-foreground rounded-md shadow-sm prose-sm dark:prose-invert max-w-none">
+          <Markdown>{content}</Markdown>
+      </div>
     );
 }
