@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -16,45 +16,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { createCheckoutSession } from '@/actions/stripe';
 import { useToast } from '@/hooks/use-toast';
+import { modules, type ModuleCategory } from '@/lib/modules-data';
 
-
-const modules = {
-  science: [
-    { id: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc', name: 'NV Biology', description: 'NYS Living Environment curriculum.', icon: <Dna /> },
-    { id: 'price_1Pg0yqAk4y2zY5d6n7s8tUvW', name: 'NGSS Biology (OpenSciEd)', description: 'Inquiry-based biology phenomena.', icon: <Leaf /> },
-    { id: 'price_1Pg0zFAk4y2zY5d6xYz0a1bC', name: 'NGSS Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: <Atom /> },
-    { id: 'price_1Pg0znAk4y2zY5d6pQrStVwX', name: 'NGSS Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: <Magnet /> },
-    { id: 'price_1Pg10AAk4y2zY5d6LMN9oPqR', name: 'Earth and Space Science', description: 'NYS Physical Setting curriculum.', icon: <Orbit /> },
-    { id: 'price_1Pg10RAk4y2zY5d6IJK7lMnO', name: 'Health', description: 'Promoting well-being & healthy choices.', icon: <HeartPulse /> },
-  ],
-  math: [
-    { id: 'price_1Pg10jAk4y2zY5d6DEF4gHjK', name: 'Illustrative Math Algebra 1', description: 'Linear equations, functions, data.', icon: <Sigma /> },
-    { id: 'price_1Pg10wAk4y2zY5d6sTuVwXyZ', name: 'Illustrative Math Algebra 2', description: 'Polynomials, rational, exponential.', icon: <Sigma /> },
-    { id: 'price_1Pg11DAk4y2zY5d6GHIJkLmN', name: 'Illustrative Math Geometry', description: 'Transformations, congruence, trig.', icon: <Sigma /> },
-  ],
-  ela: [
-    { id: 'price_1Pg11UAk4y2zY5d6OPQRsTuV', name: 'ELA 9th Grade', description: 'Analytical reading and writing skills.', icon: <Library /> },
-    { id: 'price_1Pg11gAk4y2zY5d6WXYZ0a1b', name: 'ELA 10th Grade', description: 'Complex texts and critical analysis.', icon: <Library /> },
-    { id: 'price_1Pg11sAk4y2zY5d6cdeFgHjK', name: 'ELA 11th Grade', description: 'American literature and research.', icon: <Library /> },
-    { id: 'price_1Pg124Ak4y2zY5d6lMnOpQrS', name: 'ELA 12th Grade', description: 'College-level reading and writing.', icon: <Library /> },
-  ],
-  social: [
-    { id: 'price_1Pg12DAk4y2zY5d6tUvWxYz0', name: 'Global History I & II', description: 'From ancient civilizations to present.', icon: <History /> },
-    { id: 'price_1Pg12NAk4y2zY5d6a1bCdeFg', name: 'US History & Government', description: 'American history & constitutional principles.', icon: <History /> },
-    { id: 'price_1Pg12ZAk4y2zY5d6hIjKlMnO', name: 'Government & Economics', description: 'Study of government and economic principles.', icon: <History /> },
-  ],
-  tools: [
-      { id: 'price_1Pg12lAk4y2zY5d6pQrStUvW', name: 'Test Generator', description: 'Generate comprehensive tests for any subject.', icon: <BookCopy /> },
-      { id: 'price_1Pg12wAk4y2zY5d6xYz0a1bC', name: 'Lab Generator', description: 'Instantly create safe lab experiments for science classes.', icon: <TestTube /> },
-  ]
+const iconMap: { [key: string]: React.ReactNode } = {
+    dna: <Dna />,
+    leaf: <Leaf />,
+    atom: <Atom />,
+    magnet: <Magnet />,
+    orbit: <Orbit />,
+    heartPulse: <HeartPulse />,
+    sigma: <Sigma />,
+    library: <Library />,
+    history: <History />,
+    bookCopy: <BookCopy />,
+    testTube: <TestTube />,
 };
 
 const pricing = {
     base: 19.99,
     additional: 9.99,
 };
-
-type ModuleCategory = keyof typeof modules;
 
 const ModuleCard = ({ module, isSelected, onSelect }: { module: any, isSelected: boolean, onSelect: (id: string) => void }) => (
     <Card
@@ -66,7 +47,7 @@ const ModuleCard = ({ module, isSelected, onSelect }: { module: any, isSelected:
     >
         <CardHeader className="flex flex-row items-start justify-between pb-2">
             <CardTitle className="text-lg font-medium">{module.name}</CardTitle>
-            <div className="text-primary">{module.icon}</div>
+            <div className="text-primary">{iconMap[module.icon]}</div>
         </CardHeader>
         <CardContent className="flex-grow">
             <p className="text-sm text-muted-foreground">{module.description}</p>

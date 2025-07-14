@@ -1,4 +1,4 @@
-// This is a new file or has been significantly updated.
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,7 @@ import {
   Bot,
   Check,
   PencilRuler,
+  FlaskConical,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -78,6 +79,7 @@ const aiTools = [
     { icon: <BookOpenText />, title: 'Reading Material Generator', description: 'Creates custom reading passages at various lexile levels.' },
     { icon: <Check />, title: 'Study Sheet Generator', description: 'Produces concise study guides and review sheets for students.' },
     { icon: <PencilRuler />, title: 'Advanced Assignment Creator', description: 'Generates challenging assignments and projects for advanced students.' },
+    { icon: <FlaskConical />, title: 'Interactive Simulators', description: 'Engaging digital simulators for science concepts, free with any science subscription.' },
 ];
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
@@ -128,17 +130,26 @@ export default function CurriculumPage() {
         </section>
 
          <section id="subscriber-benefit" className="bg-primary/5 py-20 sm:py-28">
-          <div className="container mx-auto max-w-7xl px-4">
-            <div className="mx-auto max-w-3xl text-center">
-               <h2 className="text-base font-semibold leading-7 text-primary">Exclusive Subscriber Benefit</h2>
-              <p className="mt-2 font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Curriculum Audit Simplification Tool
-              </p>
-              <p className="mt-6 text-lg text-muted-foreground">
-                Take your existing curriculum documents—dense frameworks, lengthy unit plans, or complex pacing guides—and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, concepts, and assessment points.
-              </p>
-              <FolderSync className="mx-auto mt-8 h-16 w-16 text-primary" />
-            </div>
+          <div className="container mx-auto max-w-3xl px-4 text-center">
+              <div className="mx-auto max-w-3xl text-center">
+                 <h2 className="text-base font-semibold leading-7 text-primary">Exclusive Subscriber Benefit</h2>
+                <p className="mt-2 font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                  Curriculum Audit Simplification Tool
+                </p>
+                <p className="mt-6 text-lg text-muted-foreground">
+                  Take your existing curriculum documents—dense frameworks, lengthy unit plans, or complex pacing guides—and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, concepts, and assessment points.
+                </p>
+                <FolderSync className="mx-auto mt-8 h-16 w-16 text-primary" />
+              </div>
+
+               <div className="mt-16 border-t border-primary/10 pt-12">
+                  <p className="text-lg text-muted-foreground">
+                    Don't see the subject or curriculum you need? Let us know!
+                  </p>
+                   <Button variant="link" asChild className="mt-2 text-lg">
+                      <Link href="/request-course">Request a Course</Link>
+                   </Button>
+               </div>
           </div>
         </section>
 
@@ -177,7 +188,7 @@ export default function CurriculumPage() {
                 Our algorithm ensures that all generated content is unique and tailored for your specific needs. We want to be clear: we **do not copy** information from any publicly available curricula. Instead, our AI analyzes standards and pedagogical requirements to create completely **original and unique**, high-quality material every time.
               </p>
             </div>
-            <div className="mt-16 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-16 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
               {aiTools.map((tool) => (
                 <FeatureCard key={tool.title} {...tool} />
               ))}

@@ -1,6 +1,8 @@
+
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -37,6 +39,7 @@ import {
 import Markdown from 'react-markdown';
 
 export default function LessonPlanGenerator() {
+  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +57,14 @@ export default function LessonPlanGenerator() {
   // Curriculum structure states
   const [units, setUnits] = useState<string[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
+
+  // Pre-fill subject from URL search params
+  useEffect(() => {
+    const subjectFromUrl = searchParams.get('subject');
+    if (subjectFromUrl && curriculumData.subjects.includes(subjectFromUrl)) {
+      setSelectedSubject(subjectFromUrl);
+    }
+  }, [searchParams]);
 
   // Reset and update dropdowns based on selections
   useEffect(() => {
@@ -122,7 +133,12 @@ export default function LessonPlanGenerator() {
   };
 
   const handleReset = () => {
-    setSelectedSubject('');
+    const subjectFromUrl = searchParams.get('subject');
+    if (subjectFromUrl && curriculumData.subjects.includes(subjectFromUrl)) {
+        setSelectedSubject(subjectFromUrl);
+    } else {
+        setSelectedSubject('');
+    }
     setSelectedGrade('');
     setSelectedUnit('');
     setSelectedTopic('');
@@ -142,7 +158,7 @@ export default function LessonPlanGenerator() {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="space-y-4">
+          <div className="space-y-4 p-4">
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-1/2" />
             <Skeleton className="h-4 w-full" />
@@ -151,7 +167,7 @@ export default function LessonPlanGenerator() {
           </div>
         ) : generatedContent ? (
           <ScrollArea className="h-[calc(100vh-20rem)]">
-             <div className="prose prose-sm max-w-none dark:prose-invert">
+             <div className="prose prose-sm max-w-none dark:prose-invert p-4">
                 <Markdown>{generatedContent}</Markdown>
              </div>
           </ScrollArea>

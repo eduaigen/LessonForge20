@@ -2,17 +2,26 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CheckCircle2 } from 'lucide-react';
 
 export default function CheckoutSuccessPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { subscribe } = useAuth();
 
   useEffect(() => {
-    // Mark the user as subscribed
-    subscribe();
+    // Get the purchased price IDs from the URL
+    const priceIdsParam = searchParams.get('price_ids');
+    if (priceIdsParam) {
+        const priceIds = priceIdsParam.split(',');
+        // Mark the user as subscribed with specific modules
+        subscribe(priceIds);
+    } else {
+        // Fallback for old success URL or direct access
+        subscribe([]);
+    }
     
     // Redirect to the dashboard after a short delay
     const timer = setTimeout(() => {
@@ -20,7 +29,7 @@ export default function CheckoutSuccessPage() {
     }, 3000);
 
     return () => clearTimeout(timer);
-  }, [router, subscribe]);
+  }, [router, subscribe, searchParams]);
 
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center p-8">

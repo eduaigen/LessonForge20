@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   BookCopy,
   TestTube,
@@ -20,6 +20,7 @@ import {
   HeartPulse,
   Magnet,
   Sparkles,
+  FlaskConical,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -41,28 +42,28 @@ const tools = {
         title: 'NGSS Biology (OpenSciEd)',
         description: 'Inquiry-based biology phenomena.',
         icon: <Leaf className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=NGSS_Biology',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Biology',
         isPremium: true,
       },
       {
         title: 'NV Biology',
         description: 'NYS Living Environment curriculum.',
         icon: <Dna className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=NV_Biology',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Biology',
         isPremium: true,
       },
       {
         title: 'NGSS Chemistry (OpenSciEd)',
         description: 'Foundational chemical principles.',
         icon: <Atom className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=NGSS_Chemistry',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Chemistry',
         isPremium: true,
       },
       {
         title: 'NGSS Physics (OpenSciEd)',
         description: 'Core concepts like motion, forces, energy.',
         icon: <Magnet className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=NGSS_Physics',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Physics',
         isPremium: true,
       },
        {
@@ -79,27 +80,35 @@ const tools = {
         href: '/auth-dashboard/lesson-plan-generator?subject=Health',
         isPremium: true,
       },
+      {
+        title: 'Interactive Simulators',
+        description: 'Engaging digital simulators for science concepts.',
+        icon: <FlaskConical className="w-8 h-8" />,
+        href: '/dashboard', // This will be a placeholder for now
+        isPremium: true,
+        requiresScienceSubscription: true,
+      },
     ],
     math: [
          {
         title: 'Illustrative Math Algebra 1',
         description: 'Linear equations, functions, data.',
         icon: <Sigma className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=IM_Algebra_1',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Math',
         isPremium: true,
       },
       {
         title: 'Illustrative Math Algebra 2',
         description: 'Polynomials, rational, exponential.',
         icon: <Sigma className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=IM_Algebra_2',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Math',
         isPremium: true,
       },
        {
         title: 'Illustrative Math Geometry',
         description: 'Transformations, congruence, trig.',
         icon: <Sigma className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=IM_Geometry',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Math',
         isPremium: true,
       },
     ],
@@ -108,28 +117,28 @@ const tools = {
         title: 'ELA 9th Grade',
         description: 'Analytical reading and writing skills.',
         icon: <Library className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=ELA_9',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
       },
        {
         title: 'ELA 10th Grade',
         description: 'Complex texts and critical analysis.',
         icon: <Library className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=ELA_10',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
       },
        {
         title: 'ELA 11th Grade',
         description: 'American literature and research.',
         icon: <Library className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=ELA_11',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
       },
        {
         title: 'ELA 12th Grade',
         description: 'College-level reading and writing.',
         icon: <Library className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=ELA_12',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
       },
     ],
@@ -138,21 +147,21 @@ const tools = {
         title: 'Global History I & II',
         description: 'From ancient civilizations to present.',
         icon: <History className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=Global_History',
+        href: '/auth-dashboard/lesson-plan-generator?subject=History',
         isPremium: true,
       },
        {
         title: 'US History & Government',
         description: 'American history & constitutional principles.',
         icon: <History className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=US_History',
+        href: '/auth-dashboard/lesson-plan-generator?subject=History',
         isPremium: true,
       },
        {
         title: 'Government & Economics',
         description: 'Study of government and economic principles.',
         icon: <History className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=Gov_Econ',
+        href: '/auth-dashboard/lesson-plan-generator?subject=History',
         isPremium: true,
       },
     ],
@@ -204,9 +213,9 @@ const tools = {
     ]
 };
 
-const ToolCard = ({ title, description, icon, href, isPremium }: { title: string, description: string, icon: React.ReactNode, href: string, isPremium: boolean }) => {
+const ToolCard = ({ title, description, icon, href, isPremium, requiresScienceSubscription = false }: { title: string, description: string, icon: React.ReactNode, href: string, isPremium: boolean, requiresScienceSubscription?: boolean }) => {
   const router = useRouter();
-  const { isSubscribed } = useAuth();
+  const { isSubscribed, hasScienceSubscription } = useAuth();
   const [showSubscriptionDialog, setShowSubscriptionDialog] = useState(false);
 
   const handleCardClick = () => {
@@ -215,11 +224,22 @@ const ToolCard = ({ title, description, icon, href, isPremium }: { title: string
        router.push(href);
        return;
     }
+
+    let hasAccess = false;
+    if (isPremium && isSubscribed) {
+        if (requiresScienceSubscription) {
+            hasAccess = hasScienceSubscription;
+        } else {
+            hasAccess = true;
+        }
+    } else if (!isPremium) {
+        hasAccess = true;
+    }
     
-    if (isPremium && !isSubscribed) {
-      setShowSubscriptionDialog(true);
-    } else {
+    if (hasAccess) {
       router.push(href);
+    } else {
+      setShowSubscriptionDialog(true);
     }
   };
 
@@ -252,8 +272,11 @@ const ToolCard = ({ title, description, icon, href, isPremium }: { title: string
 };
 
 
-const PremiumDashboardContent = () => (
-  <div className="flex flex-col gap-8">
+const PremiumDashboardContent = () => {
+  const { hasScienceSubscription } = useAuth();
+
+  return (
+    <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">Tool Dashboard</h1>
         <p className="text-muted-foreground">
@@ -271,7 +294,9 @@ const PremiumDashboardContent = () => (
        <div>
         <h2 className="text-2xl font-bold font-headline mb-4">Science</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.science.map((tool) => <ToolCard key={tool.title} {...tool} />)}
+          {tools.science
+            .filter(tool => !tool.requiresScienceSubscription || (tool.requiresScienceSubscription && hasScienceSubscription))
+            .map((tool) => <ToolCard key={tool.title} {...tool} />)}
         </div>
       </div>
 
@@ -303,7 +328,8 @@ const PremiumDashboardContent = () => (
         </div>
       </div>
     </div>
-);
+  );
+};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
