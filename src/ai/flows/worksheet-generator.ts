@@ -33,13 +33,12 @@ const prompt = ai.definePrompt({
 
     *   **C. MINI-LESSON:**
         *   Based on the topic and the teacher/student actions from the lesson plan, design a simple note-taking strategy for the student (e.g., a two-column note frame).
-        *   Embed the full text of the "Embedded Reading Passage" exactly as it appears in the lesson plan.
-        *   **Crucially, embed any SVG "Embedded Diagram" or other visuals from the lesson plan directly. The visual must be fully rendered in the worksheet.**
-        *   List all "Concept-Check Questions" from the lesson plan with space for answers.
+        *   **CRITICAL: You MUST embed the full text of any "Embedded Reading Passage" exactly as it appears in the lesson plan. Do not summarize it or refer to it. Generate the full text.**
+        *   **CRITICAL: You MUST embed any "Embedded Diagram" or other visuals (like SVGs) from the lesson plan directly. The visual must be fully rendered in the worksheet.**
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
         *   Clearly state the instructions for the guided practice activity, taken from the lesson plan.
-        *   **Perfectly render and include any "Embedded Data Table," graphs, or other materials from the lesson plan needed for the activity. Provide space for completion.**
+        *   **CRITICAL: You MUST perfectly render and include any "Embedded Data Table," graphs, or other materials from the lesson plan needed for the activity. Provide space for completion. Do not use placeholders.**
 
     *   **E. CHECK FOR UNDERSTANDING (CFU):**
         *   Copy all "CFU Questions" (multiple choice and short response) from the lesson plan for the student to answer. Provide space for their responses.
@@ -47,7 +46,7 @@ const prompt = ai.definePrompt({
     *   **F. INDEPENDENT PRACTICE / PERFORMANCE TASK:**
         *   Copy the full "Embedded Task" prompt (e.g., the CER prompt) from the lesson plan.
         *   Provide clear instructions and ample space for the student to complete the assignment.
-        *   **Include any necessary "taskData," tables, or graphs from the lesson plan, ensuring they are perfectly rendered.**
+        *   **CRITICAL: You MUST include any necessary "taskData," tables, or graphs from the lesson plan, ensuring they are perfectly rendered.**
 
     *   **G. CLOSURE / EXIT TICKET:**
         *   Transfer the exact "Exit Ticket Question" from the lesson plan.
@@ -60,7 +59,7 @@ const prompt = ai.definePrompt({
 {{{worksheetDataJson}}}
 \`\`\`
 
-Generate the complete worksheet content in Markdown format based on these strict instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered. Ensure there is sufficient blank space for students to write their answers for all questions.
+Generate the complete worksheet content in Markdown format based on these strict instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered. Ensure there is sufficient blank space for students to write their answers for all questions. Failure to embed all required content will result in an invalid response.
 `,
 });
 
