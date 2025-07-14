@@ -105,7 +105,7 @@ export default function SchoolLicensePage() {
         <CardHeader>
           <CardTitle>School & District Licenses</CardTitle>
           <CardDescription>
-            Interested in bringing Eduaigen to your entire school or district? Fill out the form below to get in touch with our partnerships team.
+            Interested in bringing EduAiGen to your entire school or district? Fill out the form below to get in touch with our partnerships team.
           </CardDescription>
         </CardHeader>
         <CardContent>

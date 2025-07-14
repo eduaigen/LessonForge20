@@ -336,7 +336,7 @@ const SubscriptionPrompt = () => (
                 </div>
                 <CardTitle className="font-headline text-3xl font-bold">Unlock Your Full Teaching Potential</CardTitle>
                 <CardDescription className="text-lg text-muted-foreground pt-2">
-                    Subscribe to Eduaigen to access our full suite of powerful AI tools, including curriculum generators, test makers, and advanced lesson planning features.
+                    Subscribe to EduAiGen to access our full suite of powerful AI tools, including curriculum generators, test makers, and advanced lesson planning features.
                 </CardDescription>
             </CardHeader>
             <CardContent>

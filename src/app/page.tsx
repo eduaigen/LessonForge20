@@ -70,7 +70,7 @@ export default function Home() {
         </>
       ),
       description:
-        'Eduaigen is your AI-powered partner for creating exceptional learning experiences. Save time on prep, engage students with dynamic content, and teach with renewed confidence.',
+        'EduAiGen is your AI-powered partner for creating exceptional learning experiences. Save time on prep, engage students with dynamic content, and teach with renewed confidence.',
     },
     {
       title: (
@@ -209,7 +209,7 @@ export default function Home() {
                     Focus on What Matters Most
                   </p>
                   <p className="mt-6 text-lg leading-8 text-muted-foreground">
-                    We built Eduaigen to handle the heavy lifting of curriculum
+                    We built EduAiGen to handle the heavy lifting of curriculum
                     planning so you can dedicate your energy to teaching. Our AI
                     tools are designed with educational best practices at their
                     core.

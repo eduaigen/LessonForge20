@@ -40,8 +40,8 @@ export function Logo() {
           </svg>
         </div>
       </div>
-      <span className="text-2xl font-bold font-headline text-foreground">
-        Eduaigen
+      <span className="text-2xl font-bold font-headline gradient-text">
+        EduAiGen
       </span>
     </div>
   );

@@ -202,7 +202,7 @@ export default function CurriculumPage() {
                     Ready to Transform Your Classroom?
                 </h2>
                 <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                    Join thousands of educators who are saving time, engaging students, and rediscovering the joy of teaching with Eduaigen.
+                    Join thousands of educators who are saving time, engaging students, and rediscovering the joy of teaching with EduAiGen.
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <Button size="lg" asChild className="shadow-lg shadow-primary/20">

@@ -15,7 +15,7 @@ export function Footer() {
                     Empowering educators with AI to create exceptional learning experiences.
                 </p>
                  <p className="text-sm text-muted-foreground">
-                    © {new Date().getFullYear()} Eduaigen. All Rights Reserved.
+                    © {new Date().getFullYear()} EduAiGen. All Rights Reserved.
                  </p>
             </div>
             <div>

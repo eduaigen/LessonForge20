@@ -54,7 +54,7 @@ export default function AnimatedLogo() {
 
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-2 tracking-tight">
-              Eduaigen
+              EduAiGen
             </h1>
             <p className="text-gray-300 text-lg font-medium tracking-wide">
               Educational AI Generator
