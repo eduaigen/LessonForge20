@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
+import { aiContentGenerationRules } from '@/ai/schemas/formatting-rules';
 
 const GenerateTestInputSchema = z.object({
   unit: z.string().describe('The unit or comma-separated list of units for which to generate the test.'),

@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
+import { aiContentGenerationRules } from '@/ai/schemas/formatting-rules';
 
 const RefineLearningObjectiveInputSchema = z.object({
   objective: z.string().describe('The learning objective to refine.'),

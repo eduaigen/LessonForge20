@@ -16,7 +16,7 @@ import {
     type GenerateTeacherToolOutput,
     type ToolType
 } from '@/ai/schemas/teacher-tool-schemas';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
+import { aiContentGenerationRules } from '@/ai/schemas/formatting-rules';
 
 // This is the main exported function that the UI will call.
 export async function generateTeacherTool(input: GenerateTeacherToolInput): Promise<GenerateTeacherToolOutput> {

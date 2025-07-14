@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
+import { aiContentGenerationRules } from '@/ai/schemas/formatting-rules';
 
 const ExplainConceptInputSchema = z.object({
   concept: z.string().describe('The concept or question to be explained.'),

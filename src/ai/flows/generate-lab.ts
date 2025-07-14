@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
+import { aiContentGenerationRules } from '@/ai/schemas/formatting-rules';
 
 const GenerateLabExperimentInputSchema = z.object({
   lessonDescription: z.string().describe('The description or title of the lesson that this lab should be based on.'),

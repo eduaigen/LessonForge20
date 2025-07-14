@@ -11,7 +11,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
+import { aiContentGenerationRules } from '@/ai/schemas/formatting-rules';
 
 const CurriculumAuditInputSchema = z.object({
   document: z.string().describe('The curriculum document to be analyzed (e.g., unit plan, syllabus, pacing guide).'),
