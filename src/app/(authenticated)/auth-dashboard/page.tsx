@@ -353,9 +353,3 @@ export default function PremiumDashboardPage() {
   
   return isSubscribed ? <PremiumDashboardContent /> : <SubscriptionPrompt />;
 }
-
-    
-
-    
-
-    

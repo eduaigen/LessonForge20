@@ -17,7 +17,7 @@ export const curriculumData: {
   subjects: string[];
   content: CurriculumContent;
 } = {
-  subjects: ['AP Biology', 'Biology', 'Chemistry', 'Physics', 'History', 'Literature'],
+  subjects: ['AP Biology', 'Biology', 'Chemistry', 'Earth_Science', 'Physics', 'History', 'Literature'],
   content: {
     'AP Biology': {
         units: {
@@ -266,6 +266,63 @@ export const curriculumData: {
         },
       },
     },
+    'Earth_Science': {
+        units: {
+            "Unit 1: Discovering New Worlds": {
+                topics: {
+                    "Engage & Explore": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
+                    "Earth and the Moon": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
+                    "Modeling the Sun": { lessons: ["Lesson 7", "Lesson 8", "Lesson 9"] },
+                    "Interpreting Data About Distant Objects": { lessons: ["Lesson 10", "Lesson 11", "Lesson 12"] },
+                    "Unit Closing": { lessons: ["Lesson 13"] }
+                }
+            },
+            "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
+                topics: {
+                    "Engage & Launch": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
+                    "Tectonic Movement and Plate Boundaries": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
+                    "Natural Hazard Data": { lessons: ["Lesson 7", "Lesson 8", "Lesson 9"] },
+                    "Earthquake Engineering": { lessons: ["Lesson 10", "Lesson 11"] },
+                    "Unit Closing": { lessons: ["Lesson 12"] }
+                }
+            },
+            "Unit 3: Climate Change Throughout Human History": {
+                topics: {
+                    "Engage and Ice Core Data": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
+                    "Global Warming and Carbon Emissions": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
+                    "Sea Level and Ecosystem Effects": { lessons: ["Lesson 7", "Lesson 8"] },
+                    "Geoengineering and Mitigation": { lessons: ["Lesson 9", "Lesson 10"] },
+                    "Unit Closing": { lessons: ["Lesson 11"] }
+                }
+            },
+            "Unit 4: More Hurricanes and Blizzards in NYC?": {
+                topics: {
+                    "Extreme Weather Patterns": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
+                    "Hurricane Frequency": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
+                    "Blizzard Analysis": { lessons: ["Lesson 7", "Lesson 8"] },
+                    "Infrastructure Resilience": { lessons: ["Lesson 9", "Lesson 10"] },
+                    "Unit Closing": { lessons: ["Lesson 11"] }
+                }
+            },
+            "Unit 5: Solutions for a Sustainable Future": {
+                topics: {
+                    "Burning Fossil Fuels": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6", "Lesson 7", "Lesson 8", "Lesson 9", "Lesson 10"] },
+                    "Land Use & Biodiversity": { lessons: ["Lesson 11", "Lesson 12", "Lesson 13", "Lesson 14", "Lesson 15", "Lesson 16"] },
+                    "Mining": { lessons: ["Lesson 17", "Lesson 18", "Lesson 19", "Lesson 20", "Lesson 21", "Lesson 22", "Lesson 23"] },
+                    "Unit Closing": { lessons: ["Lesson 24", "Lesson 25", "Lesson 26"] }
+                }
+            },
+            "Unit 6: Probability of Life Elsewhere": {
+                topics: {
+                    "Stability of the Solar System": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6", "Lesson 7"] },
+                    "Coevolution of Earth and Life": { lessons: ["Lesson 8", "Lesson 9", "Lesson 10", "Lesson 11", "Lesson 12"] },
+                    "Origin of the Universe": { lessons: ["Lesson 13", "Lesson 14", "Lesson 15", "Lesson 16", "Lesson 17"] },
+                    "Asteroid Orbits": { lessons: ["Lesson 18", "Lesson 19", "Lesson 20", "Lesson 21", "Lesson 22"] },
+                    "Unit Closing": { lessons: ["Lesson 23"] }
+                }
+            }
+        }
+    },
     Chemistry: {
       units: {
         'Atomic Structure': {
@@ -350,5 +407,3 @@ export const curriculumData: {
     }
   },
 };
-
-    
