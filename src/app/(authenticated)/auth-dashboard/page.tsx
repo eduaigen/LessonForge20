@@ -19,9 +19,11 @@ import {
   Orbit,
   HeartPulse,
   Magnet,
+  Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { SubscriptionDialog } from '@/components/common/SubscriptionDialog';
@@ -208,6 +210,12 @@ const ToolCard = ({ title, description, icon, href, isPremium }: { title: string
   const [showSubscriptionDialog, setShowSubscriptionDialog] = useState(false);
 
   const handleCardClick = () => {
+    // Free tools on this page link back to the main free tools dashboard
+    if (!isPremium) {
+       router.push('/dashboard');
+       return;
+    }
+
     if (isPremium && !isSubscribed) {
       setShowSubscriptionDialog(true);
     } else {
@@ -244,18 +252,12 @@ const ToolCard = ({ title, description, icon, href, isPremium }: { title: string
 };
 
 
-export default function PremiumDashboardPage() {
-  const { isSubscribed } = useAuth();
-  
-  return (
-    <div className="flex flex-col gap-8">
+const PremiumDashboardContent = () => (
+  <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">Tool Dashboard</h1>
         <p className="text-muted-foreground">
-          {isSubscribed 
-            ? "Access your subscribed AI generators and free tools."
-            : "Explore our full suite of AI tools. Subscribe to unlock premium features."
-          }
+           Access your subscribed AI generators and free tools.
         </p>
       </div>
 
@@ -301,5 +303,31 @@ export default function PremiumDashboardPage() {
         </div>
       </div>
     </div>
-  );
+);
+
+const SubscriptionPrompt = () => (
+    <div className="flex flex-1 items-center justify-center">
+        <Card className="max-w-2xl text-center p-8 shadow-lg">
+            <CardHeader>
+                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Sparkles className="h-8 w-8" />
+                </div>
+                <CardTitle className="font-headline text-3xl font-bold">Unlock Your Full Teaching Potential</CardTitle>
+                <CardDescription className="text-lg text-muted-foreground pt-2">
+                    Subscribe to Eduaigen to access our full suite of powerful AI tools, including curriculum generators, test makers, and advanced lesson planning features.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button size="lg" asChild>
+                    <Link href="/pricing">Explore Premium Tools & Subscribe</Link>
+                </Button>
+            </CardContent>
+        </Card>
+    </div>
+);
+
+export default function PremiumDashboardPage() {
+  const { isSubscribed } = useAuth();
+  
+  return isSubscribed ? <PremiumDashboardContent /> : <SubscriptionPrompt />;
 }
