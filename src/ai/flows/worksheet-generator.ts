@@ -9,7 +9,7 @@ import { WorksheetGeneratorInputSchema, WorksheetGeneratorOutputSchema, type Wor
 
 const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
-  input: { schema: WorksheetGeneratorInputSchema },
+  input: { schema: z.object({ input: WorksheetGeneratorInputSchema }) },
   output: { schema: WorksheetGeneratorOutputSchema },
   prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive worksheet that a student can use in the classroom.
 
@@ -30,6 +30,11 @@ const prompt = ai.definePrompt({
 \`\`\`
 
 Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan is present and correctly placed.`,
+  
+  // Register the custom helper
+  helpers: {
+    jsonStringify,
+  },
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
@@ -39,6 +44,7 @@ const worksheetGeneratorFlow = ai.defineFlow(
     outputSchema: WorksheetGeneratorOutputSchema,
   },
   async (input) => {
+    // Pass the input object wrapped in another object to match the prompt's input schema
     const { output } = await prompt({ input });
     if (!output) {
       throw new Error('The AI failed to generate the worksheet. Please try again.');
