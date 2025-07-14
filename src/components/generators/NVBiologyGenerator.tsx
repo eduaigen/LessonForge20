@@ -19,6 +19,7 @@ import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
 import { generateComprehensionQuestions } from '@/ai/flows/comprehension-question-generator';
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
+import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -174,6 +175,13 @@ const GeneratorContent = () => {
             result = await generateTeacherCoach(lessonPlan);
             setGeneratedSections(prev => [...prev, {
                 id: `coach-${Date.now()}`,
+                title: title,
+                content: result,
+            }]);
+        } else if (toolName === 'Slideshow Outline') {
+            result = await generateSlideshowOutline(lessonPlan);
+            setGeneratedSections(prev => [...prev, {
+                id: `slideshow-${Date.now()}`,
                 title: title,
                 content: result,
             }]);

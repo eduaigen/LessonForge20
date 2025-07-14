@@ -6,6 +6,7 @@ import Markdown from 'react-markdown';
 import { InlineMath, BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
+import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
 
 // This component now intelligently decides how to render content.
 
@@ -238,6 +239,24 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
     );
 };
 
+const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
+    return (
+        <div className="document-view">
+            <h1>Slideshow Outline</h1>
+            {outline.slides.map((slide, index) => (
+                <section key={index} className="mb-6 border-b pb-4">
+                    <h3>Slide {index + 1}: {slide.title}</h3>
+                    <ul className="list-disc pl-5 space-y-2">
+                        {slide.content.map((point, pointIndex) => (
+                            <li key={pointIndex}>{point}</li>
+                        ))}
+                    </ul>
+                </section>
+            ))}
+        </div>
+    );
+};
+
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -248,6 +267,7 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     
     const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
     const isCoachingObject = typeof content === 'object' && content !== null && 'doNow' in content && 'pedagogicalRationale' in content.doNow;
+    const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
 
     if (isLessonPlanObject) {
       return renderLessonPlan(content);
@@ -255,6 +275,10 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
 
     if (isCoachingObject) {
         return renderCoachingAdvice(content);
+    }
+
+    if (isSlideshowObject) {
+        return renderSlideshowOutline(content);
     }
 
     if (typeof content === 'string') {

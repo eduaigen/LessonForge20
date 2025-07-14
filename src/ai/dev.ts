@@ -11,3 +11,4 @@ export * from './flows/worksheet-generator';
 export * from './flows/reading-material-generator';
 export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
+export * from './flows/slideshow-outline-generator';
