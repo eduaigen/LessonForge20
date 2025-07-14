@@ -180,6 +180,8 @@ export default function TestGeneratorPage() {
           setIsLoading(true);
           const data = await getCurriculumForSubject(selectedSubject);
           setCurrentCurriculum(data);
+          setSelectedUnits([]);
+          setSelectedTopics([]);
           setIsLoading(false);
         } else {
           setCurrentCurriculum(null);
@@ -481,8 +483,6 @@ export default function TestGeneratorPage() {
                     value={selectedSubject}
                     onValueChange={(value) => {
                         setSelectedSubject(value);
-                        setSelectedUnits([]);
-                        setSelectedTopics([]);
                     }}
                     required
                 >

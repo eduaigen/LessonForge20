@@ -124,6 +124,9 @@ export default function LessonPlanGenerator() {
             setIsLoading(true);
             const data = await getCurriculumForSubject(selectedSubject);
             setCurrentCurriculum(data);
+            setSelectedUnit('');
+            setSelectedTopic('');
+            setSelectedLesson('');
             setIsLoading(false);
         } else {
             setCurrentCurriculum(null);
