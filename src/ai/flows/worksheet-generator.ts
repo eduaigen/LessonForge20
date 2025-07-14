@@ -5,6 +5,7 @@
  */
 import { ai } from '@/ai/genkit';
 import { jsonStringify } from 'genkit';
+import { z } from 'genkit';
 import { WorksheetGeneratorInputSchema, WorksheetGeneratorOutputSchema, type WorksheetGeneratorInput, type WorksheetGeneratorOutput } from '../schemas/worksheet-generator-schemas';
 
 const prompt = ai.definePrompt({
