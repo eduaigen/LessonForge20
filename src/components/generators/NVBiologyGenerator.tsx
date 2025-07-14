@@ -25,13 +25,10 @@ const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
   topic: z.string().min(1, { message: 'Please select a topic.' }),
   lesson: z.string().min(1, { message: 'Please select a lesson.' }),
-  strategy: z.enum(['Engage', 'Explore', 'Explain', 'Elaborate', 'Evaluate']),
   additionalInfo: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-const fiveEStrategies = ['Engage', 'Explore', 'Explain', 'Elaborate', 'Evaluate'] as const;
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -66,7 +63,6 @@ const GeneratorContent = () => {
       unit: '',
       topic: '',
       lesson: '',
-      strategy: 'Engage',
       additionalInfo: '',
     },
   });
@@ -211,43 +207,19 @@ const GeneratorContent = () => {
                 />
             )}
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
+            <FormField
                 control={form.control}
-                name="strategy"
+                name="additionalInfo"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>5E Strategy</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a 5E strategy" />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                        {fiveEStrategies.map((strategy) => (
-                            <SelectItem key={strategy} value={strategy}>{strategy}</SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
+                    <FormLabel>Additional Information (Optional)</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
+                    </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="additionalInfo"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Additional Information (Optional)</FormLabel>
-                        <FormControl>
-                            <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                    />
-            </div>
+            />
           </CardContent>
           <CardFooter>
             <Button type="submit" disabled={isLoading} className="w-full">
