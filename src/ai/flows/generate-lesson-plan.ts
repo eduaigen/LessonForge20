@@ -20,6 +20,8 @@ import {
 export async function generateLessonPlan(input: GenerateLessonPlanInput): Promise<string> {
   const result = await generateLessonPlanFlow(input);
   if (!result.lessonPlan) {
+    // This could happen if the AI fails or returns an empty string.
+    // We can throw an error to be handled by the calling UI component.
     throw new Error('The AI failed to generate a lesson plan. Please try again with a different or more detailed prompt.');
   }
   return result.lessonPlan;
