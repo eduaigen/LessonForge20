@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow for generating a slideshow outline from a lesson plan.
@@ -8,11 +9,12 @@ import {
   SlideshowOutlineOutputSchema,
   type SlideshowOutlineInput,
   type SlideshowOutlineOutput,
+  PromptInputSchema,
 } from '../schemas/slideshow-outline-generator-schemas';
 
 const prompt = ai.definePrompt({
   name: 'slideshowOutlineGeneratorPrompt',
-  input: { schema: SlideshowOutlineInputSchema },
+  input: { schema: PromptInputSchema },
   output: { schema: SlideshowOutlineOutputSchema },
   prompt: `You are an expert instructional designer who creates clear and engaging presentations for teachers. Your task is to convert the provided lesson plan JSON into a concise, slide-by-slide outline.
 

@@ -1,9 +1,11 @@
 import { z } from 'zod';
 import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
 
-export const SlideshowOutlineInputSchema = z.object({
+export const PromptInputSchema = z.object({
     lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
 });
+
+export const SlideshowOutlineInputSchema = GenerateNVBiologyLessonOutputSchema;
 
 const slideSchema = z.object({
   title: z.string().describe('The title of the slide.'),
