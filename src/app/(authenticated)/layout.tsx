@@ -73,30 +73,6 @@ export default function AuthenticatedAppLayout({
               </TooltipTrigger>
               <TooltipContent side="right">Pricing</TooltipContent>
             </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/auth-dashboard/test-generator"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
-                  <BookCopy className="h-5 w-5" />
-                  <span className="sr-only">Test Generator</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Test Generator</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href="/auth-dashboard/curriculum-audit"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
-                  <FolderSync className="h-5 w-5" />
-                  <span className="sr-only">Curriculum Audit</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Curriculum Audit</TooltipContent>
-            </Tooltip>
           </TooltipProvider>
         </nav>
       </aside>
@@ -131,20 +107,6 @@ export default function AuthenticatedAppLayout({
                 >
                   <DollarSign className="h-5 w-5" />
                   Pricing
-                </Link>
-                <Link
-                  href="/auth-dashboard/test-generator"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <BookCopy className="h-5 w-5" />
-                  Test Generator
-                </Link>
-                <Link
-                  href="/auth-dashboard/curriculum-audit"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <FolderSync className="h-5 w-5" />
-                  Curriculum Audit
                 </Link>
               </nav>
             </SheetContent>

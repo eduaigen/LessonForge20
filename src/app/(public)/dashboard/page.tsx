@@ -1,43 +1,26 @@
 
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ObjectiveRefiner from './ObjectiveRefiner';
-import ConceptExplainer from './ConceptExplainer';
-import VocabDeepDive from './VocabDeepDive';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Lightbulb } from 'lucide-react';
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold">Free AI Tools</h1>
-        <p className="text-muted-foreground">
-          Explore our foundational AI tools, available for free to all
-          educators.
-        </p>
-      </div>
-      <Tabs defaultValue="objective-refiner" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
-          <TabsTrigger value="objective-refiner">
-            Objective Refiner
-          </TabsTrigger>
-          <TabsTrigger value="concept-explainer">
-            Concept Explainer
-          </TabsTrigger>
-          <TabsTrigger value="vocab-deep-dive">Vocab Deep Dive</TabsTrigger>
-        </TabsList>
-        <TabsContent value="objective-refiner" className="mt-4">
-          <ObjectiveRefiner />
-        </TabsContent>
-        <TabsContent value="concept-explainer" className="mt-4">
-          <ConceptExplainer />
-        </TabsContent>
-        <TabsContent value="vocab-deep-dive" className="mt-4">
-          <VocabDeepDive />
-        </TabsContent>
-      </Tabs>
+    <div className="flex flex-1 items-center justify-center p-4">
+      <Card className="max-w-2xl text-center">
+        <CardHeader>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Lightbulb className="h-8 w-8" />
+          </div>
+          <CardTitle>Free AI Tools</CardTitle>
+          <CardDescription>
+            Our free tools are currently under maintenance. Please check back later!
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">We're working hard to bring you new and improved features.</p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
-
-    

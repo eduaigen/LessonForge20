@@ -16,14 +16,6 @@ import {
   Library,
   BookOpenText,
   History,
-  FileText,
-  Presentation,
-  GitBranch,
-  Users,
-  Bot,
-  Check,
-  PencilRuler,
-  FlaskConical,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -70,27 +62,6 @@ const offerings = {
   },
 };
 
-const aiTools = [
-    { icon: <FileText />, title: 'Lesson-Specific Worksheets', description: 'Automatically generated worksheets aligned with module content and objectives.' },
-    { icon: <Presentation />, title: 'Slide Show Creator', description: 'AI-designed slide presentations, ready for classroom use, summarizing key concepts.' },
-    { icon: <GitBranch />, title: 'Outlines', description: 'Detailed lesson outlines providing a structured flow for teaching.' },
-    { icon: <Users />, title: 'Differentiation Strategies', description: 'Tailored suggestions and materials to support diverse learners.' },
-    { icon: <Bot />, title: 'Pedagogical Coaching', description: 'AI-driven insights aligned with the Danielson Framework for Teaching.' },
-    { icon: <BookOpenText />, title: 'Reading Material Generator', description: 'Creates custom reading passages at various lexile levels.' },
-    { icon: <Check />, title: 'Study Sheet Generator', description: 'Produces concise study guides and review sheets for students.' },
-    { icon: <PencilRuler />, title: 'Advanced Assignment Creator', description: 'Generates challenging assignments and projects for advanced students.' },
-    { icon: <FlaskConical />, title: 'Interactive Simulators', description: 'Engaging digital simulators for science concepts, free with any science subscription.' },
-];
-
-const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) => (
-    <div className="flex items-start space-x-4">
-        <div className="flex-shrink-0 text-primary">{icon}</div>
-        <div>
-            <h3 className="font-semibold text-foreground">{title}</h3>
-            <p className="text-muted-foreground">{description}</p>
-        </div>
-    </div>
-);
 
 export default function CurriculumPage() {
   return (
@@ -111,10 +82,10 @@ export default function CurriculumPage() {
           </div>
           <div className="container mx-auto max-w-7xl px-4 text-center">
             <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              A New Standard in <span className="gradient-text">Curriculum Generation</span>
+              A New Standard in <span className="gradient-text">Curriculum</span>
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl">
-              Our advanced AI platform offers comprehensive, unique, and tailored educational modules across a wide range of subjects, designed to meet the specific needs of you and your students.
+              Our platform offers comprehensive, and tailored educational modules across a wide range of subjects, designed to meet the specific needs of you and your students.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-4">
               <Button size="lg" asChild className="shadow-lg shadow-primary/20">
@@ -137,7 +108,7 @@ export default function CurriculumPage() {
                   Curriculum Audit Simplification Tool
                 </p>
                 <p className="mt-6 text-lg text-muted-foreground">
-                  Take your existing curriculum documents—dense frameworks, lengthy unit plans, or complex pacing guides—and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, concepts, and assessment points.
+                  Take your existing curriculum documents—dense frameworks, lengthy unit plans, or complex pacing guides—and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, concepts, and assessment points. (Coming Soon)
                 </p>
                 <FolderSync className="mx-auto mt-8 h-16 w-16 text-primary" />
               </div>
@@ -176,25 +147,6 @@ export default function CurriculumPage() {
             </div>
           </section>
         ))}
-
-        <section id="ai-tools" className="bg-background py-20 sm:py-28">
-          <div className="container mx-auto max-w-7xl px-4">
-            <div className="mx-auto max-w-3xl text-center">
-               <h2 className="text-base font-semibold leading-7 text-primary">Powered by AI</h2>
-              <p className="mt-2 font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                 Unique Generation &amp; Teacher Tools
-              </p>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Our algorithm ensures that all generated content is unique and tailored for your specific needs. We want to be clear: we **do not copy** information from any publicly available curricula. Instead, our AI analyzes standards and pedagogical requirements to create completely **original and unique**, high-quality material every time.
-              </p>
-            </div>
-            <div className="mt-16 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-              {aiTools.map((tool) => (
-                <FeatureCard key={tool.title} {...tool} />
-              ))}
-            </div>
-          </div>
-        </section>
 
         <section className="bg-muted/30">
             <div className="container mx-auto max-w-4xl px-4 py-16 text-center sm:py-24">
