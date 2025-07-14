@@ -15,3 +15,4 @@ export * from './flows/slideshow-outline-generator';
 export * from './flows/scaffold-worksheet';
 export * from './flows/question-cluster-generator';
 export * from './flows/translate-content';
+export * from './flows/study-sheet-generator';

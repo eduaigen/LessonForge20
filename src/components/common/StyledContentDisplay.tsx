@@ -8,6 +8,7 @@ import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
 import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
+import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schemas';
 
 // This component now intelligently decides how to render content.
 
@@ -322,6 +323,37 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     );
   };
 
+const renderStudySheet = (studySheet: StudySheetOutput) => (
+    <div className="document-view">
+        <section className="mb-6">
+            <h2>Key Vocabulary</h2>
+            <ul className="list-disc pl-5 space-y-2">
+                {studySheet.vocabulary.map((item, index) => (
+                    <li key={index}>
+                        <strong>{item.term}:</strong> {item.definition}
+                    </li>
+                ))}
+            </ul>
+        </section>
+        <section className="mb-6">
+            <h2>Key Concepts</h2>
+            <ul className="list-disc pl-5 space-y-2">
+                {studySheet.keyConcepts.map((concept, index) => (
+                    <li key={index}>{concept}</li>
+                ))}
+            </ul>
+        </section>
+        <section>
+            <h2>Real-World Applications & Questions</h2>
+            <ul className="list-disc pl-5 space-y-2">
+                {studySheet.applications.map((application, index) => (
+                    <li key={index}>{application}</li>
+                ))}
+            </ul>
+        </section>
+    </div>
+);
+
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -334,6 +366,8 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     const isCoachingObject = typeof content === 'object' && content !== null && 'doNow' in content && 'pedagogicalRationale' in content.doNow;
     const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
     const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
+    const isStudySheetObject = typeof content === 'object' && content !== null && 'keyConcepts' in content;
+
 
     if (isLessonPlanObject) {
       return renderLessonPlan(content);
@@ -349,6 +383,10 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
 
     if (isQuestionClusterObject) {
         return renderQuestionCluster(content);
+    }
+
+     if (isStudySheetObject) {
+        return renderStudySheet(content);
     }
 
     if (typeof content === 'string') {

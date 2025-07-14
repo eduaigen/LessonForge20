@@ -22,6 +22,7 @@ import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
 import { scaffoldWorksheet } from '@/ai/flows/scaffold-worksheet';
 import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
+import { generateStudySheet } from '@/ai/flows/study-sheet-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -43,7 +44,7 @@ type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: 'worksheet' | 'lesson-plan' | 'reading-material' | 'coaching-advice' | 'slideshow-outline' | 'scaffolded-worksheet' | 'question-cluster';
+  type: 'worksheet' | 'lesson-plan' | 'reading-material' | 'coaching-advice' | 'slideshow-outline' | 'scaffolded-worksheet' | 'question-cluster' | 'study-sheet';
   subContent?: any;
   isSubContentLoading?: boolean;
 };
@@ -140,7 +141,7 @@ const GeneratorContent = () => {
         'Worksheet': 'Student Worksheet',
         'Reading Material': 'Reading Material',
         'Comprehension Qs': 'Comprehension Questions',
-        'Study Sheet': 'Study Sheet',
+        'Study Sheet': 'Student Study Sheet',
         'Question Cluster': 'NGSS Question Cluster',
         'Slideshow Outline': 'Slideshow Outline',
         'Scaffold Tool': 'Scaffolded Worksheet',
@@ -217,6 +218,14 @@ const GeneratorContent = () => {
                 title: title,
                 content: result,
                 type: 'question-cluster',
+            }]);
+        } else if (toolName === 'Study Sheet') {
+            result = await generateStudySheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            setGeneratedSections(prev => [...prev, {
+                id: `study-sheet-${Date.now()}`,
+                title: title,
+                content: result,
+                type: 'study-sheet',
             }]);
         }
     } catch (error) {
