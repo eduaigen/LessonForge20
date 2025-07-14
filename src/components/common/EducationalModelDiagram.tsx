@@ -1,15 +1,18 @@
 import { BookOpenText, TestTube, Sigma, History } from 'lucide-react';
+import { Logo } from '@/components/common/Logo';
+import Link from 'next/link';
 
 const Node = ({ icon, label, position, delay }: { icon: React.ReactNode, label: string, position: string, delay: string }) => (
-    <div
-      className={`absolute ${position} flex flex-col items-center animate-float-up`}
+    <Link
+      href="/curriculum"
+      className={`absolute ${position} flex flex-col items-center animate-float-up group`}
       style={{ animationDelay: delay }}
     >
-      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-card shadow-lg border border-border/50 backdrop-blur-sm">
+      <div className="flex items-center justify-center w-16 h-16 rounded-full bg-card shadow-lg border border-border/50 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-primary/20">
         {icon}
       </div>
-      <span className="mt-2 text-xs font-medium text-muted-foreground">{label}</span>
-    </div>
+      <span className="mt-2 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">{label}</span>
+    </Link>
   );
 
 export default function EducationalModelDiagram() {
@@ -33,7 +36,7 @@ export default function EducationalModelDiagram() {
 
         {/* Central Node */}
         <div 
-          className="relative z-10 flex items-center justify-center w-40 h-40 rounded-full bg-background"
+          className="relative z-10 flex flex-col items-center justify-center w-40 h-40 rounded-full bg-background"
         >
             <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow"/>
             <div className="absolute inset-2 rounded-full bg-background shadow-inner"/>
@@ -82,7 +85,7 @@ export default function EducationalModelDiagram() {
                         <div className="absolute inset-2 w-20 h-20 border-2 border-accent/30 rounded-full energy-ring-2"></div>
                     </div>
                  </div>
-                 <span className="font-headline text-lg font-bold gradient-text mt-2">
+                 <span className="font-headline text-lg font-bold gradient-text -mt-4">
                     Eduaigen
                  </span>
             </div>
@@ -95,21 +98,3 @@ export default function EducationalModelDiagram() {
       </div>
     );
   }
-
-  // Add this to your globals.css or a style tag if needed
-  /*
-  @keyframes ping-slow {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.7;
-    }
-    50% {
-      transform: scale(1.4);
-      opacity: 0;
-    }
-  }
-  .animate-ping-slow {
-    animation: ping-slow 4s cubic-bezier(0, 0, 0.2, 1) infinite;
-  }
-  */
-
