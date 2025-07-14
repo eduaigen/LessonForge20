@@ -1,5 +1,5 @@
 
-import {z} from 'genkit';
+import {z} from 'zod';
 import { aiContentGenerationRules } from './formatting-rules';
 
 export const lessonPlanFormattingInstruction = `

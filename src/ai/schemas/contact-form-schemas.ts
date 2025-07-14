@@ -1,4 +1,4 @@
-import {z} from 'genkit';
+import {z} from 'zod';
 
 export const SendContactEmailInputSchema = z.object({
   formType: z.enum(['courseRequest', 'schoolLicense']).describe('The type of form being submitted.'),
