@@ -20,7 +20,7 @@ import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
-import FloatingToolsMenu from '../common/FloatingToolsMenu';
+import AIToolsPanel from '../common/AIToolsPanel';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -241,10 +241,10 @@ const GeneratorContent = () => {
             {output && !isLoading && (
             <div className="mt-8 border-t pt-8">
                 <StyledContentDisplay content={output} />
+                <AIToolsPanel lessonPlan={output} />
             </div>
             )}
         </Card>
-        <FloatingToolsMenu lessonPlan={output} />
     </div>
   );
 }
