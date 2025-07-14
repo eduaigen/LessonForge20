@@ -13,6 +13,12 @@ import {
   ScrollText,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 type ToolName = 'Worksheet' | 'Reading Material' | 'Comprehension Qs' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Scaffold Tool' | 'Teacher Coach';
 
@@ -48,21 +54,29 @@ export default function RightSidebar({ onToolClick, isGenerating }: RightSidebar
 
   return (
     <aside className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
-      <div className="flex flex-col gap-2 p-2 bg-background/80 backdrop-blur-sm border rounded-lg shadow-lg">
-        {tools.map((tool) => (
-          <Button
-            key={tool.name}
-            variant="ghost"
-            size="icon"
-            onClick={() => handleToolClick(tool)}
-            disabled={isGenerating || tool.disabled}
-            title={tool.name}
-          >
-            {tool.icon}
-            <span className="sr-only">{tool.name}</span>
-          </Button>
-        ))}
-      </div>
+       <TooltipProvider>
+        <div className="flex flex-col gap-2 p-2 bg-background/80 backdrop-blur-sm border rounded-lg shadow-lg">
+          {tools.map((tool) => (
+            <Tooltip key={tool.name} delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleToolClick(tool)}
+                  disabled={isGenerating || tool.disabled}
+                  aria-label={tool.name}
+                >
+                  {tool.icon}
+                  <span className="sr-only">{tool.name}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                <p>{tool.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+      </TooltipProvider>
     </aside>
   );
 }
