@@ -15,15 +15,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/common/Logo';
 import { useAuth } from '@/context/AuthContext';
+import { useState } from 'react';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const [email, setEmail] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login();
-    router.push('/dashboard');
+    login(email);
+    router.push('/auth-dashboard');
   };
   
   return (
@@ -47,6 +49,8 @@ export default function LoginPage() {
                 type="email"
                 placeholder="m@example.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">

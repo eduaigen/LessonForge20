@@ -256,10 +256,12 @@ const ToolCard = ({ title, description, icon, href }: { title: string, descripti
   );
 };
 
-const ToolSection = ({ title, tools, userSubscriptions }: { title: string, tools: any[], userSubscriptions: string[] }) => {
+const ToolSection = ({ title, tools, userSubscriptions, isAdmin }: { title: string, tools: any[], userSubscriptions: string[], isAdmin: boolean }) => {
     const { hasScienceSubscription } = useAuth();
     
     const accessibleTools = useMemo(() => {
+        if (isAdmin) return tools; // Admin sees all tools in the section
+
         return tools.filter(tool => {
             if (tool.requiresScienceSubscription) {
                 return hasScienceSubscription;
@@ -268,11 +270,11 @@ const ToolSection = ({ title, tools, userSubscriptions }: { title: string, tools
                 return userSubscriptions.includes(tool.priceId);
             }
             if (tool.isPremium && tool.priceId === null) {
-                return true; // Part of base subscription
+                return true; // Part of base subscription for non-admins
             }
             return !tool.isPremium;
         });
-    }, [tools, userSubscriptions, hasScienceSubscription]);
+    }, [tools, userSubscriptions, hasScienceSubscription, isAdmin]);
 
     if (accessibleTools.length === 0) {
         return null;
@@ -290,23 +292,23 @@ const ToolSection = ({ title, tools, userSubscriptions }: { title: string, tools
 
 
 const PremiumDashboardContent = () => {
-  const { subscriptions } = useAuth();
+  const { subscriptions, isAdmin } = useAuth();
 
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">Tool Dashboard</h1>
         <p className="text-muted-foreground">
-           Access your subscribed AI generators and free tools.
+           {isAdmin ? "Admin access: All tools are enabled." : "Access your subscribed AI generators and free tools."}
         </p>
       </div>
 
-       <ToolSection title="General Tools" tools={tools.general} userSubscriptions={subscriptions} />
-       <ToolSection title="Science" tools={tools.science} userSubscriptions={subscriptions} />
-       <ToolSection title="Mathematics" tools={tools.math} userSubscriptions={subscriptions} />
-       <ToolSection title="English Language Arts" tools={tools.ela} userSubscriptions={subscriptions} />
-       <ToolSection title="Social Studies" tools={tools.social} userSubscriptions={subscriptions} />
-       <ToolSection title="Free Tools" tools={tools.free} userSubscriptions={subscriptions} />
+       <ToolSection title="General Tools" tools={tools.general} userSubscriptions={subscriptions} isAdmin={isAdmin} />
+       <ToolSection title="Science" tools={tools.science} userSubscriptions={subscriptions} isAdmin={isAdmin} />
+       <ToolSection title="Mathematics" tools={tools.math} userSubscriptions={subscriptions} isAdmin={isAdmin} />
+       <ToolSection title="English Language Arts" tools={tools.ela} userSubscriptions={subscriptions} isAdmin={isAdmin} />
+       <ToolSection title="Social Studies" tools={tools.social} userSubscriptions={subscriptions} isAdmin={isAdmin} />
+       <ToolSection title="Free Tools" tools={tools.free} userSubscriptions={subscriptions} isAdmin={isAdmin} />
     </div>
   );
 };

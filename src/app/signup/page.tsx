@@ -1,4 +1,4 @@
-// This is a new file or has been significantly updated.
+
 'use client';
 
 import Link from 'next/link';
@@ -15,15 +15,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/common/Logo';
 import { useAuth } from '@/context/AuthContext';
+import { useState } from 'react';
 
 export default function SignupPage() {
   const { login } = useAuth();
   const router = useRouter();
+  const [email, setEmail] = useState('');
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    login();
-    router.push('/dashboard');
+    login(email);
+    router.push('/auth-dashboard');
   };
 
   return (
@@ -57,6 +59,8 @@ export default function SignupPage() {
                 type="email"
                 placeholder="m@example.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
