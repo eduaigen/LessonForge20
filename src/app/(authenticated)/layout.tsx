@@ -100,18 +100,6 @@ export default function AuthenticatedAppLayout({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/auth-dashboard/lab-generator"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
-                  <TestTube className="h-5 w-5" />
-                  <span className="sr-only">Lab Generator</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Lab Generator</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
                   href="/auth-dashboard/curriculum-audit"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                 >
@@ -169,13 +157,6 @@ export default function AuthenticatedAppLayout({
                 >
                   <BookCopy className="h-5 w-5" />
                   Test Generator
-                </Link>
-                <Link
-                  href="/auth-dashboard/lab-generator"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <TestTube className="h-5 w-5" />
-                  Lab Generator
                 </Link>
                 <Link
                   href="/auth-dashboard/curriculum-audit"
