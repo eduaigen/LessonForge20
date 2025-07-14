@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -26,63 +26,99 @@ const supportedLanguages = [
     { value: 'Mandarin', label: 'Mandarin' },
 ];
 
+const extractContentAsString = (children: React.ReactNode): string => {
+    let contentToProcess = '';
+    if (React.isValidElement(children) && (children.type === StyledContentDisplay)) {
+        const contentProp = (children.props as any).content;
+        if (typeof contentProp === 'string') {
+            contentToProcess = contentProp;
+        } else if (typeof contentProp === 'object' && contentProp !== null) {
+            if (contentProp.worksheetContent) {
+                contentToProcess = contentProp.worksheetContent;
+            } else if (contentProp.scaffoldedContent) {
+                contentToProcess = contentProp.scaffoldedContent;
+            } else if (contentProp.articleContent) {
+                contentToProcess = contentProp.articleContent;
+            } else {
+                contentToProcess = JSON.stringify(contentProp, null, 2);
+            }
+        }
+    }
+    return contentToProcess;
+};
+
+
 export default function CollapsibleSection({ title, children }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const [isTranslating, setIsTranslating] = useState(false);
     const [translatedContent, setTranslatedContent] = useState<string | null>(null);
+    const [translatedLanguage, setTranslatedLanguage] = useState<string | null>(null);
     const [selectedLanguage, setSelectedLanguage] = useState('Spanish');
+    const contentRef = useRef<HTMLDivElement>(null);
 
     const handlePrint = () => {
-        window.print();
+        const printableContent = contentRef.current;
+        if (printableContent) {
+            const printWindow = window.open('', '', 'height=600,width=800');
+            if (printWindow) {
+                printWindow.document.write('<html><head><title>Print</title>');
+                // Link to globals.css to maintain styling
+                const styles = Array.from(document.styleSheets)
+                    .map(styleSheet => {
+                        try {
+                            return Array.from(styleSheet.cssRules)
+                                .map(rule => rule.cssText)
+                                .join('');
+                        } catch (e) {
+                            // Can't access cross-origin stylesheets
+                            if (styleSheet.href) {
+                                return `<link rel="stylesheet" href="${styleSheet.href}">`;
+                            }
+                            return '';
+                        }
+                    })
+                    .join('');
+
+                printWindow.document.write(`<style>${styles}</style></head><body>`);
+                printWindow.document.write(printableContent.innerHTML);
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.print();
+            }
+        }
     };
 
     const handleDownload = () => {
-        toast({ title: "Coming Soon!", description: "Download functionality is under development." });
+        const contentToDownload = extractContentAsString(children);
+        if (!contentToDownload) {
+            toast({ title: "Download Failed", description: "Could not extract content to download.", variant: "destructive" });
+            return;
+        }
+
+        const blob = new Blob([contentToDownload], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${title.replace(/ /g, '_')}.md`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     };
 
     const handleTranslate = async () => {
         setIsTranslating(true);
         setTranslatedContent(null);
         try {
-            let contentToTranslate = '';
+            const contentToTranslate = extractContentAsString(children);
             
-            // This logic ensures we get the raw, structured content before it's rendered.
-            if (React.isValidElement(children) && (children.type === StyledContentDisplay)) {
-                 const contentProp = (children.props as any).content;
-                 if (typeof contentProp === 'string') {
-                    contentToTranslate = contentProp;
-                 } else if (typeof contentProp === 'object' && contentProp !== null) {
-                    // This handles worksheets, lesson plans, etc., that are passed as objects
-                     if (contentProp.worksheetContent) {
-                        contentToTranslate = contentProp.worksheetContent;
-                    } else if (contentProp.scaffoldedContent) {
-                        contentToTranslate = contentProp.scaffoldedContent;
-                    } else if (contentProp.articleContent) {
-                        contentToTranslate = contentProp.articleContent;
-                    } else {
-                        // Fallback for other objects like lesson plans, coaching reports, etc.
-                        contentToTranslate = JSON.stringify(contentProp, null, 2);
-                    }
-                 }
-            }
-            
-            if (!contentToTranslate) {
-                // Fallback for simple children or cases where the above logic fails
-                // Note: This might not preserve complex formatting for non-StyledContentDisplay children.
-                const container = document.createElement('div');
-                const reactDom = await import('react-dom/client');
-                const root = reactDom.createRoot(container);
-                root.render(<div>{children}</div>);
-                await new Promise(resolve => setTimeout(resolve, 0));
-                contentToTranslate = container.innerHTML; // Use innerHTML to preserve some tags
-            }
-
             if (!contentToTranslate.trim()) {
                 throw new Error("Could not extract content for translation.");
             }
 
             const result = await translateContent({ content: contentToTranslate, targetLanguage: selectedLanguage });
             setTranslatedContent(result.translatedContent);
+            setTranslatedLanguage(selectedLanguage);
 
         } catch (error) {
             console.error("Translation failed:", error);
@@ -110,7 +146,7 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>
                     </Button>
-                    <Button variant="outline" size="icon" onClick={handleDownload} title="Download">
+                    <Button variant="outline" size="icon" onClick={handleDownload} title="Download as Markdown">
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
                     </Button>
@@ -134,11 +170,18 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
             </CardHeader>
             <AccordionContent>
                 <CardContent className="p-0">
-                <ScrollArea className="max-h-[800px] overflow-y-auto">
-                    <div className="p-4">
-                    {isTranslating ? <GeneratingAnimation /> : (translatedContent ? <StyledContentDisplay content={translatedContent} /> : children) }
-                    </div>
-                </ScrollArea>
+                    <ScrollArea className="max-h-[800px] overflow-y-auto">
+                        <div ref={contentRef}>
+                            <div className="p-4">{children}</div>
+                            {isTranslating && <GeneratingAnimation />}
+                            {translatedContent && (
+                                <div className="p-4 border-t-2 border-primary/20">
+                                    <h3 className="text-lg font-bold font-headline mb-4 text-primary">{translatedLanguage} Translation</h3>
+                                    <StyledContentDisplay content={translatedContent} />
+                                </div>
+                            )}
+                        </div>
+                    </ScrollArea>
                 </CardContent>
             </AccordionContent>
         </AccordionItem>
