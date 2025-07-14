@@ -10,3 +10,4 @@ export * from './flows/generate-nv-biology-lesson';
 export * from './flows/worksheet-generator';
 export * from './flows/reading-material-generator';
 export * from './flows/comprehension-question-generator';
+export * from './flows/teacher-coach-generator';

@@ -5,10 +5,9 @@ import React from 'react';
 import Markdown from 'react-markdown';
 import { InlineMath, BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
+import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 
 // This component now intelligently decides how to render content.
-// If it looks like a complex lesson plan (has specific headers), it uses the full "document-view" parser.
-// Otherwise, it treats it as a general Markdown document but still wraps it in the "document-view" for consistent styling.
 
 const renderSimpleMarkdown = (content: string) => {
     return (
@@ -198,6 +197,47 @@ const renderLessonPlan = (lessonPlan: any) => (
   </div>
 );
 
+const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
+    const sections = [
+        { title: "B. DO NOW", advice: advice.doNow },
+        { title: "C. MINI-LESSON", advice: advice.miniLesson },
+        { title: "D. GUIDED PRACTICE", advice: advice.guidedPractice },
+        { title: "E. CHECK FOR UNDERSTANDING", advice: advice.checkFoUnderstanding },
+        { title: "F. INDEPENDENT PRACTICE", advice: advice.independentPractice },
+        { title: "G. CLOSURE", advice: advice.closure },
+        { title: "H. HOMEWORK", advice: advice.homework },
+    ];
+
+    return (
+         <div className="document-view">
+            <h1>Teacher Coaching Guide</h1>
+            {sections.map(sec => (
+                <section key={sec.title} className="mb-8">
+                    <h2>{sec.title}</h2>
+                    <div className="space-y-4">
+                        <div>
+                            <h4>Pedagogical Rationale</h4>
+                            <p>{sec.advice.pedagogicalRationale}</p>
+                        </div>
+                        <div>
+                            <h4>Sample Teacher Script / Talk Moves</h4>
+                            <blockquote className="whitespace-pre-wrap">{sec.advice.sampleScript}</blockquote>
+                        </div>
+                        <div>
+                            <h4>Danielson Framework Connection</h4>
+                            <p>{sec.advice.danielsonConnection}</p>
+                        </div>
+                        <div>
+                            <h4>CRSE / UDL Check</h4>
+                            <p>{sec.advice.crseUdlCheck}</p>
+                        </div>
+                    </div>
+                </section>
+            ))}
+        </div>
+    );
+};
+
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -206,14 +246,17 @@ type StyledContentDisplayProps = {
 export default function StyledContentDisplay({ content }: StyledContentDisplayProps) {
     if (!content) return null;
     
-    // Check if the content is a full lesson plan object or just a string (like a worksheet)
     const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
+    const isCoachingObject = typeof content === 'object' && content !== null && 'doNow' in content && 'pedagogicalRationale' in content.doNow;
 
     if (isLessonPlanObject) {
       return renderLessonPlan(content);
     }
 
-    // Fallback for simpler content (like a worksheet) that is a string in Markdown format
+    if (isCoachingObject) {
+        return renderCoachingAdvice(content);
+    }
+
     if (typeof content === 'string') {
         return renderSimpleMarkdown(content);
     }

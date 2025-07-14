@@ -30,7 +30,7 @@ const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Question Cluster', icon: <FileQuestion className="h-5 w-5" />, disabled: true },
   { name: 'Slideshow Outline', icon: <Presentation className="h-5 w-5" />, disabled: true },
   { name: 'Scaffold Tool', icon: <Accessibility className="h-5 w-5" />, disabled: true },
-  { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: true },
+  { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
 ];
 
 type RightSidebarProps = {

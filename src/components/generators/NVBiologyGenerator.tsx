@@ -18,6 +18,7 @@ import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/a
 import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
 import { generateComprehensionQuestions } from '@/ai/flows/comprehension-question-generator';
+import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -137,7 +138,7 @@ const GeneratorContent = () => {
         'Question Cluster': 'Question Cluster',
         'Slideshow Outline': 'Slideshow Outline',
         'Scaffold Tool': 'Scaffolded Tool',
-        'Teacher Coach': 'Teacher Coach',
+        'Teacher Coach': 'Teacher Coach Guide',
     };
 
     const title = toolTitleMap[toolName];
@@ -149,15 +150,16 @@ const GeneratorContent = () => {
     setIsToolLoading(title);
 
     try {
+        let result;
         if (toolName === 'Worksheet') {
-            const result = await generateWorksheet(lessonPlan);
+            result = await generateWorksheet(lessonPlan);
             setGeneratedSections(prev => [...prev, {
                 id: `worksheet-${Date.now()}`,
                 title: title,
                 content: result.worksheetContent,
             }]);
         } else if (toolName === 'Reading Material') {
-            const result = await generateReadingMaterial({
+            result = await generateReadingMaterial({
                 topic: lessonPlan.lessonOverview.topic,
                 gradeLevel: '10th',
                 length: 'standard',
@@ -167,6 +169,13 @@ const GeneratorContent = () => {
                 id: `reading-${Date.now()}`,
                 title: result.title,
                 content: result.articleContent,
+            }]);
+        } else if (toolName === 'Teacher Coach') {
+            result = await generateTeacherCoach(lessonPlan);
+            setGeneratedSections(prev => [...prev, {
+                id: `coach-${Date.now()}`,
+                title: title,
+                content: result,
             }]);
         }
     } catch (error) {
