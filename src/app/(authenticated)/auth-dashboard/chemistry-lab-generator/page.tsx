@@ -79,7 +79,7 @@ export default function ChemistryLabGeneratorPage() {
     setGeneratedContent(null);
 
     const input: GenerateLabExperimentInput = {
-      subject: 'Chemistry',
+      subject: 'Chemistry (OpenSciEd)',
       topic: selectedTopic,
       lessonDescription: selectedLesson,
     };
@@ -124,7 +124,7 @@ export default function ChemistryLabGeneratorPage() {
       <CardHeader className='flex-row items-center justify-between'>
         <div>
             <CardTitle>Generated Lab Handout</CardTitle>
-            <CardDescription>Review the Chemistry lab below.</CardDescription>
+            <CardDescription>Review the Chemistry (OpenSciEd) lab below.</CardDescription>
         </div>
         <Button variant="outline" size="sm" onClick={handlePrint} disabled={!generatedContent}>
             <Printer className="mr-2 h-4 w-4" />
@@ -171,8 +171,8 @@ export default function ChemistryLabGeneratorPage() {
 
   return (
     <AiToolLayout
-      title="Chemistry Lab Generator"
-      description="Create labs aligned with the Chemistry curriculum."
+      title="Chemistry (OpenSciEd) Lab Generator"
+      description="Create labs aligned with the Chemistry (OpenSciEd) curriculum."
       resultDisplay={<ResultDisplay />}
     >
       <form onSubmit={handleSubmit} className="space-y-6">

@@ -79,7 +79,7 @@ export default function PhysicsLabGeneratorPage() {
     setGeneratedContent(null);
 
     const input: GenerateLabExperimentInput = {
-      subject: 'Physics',
+      subject: 'Physics (OpenSciEd)',
       topic: selectedTopic,
       lessonDescription: selectedLesson,
     };
@@ -124,7 +124,7 @@ export default function PhysicsLabGeneratorPage() {
       <CardHeader className='flex-row items-center justify-between'>
         <div>
             <CardTitle>Generated Lab Handout</CardTitle>
-            <CardDescription>Review the Physics lab below.</CardDescription>
+            <CardDescription>Review the Physics (OpenSciEd) lab below.</CardDescription>
         </div>
         <Button variant="outline" size="sm" onClick={handlePrint} disabled={!generatedContent}>
             <Printer className="mr-2 h-4 w-4" />
@@ -171,8 +171,8 @@ export default function PhysicsLabGeneratorPage() {
 
   return (
     <AiToolLayout
-      title="Physics Lab Generator"
-      description="Create labs aligned with the Physics curriculum."
+      title="Physics (OpenSciEd) Lab Generator"
+      description="Create labs aligned with the Physics (OpenSciEd) curriculum."
       resultDisplay={<ResultDisplay />}
     >
       <form onSubmit={handleSubmit} className="space-y-6">

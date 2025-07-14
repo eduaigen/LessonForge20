@@ -48,11 +48,11 @@ const getCurriculumForSubject = async (subject: string) => {
                 return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
             case 'NGSS Biology (OpenSciEd)':
                 return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
-            case 'Chemistry':
+            case 'Chemistry (OpenSciEd)':
                 return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
             case 'NV Earth Science':
                 return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
-            case 'Physics':
+            case 'Physics (OpenSciEd)':
                 return (await import('@/lib/physics-curriculum')).physicsCurriculum;
             case 'Health':
                 return (await import('@/lib/health-curriculum')).healthCurriculum;
