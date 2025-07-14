@@ -272,222 +272,222 @@ export const curriculumData: {
         units: {
             "Unit 1: Discovering New Worlds": {
                 topics: {
-                    "Engage & Explore": { lessons: ["Lesson 1: Anchor Phenomenon - How do we know what’s out there in space?", "Lesson 2: Naked-Eye Observations", "Lesson 3: Tools for Observation"] },
-                    "Earth and the Moon": { lessons: ["Lesson 4: Earth's Rotation", "Lesson 5: Moon Phases", "Lesson 6: Eclipses"] },
-                    "Modeling the Sun": { lessons: ["Lesson 7: Sun's Apparent Path", "Lesson 8: Seasonal Changes", "Lesson 9: Solar Energy"] },
-                    "Interpreting Data About Distant Objects": { lessons: ["Lesson 10: Light from Stars", "Lesson 11: The H-R Diagram", "Lesson 12: Galaxies"] },
-                    "Unit Closing": { lessons: ["Lesson 13: Final Performance Task"] }
+                    "Engage & Explore": { lessons: ["Anchor Phenomenon - How do we know what’s out there in space?", "Naked-Eye Observations", "Tools for Observation"] },
+                    "Earth and the Moon": { lessons: ["Earth's Rotation", "Moon Phases", "Eclipses"] },
+                    "Modeling the Sun": { lessons: ["Sun's Apparent Path", "Seasonal Changes", "Solar Energy"] },
+                    "Interpreting Data About Distant Objects": { lessons: ["Light from Stars", "The H-R Diagram", "Galaxies"] },
+                    "Unit Closing": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
                 topics: {
-                    "Engage & Launch": { lessons: ["Lesson 1: Anchor Phenomenon - Natural Hazard Risk", "Lesson 2: Earth's Layers", "Lesson 3: Plate Tectonics"] },
-                    "Tectonic Movement and Plate Boundaries": { lessons: ["Lesson 4: Plate Boundaries", "Lesson 5: Earthquakes", "Lesson 6: Volcanoes"] },
-                    "Natural Hazard Data": { lessons: ["Lesson 7: Mapping Hazards", "Lesson 8: Tsunami Risk", "Lesson 9: Social Vulnerability"] },
-                    "Earthquake Engineering": { lessons: ["Lesson 10: Engineering for Earthquakes", "Lesson 11: Community Resilience"] },
-                    "Unit Closing": { lessons: ["Lesson 12: Final Performance Task"] }
+                    "Engage & Launch": { lessons: ["Anchor Phenomenon - Natural Hazard Risk", "Earth's Layers", "Plate Tectonics"] },
+                    "Tectonic Movement and Plate Boundaries": { lessons: ["Plate Boundaries", "Earthquakes", "Volcanoes"] },
+                    "Natural Hazard Data": { lessons: ["Mapping Hazards", "Tsunami Risk", "Social Vulnerability"] },
+                    "Earthquake Engineering": { lessons: ["Engineering for Earthquakes", "Community Resilience"] },
+                    "Unit Closing": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 3: Climate Change Throughout Human History": {
                 topics: {
-                    "Engage and Ice Core Data": { lessons: ["Lesson 1: Anchor Phenomenon - Past & Future Climate", "Lesson 2: Ice Cores", "Lesson 3: Analyzing Ice Core Data"] },
-                    "Global Warming and Carbon Emissions": { lessons: ["Lesson 4: The Greenhouse Effect", "Lesson 5: The Carbon Cycle", "Lesson 6: Human Impact on Climate"] },
-                    "Sea Level and Ecosystem Effects": { lessons: ["Lesson 7: Sea Level Rise", "Lesson 8: Ecosystem Impacts"] },
-                    "Geoengineering and Mitigation": { lessons: ["Lesson 9: Mitigation Strategies", "Lesson 10: Geoengineering"] },
-                    "Unit Closing": { lessons: ["Lesson 11: Final Performance Task"] }
+                    "Engage and Ice Core Data": { lessons: ["Anchor Phenomenon - Past & Future Climate", "Ice Cores", "Analyzing Ice Core Data"] },
+                    "Global Warming and Carbon Emissions": { lessons: ["The Greenhouse Effect", "The Carbon Cycle", "Human Impact on Climate"] },
+                    "Sea Level and Ecosystem Effects": { lessons: ["Sea Level Rise", "Ecosystem Impacts"] },
+                    "Geoengineering and Mitigation": { lessons: ["Mitigation Strategies", "Geoengineering"] },
+                    "Unit Closing": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 4: More Hurricanes and Blizzards in NYC?": {
                 topics: {
-                    "Extreme Weather Patterns": { lessons: ["Lesson 1: Anchor Phenomenon - Extreme Weather", "Lesson 2: Weather vs. Climate", "Lesson 3: Air Masses and Fronts"] },
-                    "Hurricane Frequency": { lessons: ["Lesson 4: Hurricane Formation", "Lesson 5: Hurricane Data Analysis", "Lesson 6: Climate Change and Hurricanes"] },
-                    "Blizzard Analysis": { lessons: ["Lesson 7: Blizzard Formation", "Lesson 8: Blizzard Data Analysis"] },
-                    "Infrastructure Resilience": { lessons: ["Lesson 9: Infrastructure Vulnerability", "Lesson 10: Designing for Resilience"] },
-                    "Unit Closing": { lessons: ["Lesson 11: Final Performance Task"] }
+                    "Extreme Weather Patterns": { lessons: ["Anchor Phenomenon - Extreme Weather", "Weather vs. Climate", "Air Masses and Fronts"] },
+                    "Hurricane Frequency": { lessons: ["Hurricane Formation", "Hurricane Data Analysis", "Climate Change and Hurricanes"] },
+                    "Blizzard Analysis": { lessons: ["Blizzard Formation", "Blizzard Data Analysis"] },
+                    "Infrastructure Resilience": { lessons: ["Infrastructure Vulnerability", "Designing for Resilience"] },
+                    "Unit Closing": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 5: Solutions for a Sustainable Future": {
                 topics: {
-                    "Burning Fossil Fuels": { lessons: ["Lesson 1: Fossil Fuels and Energy", "Lesson 2: Air Pollution", "Lesson 3: Water Pollution", "Lesson 4: Acid Rain", "Lesson 5: The Ozone Layer", "Lesson 6: Renewable Energy", "Lesson 7: Nuclear Energy", "Lesson 8: Energy Efficiency", "Lesson 9: Policy Solutions", "Lesson 10: Individual Action"] },
-                    "Land Use & Biodiversity": { lessons: ["Lesson 11: Deforestation", "Lesson 12: Urbanization", "Lesson 13: Agriculture", "Lesson 14: Biodiversity", "Lesson 15: Habitat Destruction", "Lesson 16: Conservation"] },
-                    "Mining": { lessons: ["Lesson 17: Mineral Resources", "Lesson 18: Mining Techniques", "Lesson 19: Environmental Impacts of Mining", "Lesson 20: Social Impacts of Mining", "Lesson 21: Sustainable Mining Practices", "Lesson 22: Recycling Minerals", "Lesson 23: Conflict Minerals"] },
-                    "Unit Closing": { lessons: ["Lesson 24: Stakeholder Meeting Simulation", "Lesson 25: Sustainability Plan", "Lesson 26: Final Presentation"] }
+                    "Burning Fossil Fuels": { lessons: ["Fossil Fuels and Energy", "Air Pollution", "Water Pollution", "Acid Rain", "The Ozone Layer", "Renewable Energy", "Nuclear Energy", "Energy Efficiency", "Policy Solutions", "Individual Action"] },
+                    "Land Use & Biodiversity": { lessons: ["Deforestation", "Urbanization", "Agriculture", "Biodiversity", "Habitat Destruction", "Conservation"] },
+                    "Mining": { lessons: ["Mineral Resources", "Mining Techniques", "Environmental Impacts of Mining", "Social Impacts of Mining", "Sustainable Mining Practices", "Recycling Minerals", "Conflict Minerals"] },
+                    "Unit Closing": { lessons: ["Stakeholder Meeting Simulation", "Sustainability Plan", "Final Presentation"] }
                 }
             },
             "Unit 6: Probability of Life Elsewhere": {
                 topics: {
-                    "Stability of the Solar System": { lessons: ["Lesson 1: Gravity and Orbits", "Lesson 2: The Goldilocks Zone", "Lesson 3: Earth's Magnetic Field", "Lesson 4: The Role of Jupiter", "Lesson 5: The Moon's Influence", "Lesson 6: Long-Term Stability", "Lesson 7: Exoplanets"] },
-                    "Coevolution of Earth and Life": { lessons: ["Lesson 8: Early Earth", "Lesson 9: Origin of Life", "Lesson 10: Photosynthesis and Oxygen", "Lesson 11: Mass Extinctions", "Lesson 12: Humans and the Biosphere"] },
-                    "Origin of the Universe": { lessons: ["Lesson 13: The Big Bang", "Lesson 14: Evidence for the Big Bang", "Lesson 15: Stellar Evolution", "Lesson 16: Formation of Elements", "Lesson 17: The Drake Equation"] },
-                    "Asteroid Orbits": { lessons: ["Lesson 18: Asteroids and Comets", "Lesson 19: Impact Events", "Lesson 20: Near-Earth Objects", "Lesson 21: Planetary Defense", "Lesson 22: The Search for Extraterrestrial Intelligence (SETI)"] },
-                    "Unit Closing": { lessons: ["Lesson 23: Final Performance Task"] }
+                    "Stability of the Solar System": { lessons: ["Gravity and Orbits", "The Goldilocks Zone", "Earth's Magnetic Field", "The Role of Jupiter", "The Moon's Influence", "Long-Term Stability", "Exoplanets"] },
+                    "Coevolution of Earth and Life": { lessons: ["Early Earth", "Origin of Life", "Photosynthesis and Oxygen", "Mass Extinctions", "Humans and the Biosphere"] },
+                    "Origin of the Universe": { lessons: ["The Big Bang", "Evidence for the Big Bang", "Stellar Evolution", "Formation of Elements", "The Drake Equation"] },
+                    "Asteroid Orbits": { lessons: ["Asteroids and Comets", "Impact Events", "Near-Earth Objects", "Planetary Defense", "The Search for Extraterrestrial Intelligence (SETI)"] },
+                    "Unit Closing": { lessons: ["Final Performance Task"] }
                 }
             }
         }
     },
     Chemistry: {
       units: {
-        "Unit 1: Why are oysters dying, and how can we use chemistry to protect them?": {
+        "Why are oysters dying, and how can we use chemistry to protect them?": {
           topics: {
             "What large and small-scale processes make water more or less acidic?": {
               lessons: [
-                "Lesson 1: What is happening to oysters?",
-                "Lesson 2: How can we break down the problem so we can solve it?",
-                "Lesson 3: Can carbon dioxide make the ocean more acidic?",
-                "Lesson 4: What is it about a substance that determines whether it produces more or fewer H+ or OH- ions when it is added to water?",
-                "Lesson 5: How does carbon dioxide move between the atmosphere and ocean systems to cause the water to become more acidic?",
-                "Lesson 6: How can acidic water become less acidic again?",
-                "Lesson 7: How can we use what we have learned to help protect oysters?"
-              ]
+                "What is happening to oysters?",
+                "How can we break down the problem so we can solve it?",
+                "Can carbon dioxide make the ocean more acidic?",
+                "What is it about a substance that determines whether it produces more or fewer H+ or OH- ions when it is added to water?",
+                "How does carbon dioxide move between the atmosphere and ocean systems to cause the water to become more acidic?",
+                "How can acidic water become less acidic again?",
+                "How can we use what we have learned to help protect oysters?",
+              ],
             },
             "What mathematical models can help us determine the scale of the reactions needed to save oysters?": {
               lessons: [
-                "Lesson 8: How can we figure out how much of a substance we need to neutralize acid?",
-                "Lesson 9: How much NaOH would we need to add to make ocean water safe for oysters?",
-                "Lesson 10: How does ocean acidification hurt oysters?",
-                "Lesson 11: How can we help oysters build shells quickly?"
-              ]
+                "How can we figure out how much of a substance we need to neutralize acid?",
+                "How much NaOH would we need to add to make ocean water safe for oysters?",
+                "How does ocean acidification hurt oysters?",
+                "How can we help oysters build shells quickly?",
+              ],
             },
             "How can engineering design help us determine the best process to save oysters?": {
               lessons: [
-                "Lesson 12: What criteria and constraints do we need to consider when designing solutions to help protect oysters?",
-                "Lesson 13: How can we apply our science ideas to develop a solution to help protect oysters?",
-                "Lesson 14: How well do our different design solutions address our criteria and constraints?",
-                "Lesson 15: How can we apply our learning to other situations?"
-              ]
-            }
-          }
+                "What criteria and constraints do we need to consider when designing solutions to help protect oysters?",
+                "How can we apply our science ideas to develop a solution to help protect oysters?",
+                "How well do our different design solutions address our criteria and constraints?",
+                "How can we apply our learning to other situations?",
+              ],
+            },
+          },
         },
-        "Unit 2: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
+        "How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
           topics: {
             "Why and how is the sea level rising?": {
               lessons: [
-                "Lesson 1: How are sea levels rising and forcing people to move?",
-                "Lesson 2: What can the past help us figure out about what is causing sea level rise in the present?",
-                "Lesson 3: How does carbon dioxide contribute to climate change?",
-                "Lesson 4: What would happen if the Earth's ice melted?"
-              ]
+                "How are sea levels rising and forcing people to move?",
+                "What can the past help us figure out about what is causing sea level rise in the present?",
+                "How does carbon dioxide contribute to climate change?",
+                "What would happen if the Earth's ice melted?",
+              ],
             },
             "What solutions could help slow polar ice melt?": {
               lessons: [
-                "Lesson 5: How can we best slow or stop the land ice melt?",
-                "Lesson 6: Why would some engineers want to sprinkle glass microbeads on the Arctic?",
-                "Lesson 7: How do feedback loops affect Earth's systems?"
-              ]
+                "How can we best slow or stop the land ice melt?",
+                "Why would some engineers want to sprinkle glass microbeads on the Arctic?",
+                "How do feedback loops affect Earth's systems?",
+              ],
             },
             "How well would the berm solution work in the context of Earth systems?": {
               lessons: [
-                "Lesson 8: What is going on where the ice meets the water?",
-                "Lesson 9: Why does warm salty water sink to melt a glacier?",
-                "Lesson 10: How can we measure the energy transfer a berm prevents?",
-                "Lesson 11: How does heat affect the amount of ice melt?",
-                "Lesson 12: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?",
-                "Lesson 13: How can we model what will happen to Earth's climate if humans make changes?"
-              ]
-            }
-          }
+                "What is going on where the ice meets the water?",
+                "Why does warm salty water sink to melt a glacier?",
+                "How can we measure the energy transfer a berm prevents?",
+                "How does heat affect the amount of ice melt?",
+                "How can we slow the flow of energy on Earth to protect vulnerable coastal communities?",
+                "How can we model what will happen to Earth's climate if humans make changes?",
+              ],
+            },
+          },
         },
-        "Unit 3: What causes lightning and why are some places safer than others when it strikes?": {
+        "What causes lightning and why are some places safer than others when it strikes?": {
           topics: {
             "What is lightning?": {
               lessons: [
-                "Lesson 1: When and where does lightning occur and what are its impacts?",
-                "Lesson 2: What parts of the (smaller-scale) system might be causing the (smaller-scale) lightning?",
-                "Lesson 3: What is the spark in the water dropper system and what else is happening in the system before it appears?",
-                "Lesson 4: What happens when we produce static electricity?",
-                "Lesson 5: What is happening at a particle level to produce static effects?"
-              ]
+                "When and where does lightning occur and what are its impacts?",
+                "What parts of the (smaller-scale) system might be causing the (smaller-scale) lightning?",
+                "What is the spark in the water dropper system and what else is happening in the system before it appears?",
+                "What happens when we produce static electricity?",
+                "What is happening at a particle level to produce static effects?",
+              ],
             },
             "What causes a lightning strike?": {
               lessons: [
-                "Lesson 6: What causes static in a lightning system?",
-                "Lesson 7: How are electrostatic forces between objects affected by the amount of charge and the distance between them?",
-                "Lesson 8: How can something that is neutral have an attractive or repulsive interaction with another object without any contact?",
-                "Lesson 9: How can we revise our models to explain what we have figured out about the lightning system?"
-              ]
+                "What causes static in a lightning system?",
+                "How are electrostatic forces between objects affected by the amount of charge and the distance between them?",
+                "How can something that is neutral have an attractive or repulsive interaction with another object without any contact?",
+                "How can we revise our models to explain what we have figured out about the lightning system?",
+              ],
             },
             "How and why does a lightning strike transfer so much energy?": {
               lessons: [
-                "Lesson 10: Where does the energy come from for lightning to strike across miles of air?",
-                "Lesson 11: Why do the electrons build up in the cloud and then jump to the ground suddenly?"
-              ]
+                "Where does the energy come from for lightning to strike across miles of air?",
+                "Why do the electrons build up in the cloud and then jump to the ground suddenly?",
+              ],
             },
             "What makes some places safer than others when lightning strikes?": {
               lessons: [
-                "Lesson 12: Why are some structures safer than others (and safer than being outside)?",
-                "Lesson 13: Why are you supposed to get away from water when there is lightning nearby?",
-                "Lesson 14: Why are some places safer than others when lightning strikes?"
-              ]
-            }
-          }
+                "Why are some structures safer than others (and safer than being outside)?",
+                "Why are you supposed to get away from water when there is lightning nearby?",
+                "Why are some places safer than others when lightning strikes?",
+              ],
+            },
+          },
         },
-        "Unit 4: How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
+        "How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
           topics: {
             "How do carbon-based fuels release energy?": {
               lessons: [
-                "Lesson 1: What different fuels have we used, and do we currently use, for transportation?",
-                "Lesson 2: What is happening to the fuels inside the engine to make the vehicle move?",
-                "Lesson 3: How can diesel engines be working so differently from gasoline engines?",
-                "Lesson 4: Why do we need to put energy into the system to start the reaction?",
-                "Lesson 5: How and why is energy released when we burn carbon-based fuels?",
-                "Lesson 6: How does the amount of energy we put into the reaction system compare to the energy we get out?",
-                "Lesson 7: How can fuels release different amounts of energy when they all have bonds breaking and forming?",
-                "Lesson 8: How does our understanding of carbon-based fuels inform our decision-making?"
-              ]
+                "What different fuels have we used, and do we currently use, for transportation?",
+                "What is happening to the fuels inside the engine to make the vehicle move?",
+                "How can diesel engines be working so differently from gasoline engines?",
+                "Why do we need to put energy into the system to start the reaction?",
+                "How and why is energy released when we burn carbon-based fuels?",
+                "How does the amount of energy we put into the reaction system compare to the energy we get out?",
+                "How can fuels release different amounts of energy when they all have bonds breaking and forming?",
+                "How does our understanding of carbon-based fuels inform our decision-making?",
+              ],
             },
             "How do fuels that are not carbon based release energy?": {
               lessons: [
-                "Lesson 9: Where is the energy coming from (and what are some trade-offs) when we use batteries to power vehicles?",
-                "Lesson 10: How can we use hydrogen as a fuel and what are the impacts?",
-                "Lesson 11: Where is the energy coming from when we use uranium as a fuel?",
-                "Lesson 12: How can our knowledge of fuel trade-offs support our evaluation of future rocket fuels?"
-              ]
+                "Where is the energy coming from (and what are some trade-offs) when we use batteries to power vehicles?",
+                "How can we use hydrogen as a fuel and what are the impacts?",
+                "Where is the energy coming from when we use uranium as a fuel?",
+                "How can our knowledge of fuel trade-offs support our evaluation of future rocket fuels?",
+              ],
             },
             "How can we use what we have learned to improve our transportation system?": {
               lessons: [
-                "Lesson 13: Why do we use some fuels rather than others?",
-                "Lesson 14: How do we decide on the best transportation options for our future?",
-                "Lesson 15: How can we make transportation decisions to benefit our communities and Earth?"
-              ]
-            }
-          }
+                "Why do we use some fuels rather than others?",
+                "How do we decide on the best transportation options for our future?",
+                "How can we make transportation decisions to benefit our communities and Earth?",
+              ],
+            },
+          },
         },
-        "Unit 5: How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
+        "How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
           topics: {
             "How can we find water and other substances we need to survive on other objects in space?": {
               lessons: [
-                "Lesson 1: What substances would we need and how would we get them to live and work beyond Earth?",
-                "Lesson 2: How does water support life and chemical reactions?",
-                "Lesson 3: How can we find evidence of the water we need on the surfaces of other objects in space?",
-                "Lesson 4: How and why do water and other liquids interact with materials to make surface features?",
-                "Lesson 5: How can we tell what is in the atmosphere (and just below the surface) of objects in space?"
-              ]
+                "What substances would we need and how would we get them to live and work beyond Earth?",
+                "How does water support life and chemical reactions?",
+                "How can we find evidence of the water we need on the surfaces of other objects in space?",
+                "How and why do water and other liquids interact with materials to make surface features?",
+                "How can we tell what is in the atmosphere (and just below the surface) of objects in space?",
+              ],
             },
             "Why do we need certain types of atoms to create the substances we need?": {
               lessons: [
-                "Lesson 6: What patterns are there between the types of atoms and the number of bonds they form in the resources we need?",
-                "Lesson 7: Why is there a difference between the number of electrons an element has and the number of bonds an element forms?",
-                "Lesson 8: Could another substance serve as a substitute for water for some of the processes we need to use it for in space?",
-                "Lesson 9: How can the ideas we developed be applied to making a possible substitute for another substance?"
-              ]
+                "What patterns are there between the types of atoms and the number of bonds they form in the resources we need?",
+                "Why is there a difference between the number of electrons an element has and the number of bonds an element forms?",
+                "Could another substance serve as a substitute for water for some of the processes we need to use it for in space?",
+                "How can the ideas we developed be applied to making a possible substitute for another substance?",
+              ],
             },
             "How can we make the substances we need to survive off of Earth using the existing matter in the solar system?": {
               lessons: [
-                "Lesson 10: Why do we need water in so many reactions?",
-                "Lesson 11: How can we grow food in space?",
-                "Lesson 12: Which location(s) in the solar system has the elements we need and what relative amount is required to make any substance?"
-              ]
+                "Why do we need water in so many reactions?",
+                "How can we grow food in space?",
+                "Which location(s) in the solar system has the elements we need and what relative amount is required to make any substance?",
+              ],
             },
             "How can we be more sustainable in what we use and produce?": {
               lessons: [
-                "Lesson 13: Why can we recycle some of the substances we need and not others?",
-                "Lesson 14: What are some more sustainable approaches we are developing to help us make the things we need off of Earth and on it?",
-                "Lesson 15: What is the full impact of going to space?"
-              ]
-            }
-          }
-        }
-      }
+                "Why can we recycle some of the substances we need and not others?",
+                "What are some more sustainable approaches we are developing to help us make the things we need off of Earth and on it?",
+                "What is the full impact of going to space?",
+              ],
+            },
+          },
+        },
+      },
     },
     Physics: {
       units: {
@@ -639,856 +639,7 @@ export const curriculumData: {
       }
     },
     Literature: {
-      units: {
-        "Grade 9: Unit 1: Journeys of Identity": {
-            "topics": {
-                "Analyzing Narrative and Character in 'The House on Mango Street'": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is Identity?",
-                        "Day 2: Engage: Identity Mapping",
-                        "Day 3: Anchor Text Introduction: First Look",
-                        "Day 4: Close Reading & Annotation Practice",
-                        "Day 5: Discussion: First Impressions",
-                        "Day 6: Citing Textual Evidence",
-                        "Day 7: Figurative Language Workshop 1",
-                        "Day 8: Analyzing Character Voice",
-                        "Day 9: Reading for Thematic Development",
-                        "Day 10: Writing Workshop: Claim-Evidence-Reasoning",
-                        "Day 11: Thematic Analysis: Shame and Hope",
-                        "Day 12: Group Discussion: Thematic Patterns",
-                        "Day 13: Figurative Language Workshop 2",
-                        "Day 14: Reading and Connecting",
-                        "Day 15: Checkpoint: Thematic Analysis",
-                        "Day 16: Analyzing Narrative Structure",
-                        "Day 17: Intro to Personal Narratives",
-                        "Day 18: Brainstorming Workshop: 'My Own Mango Street'",
-                        "Day 19: Narrative Craft: Show, Don't Tell",
-                        "Day 20: Drafting the Personal Narrative",
-                        "Day 21: Peer Review Workshop 1",
-                        "Day 22: Revision Workshop: Voice and Tone",
-                        "Day 23: Connecting Texts: Poetry of Identity",
-                        "Day 24: Comparative Discussion",
-                        "Day 25: Peer Review Workshop 2",
-                        "Day 26: Revision Workshop: Polishing the Narrative",
-                        "Day 27: Publishing and Sharing",
-                        "Day 28: Connecting Texts: Non-fiction",
-                        "Day 29: Synthesizing Ideas",
-                        "Day 30: Summative Task Intro: Thematic Essay",
-                        "Day 31: Essay Workshop: Developing a Thesis",
-                        "Day 32: Essay Workshop: Gathering Evidence",
-                        "Day 33: Essay Workshop: Outlining",
-                        "Day 34: Drafting the Essay: Introduction",
-                        "Day 35: Drafting the Essay: Body Paragraphs",
-                        "Day 36: Drafting the Essay: Conclusion",
-                        "Day 37: Self-Revision Workshop",
-                        "Day 38: Peer Review Essay Workshop",
-                        "Day 39: Final Revisions and Editing",
-                        "Day 40: Final Essay Due. Socratic Seminar Prep",
-                        "Day 41: Unit Closure: Socratic Seminar",
-                        "Day 42: Creative Response to Text",
-                        "Day 43: Gallery Walk and Sharing",
-                        "Day 44: Unit Reflection",
-                        "Day 45: Portfolio Review and Goal Setting"
-                    ]
-                }
-            }
-        },
-        "Grade 9: Unit 2: The Power of Persuasion": {
-            "topics": {
-                "Deconstructing Arguments": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is Persuasion?",
-                        "Day 2: Engage: Analyzing Advertisements",
-                        "Day 3: Introduction to Rhetoric: Ethos, Pathos, Logos",
-                        "Day 4: Identifying Appeals in Speeches",
-                        "Day 5: Anchor Text Introduction",
-                        "Day 6: Delineating an Argument",
-                        "Day 7: Evaluating Evidence",
-                        "Day 8: Analyzing Word Choice and Tone",
-                        "Day 9: Rhetorical Devices Workshop",
-                        "Day 10: Writing Workshop: Rhetorical Analysis Paragraph",
-                        "Day 11: Author's Purpose and Point of View",
-                        "Day 12: Reading a Counter-Argument",
-                        "Day 13: Comparative Analysis",
-                        "Day 14: Introduction to Logical Fallacies",
-                        "Day 15: Identifying Fallacies in Media",
-                        "Day 16: Evaluating Speaker's Reasoning",
-                        "Day 17: Integrating Information from Diverse Media",
-                        "Day 18: Debate Preparation",
-                        "Day 19: Class Debate",
-                        "Day 20: Debate Reflection",
-                        "Day 21: Argumentative Writing Intro",
-                        "Day 22: Topic Selection and Brainstorming",
-                        "Day 23: Research Workshop 1: Formulating Questions",
-                        "Day 24: Research Workshop 2: Finding Credible Sources",
-                        "Day 25: Writing Workshop: Crafting a Thesis Statement",
-                        "Day 26: Outlining the Argument",
-                        "Day 27: Workshop: Acknowledging the Counterclaim",
-                        "Day 28: Drafting: Introduction",
-                        "Day 29: Drafting: Body Paragraphs with Evidence",
-                        "Day 30: Drafting: Conclusion",
-                        "Day 31: Language for Effect: Academic Vocabulary",
-                        "Day 32: Language for Effect: Transitions",
-                        "Day 33: Self-Revision Workshop",
-                        "Day 34: Peer Review Workshop",
-                        "Day 35: Revising Based on Feedback",
-                        "Day 36: Editing and Proofreading",
-                        "Day 37: Adapting Writing for Presentation",
-                        "Day 38: Presentation Workshop: Using Visuals",
-                        "Day 39: Presentation Workshop: Delivery",
-                        "Day 40: Presentation Rehearsals",
-                        "Day 41: Persuasive Presentations Day 1",
-                        "Day 42: Persuasive Presentations Day 2",
-                        "Day 43: Final Paper Submission",
-                        "Day 44: Unit Closure: Socratic Seminar",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 9: Unit 3: Structure and Story": {
-            "topics": {
-                "Analyzing Text Structure and Form": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is Narrative Structure?",
-                        "Day 2: Engage: Playing with Story",
-                        "Day 3: Anchor Text Introduction",
-                        "Day 4: Plotting the Story: Freytag's Pyramid",
-                        "Day 5: Reading and Mapping the Plot",
-                        "Day 6: Structural Elements: Chronological vs. Non-linear",
-                        "Day 7: Workshop: Analyzing Foreshadowing",
-                        "Day 8: Workshop: Analyzing Flashbacks",
-                        "Day 9: Pacing and Tension",
-                        "Day 10: Writing Workshop: Structural Analysis Paragraph",
-                        "Day 11: Point of View 1: First and Third Person",
-                        "Day 12: Point of View 2: Analyzing POV in the Anchor Text",
-                        "Day 13: Creative Writing: Shifting Perspectives",
-                        "Day 14: Reading and Analyzing Subplots",
-                        "Day 15: Discussion: Structure and Theme",
-                        "Day 16: Introduction to the Analytical Essay",
-                        "Day 17: Essay Workshop: Thesis Development",
-                        "Day 18: Essay Workshop: Finding Evidence for Structure",
-                        "Day 19: Essay Workshop: Outlining",
-                        "Day 20: Drafting the Analytical Essay",
-                        "Day 21: Peer Review: Thesis and Introduction",
-                        "Day 22: Continued Drafting",
-                        "Day 23: Language Workshop: Writing with Precision",
-                        "Day 24: Revising for Clarity and Cohesion",
-                        "Day 25: Editing and Proofreading",
-                        "Day 26: Elaboration Intro: Text to Film Adaptation",
-                        "Day 27: Film Viewing Day 1",
-                        "Day 28: Film Viewing Day 2",
-                        "Day 29: Comparative Analysis: What Changed?",
-                        "Day 30: Discussion: The 'Why' of Adaptation",
-                        "Day 31: Project Intro: Comparative Presentation",
-                        "Day 32: Scene Selection and Analysis",
-                        "Day 33: Film Scene Analysis",
-                        "Day 34: Developing a Comparative Claim",
-                        "Day 35: Storyboarding the Presentation",
-                        "Day 36: Presentation Workshop: Clear and Logical Reporting",
-                        "Day 37: Presentation Workshop: Delivery",
-                        "Day 38: Presentation Rehearsals",
-                        "Day 39: Submit Analytical Essay",
-                        "Day 40: Presentations Day 1",
-                        "Day 41: Presentations Day 2",
-                        "Day 42: Presentations Day 3",
-                        "Day 43: Unit Closure: Socratic Seminar",
-                        "Day 44: Creative Response",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 9: Unit 4: Research and Inquiry": {
-            "topics": {
-                "The Research Process": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: The Power of Inquiry",
-                        "Day 2: Engage: Sparking Curiosity",
-                        "Day 3: From Broad Topic to Focused Question",
-                        "Day 4: Keywords and Search Strategies",
-                        "Day 5: Library/Database Orientation",
-                        "Day 6: Source Evaluation 1: The CRAAP Test",
-                        "Day 7: Source Evaluation 2: Primary vs. Secondary Sources",
-                        "Day 8: Assessing Usefulness of Sources",
-                        "Day 9: Research Check-in and Question Refinement",
-                        "Day 10: Introduction to the Annotated Bibliography",
-                        "Day 11: Note-Taking Strategies 1: Paraphrasing",
-                        "Day 12: Note-Taking Strategies 2: Summarizing",
-                        "Day 13: Note-Taking Strategies 3: Direct Quotation",
-                        "Day 14: Avoiding Plagiarism",
-                        "Day 15: Citation Workshop 1: MLA Basics",
-                        "Day 16: Writing Annotations",
-                        "Day 17: Peer Review: Annotated Bibliography",
-                        "Day 18: Annotated Bibliography Due",
-                        "Day 19: Synthesizing Information: Finding Connections",
-                        "Day 20: Developing a Working Thesis",
-                        "Day 21: Outlining the Research Paper",
-                        "Day 22: Drafting the Introduction",
-                        "Day 23: Drafting Body Paragraphs with Synthesis",
-                        "Day 24: Workshop: Integrating Quotations",
-                        "Day 25: Drafting the Conclusion",
-                        "Day 26: Self-Revision Workshop",
-                        "Day 27: Peer Review Workshop: Research Paper",
-                        "Day 28: Revising Based on Feedback",
-                        "Day 29: Citation Workshop 2: Works Cited Page",
-                        "Day 30: Final Editing and Proofreading",
-                        "Day 31: Research Paper Due",
-                        "Day 32: From Paper to Presentation",
-                        "Day 33: Presentation Storyboarding",
-                        "Day 34: Workshop: Effective Visual Aids",
-                        "Day 35: Creating Visuals",
-                        "Day 36: Presentation Delivery Workshop",
-                        "Day 37: Presentation Rehearsal Day 1",
-                        "Day 38: Presentation Rehearsal Day 2",
-                        "Day 39: Research Symposium Day 1",
-                        "Day 40: Research Symposium Day 2",
-                        "Day 41: Research Symposium Day 3",
-                        "Day 42: Research Symposium Day 4",
-                        "Day 43: Evaluating Texts and Research",
-                        "Day 44: Unit Closure: What Have We Learned?",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 10: Unit 1: Truth and Perspective": {
-            "topics": {
-                "Point of View and Reliability": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is Truth?",
-                        "Day 2: Engage: A Question of Truth",
-                        "Day 3: Defining Point of View and Narrator Reliability",
-                        "Day 4: Anchor Text Introduction",
-                        "Day 5: Reading and First Impressions",
-                        "Day 6: Analyzing Diction and Tone",
-                        "Day 7: Tracking the Narrative",
-                        "Day 8: Character Motivation",
-                        "Day 9: Group Discussion: Is the Narrator Trustworthy?",
-                        "Day 10: Writing Workshop: Character Voice Journal",
-                        "Day 11: How Perspective Shapes Plot",
-                        "Day 12: The Impact of an Unreliable Narrator",
-                        "Day 13: Reading and Analyzing a Key Scene",
-                        "Day 14: Socratic Seminar Preparation",
-                        "Day 15: Socratic Seminar",
-                        "Day 16: Connecting to Other Perspectives",
-                        "Day 17: Comparative Analysis",
-                        "Day 18: Introduction to the Analytical Essay",
-                        "Day 19: Essay Workshop: Developing a Thesis",
-                        "Day 20: Essay Workshop: Gathering Evidence",
-                        "Day 21: Elaboration: Rewriting a Scene",
-                        "Day 22: Creative Writing Workshop: Capturing a New Voice",
-                        "Day 23: Peer Review: Creative Scene",
-                        "Day 24: Sharing Rewritten Scenes",
-                        "Day 25: Connecting Creative and Analytical Writing",
-                        "Day 26: Essay Workshop: Outlining",
-                        "Day 27: Drafting the Essay: Introduction and Body",
-                        "Day 28: Drafting the Essay: Conclusion",
-                        "Day 29: Figurative Language and Nuance",
-                        "Day 30: Revising for Argument",
-                        "Day 31: Revising for Clarity and Style",
-                        "Day 32: Peer Review Workshop: Full Essay",
-                        "Day 33: Final Revisions",
-                        "Day 34: Editing and Proofreading",
-                        "Day 35: Final Essay Submission",
-                        "Day 36: Introduction to a New Text with Multiple Perspectives",
-                        "Day 37: Comparing Narrative Structures",
-                        "Day 38: Evaluating a Speaker's Perspective",
-                        "Day 39: Discussion: Truth in Non-Fiction",
-                        "Day 40: Debate: Is Objective Truth Possible?",
-                        "Day 41: Creative Response Project Intro",
-                        "Day 42: Creative Project Work Day",
-                        "Day 43: Creative Project Work Day",
-                        "Day 44: Project Showcase",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 10: Unit 2: Utopia and Dystopia": {
-            "topics": {
-                "Analyzing Dystopian Societies": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: The Concept of Utopia",
-                        "Day 2: Engage: Designing a Perfect World",
-                        "Day 3: Presenting Utopias",
-                        "Day 4: Characteristics of Dystopian Fiction",
-                        "Day 5: Anchor Text Introduction",
-                        "Day 6: World-Building Analysis",
-                        "Day 7: Analyzing Dystopian Control",
-                        "Day 8: The Dystopian Protagonist",
-                        "Day 9: Reading and Discussion",
-                        "Day 10: Writing Workshop: World-Building Paragraph",
-                        "Day 11: Thematic Development: Conformity vs. Individuality",
-                        "Day 12: Analyzing Propaganda",
-                        "Day 13: Symbolism in Dystopian Literature",
-                        "Day 14: Reading and Analyzing the Climax",
-                        "Day 15: Socratic Seminar",
-                        "Day 16: Connecting to the Real World: Research Mini-Project",
-                        "Day 17: Research Day",
-                        "Day 18: Making Connections",
-                        "Day 19: Sharing Connections",
-                        "Day 20: Summative Essay Introduction",
-                        "Day 21: Essay Workshop: Thesis Development",
-                        "Day 22: Essay Workshop: Gathering Evidence",
-                        "Day 23: Essay Workshop: Outlining",
-                        "Day 24: Drafting the Explanatory Essay",
-                        "Day 25: Peer Review Workshop",
-                        "Day 26: Revising the Essay",
-                        "Day 27: Vocabulary and Precise Language",
-                        "Day 28: Finalizing the Explanatory Essay",
-                        "Day 29: Elaboration: Dystopia on Screen Intro",
-                        "Day 30: Film Viewing Day 1",
-                        "Day 31: Film Viewing Day 2",
-                        "Day 32: Comparative Analysis: Book vs. Film",
-                        "Day 33: Discussion: Analyzing Adaptation Choices",
-                        "Day 34: Creative Response Intro: Your Dystopia",
-                        "Day 35: Creative Project: World-Building",
-                        "Day 36: Creative Project: The Protagonist",
-                        "Day 37: Creative Project: Writing a Scene",
-                        "Day 38: Creative Project Workshop",
-                        "Day 39: Finalizing Creative Projects",
-                        "Day 40: Submit Explanatory Essay",
-                        "Day 41: Dystopian Showcase Day 1",
-                        "Day 42: Dystopian Showcase Day 2",
-                        "Day 43: Unit Closure Discussion",
-                        "Day 44: Final Thematic Connection",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 10: Unit 3: Foundational Myths and Modern Meanings": {
-            "topics": {
-                "Exploring Archetypes and Allusions": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is a Myth?",
-                        "Day 2: Engage: Modern Heroes and Monsters",
-                        "Day 3: The Hero's Journey",
-                        "Day 4: Reading Foundational Myths 1: Creation Myths",
-                        "Day 5: Reading Foundational Myths 2: Hero Myths",
-                        "Day 6: Character Archetypes",
-                        "Day 7: Anchor Text Introduction",
-                        "Day 8: Identifying Mythological Parallels",
-                        "Day 9: Analyzing Allusions",
-                        "Day 10: Reading the Anchor Text",
-                        "Day 11: Transformation of Character",
-                        "Day 12: Transformation of Theme",
-                        "Day 13: Discussion: Why Adapt Myths?",
-                        "Day 14: Reading and Discussion",
-                        "Day 15: Socratic Seminar",
-                        "Day 16: Myths Across Media",
-                        "Day 17: Comparative Analysis: Different Media",
-                        "Day 18: Creative Response Project Introduction",
-                        "Day 19: Brainstorming for Creative Adaptation",
-                        "Day 20: Project Planning",
-                        "Day 21: Creative Writing Workshop: Narrative",
-                        "Day 22: Creative Writing Workshop: Poetry",
-                        "Day 23: Creative Project Work Day",
-                        "Day 24: Peer Review Workshop",
-                        "Day 25: Revising Creative Projects",
-                        "Day 26: Analytical Essay Introduction",
-                        "Day 27: Essay Workshop: Comparative Thesis",
-                        "Day 28: Essay Workshop: Structuring a Comparative Essay",
-                        "Day 29: Essay Workshop: Gathering Evidence",
-                        "Day 30: Drafting the Comparative Essay",
-                        "Day 31: Finalizing Creative Projects",
-                        "Day 32: Peer Review: Comparative Essay",
-                        "Day 33: Revising the Comparative Essay",
-                        "Day 34: Language Workshop: Academic Vocabulary",
-                        "Day 35: Editing and Proofreading",
-                        "Day 36: Submit Comparative Essay",
-                        "Day 37: Presentation Skills Workshop",
-                        "Day 38: Presentation Preparation",
-                        "Day 39: Mythology Showcase Day 1",
-                        "Day 40: Mythology Showcase Day 2",
-                        "Day 41: Mythology Showcase Day 3",
-                        "Day 42: Gallery Walk",
-                        "Day 43: Unit Closure Discussion",
-                        "Day 44: Connecting to Personal Experience",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 10: Unit 4: The Language of Poetry": {
-            "topics": {
-                "Sound and Sense in Poetry": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is Poetry?",
-                        "Day 2: Engage: Hearing the Music in Language",
-                        "Day 3: Figurative Language 1: Simile and Metaphor",
-                        "Day 4: Figurative Language 2: Personification and Imagery",
-                        "Day 5: Sound Devices 1: Alliteration and Assonance",
-                        "Day 6: Sound Devices 2: Rhyme and Rhythm",
-                        "Day 7: Connotation and Denotation",
-                        "Day 8: Close Reading a Poem: TP-CASTT",
-                        "Day 9: Applying TP-CASTT",
-                        "Day 10: Writing Workshop: Short Analysis",
-                        "Day 11: Poetic Structure 1: The Stanza and the Line",
-                        "Day 12: Poetic Structure 2: Fixed Forms (The Sonnet)",
-                        "Day 13: Poetic Structure 3: Free Verse",
-                        "Day 14: Comparing Forms",
-                        "Day 15: Discussion: Form and Freedom",
-                        "Day 16: Creative Writing Intro: Poetry Imitation",
-                        "Day 17: Imitation Workshop 1: Sound",
-                        "Day 18: Imitation Workshop 2: Figurative Language",
-                        "Day 19: Imitation Workshop 3: Form",
-                        "Day 20: Peer Review: Imitation Poems",
-                        "Day 21: Creative Writing: Personal Experience",
-                        "Day 22: Drafting Workshop 1: Getting Ideas Down",
-                        "Day 23: Drafting Workshop 2: Shaping the Poem",
-                        "Day 24: Revision Workshop: The Power of the Verb",
-                        "Day 25: Revision Workshop: Cutting Clutter",
-                        "Day 26: Poetry Peer Review",
-                        "Day 27: Finalizing Personal Poems",
-                        "Day 28: Poetry Anthology Project Introduction",
-                        "Day 29: Selecting Poems for Anthology",
-                        "Day 30: Writing Analyses for Anthology",
-                        "Day 31: Anthology Work Day",
-                        "Day 32: Anthology Peer Review",
-                        "Day 33: Finalizing Anthologies",
-                        "Day 34: Performance Poetry Intro",
-                        "Day 35: Analyzing a Spoken Word Performance",
-                        "Day 36: Preparing for a Poetry Slam",
-                        "Day 37: Performance Workshop",
-                        "Day 38: Presentation Visuals",
-                        "Day 39: Poetry Slam Day 1",
-                        "Day 40: Poetry Slam Day 2",
-                        "Day 41: Poetry Slam Day 3",
-                        "Day 42: Submit Poetry Anthology",
-                        "Day 43: Found Poetry Workshop",
-                        "Day 44: Unit Closure Discussion",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 11: Unit 1: The American Experience": {
-            "topics": {
-                "Analyzing Foundational American Texts": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: The American Question",
-                        "Day 2: Engage: Defining 'American'",
-                        "Day 3: Reading Foundational Text 1",
-                        "Day 4: Analyzing Rhetoric in Foundational Texts",
-                        "Day 5: Reading Foundational Text 2: A Competing Vision",
-                        "Day 6: Comparative Analysis Workshop",
-                        "Day 7: Discussion: Ideals vs. Realities",
-                        "Day 8: Anchor Text Introduction (e.g., The Great Gatsby)",
-                        "Day 9: Reading and Annotating the Anchor Text",
-                        "Day 10: Analyzing Character as Symbol",
-                        "Day 11: The American Dream in the Anchor Text",
-                        "Day 12: Socratic Seminar on the Anchor Text",
-                        "Day 13: Literary Criticism 1: Introduction",
-                        "Day 14: Applying a Critical Lens",
-                        "Day 15: Writing Workshop: Integrating Critical Voices",
-                        "Day 16: Connecting to Contemporary Voices: Poetry",
-                        "Day 17: Connecting to Contemporary Voices: Non-Fiction",
-                        "Day 18: Synthesis Discussion",
-                        "Day 19: Introduction to the Synthesis Essay",
-                        "Day 20: Essay Workshop: Formulating a Complex Thesis",
-                        "Day 21: Essay Workshop: Selecting and Organizing Evidence",
-                        "Day 22: Essay Workshop: Outlining the Synthesis Essay",
-                        "Day 23: Drafting the Introduction",
-                        "Day 24: Drafting Body Paragraphs with Synthesis",
-                        "Day 25: Language Workshop: Varying Syntax",
-                        "Day 26: Continued Drafting",
-                        "Day 27: Self-Revision Workshop",
-                        "Day 28: Peer Review Workshop",
-                        "Day 29: Revision Planning",
-                        "Day 30: Revising the Essay",
-                        "Day 31: Workshop on Figurative Language and Nuance",
-                        "Day 32: Editing and Proofreading",
-                        "Day 33: Final Synthesis Essay Due",
-                        "Day 34: Preparing for a Harkness Discussion",
-                        "Day 35: Harkness Discussion Day 1",
-                        "Day 36: Harkness Discussion Day 2",
-                        "Day 37: Discussion Reflection",
-                        "Day 38: Creative Response Project",
-                        "Day 39: Creative Project Work Day",
-                        "Day 40: Sharing Creative Responses",
-                        "Day 41: Final Text: A Modern Speech",
-                        "Day 42: Connecting Past and Present",
-                        "Day 43: Unit Closure Discussion",
-                        "Day 44: Portfolio Curation",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 11: Unit 2: The Author's Craft": {
-            "topics": {
-                "Deconstructing Authorial Style": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: What is Style?",
-                        "Day 2: Engage: Recognizing a Voice",
-                        "Day 3: Author Study Introduction",
-                        "Day 4: Reading and Annotating for Style",
-                        "Day 5: Deconstructing Diction",
-                        "Day 6: Deconstructing Syntax",
-                        "Day 7: Discussion: The 'Stylistic Fingerprint'",
-                        "Day 8: Reading Anchor Text 2",
-                        "Day 9: Analyzing Tone and Mood",
-                        "Day 10: Workshop: Writing a Style Analysis Paragraph",
-                        "Day 11: Analyzing Narrative Structure",
-                        "Day 12: Analyzing Thematic Development",
-                        "Day 13: Figurative Language and Symbolism",
-                        "Day 14: Socratic Seminar Preparation",
-                        "Day 15: Socratic Seminar: Style and Meaning",
-                        "Day 16: Literary Criticism on the Author",
-                        "Day 17: Synthesizing Critical Perspectives",
-                        "Day 18: Introduction to the Literary Argument Essay",
-                        "Day 19: Essay Workshop: Formulating a Nuanced Thesis",
-                        "Day 20: Essay Workshop: Organizing the Argument",
-                        "Day 21: Elaboration: Mentor Text Imitation",
-                        "Day 22: Creative Writing: Imitating the Master",
-                        "Day 23: Peer Review: Style Imitations",
-                        "Day 24: Reflection on Imitation",
-                        "Day 25: Drafting the Literary Argument: Introduction",
-                        "Day 26: Drafting Body Paragraphs: Diction and Syntax",
-                        "Day 27: Drafting Body Paragraphs: Structure and Theme",
-                        "Day 28: Drafting with a Critical Voice",
-                        "Day 29: Drafting the Conclusion",
-                        "Day 30: Self-Revision Workshop",
-                        "Day 31: Peer Review Workshop: Full Draft",
-                        "Day 32: Revising for a Formal Tone",
-                        "Day 33: Final Revisions",
-                        "Day 34: Editing Workshop: Advanced Conventions",
-                        "Day 35: Final Literary Argument Due",
-                        "Day 36: Panel Presentation Introduction",
-                        "Day 37: Group Work: Planning the Panel",
-                        "Day 38: Creating Presentation Materials",
-                        "Day 39: Presentation Rehearsals",
-                        "Day 40: Panel Presentations Day 1",
-                        "Day 41: Panel Presentations Day 2",
-                        "Day 42: Responding to Other Texts by the Author",
-                        "Day 43: Unit Closure Discussion",
-                        "Day 44: Vocabulary Acquisition",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 11: Unit 3: Shakespeare and Adaptation": {
-            "topics": {
-                "Reading Shakespeare": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: Shakespeare's Legacy",
-                        "Day 2: Engage: Shakespeare in Pop Culture",
-                        "Day 3: Introduction to the Anchor Play",
-                        "Day 4: Reading Act I",
-                        "Day 5: Analyzing the Inciting Incident",
-                        "Day 6: Understanding Shakespearean Language",
-                        "Day 7: Reading Act II",
-                        "Day 8: Workshop: The Soliloquy",
-                        "Day 9: Performance Analysis",
-                        "Day 10: Character Foils",
-                        "Day 11: Reading Act III",
-                        "Day 12: Analyzing the Climax",
-                        "Day 13: Thematic Development",
-                        "Day 14: Socratic Seminar",
-                        "Day 15: Reading Act IV",
-                        "Day 16: Reading Act V",
-                        "Day 17: Discussion: Tragic Hero",
-                        "Day 18: Introduction to Adaptation",
-                        "Day 19: Analyzing a Film Adaptation 1",
-                        "Day 20: Analyzing a Film Adaptation 2",
-                        "Day 21: Comparative Discussion: Play vs. Film",
-                        "Day 22: Focus on a Scene: Textual Analysis",
-                        "Day 23: Focus on a Scene: Comparative Film Analysis",
-                        "Day 24: Workshop: Writing a Comparative Analysis",
-                        "Day 25: Evaluating Adaptations",
-                        "Day 26: Creative Response: Modern Adaptation Intro",
-                        "Day 27: Brainstorming a Modern Context",
-                        "Day 28: Scriptwriting Workshop",
-                        "Day 29: Drafting the Modern Scene",
-                        "Day 30: Peer Review: Modern Scenes",
-                        "Day 31: Revising the Modern Scene",
-                        "Day 32: Summative Project: Performance/Analysis Intro",
-                        "Day 33: Project Work Day 1",
-                        "Day 34: Performance Track: Rehearsal",
-                        "Day 35: Analysis Track: Thesis Development",
-                        "Day 36: Performance Track: Tech and Props",
-                        "Day 37: Analysis Track: Outlining and Drafting",
-                        "Day 38: Project Work Day: Teacher Conferencing",
-                        "Day 39: Final Project Work Day",
-                        "Day 40: Shakespeare Festival Day 1: Performances",
-                        "Day 41: Shakespeare Festival Day 2: Performances",
-                        "Day 42: Analytical Essay Submission",
-                        "Day 43: Performance Reflection",
-                        "Day 44: Unit Closure Discussion",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 11: Unit 4: The Researched Argument": {
-            "topics": {
-                "Building a Complex Argument": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: Writing as Action",
-                        "Day 2: Engage: Identifying Public Conversations",
-                        "Day 3: Topic Selection and Initial Exploration",
-                        "Day 4: Formulating a Research Question",
-                        "Day 5: Advanced Source Evaluation",
-                        "Day 6: Research Workshop: Academic Databases",
-                        "Day 7: Reading and Annotating Scholarly Articles",
-                        "Day 8: Synthesizing Sources: Finding the Conversation",
-                        "Day 9: Note-Taking and Annotated Bibliography",
-                        "Day 10: Developing a Nuanced Thesis",
-                        "Day 11: Acknowledging and Responding to Counterclaims",
-                        "Day 12: Structuring a Complex Argument",
-                        "Day 13: Drafting the Introduction",
-                        "Day 14: Drafting Body Paragraphs: Integrating Evidence",
-                        "Day 15: Workshop on Logical Fallacies",
-                        "Day 16: Continued Drafting",
-                        "Day 17: Drafting the Conclusion",
-                        "Day 18: Self-Revision Workshop",
-                        "Day 19: Peer Review Workshop",
-                        "Day 20: Revising the Argument",
-                        "Day 21: Language and Style Workshop",
-                        "Day 22: Transitions and Cohesion",
-                        "Day 23: Citation and Formatting Workshop (MLA/APA)",
-                        "Day 24: Final Editing and Proofreading",
-                        "Day 25: Research Paper Submission",
-                        "Day 26: From Research to Advocacy: Presentation Intro",
-                        "Day 27: Identifying Audience and Purpose",
-                        "Day 28: Structuring the Advocacy Presentation",
-                        "Day 29: Using Rhetoric for a Live Audience",
-                        "Day 30: Creating Visuals for Advocacy",
-                        "Day 31: Workshop: Delivery and Presence",
-                        "Day 32: Presentation Rehearsal and Feedback",
-                        "Day 33: Advocacy Presentations Day 1",
-                        "Day 34: Advocacy Presentations Day 2",
-                        "Day 35: Evaluating a Speaker's Argument",
-                        "Day 36: Q&A and Discussion",
-                        "Day 37: Advocacy Presentations Day 3",
-                        "Day 38: Advocacy Presentations Day 4",
-                        "Day 39: Connecting to Other Media",
-                        "Day 40: Synthesizing Across Formats",
-                        "Day 41: Writing a 'Letter to the Editor'",
-                        "Day 42: Workshop: Writing for a Public Audience",
-                        "Day 43: Unit Closure: Symposium of Ideas",
-                        "Day 44: Acquiring Academic Vocabulary",
-                        "Day 45: Final Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 12: Unit 1: Choice and Consequence": {
-            "topics": {
-                "Analyzing Complex Characters": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: Fate and Free Will",
-                        "Day 2: Engage: A Moral Dilemma",
-                        "Day 3: Anchor Text Introduction",
-                        "Day 4: Reading and Identifying Core Conflicts",
-                        "Day 5: Analyzing Character Motivation",
-                        "Day 6: Moral Ambiguity",
-                        "Day 7: Reading and Discussion",
-                        "Day 8: Choice-and-Consequence Mapping",
-                        "Day 9: Thematic Development: Guilt and Responsibility",
-                        "Day 10: Socratic Seminar",
-                        "Day 11: Analyzing Structure and Pacing",
-                        "Day 12: Literary Theory 1: Psychoanalytic Lens",
-                        "Day 13: Literary Theory 2: Existentialist Lens",
-                        "Day 14: Applying Critical Lenses",
-                        "Day 15: Reading and Discussion to Conclusion",
-                        "Day 16: Debate: A Character on Trial",
-                        "Day 17: Introduction to the Literary Argument Essay",
-                        "Day 18: Essay Workshop: Complex Thesis",
-                        "Day 19: Essay Workshop: Using Ambiguous Evidence",
-                        "Day 20: Essay Workshop: Outlining",
-                        "Day 21: Drafting Workshop: Introduction",
-                        "Day 22: Drafting Workshop: Body Paragraphs",
-                        "Day 23: Language Workshop: Syntax for Effect",
-                        "Day 24: Drafting Workshop: Conclusion",
-                        "Day 25: Self-Revision Workshop",
-                        "Day 26: Peer Review Workshop",
-                        "Day 27: Teacher-Student Conferences",
-                        "Day 28: Revision Planning",
-                        "Day 29: Revising the Essay",
-                        "Day 30: Editing and Proofreading",
-                        "Day 31: Final Essay Submission",
-                        "Day 32: Elaboration: Philosophical Chairs",
-                        "Day 33: Debate Reflection",
-                        "Day 34: Connecting to Film",
-                        "Day 35: Connecting to Personal Experience",
-                        "Day 36: Introduction to the Final Project",
-                        "Day 37: Project Proposal Workshop",
-                        "Day 38: Project Work Day",
-                        "Day 39: Project Work Day",
-                        "Day 40: Project Work Day",
-                        "Day 41: Final Project Presentations Day 1",
-                        "Day 42: Final Project Presentations Day 2",
-                        "Day 43: Unit Closure Discussion",
-                        "Day 44: Portfolio Selection",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 12: Unit 2: Reading the World": {
-            "topics": {
-                "Exploring Global Literature": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: Mapping Our Literary Worlds",
-                        "Day 2: Engage: Universal Themes",
-                        "Day 3: Anchor Text Introduction",
-                        "Day 4: Context Workshop: Researching the Culture",
-                        "Day 5: Reading and Annotating for Cultural Perspective",
-                        "Day 6: Discussing Initial Readings",
-                        "Day 7: Reading the Anchor Text",
-                        "Day 8: Analyzing Character through a Cultural Lens",
-                        "Day 9: Thematic Development",
-                        "Day 10: Writing Workshop: Cultural Analysis",
-                        "Day 11: Continued Reading and Discussion",
-                        "Day 12: Author's Purpose and Message",
-                        "Day 13: Making Connections to Personal Experience",
-                        "Day 14: Socratic Seminar Preparation",
-                        "Day 15: Socratic Seminar",
-                        "Day 16: Introduction to the Explanatory Essay",
-                        "Day 17: Essay Workshop: Thesis Development",
-                        "Day 18: Essay Workshop: Gathering Evidence",
-                        "Day 19: Essay Workshop: Outlining",
-                        "Day 20: Drafting the Essay",
-                        "Day 21: Peer Review Workshop",
-                        "Day 22: Revising the Essay",
-                        "Day 23: Language Workshop: Vocabulary",
-                        "Day 24: Finalizing the Explanatory Essay",
-                        "Day 25: Explanatory Essay Due",
-                        "Day 26: Elaboration: Exploring World Literature through Poetry",
-                        "Day 27: Discussion: Universal vs. Culturally Specific",
-                        "Day 28: Creative Response Project Introduction",
-                        "Day 29: Project Brainstorming and Planning",
-                        "Day 30: Project Work Day 1",
-                        "Day 31: Project Work Day 2",
-                        "Day 32: Project Work Day 3",
-                        "Day 33: Connecting to Other Media: World Cinema",
-                        "Day 34: Comparative Discussion: Literature and Film",
-                        "Day 35: Guest Speaker or Virtual Tour",
-                        "Day 36: Student-Led Presentations: Cultural Spotlight",
-                        "Day 37: Presentations Day 1",
-                        "Day 38: Presentations Day 2",
-                        "Day 39: Synthesizing Across Presentations",
-                        "Day 40: Showcase of Creative Projects",
-                        "Day 41: Artist's Statement Workshop",
-                        "Day 42: Unit Closure Discussion",
-                        "Day 43: Acquiring Academic Vocabulary",
-                        "Day 44: Portfolio Curation",
-                        "Day 45: Final Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 12: Unit 3: Satire and Social Critique": {
-            "topics": {
-                "Understanding Satire": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: The Power of Humor",
-                        "Day 2: Engage: Analyzing Contemporary Satire",
-                        "Day 3: The Satirist's Toolkit",
-                        "Day 4: Anchor Text Introduction",
-                        "Day 5: Reading and Deconstructing the Anchor Text",
-                        "Day 6: Analyzing Ironic Tone",
-                        "Day 7: Hyperbole and Understatement",
-                        "Day 8: Delineating the Satirical Argument",
-                        "Day 9: Discussion: The Satirical Target",
-                        "Day 10: Writing Workshop: Satirical Analysis",
-                        "Day 11: Continued Reading and Analysis",
-                        "Day 12: The Role of Logic in Satire",
-                        "Day 13: Evaluating the Argument",
-                        "Day 14: Socratic Seminar",
-                        "Day 15: Introduction to the Explanatory Essay",
-                        "Day 16: Essay Workshop: Thesis Development",
-                        "Day 17: Essay Workshop: Gathering Evidence",
-                        "Day 18: Essay Workshop: Outlining",
-                        "Day 19: Drafting the Essay",
-                        "Day 20: Peer Review and Revision",
-                        "Day 21: Elaboration: Satire in Different Media",
-                        "Day 22: Analyzing Political Cartoons",
-                        "Day 23: Evaluating a Speaker's Satirical Argument",
-                        "Day 24: Discussion: The Motives of Satire",
-                        "Day 25: Introduction to the Creative Satire Project",
-                        "Day 26: Brainstorming Topics for Satire",
-                        "Day 27: Choosing a Satirical Mode",
-                        "Day 28: Creative Project Work Day: Drafting",
-                        "Day 29: Workshop: Creating an Ironic Persona",
-                        "Day 30: Creative Project Peer Review",
-                        "Day 31: Revising Creative Projects",
-                        "Day 32: Finalizing Creative Projects",
-                        "Day 33: Finalizing the Analytical Essay",
-                        "Day 34: Essay Submission",
-                        "Day 35: Preparing for the Satire Showcase",
-                        "Day 36: Presentation Workshop: Using Visuals",
-                        "Day 37: Satire Showcase Day 1",
-                        "Day 38: Satire Showcase Day 2",
-                        "Day 39: Satire Showcase Day 3",
-                        "Day 40: Audience Response and Discussion",
-                        "Day 41: The Limits and Dangers of Satire",
-                        "Day 42: Debate: The Responsibility of the Satirist",
-                        "Day 43: Final Text Analysis",
-                        "Day 44: Portfolio Selection and Reflection",
-                        "Day 45: Unit Reflection"
-                    ]
-                }
-            }
-        },
-        "Grade 12: Unit 4: Crafting the Future: College and Career Writing": {
-            "topics": {
-                "The Personal Statement": {
-                    "lessons": [
-                        "Day 1: Unit Introduction: Writing for Your Future",
-                        "Day 2: Engage: Analyzing College Application Prompts",
-                        "Day 3: What Makes a College Essay Effective?",
-                        "Day 4: Brainstorming Workshop 1: Personal Inventory",
-                        "Day 5: Brainstorming Workshop 2: Telling Small Stories",
-                        "Day 6: Selecting a Topic",
-                        "Day 7: Narrative Structure: The Anecdote-Reflection Model",
-                        "Day 8: Writing Workshop: The Opening Hook",
-                        "Day 9: Drafting the Anecdote",
-                        "Day 10: Drafting the Reflection",
-                        "Day 11: First Draft Due",
-                        "Day 12: Self-Revision Workshop",
-                        "Day 13: Peer Review Workshop 1",
-                        "Day 14: Revision Workshop: Finding the 'So What?'",
-                        "Day 15: Peer Review Workshop 2",
-                        "Day 16: Voice and Tone",
-                        "Day 17: Teacher-Student Conferences",
-                        "Day 18: Final Revisions",
-                        "Day 19: Editing and Proofreading",
-                        "Day 20: Polished Personal Statement Due",
-                        "Day 21: Introduction to Career Writing: The Resume",
-                        "Day 22: Resume Workshop: Brainstorming Content",
-                        "Day 23: Resume Workshop: Action Verbs",
-                        "Day 24: Drafting the Resume",
-                        "Day 25: Resume Peer Review",
-                        "Day 26: Revising and Finalizing the Resume",
-                        "Day 27: Introduction to Professional Communication",
-                        "Day 28: Workshop: Writing a Professional Email",
-                        "Day 29: Introduction to Interviewing",
-                        "Day 30: Workshop: Common Interview Questions",
-                        "Day 31: Mock Interview Preparation",
-                        "Day 32: Adapting Speech for a Formal Context",
-                        "Day 33: Mock Interviews Day 1",
-                        "Day 34: Mock Interviews Day 2",
-                        "Day 35: Interview Reflection and Thank-You Notes",
-                        "Day 36: Scholarship Essay Workshop",
-                        "Day 37: Writing a Scholarship Essay",
-                        "Day 38: Researching Colleges and Careers",
-                        "Day 39: Presenting Research Findings",
-                        "Day 40: Sharing Research",
-                        "Day 41: Creating a Professional Digital Presence",
-                        "Day 42: Portfolio Assembly",
-                        "Day 43: Portfolio Presentation",
-                        "Day 44: Unit Closure Discussion",
-                        "Day 45: Final Unit Reflection"
-                    ]
-                }
-            }
-        }
-      }
+      units: {}
     },
     Health: {
         units: {}
@@ -2389,5 +1540,3 @@ export const curriculumData: {
     }
   },
 };
-
-    

@@ -26,7 +26,7 @@ import {
   generateLessonPlan,
   type GenerateLessonPlanInput,
 } from '@/ai/flows/generate-lesson-plan';
-import { curriculumData } from '@/lib/curriculum-data';
+import { curriculumData as baseCurriculumData, type CurriculumContent } from '@/lib/curriculum-data';
 import AiToolLayout from './AiToolLayout';
 import {
   BookCopy,
@@ -36,12 +36,30 @@ import {
 import Markdown from 'react-markdown';
 import { Label } from '../ui/label';
 
+// Helper function to dynamically import ELA curriculum
+const getElaCurriculum = async (gradeTitle: string) => {
+  switch (gradeTitle) {
+    case 'ELA 9th Grade':
+      return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
+    case 'ELA 10th Grade':
+      return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
+    case 'ELA 11th Grade':
+      return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
+    case 'ELA 12th Grade':
+      return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
+    default:
+      return null;
+  }
+};
+
+
 export default function LessonPlanGenerator() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
+  const [curriculumData, setCurriculumData] = useState(baseCurriculumData);
 
   const pageTitle = useMemo(() => {
     return searchParams.get('title') || 'Lesson Plan Generator';
@@ -51,7 +69,7 @@ export default function LessonPlanGenerator() {
   const subjectFromUrl = useMemo(() => {
     const subject = searchParams.get('subject');
     return subject && curriculumData.subjects.includes(subject) ? subject : '';
-  }, [searchParams]);
+  }, [searchParams, curriculumData.subjects]);
 
   const [selectedSubject, setSelectedSubject] = useState<string>(subjectFromUrl);
   const [selectedUnit, setSelectedUnit] = useState<string>('');
@@ -63,6 +81,21 @@ export default function LessonPlanGenerator() {
   const [units, setUnits] = useState<string[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
   const [lessons, setLessons] = useState<string[]>([]);
+
+  useEffect(() => {
+    const loadCurriculum = async () => {
+        const title = searchParams.get('title');
+        if (title && title.startsWith('ELA')) {
+            const elaContent = await getElaCurriculum(title);
+            if (elaContent) {
+                const newContent: CurriculumContent = { 'Literature': elaContent };
+                setCurriculumData(prev => ({ ...prev, content: { ...prev.content, ...newContent }}));
+            }
+        }
+    };
+    loadCurriculum();
+  }, [searchParams]);
+
 
   // Pre-fill subject from URL search params
   useEffect(() => {
@@ -80,7 +113,7 @@ export default function LessonPlanGenerator() {
     } else {
       setUnits([]);
     }
-  }, [selectedSubject]);
+  }, [selectedSubject, curriculumData]);
 
   useEffect(() => {
     if (selectedSubject && selectedUnit) {
@@ -92,7 +125,7 @@ export default function LessonPlanGenerator() {
     } else {
       setTopics([]);
     }
-  }, [selectedSubject, selectedUnit]);
+  }, [selectedSubject, selectedUnit, curriculumData]);
 
    useEffect(() => {
     if (selectedSubject && selectedUnit && selectedTopic) {
@@ -103,7 +136,7 @@ export default function LessonPlanGenerator() {
     } else {
       setLessons([]);
     }
-  }, [selectedSubject, selectedUnit, selectedTopic]);
+  }, [selectedSubject, selectedUnit, selectedTopic, curriculumData]);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -311,5 +344,3 @@ export default function LessonPlanGenerator() {
     </AiToolLayout>
   );
 }
-
-    
