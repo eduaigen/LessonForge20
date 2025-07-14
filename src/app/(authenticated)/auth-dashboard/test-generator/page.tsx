@@ -39,14 +39,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
-    Object.values(modules).flat().forEach(module => {
+    const subjectModules = { ...modules };
+    delete subjectModules.tools; // Exclude tools from this mapping
+
+    Object.values(subjectModules).flat().forEach(module => {
       if (module.name === "NV Biology" || module.name === "NGSS Biology (OpenSciEd)" || module.name === "AP Biology") {
           mapping[module.id] = module.name;
       } else {
           mapping[module.id] = subjectNameToCurriculumKey(module.name);
       }
     });
-    mapping['price_1Pg12lAk4y2zY5d6pQrStUvW'] = 'All'; // Test Generator can be for any subject
     return mapping;
 };
 
@@ -89,14 +91,17 @@ export default function TestGeneratorPage() {
   const priceIdToSubject = useMemo(mapPriceIdToSubject, []);
 
   const availableSubjects = useMemo(() => {
-    if (isAdmin) return Object.values(modules).flat().map(m => m.name);
+    const subjectModules = { ...modules };
+    delete subjectModules.tools; // Exclude tools from the list of available subjects
+
+    if (isAdmin) return Object.values(subjectModules).flat().map(m => m.name);
     
     const testGeneratorSub = subscriptions.includes('price_1Pg12lAk4y2zY5d6pQrStUvW');
     if (!testGeneratorSub) return [];
 
     const subscribedSubjects = subscriptions
       .map(priceId => priceIdToSubject[priceId])
-      .filter((subject): subject is string => !!subject && subject !== 'All');
+      .filter((subject): subject is string => !!subject);
       
     return [...new Set(subscribedSubjects)];
   }, [subscriptions, isAdmin, priceIdToSubject]);
