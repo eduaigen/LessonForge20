@@ -4,7 +4,7 @@
  * @fileOverview An AI flow for generating a 5E lesson plan for NV Biology.
  */
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 import { GenerateNVBiologyLessonInputSchema, GenerateNVBiologyLessonOutputSchema } from '../schemas/nv-biology-lesson-schemas';
 
 export type GenerateNVBiologyLessonInput = z.infer<typeof GenerateNVBiologyLessonInputSchema>;
@@ -55,7 +55,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Organize students into groups, provide graphic organizer).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students collaboratively complete the graphic organizer).
-- **Embedded Data Table**: A complete and structured data table with a title, clear headers, and logically organized data, ready for students to analyze and graph themselves. Do not generate a graph.
+- **Embedded Data Table**: A complete and structured data table with a title, clear headers, and logically organized data, ready for students to analyze and graph themselves. **Do not generate a graph or chart; provide only the raw data in a table.**
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Launch a quick poll).
@@ -65,7 +65,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Clarify expectations with a rubric).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students construct a written explanation using CER).
-- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. Ensure any embedded charts or graphs are clearly labeled.
+- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. If data is needed, provide it in a structured data table, not a graph. Ensure any embedded charts or diagrams are clearly labeled.
 
 **G. CLOSURE / EXIT TICKET**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Prompt students to summarize the main point).
