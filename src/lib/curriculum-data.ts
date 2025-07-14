@@ -51,25 +51,25 @@ export const curriculumData: {
             "Unit 3: Cellular Energetics": {
                 topics: {
                     "Enzymes": { lessons: ["Explain how enzymes affect the rate of biological reactions."] },
-                    "Environmental Impacts on Enzyme Function": { lessons: ["Explain how changes to enzyme structure and the cellular environment affect enzyme activity."] },
-                    "Cellular Energy": { lessons: ["Describe the role of energy in living organisms and explain how shared processes support common ancestry."] },
-                    "Photosynthesis": { lessons: ["Describe the photosynthetic processes and structures that allow organisms to capture and store energy."] },
-                    "Cellular Respiration": { lessons: ["Describe the processes and structures that allow organisms to use energy stored in biological macromolecules."] }
+                    "Environmental Impacts on Enzyme Function": { lessons: ["Explain how changes to the structure of an enzyme may affect its function.", "Explain how the cellular environment affects enzyme activity."] },
+                    "Cellular Energy": { lessons: ["Describe the role of energy in living organisms.", "Explain how shared, conserved, and fundamental processes and features support the concept of common ancestry for all organisms."] },
+                    "Photosynthesis": { lessons: ["Describe the photosynthetic processes and structural features of the chloroplast that allow organisms to capture and store energy.", "Explain how cells capture energy from light and transfer it to biological molecules for storage and use."] },
+                    "Cellular Respiration": { lessons: ["Describe the processes and structural features of mitochondria that allow organisms to use energy stored in biological macromolecules.", "Explain how cells obtain energy from biological macromolecules in order to power cellular functions."] }
                 }
             },
             "Unit 4: Cell Communication and Cell Cycle": {
                 topics: {
-                    "Cell Communication": { lessons: ["Describe and explain the ways that cells communicate with one another over short and long distances."] },
-                    "Introduction to Signal Transduction": { lessons: ["Describe the components of a signal transduction pathway and their role in producing a cellular response."] },
-                    "Signal Transduction Pathways": { lessons: ["Describe the different types of cellular responses elicited by a signal transduction pathway and explain how changes affect its activity."] },
+                    "Cell Communication": { lessons: ["Describe the ways that cells can communicate with one another.", "Explain how cells communicate with one another over short and long distances."] },
+                    "Introduction to Signal Transduction": { lessons: ["Describe the components of a signal transduction pathway.", "Describe the role of components of a signal transduction pathway in producing a cellular response."] },
+                    "Signal Transduction Pathways": { lessons: ["Describe the different types of cellular responses elicited by a signal transduction pathway.", "Explain how a change in the structure of any signaling molecule affects the activity of the signaling pathway."] },
                     "Feedback": { lessons: ["Explain how positive and negative feedback helps maintain homeostasis."] },
-                    "Cell Cycle": { lessons: ["Describe the events that occur in the cell cycle and explain how mitosis results in the transmission of chromosomes."] },
-                    "Regulation of Cell Cycle": { lessons: ["Describe the role of checkpoints in regulating the cell cycle and the effects of disruptions."] }
+                    "Cell Cycle": { lessons: ["Describe the events that occur in the cell cycle.", "Explain how mitosis results in the transmission of chromosomes from one generation of cells to the next."] },
+                    "Regulation of Cell Cycle": { lessons: ["Describe the role of checkpoints in regulating the cell cycle.", "Describe the effects of disruptions to the cell cycle on the cell or organism."] }
                 }
             },
             "Unit 5: Heredity": {
                 topics: {
-                    "Meiosis": { lessons: ["Explain how meiosis results in the transmission of chromosomes and describe similarities and differences between mitosis and meiosis."] },
+                    "Meiosis": { lessons: ["Explain how meiosis results in the transmission of chromosomes from one generation to the next.", "Describe similarities and differences between the phases and outcomes of mitosis and meiosis."] },
                     "Meiosis and Genetic Diversity": { lessons: ["Explain how the process of meiosis generates genetic diversity."] },
                     "Mendelian Genetics": { lessons: ["Explain the inheritance of genes and traits as described by Mendel’s laws."] },
                     "Non-Mendelian Genetics": { lessons: ["Explain deviations from Mendel’s model of the inheritance of traits."] },
@@ -78,41 +78,41 @@ export const curriculumData: {
             },
             "Unit 6: Gene Expression and Regulation": {
                 topics: {
-                    "DNA and RNA Structure": { lessons: ["Describe the structures involved in passing hereditary information and the characteristics of DNA that allow it to be used as hereditary material."] },
+                    "DNA and RNA Structure": { lessons: ["Describe the structures involved in passing hereditary information from one generation to the next.", "Describe the characteristics of DNA that allow it to be used as hereditary material."] },
                     "DNA Replication": { lessons: ["Describe the mechanisms by which genetic information is copied for transmission between generations."] },
                     "Transcription and RNA Processing": { lessons: ["Describe the mechanisms by which genetic information flows from DNA to RNA to protein."] },
                     "Translation": { lessons: ["Explain how the phenotype of an organism is determined by its genotype."] },
-                    "Regulation of Gene Expression": { lessons: ["Describe the types of interactions that regulate gene expression and explain how the location of regulatory sequences relates to their function."] },
-                    "Gene Expression and Cell Specialization": { lessons: ["Explain how transcription factors affect gene expression and the connection between gene regulation and phenotypic differences."] },
-                    "Mutations": { lessons: ["Describe the various types of mutation and explain how changes in genotype may result in changes in phenotype and contribute to variation."] },
+                    "Regulation of Gene Expression": { lessons: ["Describe the types of interactions that regulate gene expression.", "Explain how the location of regulatory sequences relates to their function."] },
+                    "Gene Expression and Cell Specialization": { lessons: ["Explain how the binding of transcription factors to promoter regions affects gene expression and the phenotype of the organism.", "Explain the connection between the regulation of gene expression and phenotypic differences in cells and organisms."] },
+                    "Mutations": { lessons: ["Describe the various types of mutation.", "Explain how changes in genotype may result in changes in phenotype.", "Explain how alterations in DNA sequences contribute to variation that can be subject to natural selection."] },
                     "Biotechnology": { lessons: ["Explain the use of genetic engineering techniques in analyzing or manipulating DNA."] }
                 }
             },
             "Unit 7: Natural Selection": {
                 topics: {
-                    "Introduction to Natural Selection": { lessons: ["Describe the causes of natural selection and explain how it affects populations."] },
-                    "Natural Selection": { lessons: ["Describe the importance of phenotypic variation in a population and explain how molecular variation connects to fitness."] },
+                    "Introduction to Natural Selection": { lessons: ["Describe the causes of natural selection.", "Explain how natural selection affects populations."] },
+                    "Natural Selection": { lessons: ["Describe the importance of phenotypic variation in a population.", "Explain how variation in molecules within cells connects to the fitness of an organism."] },
                     "Artificial Selection": { lessons: ["Explain how humans can affect diversity within a population."] },
-                    "Population Genetics": { lessons: ["Explain how random occurrences affect the genetic makeup of a population and describe the change over time."] },
+                    "Population Genetics": { lessons: ["Explain how random occurrences affect the genetic makeup of a population.", "Describe the role of random processes in the evolution of specific populations.", "Describe the change in the genetic makeup of a population over time."] },
                     "Hardy–Weinberg Equilibrium": { lessons: ["Describe the conditions under which allele and genotype frequencies will change in populations."] },
-                    "Evidence of Evolution": { lessons: ["Describe the types of data that provide evidence for evolution and explain how they show change over time."] },
+                    "Evidence of Evolution": { lessons: ["Describe the types of data that provide evidence for evolution.", "Explain how morphological, biochemical, and geological data provide evidence that organisms have changed over time."] },
                     "Common Ancestry": { lessons: ["Describe structural and functional evidence on cellular and molecular levels that provides evidence for the common ancestry of all eukaryotes."] },
                     "Continuing Evolution": { lessons: ["Explain how evolution is an ongoing process in all living organisms."] },
-                    "Phylogeny": { lessons: ["Describe the types of evidence used to infer evolutionary relationships and explain how phylogenetic trees are used."] },
-                    "Speciation": { lessons: ["Describe the conditions under which new species may arise and explain the processes and mechanisms that drive speciation."] },
+                    "Phylogeny": { lessons: ["Describe the types of evidence that can be used to infer an evolutionary relationship.", "Explain how phylogenetic trees and cladograms can be used to infer evolutionary relatedness."] },
+                    "Speciation": { lessons: ["Describe the conditions under which new species may arise.", "Describe the rate of evolution and speciation under different ecological conditions.", "Explain the processes and mechanisms that drive speciation."] },
                     "Variations in Populations": { lessons: ["Explain how the genetic diversity of a species or population affects its ability to withstand environmental pressures."] },
                     "Origins of Life on Earth": { lessons: ["Describe the scientific evidence that supports models of the origin of life on Earth."] }
                 }
             },
             "Unit 8: Ecology": {
                 topics: {
-                    "Responses to the Environment": { lessons: ["Explain how behavioral and physiological responses of an organism are related to environmental changes and affect fitness."] },
-                    "Energy Flow Through Ecosystems": { lessons: ["Describe energy acquisition strategies, explain energy flow through trophic levels, and explain how energy availability affects ecosystems."] },
+                    "Responses to the Environment": { lessons: ["Explain how the behavioral and physiological response of an organism is related to changes in internal or external environment.", "Explain how the behavioral responses of organisms affect their overall fitness and may contribute to the success of a population."] },
+                    "Energy Flow Through Ecosystems": { lessons: ["Describe the strategies organisms use to acquire and use energy.", "Explain how energy flows and matter cycles through trophic levels.", "Explain how changes in energy availability affect populations, communities, and ecosystems.", "Explain how the activities of autotrophs and heterotrophs enable the flow of energy within an ecosystem."] },
                     "Population Ecology": { lessons: ["Describe factors that influence growth dynamics of populations."] },
-                    "Effect of Density on Populations": { lessons: ["Explain how the density of a population affects and is determined by resource availability."] },
-                    "Community Ecology": { lessons: ["Describe the structure of a community and explain how interactions influence community structure."] },
-                    "Biodiversity": { lessons: ["Describe the relationship between ecosystem diversity and its resilience and explain how adding or removing components affects it."] },
-                    "Disruptions in Ecosystems": { lessons: ["Explain the interaction between environment and population variations, the effect of invasive species, human activities, and geological/meteorological activity on ecosystems."] }
+                    "Effect of Density on Populations": { lessons: ["Explain how the density of a population affects and is determined by resource availability in the environment."] },
+                    "Community Ecology": { lessons: ["Describe the structure of a community according to its species composition and diversity.", "Explain how interactions within and among populations influence community structure."] },
+                    "Biodiversity": { lessons: ["Describe the relationship between ecosystem diversity and its resilience to changes in the environment.", "Explain how the addition or removal of any component of an ecosystem will affect its overall short-term and long-term structure."] },
+                    "Disruptions in Ecosystems": { lessons: ["Explain the interaction between the environment and random or preexisting variations in populations.", "Explain how invasive species affect ecosystem dynamics.", "Describe human activities that lead to changes in ecosystem structure and dynamics.", "Explain how geological and meteorological activity leads to changes in ecosystem structure and dynamics."] }
                 }
             }
         }
@@ -120,190 +120,84 @@ export const curriculumData: {
     'Biology': {
       units: {
         "How do ecosystems work, and how can understanding them help us protect them?": {
-            topics: {
-                "Ecosystems and Conservation": {
-                    lessons: [
-                        "Why do ecosystems need protection, and how are they protected?",
-                        "What can other cases of conservation help us understand about ecosystems and conservation?",
-                        "Why do the animals in the Serengeti migrate?",
-                        "How is food driving the wildebeest migration?",
-                        "How does food affect the population size?",
-                        "Can we apply what we figured out about limiting factors and carrying capacity to a new scenario?",
-                        "How do predators interact with the wildebeest migration?",
-                        "What other components of the Serengeti system interact with the migration?",
-                        "How do humans interact with the Serengeti ecosystem?",
-                        "How do we evaluate if a conservation effort is working?",
-                        "Can we use everything we have figured out about ecosystems and conservation to expand conservation to new lands and waters?"
-                    ]
-                }
-            }
+          topics: {
+            "Ecosystem Components and Interactions": { lessons: ["Why do ecosystems need protection, and how are they protected?", "What can other cases of conservation help us understand about ecosystems and conservation?", "Why do the animals in the Serengeti migrate?"] },
+            "Conservation and Human Impact": { lessons: ["How is food driving the wildebeest migration?", "How do predators interact with the Serengeti ecosystem?", "How do humans interact with the Serengeti ecosystem?", "How do we evaluate if a conservation effort is working?"] },
+            "Limiting Factors and Carrying Capacity": { lessons: ["How does food affect the population size?", "Can we apply what we figured out about limiting factors and carrying capacity to a new scenario?"] },
+            "Biodiversity and Ecosystem Resilience": { lessons: ["What other components of the Serengeti system interact with the migration?", "Can we use everything we have figured out about ecosystems and conservation to expand conservation to new lands and waters?"] }
+          }
         },
         "What causes fires in ecosystems to burn and how should we manage them?": {
-            topics: {
-                "Fires, Energy, and Matter": {
-                    lessons: [
-                        "How can fires burn under ice and release so much energy and matter?",
-                        "What is peat and why does it burn so much?",
-                        "Why is there so much peat that has not decomposed in the permafrost?",
-                        "How did so much plant energy and matter get into the peat in the zombie fire system?",
-                        "Could changes in the Earth's tilt cause more energy and matter to be stored in plants?",
-                        "How do zombie fires disrupt the flow of energy and cycle of matter in Arctic ecosystems?",
-                        "What is happening to carbon sinks in other ecosystems?",
-                        "Why should we be concerned that carbon sinks around the world are burning?",
-                        "What are the global effects of increased carbon dioxide from fires?",
-                        "How can we help manage the matter and energy in fire systems?",
-                        "What decisions can we make to help manage fire in communities we care about?",
-                        "Can we use everything we have figured out about fires to explain a new phenomenon?"
-                    ]
-                }
-            }
+          topics: {
+            "Energy and Matter in Fire Systems": { lessons: ["How can fires burn under ice and release so much energy and matter?", "What is peat and why does it burn so much?"] },
+            "Decomposition and Carbon Sinks": { lessons: ["Why is there so much peat that has not decomposed in the permafrost?", "How did so much plant energy and matter get into the peat in the zombie fire system?", "Could changes in the Earth's tilt cause more energy and matter to be stored in plants?"] },
+            "Global Carbon Cycling and Fires": { lessons: ["How do zombie fires disrupt the flow of energy and cycle of matter in Arctic ecosystems?", "What is happening to carbon sinks in other ecosystems?", "Why should we be concerned that carbon sinks around the world are burning?", "What are the global effects of increased carbon dioxide from fires?"] },
+            "Fire Management Solutions": { lessons: ["How can we help manage the matter and energy in fire systems?", "What decisions can we make to help manage fire in communities we care about?", "Can we use everything we have figured out about fires to explain a new phenomenon?"] }
+          }
         },
         "Who gets cancer and why? Where should we focus efforts on treatment and prevention?": {
-            topics: {
-                "Cancer, Genetics, and Environment": {
-                    lessons: [
-                        "Who gets cancer and why?",
-                        "What is cancer?",
-                        "How do non-cancer cells become cancer cells?",
-                        "Why are some kinds of cancer more common than others in older and taller people?",
-                        "How do cancer cells end up with differences in their chromosomes and what is the role of p53 in preventing the differences?",
-                        "How do we make p53, and why is it different sometimes?",
-                        "What is the genetic basis of cancer?",
-                        "Why do some cancers appear to run in families?",
-                        "How do genes interact with the environment to affect who gets cancer?",
-                        "How do cancer treatments work?",
-                        "What can we do to support people in our communities who have cancer?"
-                    ]
-                }
-            }
+          topics: {
+            "Cancer Incidence and Factors": { lessons: ["Who gets cancer and why?"] },
+            "Cell Division and Cancer Development": { lessons: ["What is cancer?", "How do non-cancer cells become cancer cells?", "Why are some kinds of cancer more common than others in older and taller people?", "How do cancer cells end up with differences in their chromosomes and what is the role of p53 in preventing the differences?", "How do we make p53, and why is it different sometimes?"] },
+            "Genetic and Environmental Causes of Cancer": { lessons: ["What is the genetic basis of cancer?", "Why do some cancers appear to run in families?", "How do genes interact with the environment to affect who gets cancer?"] },
+            "Cancer Treatment and Prevention": { lessons: ["How do cancer treatments work?", "What can we do to support people in our communities who have cancer?"] }
+          }
         },
         "Natural Selection & Evolution of Populations": {
-            topics: {
-                "Urbanization and Adaptation": {
-                    lessons: [
-                        "What is the effect of increasing urbanization on nonhuman populations?",
-                        "Why does hawksbeard make fewer feathery seeds in cities?",
-                        "Is poison a selection pressure?",
-                        "What causes populations of city juncos to be bolder than mountain juncos?",
-                        "How can we make sense of the way urbanization could have caused changes in hawksbeard, rat, and junco populations?",
-                        "Can we apply what we know about evolution by natural selection to another phenomenon?",
-                        "What happens when nonhuman populations are harmed by urbanization and what can we do about it?",
-                        "How can fragmentation lead to lower genetic diversity?",
-                        "How can we plan urban areas to protect genetic diversity in nonhuman populations?",
-                        "How can we use what we know about natural selection to design cities that support resilient populations and ecosystems?",
-                        "Can we apply what we know about natural selection and genetic diversity to a novel phenomenon?"
-                    ]
-                }
-            }
+          topics: {
+            "Urbanization and Nonhuman Populations": { lessons: ["What is the effect of increasing urbanization on nonhuman populations?"] },
+            "Selection Pressures and Trait Adaptation": { lessons: ["Why does hawksbeard make fewer feathery seeds in cities?", "Is poison a selection pressure?", "What causes populations of city juncos to be bolder than mountain juncos?", "How can we make sense of the way urbanization could have caused changes in hawksbeard, rat, and junco populations?", "Can we apply what we know about evolution by natural selection to another phenomenon?"] },
+            "Genetic Diversity and Population Adaptation": { lessons: ["What happens when nonhuman populations are harmed by urbanization and what can we do about it?", "How can fragmentation lead to lower genetic diversity?"] },
+            "Human-Engineered Solutions for Biodiversity": { lessons: ["How can we plan urban areas to protect genetic diversity in nonhuman populations?", "How can we use what we know about natural selection to design cities that support resilient populations and ecosystems?", "Can we apply what we know about natural selection and genetic diversity to a novel phenomenon?"] }
+          }
         },
         "What will happen to Arctic bear populations as their environment changes?": {
-            topics: {
-                "Climate Change and Speciation": {
-                    lessons: [
-                        "How do changes in climate affect bear species coming together for the first time in the Arctic?",
-                        "How and why are bear species interacting and why might brown bears dominate?",
-                        "How similar/different are the polar, brown, and black bears?",
-                        "How did polar and brown bears become different species?",
-                        "What will happen to Arctic bear populations as their environment changes?",
-                        "What will happen to bear species in the Arctic in the future?",
-                        "How do past patterns of extinction help us understand possible consequences of extinctions now and in the future?",
-                        "What are our options for protecting species from extinction and should we implement them?",
-                        "Can we use everything we have figured out about speciation to explain a new phenomenon?"
-                    ]
-                }
-            }
+          topics: {
+            "Arctic Bear Populations and Climate Change": { lessons: ["How do changes in climate affect bear species coming together for the first time in the Arctic?"] },
+            "Bear Interactions and Adaptations": { lessons: ["How and why are bear species interacting and why might brown bears dominate?", "How similar/different are the polar, brown, and black bears?"] },
+            "Speciation and Common Ancestry": { lessons: ["How did polar and brown bears become different species?", "What will happen to Arctic bear populations as their environment changes?"] },
+            "Extinction and Conservation Efforts": { lessons: ["What will happen to bear species in the Arctic in the future?", "How do past patterns of extinction help us understand possible consequences of extinctions now and in the future?", "What are our options for protecting species from extinction and should we implement them?", "Can we use everything we have figured out about speciation to explain a new phenomenon?"] }
+          }
         }
       }
     },
     'Earth_Science': {
         units: {
-            "Unit 1: Discovering New Worlds": {
+            "Discovering New Worlds": {
                 topics: {
-                    "How do we know what’s out there in space?": { lessons: ["Anchor Phenomenon - How do we know what’s out there in space?"] },
-                    "Naked-Eye Observations": { lessons: ["Naked-Eye Observations"] },
-                    "Tools for Observation": { lessons: ["Tools for Observation"] },
-                    "Earth's Rotation": { lessons: ["Earth's Rotation"] },
-                    "Moon Phases": { lessons: ["Moon Phases"] },
-                    "Eclipses": { lessons: ["Eclipses"] },
-                    "Sun's Apparent Path": { lessons: ["Sun's Apparent Path"] },
-                    "Seasonal Changes": { lessons: ["Seasonal Changes"] },
-                    "Solar Energy": { lessons: ["Solar Energy"] },
-                    "Light from Stars": { lessons: ["Light from Stars"] },
-                    "The H-R Diagram": { lessons: ["The H-R Diagram"] },
-                    "Galaxies": { lessons: ["Galaxies"] },
-                    "Final Performance Task: Discovering New Worlds": { lessons: ["Final Performance Task"] }
+                    "How do we know what’s out there in space?": { lessons: ["Making observations of the sky", "Using tools to extend our observations", "Understanding Earth's daily rotation", "Explaining the phases of the Moon", "Modeling solar and lunar eclipses", "Tracking the Sun's path across the sky", "Relating Earth's tilt to the seasons", "Investigating the intensity of solar energy", "Analyzing the light from distant stars", "Classifying stars using the Hertzsprung-Russell diagram", "Exploring the structure and scale of galaxies", "Applying knowledge to a new planetary system"] }
                 }
             },
-            "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
+            "Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
                 topics: {
-                    "Natural Hazard Risk": { lessons: ["Anchor Phenomenon - Natural Hazard Risk"] },
-                    "Earth's Layers": { lessons: ["Earth's Layers"] },
-                    "Plate Tectonics": { lessons: ["Plate Tectonics"] },
-                    "Plate Boundaries": { lessons: ["Plate Boundaries"] },
-                    "Earthquakes": { lessons: ["Earthquakes"] },
-                    "Volcanoes": { lessons: ["Volcanoes"] },
-                    "Mapping Hazards": { lessons: ["Mapping Hazards"] },
-                    "Tsunami Risk": { lessons: ["Tsunami Risk"] },
-                    "Social Vulnerability": { lessons: ["Social Vulnerability"] },
-                    "Engineering for Earthquakes": { lessons: ["Engineering for Earthquakes"] },
-                    "Community Resilience": { lessons: ["Community Resilience"] },
-                    "Final Performance Task: Risk Assessment": { lessons: ["Final Performance Task"] }
+                    "Assessing natural hazard risk": { lessons: ["Modeling the layers of the Earth", "Understanding the theory of plate tectonics", "Investigating interactions at plate boundaries", "Explaining the cause and effects of earthquakes", "Analyzing the formation and eruption of volcanoes", "Using maps to identify areas of high risk", "Connecting underwater earthquakes to tsunami formation", "Investigating factors that make communities vulnerable", "Designing structures to withstand seismic activity", "Developing plans to improve community resilience", "Conducting a risk assessment for a specific location"] }
                 }
             },
-            "Unit 3: Climate Change Throughout Human History": {
+            "Climate Change Throughout Human History": {
                 topics: {
-                    "Past & Future Climate": { lessons: ["Anchor Phenomenon - Past & Future Climate"] },
-                    "Ice Cores": { lessons: ["Ice Cores"] },
-                    "Analyzing Ice Core Data": { lessons: ["Analyzing Ice Core Data"] },
-                    "The Greenhouse Effect": { lessons: ["The Greenhouse Effect"] },
-                    "The Carbon Cycle": { lessons: ["The Carbon Cycle"] },
-                    "Human Impact on Climate": { lessons: ["Human Impact on Climate"] },
-                    "Sea Level Rise": { lessons: ["Sea Level Rise"] },
-                    "Ecosystem Impacts": { lessons: ["Ecosystem Impacts"] },
-                    "Mitigation Strategies": { lessons: ["Mitigation Strategies"] },
-                    "Geoengineering": { lessons: ["Geoengineering"] },
-                    "Final Performance Task: Climate Communication": { lessons: ["Final Performance Task"] }
+                    "Investigating past and future climate": { lessons: ["Analyzing data from ice cores", "Interpreting climate evidence from ice core data", "Modeling the greenhouse effect", "Tracing the movement of carbon through Earth's systems", "Investigating the human contribution to climate change", "Analyzing data and predicting future sea level rise", "Investigating the effects of climate change on ecosystems", "Evaluating strategies to reduce carbon emissions", "Exploring controversial geoengineering solutions", "Communicating climate change findings to the public"] }
                 }
             },
-            "Unit 4: More Hurricanes and Blizzards in NYC?": {
+            "More Hurricanes and Blizzards in NYC?": {
                 topics: {
-                    "Extreme Weather": { lessons: ["Anchor Phenomenon - Extreme Weather"] },
-                    "Weather vs. Climate": { lessons: ["Weather vs. Climate"] },
-                    "Air Masses and Fronts": { lessons: ["Air Masses and Fronts"] },
-                    "Hurricane Formation": { lessons: ["Hurricane Formation"] },
-                    "Hurricane Data Analysis": { lessons: ["Hurricane Data Analysis"] },
-                    "Climate Change and Hurricanes": { lessons: ["Climate Change and Hurricanes"] },
-                    "Blizzard Formation": { lessons: ["Blizzard Formation"] },
-                    "Blizzard Data Analysis": { lessons: ["Blizzard Data Analysis"] },
-                    "Infrastructure Vulnerability": { lessons: ["Infrastructure Vulnerability"] },
-                    "Designing for Resilience": { lessons: ["Designing for Resilience"] },
-                    "Final Performance Task: Infrastructure Proposal": { lessons: ["Final Performance Task"] }
+                    "Analyzing extreme weather events": { lessons: ["Distinguishing between weather and climate", "Modeling the interaction of air masses and fronts", "Investigating the conditions for hurricane formation", "Analyzing historical hurricane data", "Exploring the link between climate change and hurricane intensity", "Understanding the conditions that lead to blizzards", "Analyzing historical blizzard data", "Assessing the vulnerability of infrastructure to extreme weather", "Proposing designs to make infrastructure more resilient", "Developing a proposal to protect infrastructure"] }
                 }
             },
-            "Unit 5: Solutions for a Sustainable Future": {
+            "Solutions for a Sustainable Future": {
                 topics: {
-                    "Fossil Fuels and Energy": { lessons: ["Fossil Fuels and Energy"] },
-                    "Pollution and Environmental Effects": { lessons: ["Air Pollution", "Water Pollution", "Acid Rain", "The Ozone Layer"] },
-                    "Renewable and Alternative Energy": { lessons: ["Renewable Energy", "Nuclear Energy", "Energy Efficiency", "Policy Solutions", "Individual Action"] },
-                    "Land Use & Biodiversity": { lessons: ["Deforestation", "Urbanization", "Agriculture", "Biodiversity", "Habitat Destruction", "Conservation"] },
-                    "Mining and Resources": { lessons: ["Mineral Resources", "Mining Techniques", "Environmental Impacts of Mining", "Social Impacts of Mining", "Sustainable Mining Practices", "Recycling Minerals", "Conflict Minerals"] },
-                    "Unit Closing: Sustainability Project": { lessons: ["Stakeholder Meeting Simulation", "Sustainability Plan", "Final Presentation"] }
+                    "Understanding our reliance on fossil fuels": { lessons: ["Investigating air and water pollution, acid rain, and the ozone layer", "Exploring renewable energy sources and energy efficiency", "Analyzing the impacts of deforestation, urbanization, and agriculture on biodiversity", "Investigating the environmental and social impacts of mining", "Developing a comprehensive sustainability plan for a community"] }
                 }
             },
-            "Unit 6: Probability of Life Elsewhere": {
+            "Probability of Life Elsewhere": {
                 topics: {
-                    "Solar System Stability": { lessons: ["Gravity and Orbits", "The Goldilocks Zone", "Earth's Magnetic Field", "The Role of Jupiter", "The Moon's Influence", "Long-Term Stability", "Exoplanets"] },
-                    "Coevolution of Earth and Life": { lessons: ["Early Earth", "Origin of Life", "Photosynthesis and Oxygen", "Mass Extinctions", "Humans and the Biosphere"] },
-                    "Origin of the Universe": { lessons: ["The Big Bang", "Evidence for the Big Bang", "Stellar Evolution", "Formation of Elements", "The Drake Equation"] },
-                    "Asteroids and Planetary Defense": { lessons: ["Asteroids and Comets", "Impact Events", "Near-Earth Objects", "Planetary Defense", "The Search for Extraterrestrial Intelligence (SETI)"] },
-                    "Final Performance Task: Astrobiology Report": { lessons: ["Final Performance Task"] }
+                    "Investigating the factors that contribute to a stable solar system": { lessons: ["Exploring the interconnected history of Earth and life", "Understanding the Big Bang theory and the formation of elements", "Assessing the risk of impact events and exploring planetary defense", "Writing a report on the probability of life on an exoplanet"] }
                 }
             }
         }
     },
     Chemistry: {
       units: {
-        "Unit 1: Why are oysters dying, and how can we use chemistry to protect them?": {
+        "Why are oysters dying, and how can we use chemistry to protect them?": {
           topics: {
             "What large and small-scale processes make water more or less acidic?": {
               lessons: [
@@ -334,7 +228,7 @@ export const curriculumData: {
             },
           },
         },
-        "Unit 2: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
+        "How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
           topics: {
             "Why and how is the sea level rising?": {
               lessons: [
@@ -363,7 +257,7 @@ export const curriculumData: {
             },
           },
         },
-        "Unit 3: What causes lightning and why are some places safer than others when it strikes?": {
+        "What causes lightning and why are some places safer than others when it strikes?": {
           topics: {
             "What is lightning?": {
               lessons: [
@@ -397,7 +291,7 @@ export const curriculumData: {
             },
           },
         },
-        "Unit 4: How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
+        "How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
           topics: {
             "How do carbon-based fuels release energy?": {
               lessons: [
@@ -428,7 +322,7 @@ export const curriculumData: {
             },
           },
         },
-        "Unit 5: How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
+        "How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
           topics: {
             "How can we find water and other substances we need to survive on other objects in space?": {
               lessons: [
@@ -957,295 +851,6 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 1: Sequences and Functions": {
-          topics: {
-            "Section A: Sequences": {
-              lessons: [
-                "Lesson 1: A Towering Sequence",
-                "Lesson 2: Introducing Geometric Sequences",
-                "Lesson 3: Different Types of Sequences",
-                "Lesson 4: Using Technology to Work with Sequences"
-              ]
-            },
-            "Section B: Representing Sequences": {
-              lessons: [
-                "Lesson 5: Sequences Are Functions",
-                "Lesson 6: Representing Sequences",
-                "Lesson 7: Representing More Sequences"
-              ]
-            },
-            "Section C: What’s the Equation?": {
-              lessons: [
-                "Lesson 8: The nth Term",
-                "Lesson 9: What’s the Equation?",
-                "Lesson 10: Situations and Sequence Types",
-                "Lesson 11: Adding Up"
-              ]
-            }
-          }
-        },
-        "Unit 2: Polynomial Functions": {
-          topics: {
-            "Section A: What Is a Polynomial?": {
-              lessons: [
-                "Lesson 1: Let’s Make a Box",
-                "Lesson 2: Funding the Future",
-                "Lesson 3: Introducing Polynomials",
-                "Lesson 4: Combining Polynomials"
-              ]
-            },
-            "Section B: Working with Polynomials": {
-              lessons: [
-                "Lesson 5: Connecting Factors and Zeros",
-                "Lesson 6: Different Forms",
-                "Lesson 7: Using Factors and Zeros"
-              ]
-            },
-            "Section C: Graphs of Polynomials": {
-              lessons: [
-                "Lesson 8: End Behavior (Part 1)",
-                "Lesson 9: End Behavior (Part 2)",
-                "Lesson 10: Multiplicity",
-                "Lesson 11: Finding Intersections"
-              ]
-            },
-            "Section D: Polynomial Division": {
-              lessons: [
-                "Lesson 12: Polynomial Division (Part 1)",
-                "Lesson 13: Polynomial Division (Part 2)",
-                "Lesson 14: What Do You Know about Polynomials?",
-                "Lesson 15: The Remainder Theorem"
-              ]
-            }
-          }
-        },
-        "Unit 3: Rational Functions and Equations": {
-          topics: {
-            "Section A: Rational Functions": {
-              lessons: [
-                "Lesson 1: Minimizing Surface Area",
-                "Lesson 2: Graphs of Rational Functions (Part 1)",
-                "Lesson 3: Graphs of Rational Functions (Part 2)",
-                "Lesson 4: End Behavior of Rational Functions"
-              ]
-            },
-            "Section B: Rational Equations": {
-              lessons: [
-                "Lesson 5: Rational Equations (Part 1)",
-                "Lesson 6: Rational Equations (Part 2)",
-                "Lesson 7: Solving Rational Equations"
-              ]
-            },
-            "Section C: Polynomial Identities": {
-              lessons: [
-                "Lesson 8: Polynomial Identities (Part 1)",
-                "Lesson 9: Polynomial Identities (Part 2)",
-                "Lesson 10: Summing Up",
-                "Lesson 11: Using the Sum"
-              ]
-            }
-          }
-        },
-        "Unit 4: Complex Numbers and Rational Exponents": {
-          topics: {
-            "Section A: Exponent Properties": {
-              lessons: [
-                "Lesson 1: Properties of Exponents",
-                "Lesson 2: Square Roots and Cube Roots",
-                "Lesson 3: Exponents That Are Unit Fractions",
-                "Lesson 4: Positive Rational Exponents",
-                "Lesson 5: Negative Rational Exponents"
-              ]
-            },
-            "Section B: Solving Equations with Square and Cube Roots": {
-              lessons: [
-                "Lesson 6: Squares and Square Roots",
-                "Lesson 7: Inequivalent Equations?",
-                "Lesson 8: Cubes and Cube Roots",
-                "Lesson 9: Solving Radical Equations"
-              ]
-            },
-            "Section C: A New Kind of Number": {
-              lessons: [
-                "Lesson 10: A New Kind of Number",
-                "Lesson 11: Introducing the Number i",
-                "Lesson 12: Arithmetic with Complex Numbers",
-                "Lesson 13: Multiplying Complex Numbers",
-                "Lesson 14: More Arithmetic with Complex Numbers",
-                "Lesson 15: Working Backward"
-              ]
-            },
-            "Section D: Solving Quadratics with Complex Numbers": {
-              lessons: [
-                "Lesson 16: Solving Quadratics",
-                "Lesson 17: Completing the Square and Complex Solutions",
-                "Lesson 18: The Quadratic Formula and Complex Solutions",
-                "Lesson 19: Real and Non-Real Solutions"
-              ]
-            },
-            "Section E: Let's Put It to Work": {
-              lessons: [
-                "Lesson 20: Drawing Proportional Circles"
-              ]
-            }
-          }
-        },
-        "Unit 5: Exponential Functions and Equations": {
-          topics: {
-            "Section A: Growing and Shrinking": {
-              lessons: [
-                "Lesson 1: Growing and Shrinking",
-                "Lesson 2: Representations of Growth and Decay",
-                "Lesson 3: Understanding Rational Inputs",
-                "Lesson 4: Representing Functions at Rational Inputs",
-                "Lesson 5: Changes Over Rational Intervals",
-                "Lesson 6: Writing Equations for Exponential Functions",
-                "Lesson 7: Interpreting and Using Exponential Functions"
-              ]
-            },
-            "Section B: Missing Exponents": {
-              lessons: [
-                "Lesson 8: Unknown Exponents",
-                "Lesson 9: What Is a Logarithm?",
-                "Lesson 10: Interpreting and Writing Logarithmic Equations",
-                "Lesson 11: Evaluating Logarithmic Expressions"
-              ]
-            },
-            "Section C: The Constant e": {
-              lessons: [
-                "Lesson 12: The Number e",
-                "Lesson 13: Exponential Functions with Base e",
-                "Lesson 14: Solving Exponential Equations"
-              ]
-            },
-            "Section D: Logarithmic Functions and Graphs": {
-              lessons: [
-                "Lesson 15: Using Graphs and Logarithms to Solve Problems (Part 1)",
-                "Lesson 16: Using Graphs and Logarithms to Solve Problems (Part 2)",
-                "Lesson 17: Logarithmic Functions"
-              ]
-            },
-            "Section E: Let's Put It to Work": {
-              lessons: [
-                "Lesson 18: Applications of Logarithmic Functions"
-              ]
-            }
-          }
-        },
-        "Unit 6: Transformations of Functions": {
-          topics: {
-            "Section A: Translations, Reflections, and Symmetry": {
-              lessons: [
-                "Lesson 1: Matching Up to Data",
-                "Lesson 2: Moving Functions",
-                "Lesson 3: More Movement",
-                "Lesson 4: Reflecting Functions",
-                "Lesson 5: Some Functions Have Symmetry",
-                "Lesson 6: Symmetry in Equations",
-                "Lesson 7: Expressing Transformations of Functions Algebraically"
-              ]
-            },
-            "Section B: Scaling Outputs and Inputs": {
-              lessons: [
-                "Lesson 8: Scaling the Outputs",
-                "Lesson 9: Scaling the Inputs",
-                "Lesson 10: Combining Functions"
-              ]
-            },
-            "Section C: Transformations of Functions": {
-              lessons: [
-                "Lesson 11: Transforming from an Original Function",
-                "Lesson 12: Transformation Effects",
-                "Lesson 13: Transforming Parabolas",
-                "Lesson 14: Transforming Circles"
-              ]
-            },
-            "Section D: Let’s Put It to Work": {
-              lessons: [
-                "Lesson 15: Making a Model for Data"
-              ]
-            }
-          }
-        },
-        "Unit 7: Trigonometric Functions": {
-          topics: {
-            "Section A: The Unit Circle": {
-              lessons: [
-                "Lesson 1: Moving in Circles",
-                "Lesson 2: Revisiting Right Triangles",
-                "Lesson 3: The Unit Circle (Part 1)",
-                "Lesson 4: The Unit Circle (Part 2)",
-                "Lesson 5: The Pythagorean Identity (Part 1)",
-                "Lesson 6: The Pythagorean Identity (Part 2)",
-                "Lesson 7: Finding Unknown Coordinates on a Circle"
-              ]
-            },
-            "Section B: Periodic Functions": {
-              lessons: [
-                "Lesson 8: Rising and Falling",
-                "Lesson 9: Introduction to Trigonometric Functions",
-                "Lesson 10: Beyond 2pi",
-                "Lesson 11: Extending the Domain of Trigonometric Functions",
-                "Lesson 12: Tangent",
-                "Lesson 13: Some New Ratios"
-              ]
-            },
-            "Section C: Trigonometry Transformations": {
-              lessons: [
-                "Lesson 14: Amplitude and Midline",
-                "Lesson 15: Transforming Trigonometric Functions",
-                "Lesson 16: Features of Trigonometric Graphs (Part 1)",
-                "Lesson 17: Features of Trigonometric Graphs (Part 2)",
-                "Lesson 18: Comparing Transformations",
-                "Lesson 19: Modeling Circular Motion"
-              ]
-            },
-            "Section D: Let’s Put It to Work": {
-              lessons: [
-                "Lesson 20: Beyond Circles"
-              ]
-            }
-          }
-        },
-        "Unit 8: Statistical Inferences": {
-          topics: {
-            "Section A: Study Types": {
-              lessons: [
-                "Lesson 1: Being Skeptical",
-                "Lesson 2: Study Types",
-                "Lesson 3: Randomness in Groups"
-              ]
-            },
-            "Section B: Distributions": {
-              lessons: [
-                "Lesson 4: Describing Distributions",
-                "Lesson 5: Normal Distributions",
-                "Lesson 6: Areas in Histograms",
-                "Lesson 7: Areas under a Normal Curve"
-              ]
-            },
-            "Section C: Not All Samples Are the Same": {
-              lessons: [
-                "Lesson 8: Not Always Ideal",
-                "Lesson 9: Variability in Samples",
-                "Lesson 10: Estimating Proportions from Samples",
-                "Lesson 11: Estimating a Population Mean"
-              ]
-            },
-            "Section D: Analyzing Experimental Data": {
-              lessons: [
-                "Lesson 12: Experimenting",
-                "Lesson 13: Using Normal Distributions for Experiment Analysis",
-                "Lesson 14: Questioning Experimenting"
-              ]
-            },
-            "Section E: Let's Put It to Work": {
-              lessons: [
-                "Lesson 15: Heart Rates"
-              ]
-            }
-          }
-        },
         "Unit 1: Constructions and Rigid Transformations": {
             topics: {
                 "Section A: Constructions": {
@@ -1507,35 +1112,33 @@ export const curriculumData: {
             }
         },
         "Unit 8: Conditional Probability": {
-            topics: {
-                "Section A: Up to Chance": {
-                    lessons: [
-                        "Lesson 1: Up to Chance",
-                        "Lesson 2: Playing with Probability",
-                        "Lesson 3: Sample Spaces",
-                        "Lesson 4: Tables of Relative Frequencies",
-                        "Lesson 5: Combining Events",
-                        "Lesson 6: The Addition Rule"
-                    ]
-                },
-                "Section B: Related Events": {
-                    lessons: [
-                        "Lesson 7: Related Events",
-                        "Lesson 8: Conditional Probability",
-                        "Lesson 9: Using Tables for Conditional Probability",
-                        "Lesson 10: Using Probability to Determine Whether Events Are Independent"
-                    ]
-                },
-                "Section C: Let's Put It to Work": {
-                    lessons: [
-                        "Lesson 11: Probabilities in Games"
-                    ]
-                }
+          topics: {
+            "Section A: Up to Chance": {
+              lessons: [
+                "Lesson 1: Up to Chance",
+                "Lesson 2: Playing with Probability",
+                "Lesson 3: Sample Spaces",
+                "Lesson 4: Tables of Relative Frequencies",
+                "Lesson 5: Combining Events",
+                "Lesson 6: The Addition Rule"
+              ]
+            },
+            "Section B: Related Events": {
+              lessons: [
+                "Lesson 7: Related Events",
+                "Lesson 8: Conditional Probability",
+                "Lesson 9: Using Tables for Conditional Probability",
+                "Lesson 10: Using Probability to Determine Whether Events Are Independent"
+              ]
+            },
+            "Section C: Let's Put It to Work": {
+              lessons: [
+                "Lesson 11: Probabilities in Games"
+              ]
             }
+          }
         }
       }
     }
-  },
+  }
 };
-
-    
