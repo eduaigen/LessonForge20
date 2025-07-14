@@ -197,7 +197,7 @@ export default function LessonPlanGenerator() {
         if (contentElement) {
             printWindow.document.write('<html><head><title>Print Lesson Plan</title>');
             // Include styles if needed, especially for the prose classes
-            printWindow.document.write('<style>body { font-family: sans-serif; } .prose { max-width: 100%; } </style>');
+            printWindow.document.write('<style>body { font-family: sans-serif; } .prose { max-w: 100%; } </style>');
             printWindow.document.write('</head><body>');
             printWindow.document.write(contentElement.innerHTML);
             printWindow.document.write('</body></html>');
@@ -221,9 +221,9 @@ export default function LessonPlanGenerator() {
             Print
         </Button>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col">
+      <CardContent className="flex-1 flex flex-col bg-muted/30 p-4">
         {isLoading ? (
-          <div className="space-y-4 p-4">
+          <div className="space-y-4 p-4 bg-background rounded-md">
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-4 w-1/2" />
             <Skeleton className="h-4 w-full" />
@@ -231,11 +231,13 @@ export default function LessonPlanGenerator() {
             <Skeleton className="h-4 w-5/6" />
           </div>
         ) : generatedContent ? (
-          <ScrollArea className="flex-1 border rounded-md" id="printable-content">
-             <StyledContentDisplay content={generatedContent} />
+           <ScrollArea className="flex-1">
+            <div id="printable-content" className="document-view">
+              <StyledContentDisplay content={generatedContent} />
+            </div>
           </ScrollArea>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+          <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground bg-background rounded-md">
             <BookCopy className="w-16 h-16 text-muted-foreground/50" />
             <p className="mt-4">
               Your generated lesson plan will appear here.

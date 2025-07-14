@@ -296,3 +296,7 @@ body {
 .dark .prose-invert a {
     @apply text-accent hover:underline;
 }
+
+.document-view {
+    @apply bg-background p-6 rounded-md shadow-sm w-full mx-auto;
+}
