@@ -1,0 +1,230 @@
+'use client';
+
+import { useState, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Loader2, Leaf } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
+import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
+import GeneratingAnimation from '../common/GeneratingAnimation';
+import StyledContentDisplay from '../common/StyledContentDisplay';
+
+const formSchema = z.object({
+  unit: z.string().min(1, { message: 'Please select a unit.' }),
+  topic: z.string().min(1, { message: 'Please select a topic.' }),
+  lesson: z.string().min(1, { message: 'Please select a lesson.' }),
+  strategy: z.enum(['Engage', 'Explore', 'Explain', 'Elaborate', 'Evaluate']),
+  additionalInfo: z.string().optional(),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+const fiveEStrategies = ['Engage', 'Explore', 'Explain', 'Elaborate', 'Evaluate'] as const;
+
+export default function NVBiologyGenerator() {
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [output, setOutput] = useState<GenerateNVBiologyLessonOutput | null>(null);
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      unit: '',
+      topic: '',
+      lesson: '',
+      strategy: 'Engage',
+      additionalInfo: '',
+    },
+  });
+
+  const selectedUnit = form.watch('unit');
+  const selectedTopic = form.watch('topic');
+
+  const units = useMemo(() => Object.keys(nvBiologyCurriculum.units), []);
+  const topics = useMemo(() => {
+    if (!selectedUnit) return [];
+    const unitData = nvBiologyCurriculum.units[selectedUnit as keyof typeof nvBiologyCurriculum.units];
+    return unitData ? Object.keys(unitData.topics) : [];
+  }, [selectedUnit]);
+
+  const lessons = useMemo(() => {
+    if (!selectedUnit || !selectedTopic) return [];
+    const unitData = nvBiologyCurriculum.units[selectedUnit as keyof typeof nvBiologyCurriculum.units];
+    if (!unitData) return [];
+    const topicData = unitData.topics[selectedTopic as keyof typeof unitData.topics];
+    return topicData ? topicData.lessons : [];
+  }, [selectedUnit, selectedTopic]);
+
+  async function onSubmit(values: FormData) {
+    setIsLoading(true);
+    setOutput(null);
+    try {
+      const result = await generateNVBiologyLesson(values);
+      setOutput(result);
+    } catch (error) {
+      console.error('Lesson generation failed:', error);
+      toast({
+        title: 'Generation Failed',
+        description: 'An error occurred while generating the lesson. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <Card className="w-full shadow-lg">
+      <CardHeader>
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Leaf className="h-6 w-6" />
+          </div>
+          <div>
+            <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
+            <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <CardContent className="space-y-6">
+            <FormField
+              control={form.control}
+              name="unit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Unit</FormLabel>
+                  <Select onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue('topic', '');
+                      form.setValue('lesson', '');
+                  }} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a unit" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {units.map((unit) => (
+                        <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="topic"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Topic</FormLabel>
+                  <Select onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue('lesson', '');
+                  }} value={field.value} disabled={!selectedUnit}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a topic" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {topics.map((topic) => (
+                        <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lesson"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Lesson Objective</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value} disabled={!selectedTopic}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a lesson objective" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {lessons.map((lesson) => (
+                        <SelectItem key={lesson} value={lesson}>{lesson}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="strategy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>5E Strategy</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a 5E strategy" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {fiveEStrategies.map((strategy) => (
+                        <SelectItem key={strategy} value={strategy}>{strategy}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="additionalInfo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Additional Information (Optional)</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isLoading ? 'Generating Lesson...' : 'Generate Lesson'}
+            </Button>
+          </CardFooter>
+        </form>
+      </Form>
+
+        {isLoading && (
+            <div className="mt-8 border-t pt-8">
+                <GeneratingAnimation />
+            </div>
+        )}
+
+        {output?.lessonPlan && (
+          <div className="mt-8 border-t pt-8">
+            <StyledContentDisplay content={output.lessonPlan} />
+          </div>
+        )}
+    </Card>
+  );
+}

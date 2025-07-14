@@ -51,7 +51,7 @@ const ToolCard = ({ title, description, icon, href }: { title: string, descripti
 };
 
 const PremiumDashboardContent = () => {
-  const { user } = useAuth();
+  const { user, hasScienceSubscription } = useAuth();
   
   return (
     <div className="flex flex-col gap-8">
@@ -62,9 +62,22 @@ const PremiumDashboardContent = () => {
         </p>
       </div>
 
-       <div className="text-center py-16">
-          <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
-          <p className="text-muted-foreground">The AI generator tools have been removed. Please check back later for new features.</p>
+       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {hasScienceSubscription && (
+             <ToolCard 
+                title="NV Biology Generator"
+                description="Create 5E model lesson plans for the New Visions Biology curriculum."
+                icon={<Leaf />}
+                href="/nv-biology-generator"
+             />
+          )}
+
+          {!hasScienceSubscription && (
+             <div className="text-center py-16 col-span-full">
+                <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
+                <p className="text-muted-foreground">You do not have any active subscriptions with available tools.</p>
+            </div>
+          )}
        </div>
     </div>
   );
