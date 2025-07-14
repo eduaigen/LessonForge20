@@ -17,7 +17,8 @@ const prompt = ai.definePrompt({
 1.  **Analyze the Lesson Plan:** Carefully read through every part of the provided JSON lesson plan object, from "I. LESSON OVERVIEW" to "H. HOMEWORK ACTIVITY".
 2.  **Student-Facing Transformation:** Convert the teacher-facing plan into a document for students. Rephrase teacher instructions into student-friendly directions. For example, instead of "Teacher will ask students to answer the Do Now question," the worksheet should simply present the "Do Now" question for the student to answer.
 3.  **Maintain Structure:** The worksheet's organization must mirror the lesson plan's structure. Create sections for each part of the lesson.
-4.  **Follow Section-Specific Rules:**
+4.  **Formatting for Student Use:** For every question, prompt, or note-taking area, ensure there is ample blank space for a student to write their full response. Use extra line breaks to create visible space for answers.
+5.  **Follow Section-Specific Rules:**
 
     *   **Header:** Start the worksheet with a header for the student to write their Name, Class, and Date.
 
@@ -60,7 +61,7 @@ const prompt = ai.definePrompt({
 {{{worksheetDataJson}}}
 \`\`\`
 
-Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered.`,
+Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered. Ensure there is sufficient blank space for students to write their answers for all questions.`,
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
