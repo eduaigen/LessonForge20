@@ -21,10 +21,10 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  generateLessonPlan,
-  type GenerateLessonPlanInput,
-} from '@/ai/flows/generate-lesson-plan';
+// import {
+//   generateLessonPlan,
+//   type GenerateLessonPlanInput,
+// } from '@/ai/flows/generate-lesson-plan';
 import { curriculumData } from '@/lib/curriculum-data';
 import AiToolLayout from './AiToolLayout';
 import {
@@ -183,32 +183,32 @@ export default function LessonPlanGenerator() {
       });
       return;
     }
-    setIsLoading(true);
-    setGeneratedContent(null);
+    // setIsLoading(true);
+    // setGeneratedContent(null);
 
-    const input: GenerateLessonPlanInput = {
-      subject: selectedSubject,
-      unit: selectedUnit,
-      topic: selectedTopic,
-      lessonTitle: selectedLesson,
-      customPrompt,
-      language: 'en',
-    };
+    // const input: GenerateLessonPlanInput = {
+    //   subject: selectedSubject,
+    //   unit: selectedUnit,
+    //   topic: selectedTopic,
+    //   lessonTitle: selectedLesson,
+    //   customPrompt,
+    //   language: 'en',
+    // };
 
-    try {
-      const result = await generateLessonPlan(input);
-      setGeneratedContent(result);
-    } catch (error) {
-      console.error('Error generating lesson plan:', error);
-      toast({
-        title: 'Generation Failed',
-        description:
-          'An error occurred while generating the lesson plan. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // try {
+    //   const result = await generateLessonPlan(input);
+    //   setGeneratedContent(result);
+    // } catch (error) {
+    //   console.error('Error generating lesson plan:', error);
+    //   toast({
+    //     title: 'Generation Failed',
+    //     description:
+    //       'An error occurred while generating the lesson plan. Please try again.',
+    //     variant: 'destructive',
+    //   });
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const handleReset = () => {
