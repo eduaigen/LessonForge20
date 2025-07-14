@@ -35,27 +35,45 @@ const prompt = ai.definePrompt({
   name: 'generateTestPrompt',
   input: {schema: GenerateTestInputSchema},
   output: {schema: GenerateTestOutputSchema},
-  prompt: `You are an expert educator specializing in creating tests for students.
+  prompt: `You are an expert educator and exam creator specializing in New York State Regents Examinations and NGSS-aligned assessments. Your task is to generate a complete, print-ready test based on the provided curriculum details. You must adhere to the following rules with 100% fidelity.
+
+**Rule Set 1: Core Principles for Question Selection**
+- **Authentic Source Material**: You must act as if you are accessing and drawing questions from a comprehensive bank of previously released New York State Regents Examination questions and NGSS-aligned item banks. This ensures authenticity in style, difficulty, and standards alignment.
+- **Subject-Specific Adaptation**: Apply the distinct rules for each subject as detailed in Rule Set 2.
+- **Standard Alignment**: Ensure all questions are aligned to the relevant standards for the subject (NYS LS or NGSS).
+
+**Rule Set 2: Subject-Specific Question Generation & Formatting**
+- **ELA**: Questions must be linked to fully provided reading passages embedded in the test. Focus on text-dependent analysis, literary analysis, and vocabulary in context.
+- **Mathematics (Algebra I, Geometry, Algebra II)**: Formulas and equations must be in LaTeX format (e.g., $ax^2 + bx + c = 0$). Questions must include interpretation of graphs and diagrams. Constructed responses must require showing work.
+- **Science (Living Environment, Earth Science, Chemistry, Physics)**: Emphasize questions that integrate fully rendered, labeled SVG diagrams, models, and data tables. Include lab scenarios and questions requiring the use of Regents Reference Tables (indicate when needed). For science subjects, you MUST use the NGSS Retest Cluster Format from Rule Set 3.
+- **Social Studies (Global History, US History)**: A core component is the Document-Based Question (DBQ). You must construct sets of related historical documents (text, images, charts) and accompanying analytical questions. All documents must be fully embedded.
+
+**Rule Set 3: NGSS Retest Cluster Format (Mandatory for Science Subjects)**
+- **Phenomenon-Based Introduction**: Each test must begin with an engaging, observable phenomenon presented as a comprehensive stimulus (reading passage, diagram, graph, data table, or combination).
+- **Question Clustering**: All questions must be grouped in a cluster directly related to the central phenomenon. They must be logically interconnected.
+- **Multi-Dimensionality**: Questions must assess all three NGSS dimensions (DCIs, SEPs, CCCs). They should prompt students to use models, analyze data, construct explanations, and identify patterns or cause/effect related to the phenomenon.
+- **Variety of Formats**: The test must contain a mix of multiple-choice, short-response, and constructed-response questions.
+- **Novelty & Evidence**: The phenomenon should be novel, requiring application of knowledge. Questions must prompt students to use evidence from the stimulus.
+
+**Rule Set 4: Output Rendering & Display (Print-Ready)**
+- **Structure**: Your entire output must be a single block of text. It must contain two main sections, clearly marked: 'STUDENT VERSION START ---' and 'ANSWER KEY START ---'.
+- **Formatting**: Use clear section headers (e.g., 'WORKSHEET SECTION A: Multiple Choice').
+- **No Clutter**: Do not include any conversational text, notes, or apologies. The output must be only the test content.
+- **Visual Clarity**: All visuals (diagrams, graphs) MUST be rendered as complete, well-formed SVG code blocks. All tables must use pipe-and-dash Markdown format. This is non-negotiable.
+- **Mathematical Notation**: All mathematical symbols, variables, and formulas must be enclosed in LaTeX delimiters ($...$ for inline, $$...$$ for display).
 ${aiContentGenerationRules}
 
-You will use the unit(s), topic, grade level, and subject information to create a comprehensive test.
-The test should assess student understanding of the material and align with educational standards.
-Your output must contain two main sections, clearly marked:
-1. A 'STUDENT VERSION START ---' section, followed by the complete test for the student.
-2. An 'ANSWER KEY START ---' section, followed by the complete answer key for the teacher.
 
-Use appropriate section markers like 'WORKSHEET SECTION A: Multiple Choice' or 'WORKSHEET SECTION B: Short Answer' to structure the test.
+**Generation Task:**
+Generate a test based on the following user request.
 
-Unit(s): {{{unit}}}
-Topic: {{{topic}}}
-Grade Level: {{{gradeLevel}}}
-Subject: {{{subject}}}
+- **Subject:** {{{subject}}}
+- **Grade Level:** {{{gradeLevel}}}
+- **Unit(s):** {{{unit}}}
+- **Topic:** {{{topic}}}
+{{#if instructions}}- **Additional Instructions:** {{{instructions}}}{{/if}}
 
-{{#if instructions}}
-Additional Instructions: {{{instructions}}}
-{{/if}}
-
-Please generate the test now.
+Generate the test now.
 `, 
 });
 
