@@ -57,7 +57,7 @@ const parseContent = (content: string) => {
 
   const sectionHeaders = [
     'STUDENT LAB HANDOUT START ---', 'STUDENT RESPONSE SHEET START ---', 'TEACHER KEY & NOTES START ---',
-    'RUBRIC START ---', 'STUDENT VERSION START ---', 'ANSWER KEY START ---', 'LESSON OVERVIEW',
+    'RUBRIC START ---', 'STUDENT VERSION START ---', 'ANSWER KEY START ---',
     'LABORATORY INVESTIGATION:', 'STUDENT LAB HANDOUT', 'TEACHER ANSWER SHEET', 'AI-POWERED RECOMMENDATIONS',
     'CURRICULUM OVERVIEW', 'NGSS ALIGNMENT', 'LEARNING OBJECTIVES', 'SAFETY PRECAUTIONS', 'INTRODUCTION & BACKGROUND',
     'PROBLEM / INVESTIGATIVE QUESTION', 'HYPOTHESIS DEVELOPMENT', 'VARIABLES', 'MATERIALS', 'PROCEDURE',
@@ -66,37 +66,36 @@ const parseContent = (content: string) => {
     'COMMON STUDENT MISCONCEPTIONS', 'DIFFERENTIATION STRATEGIES', 'ASSESSMENT NOTES',
     '3D ALIGNMENT AUDIT SUMMARY', 'PERFORMANCE EXPECTATIONS ALIGNMENT', 'PHENOMENA-BASED LEARNING CHECK',
     'CRSE & EQUITY LENS', 'ASSESSMENT ALIGNMENT', 'INSTRUCTIONAL COHERENCE', 'EXPORT FORMAT OPTIONS',
-    'KEY ELEMENTS FOR STRONG ANSWER', 'MODEL ANSWER POINTS', 'A. AIM / ESSENTIAL QUESTION', 'B. DO NOW',
-    'C. MINI-LESSON', 'D. GUIDED PRACTICE', 'E. CHECK FOR UNDERSTANDING', 'F. INDEPENDENT PRACTICE',
-    'G. CLOSURE / EXIT TICKET', 'H. HOMEWORK ACTIVITY', 'I. DIFFERENTIATION & SUPPORT',
+    'KEY ELEMENTS FOR STRONG ANSWER', 'MODEL ANSWER POINTS',
     // More specific regex patterns
-    'WORKSHEET SECTION [A-Z]:', 'PART [IVXLCDM]+:', 'SECTION [A-Z0-9]+:'
+    'WORKSHEET SECTION [A-Z]:', 'PART [IVXLCDM]+:', 'SECTION [A-Z0-9]+:',
+    'A\\. AIM / ESSENTIAL QUESTION', 'B\\. DO NOW', 'C\\. MINI-LESSON', 'D\\. GUIDED PRACTICE', 
+    'E\\. CHECK FOR UNDERSTANDING', 'F\\. INDEPENDENT PRACTICE', 'G\\. CLOSURE / EXIT TICKET', 
+    'H\\. HOMEWORK ACTIVITY', 'I\\. DIFFERENTIATION & SUPPORT',
+    'I\\. LESSON OVERVIEW', 'II\\. LESSON SEQUENCE', 'III\\. DIFFERENTIATION & SUPPORT'
   ];
 
   // Regex to match section headers: either an exact keyword, or a letter/numbering pattern
-  const sectionRegex = new RegExp(`^(${sectionHeaders.join('|')}|[A-Z]\\. |\\d+\\.)`, 'i');
+  const sectionRegex = new RegExp(`^(${sectionHeaders.join('|').replace(/\./g, '\\.')}|[A-Z]\\. |\\d+\\.|\\*\\*I\\. |\\*\\*II\\. |\\*\\*III\\. )`, 'i');
   
   lines.forEach(line => {
     const trimmedLine = line.trim();
-    if (trimmedLine.length === 0 && currentSection) {
-        // preserve paragraph breaks
-        currentSection.content.push('');
-        return;
-    }
 
     const match = trimmedLine.match(sectionRegex);
     if (match) {
-      if (currentSection) {
-        sections.push(currentSection);
-      }
-      currentSection = { title: trimmedLine, content: [] };
+        if (currentSection) {
+            sections.push(currentSection);
+        }
+        currentSection = { title: trimmedLine.replace(/\*+/g, ''), content: [] };
     } else if (currentSection) {
-      currentSection.content.push(line);
+        currentSection.content.push(line);
     } else {
-       if (sections.length === 0) {
-         sections.push({ title: 'Introduction', content: []});
+       if (trimmedLine.length > 0) {
+           if (sections.length === 0) {
+             sections.push({ title: 'Introduction', content: []});
+           }
+           sections[sections.length - 1].content.push(line);
        }
-       sections[sections.length - 1].content.push(line);
     }
   });
 

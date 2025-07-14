@@ -58,7 +58,7 @@ All resources used in instruction must be fully generated and included within th
 - Use of visuals to explain phenomena
 - Written response to guided prompts
 📘 **Reading Passage:** [Embed a 100–250 word, grade-appropriate reading passage here, directly aligned to the topic.]
-🖼️ **Diagram:** [Embed a fully rendered diagram using proper labels and arrows, following the special SVG description format.]
+🖼️ **Diagram:** [Embed a fully rendered diagram using the special SVG description format, e.g., [START_SIMPLE_FLOW_DIAGRAM: ...]]
 ❓ **Concept-Check Questions:** [Include 2–3 concept-check questions under the reading.]
 
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**

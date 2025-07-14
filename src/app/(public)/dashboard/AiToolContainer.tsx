@@ -59,7 +59,9 @@ export default function AiToolContainer({
                     <AccordionItem value="item-1">
                       <AccordionTrigger className="text-lg font-semibold">View Generated Content</AccordionTrigger>
                       <AccordionContent>
-                        {typeof result === 'string' ? <StyledContentDisplay content={result} /> : <>{result}</>}
+                        <div className="document-view">
+                          {typeof result === 'string' ? <StyledContentDisplay content={result} /> : <>{result}</>}
+                        </div>
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
