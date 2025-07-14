@@ -123,10 +123,13 @@ export default function TestGeneratorPage() {
 
   const availableSubjects = useMemo(() => {
     const subjectModules: any = { ...modules };
-    delete subjectModules.tools;
+    // Filter out tools from the list of selectable subjects
+    const allSubjectModules = Object.keys(subjectModules)
+      .filter(key => key !== 'tools')
+      .reduce((acc, key) => ({ ...acc, [key]: subjectModules[key] }), {});
 
     if (isAdmin) {
-      const allSubjects = Object.values(subjectModules).flat().map((m: any) => m.name);
+      const allSubjects = Object.values(allSubjectModules).flat().map((m: any) => m.name);
       return [...new Set(allSubjects)];
     }
     
@@ -137,7 +140,9 @@ export default function TestGeneratorPage() {
       .map(priceId => priceIdToSubject[priceId])
       .filter((subject): subject is string => !!subject);
       
-    return [...new Set(subscribedSubjects)];
+    // Also filter out any tool names that might have slipped through
+    const toolNames = modules.tools.map(t => t.name);
+    return [...new Set(subscribedSubjects)].filter(s => !toolNames.includes(s));
   }, [subscriptions, isAdmin, priceIdToSubject]);
 
   const hasAccess = isAdmin || subscriptions.includes('price_1Pg12lAk4y2zY5d6pQrStUvW');
@@ -171,28 +176,32 @@ export default function TestGeneratorPage() {
 
   useEffect(() => {
     const loadCurriculum = async () => {
-        setIsLoading(true);
-        const data = await getCurriculumForSubject(selectedSubject);
-        setCurrentCurriculum(data);
-        setIsLoading(false);
+        if (selectedSubject) {
+          setIsLoading(true);
+          const data = await getCurriculumForSubject(selectedSubject);
+          setCurrentCurriculum(data);
+          setIsLoading(false);
+        } else {
+          setCurrentCurriculum(null);
+          setSelectedUnits([]);
+          setSelectedTopics([]);
+        }
     };
-    if (selectedSubject) {
-        loadCurriculum();
-    } else {
-        setCurrentCurriculum(null);
-    }
+    loadCurriculum();
   }, [selectedSubject]);
 
   const units = useMemo(() => {
-      return currentCurriculum ? Object.keys(currentCurriculum.units) : [];
+      if (!currentCurriculum) return [];
+      const unitData = currentCurriculum.units || {};
+      return Object.keys(unitData);
   }, [currentCurriculum]);
 
   const topics = useMemo(() => {
-      if (currentCurriculum && selectedUnits.length === 1) {
-          const unitContent = currentCurriculum.units[selectedUnits[0]];
-          return unitContent ? Object.keys(unitContent.topics) : [];
-      }
-      return [];
+      if (!currentCurriculum || selectedUnits.length !== 1) return [];
+      const unitKey = selectedUnits[0];
+      const unitData = currentCurriculum.units?.[unitKey];
+      if (!unitData || !unitData.topics) return [];
+      return Object.keys(unitData.topics);
   }, [currentCurriculum, selectedUnits]);
 
 

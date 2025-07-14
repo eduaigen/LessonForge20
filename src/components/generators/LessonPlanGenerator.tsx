@@ -93,12 +93,13 @@ export default function LessonPlanGenerator() {
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
   
   const pageTitle = useMemo(() => {
-    return searchParams.get('title') || 'Lesson Plan Generator';
+    const subject = searchParams.get('subject');
+    return subject ? `${subject} Lesson Plan Generator` : 'Lesson Plan Generator';
   }, [searchParams]);
 
   // Form State
   const subjectFromUrl = useMemo(() => {
-    const subject = searchParams.get('subject') || searchParams.get('title');
+    const subject = searchParams.get('subject');
     return subject && curriculumData.subjects.includes(subject) ? subject : '';
   }, [searchParams]);
 
@@ -109,45 +110,8 @@ export default function LessonPlanGenerator() {
   const [customPrompt, setCustomPrompt] = useState('');
 
   // Curriculum structure states
-  const [units, setUnits] = useState<string[]>([]);
-  const [topics, setTopics] = useState<string[]>([]);
-  const [lessons, setLessons] = useState<string[]>([]);
-  
   const [currentCurriculum, setCurrentCurriculum] = useState<any>(null);
-
-  const updateDropdowns = useCallback(() => {
-    if (currentCurriculum) {
-      const newUnits = Object.keys(currentCurriculum.units);
-      setUnits(newUnits);
-
-      if (selectedUnit && newUnits.includes(selectedUnit)) {
-          const newTopics = Object.keys(currentCurriculum.units[selectedUnit].topics);
-          setTopics(newTopics);
-
-          if (selectedTopic && newTopics.includes(selectedTopic)) {
-              const newLessons = currentCurriculum.units[selectedUnit].topics[selectedTopic].lessons;
-              setLessons(newLessons);
-          } else {
-              setLessons([]);
-              setSelectedLesson('');
-          }
-      } else {
-          setTopics([]);
-          setSelectedTopic('');
-          setLessons([]);
-          setSelectedLesson('');
-      }
-    } else {
-        setUnits([]);
-        setTopics([]);
-        setLessons([]);
-        setSelectedUnit('');
-        setSelectedTopic('');
-        setSelectedLesson('');
-    }
-  }, [currentCurriculum, selectedUnit, selectedTopic]);
-
-
+  
   // Pre-fill subject from URL search params
   useEffect(() => {
     setSelectedSubject(subjectFromUrl);
@@ -168,10 +132,40 @@ export default function LessonPlanGenerator() {
     loadCurriculum();
   }, [selectedSubject]);
 
-  // Update dropdown options when curriculum or selections change
-  useEffect(() => {
-    updateDropdowns();
-  }, [currentCurriculum, selectedUnit, selectedTopic, updateDropdowns]);
+  // Memoize dropdown options to prevent re-renders
+  const units = useMemo(() => {
+    if (!currentCurriculum) return [];
+    return Object.keys(currentCurriculum.units || {});
+  }, [currentCurriculum]);
+
+  const topics = useMemo(() => {
+    if (!currentCurriculum || !selectedUnit) return [];
+    return Object.keys(currentCurriculum.units?.[selectedUnit]?.topics || {});
+  }, [currentCurriculum, selectedUnit]);
+
+  const lessons = useMemo(() => {
+    if (!currentCurriculum || !selectedUnit || !selectedTopic) return [];
+    return currentCurriculum.units?.[selectedUnit]?.topics?.[selectedTopic]?.lessons || [];
+  }, [currentCurriculum, selectedUnit, selectedTopic]);
+
+  // Reset dependent dropdowns when a parent dropdown changes
+  const handleSubjectChange = (value: string) => {
+    setSelectedSubject(value);
+    setSelectedUnit('');
+    setSelectedTopic('');
+    setSelectedLesson('');
+  };
+
+  const handleUnitChange = (value: string) => {
+    setSelectedUnit(value);
+    setSelectedTopic('');
+    setSelectedLesson('');
+  };
+
+  const handleTopicChange = (value: string) => {
+    setSelectedTopic(value);
+    setSelectedLesson('');
+  };
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -287,13 +281,7 @@ export default function LessonPlanGenerator() {
                         <Label>Subject</Label>
                         <Select
                             value={selectedSubject}
-                            onValueChange={(value) => {
-                                setSelectedSubject(value);
-                                // Reset dependent dropdowns
-                                setSelectedUnit('');
-                                setSelectedTopic('');
-                                setSelectedLesson('');
-                            }}
+                            onValueChange={handleSubjectChange}
                             required
                             disabled={!!subjectFromUrl}
                         >
@@ -313,12 +301,7 @@ export default function LessonPlanGenerator() {
                         <Label>Unit</Label>
                         <Select
                             value={selectedUnit}
-                            onValueChange={(value) => {
-                                setSelectedUnit(value);
-                                // Reset dependent dropdowns
-                                setSelectedTopic('');
-                                setSelectedLesson('');
-                            }}
+                            onValueChange={handleUnitChange}
                             disabled={units.length === 0 || isLoading}
                             required
                         >
@@ -338,11 +321,7 @@ export default function LessonPlanGenerator() {
                         <Label>Topic</Label>
                         <Select
                             value={selectedTopic}
-                            onValueChange={(value) => {
-                                setSelectedTopic(value);
-                                // Reset dependent dropdown
-                                setSelectedLesson('');
-                            }}
+                            onValueChange={handleTopicChange}
                             disabled={topics.length === 0 || isLoading}
                             required
                         >
