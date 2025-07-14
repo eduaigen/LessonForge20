@@ -25,7 +25,6 @@ export async function generateTeacherTool(input: GenerateTeacherToolInput): Prom
     wordwrap: false,
     selectors: [
       { selector: 'h3', options: { uppercase: false, prefix: '\n### ', suffix: '\n' } },
-      { selector: 'div.document-view', options: { uppercase: false } },
     ]
   });
 
