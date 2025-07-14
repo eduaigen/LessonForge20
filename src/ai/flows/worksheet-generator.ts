@@ -4,16 +4,8 @@
  * @fileOverview An AI flow for generating a student-facing worksheet from a lesson plan.
  */
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
-import { GenerateNVBiologyLessonOutputSchema } from '../schemas/nv-biology-lesson-schemas';
-
-export const WorksheetGeneratorInputSchema = GenerateNVBiologyLessonOutputSchema;
-export const WorksheetGeneratorOutputSchema = z.object({
-  worksheetContent: z.string().describe('The full content of the student-facing worksheet in Markdown format.'),
-});
-
-export type WorksheetGeneratorInput = z.infer<typeof WorksheetGeneratorInputSchema>;
-export type WorksheetGeneratorOutput = z.infer<typeof WorksheetGeneratorOutputSchema>;
+import { jsonStringify } from 'genkit/zod';
+import { WorksheetGeneratorInputSchema, WorksheetGeneratorOutputSchema, type WorksheetGeneratorInput, type WorksheetGeneratorOutput } from '../schemas/worksheet-generator-schemas';
 
 const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
@@ -45,7 +37,7 @@ const worksheetGeneratorFlow = ai.defineFlow(
     outputSchema: WorksheetGeneratorOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt({ input, jsonStringify: JSON.stringify });
+    const { output } = await prompt({ input });
     if (!output) {
       throw new Error('The AI failed to generate the worksheet. Please try again.');
     }

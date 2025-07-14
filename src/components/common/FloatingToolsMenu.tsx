@@ -19,7 +19,8 @@ import {
   Loader2,
 } from 'lucide-react';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
-import { generateWorksheet, type WorksheetGeneratorOutput } from '@/ai/flows/worksheet-generator';
+import { generateWorksheet } from '@/ai/flows/worksheet-generator';
+import type { WorksheetGeneratorOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import { useToast } from '@/hooks/use-toast';
 import StyledContentDisplay from './StyledContentDisplay';
 import GeneratingAnimation from './GeneratingAnimation';
