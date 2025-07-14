@@ -370,22 +370,42 @@ export const curriculumData: {
     },
     History: {
       units: {
-        'Ancient Civilizations': {
+        "Constitutional Foundations": {
           topics: {
-            'Mesopotamia': { lessons: ['Sumerians', 'Babylonians'] },
-            'Egypt': { lessons: ['Old Kingdom', 'New Kingdom'] },
-            'Greece': { lessons: ['Athens vs. Sparta', 'Alexander the Great'] },
-            'Rome': { lessons: ['The Republic', 'The Empire'] },
-          },
+            "Colonial America": { "lessons": ["Colonial America"] },
+            "Constitutional Convention": { "lessons": ["Constitutional Convention"] },
+            "Bill of Rights": { "lessons": ["Bill of Rights"] }
+          }
         },
-        'World Revolutions': {
+        "Expansion & Reform": {
           topics: {
-            'American Revolution': { lessons: ['Causes', 'Major Battles'] },
-            'French Revolution': { lessons: ['Estates-General', 'Reign of Terror'] },
-            'Industrial Revolution': { lessons: ['Inventions', 'Social Impact'] },
-          },
+            "Civil War": { "lessons": ["Civil War"] },
+            "Reconstruction": { "lessons": ["Reconstruction"] },
+            "Progressive Era": { "lessons": ["Progressive Era"] }
+          }
         },
-      },
+        "20th Century US": {
+          topics: {
+            "Great Depression": { "lessons": ["Great Depression"] },
+            "World Wars": { "lessons": ["World Wars"] },
+            "Civil Rights Movement": { "lessons": ["Civil Rights Movement"] }
+          }
+        },
+        "Modern America": {
+          topics: {
+            "Reagan Era": { "lessons": ["Reagan Era"] },
+            "War on Terror": { "lessons": ["War on Terror"] },
+            "Contemporary Policies": { "lessons": ["Contemporary Policies"] }
+          }
+        },
+        "Regents Review": {
+          topics: {
+            "DBQ Practice": { "lessons": ["DBQ Practice"] },
+            "Thematic Essay Practice": { "lessons": ["Thematic Essay Practice"] },
+            "Civic Literacy Tasks": { "lessons": ["Civic Literacy Tasks"] }
+          }
+        }
+      }
     },
     Literature: {
       units: {
