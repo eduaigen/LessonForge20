@@ -159,5 +159,3 @@ export const nvBiologyCurriculum = {
         }
     }
 };
-
-    
