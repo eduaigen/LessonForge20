@@ -1,20 +1,23 @@
+
 'use client';
 
 import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf } from 'lucide-react';
+import { Loader2, Leaf, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
+import { useAuth } from '@/context/AuthContext';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -28,7 +31,29 @@ type FormData = z.infer<typeof formSchema>;
 
 const fiveEStrategies = ['Engage', 'Explore', 'Explain', 'Elaborate', 'Evaluate'] as const;
 
-export default function NVBiologyGenerator() {
+const SubscriptionPrompt = () => (
+    <div className="flex flex-1 items-center justify-center">
+        <Card className="max-w-2xl text-center p-8 shadow-lg">
+            <CardHeader>
+                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Sparkles className="h-8 w-8" />
+                </div>
+                <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
+                <CardDescription className="text-lg text-muted-foreground pt-2">
+                    The NV Biology Generator requires a Science curriculum subscription. Subscribe now to create powerful, standards-aligned 5E lesson plans.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button size="lg" asChild>
+                    <Link href="/pricing">Subscribe to Science Tools</Link>
+                </Button>
+            </CardContent>
+        </Card>
+    </div>
+);
+
+
+const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [output, setOutput] = useState<GenerateNVBiologyLessonOutput | null>(null);
@@ -79,7 +104,7 @@ export default function NVBiologyGenerator() {
       setIsLoading(false);
     }
   }
-
+  
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
@@ -227,4 +252,10 @@ export default function NVBiologyGenerator() {
         )}
     </Card>
   );
+}
+
+export default function NVBiologyGenerator() {
+    const { hasScienceSubscription } = useAuth();
+
+    return hasScienceSubscription ? <GeneratorContent /> : <SubscriptionPrompt />;
 }
