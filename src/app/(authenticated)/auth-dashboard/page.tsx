@@ -40,6 +40,14 @@ const tools = {
         priceId: 'price_1Pg12wAk4y2zY5d6xYz0a1bC',
       },
       {
+        title: 'NV Biology',
+        description: 'NYS Living Environment curriculum.',
+        icon: <Dna className="w-8 h-8" />,
+        href: '/auth-dashboard/lesson-plan-generator?subject=Biology&title=NV%20Biology',
+        isPremium: true,
+        priceId: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc',
+      },
+      {
         title: 'NGSS Biology (OpenSciEd)',
         description: 'Inquiry-based biology phenomena.',
         icon: <Leaf className="w-8 h-8" />,
@@ -48,12 +56,12 @@ const tools = {
         priceId: 'price_1Pg0yqAk4y2zY5d6n7s8tUvW',
       },
       {
-        title: 'NV Biology',
-        description: 'NYS Living Environment curriculum.',
+        title: 'AP Biology',
+        description: 'College-level, advanced placement biology.',
         icon: <Dna className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=Biology&title=NV%20Biology',
+        href: '/auth-dashboard/lesson-plan-generator?subject=AP%20Biology&title=AP%20Biology',
         isPremium: true,
-        priceId: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc',
+        priceId: 'price_1Pg13AAk4y2zY5d6jKlMnOpQ',
       },
       {
         title: 'NGSS Chemistry (OpenSciEd)',
@@ -345,6 +353,8 @@ export default function PremiumDashboardPage() {
   
   return isSubscribed ? <PremiumDashboardContent /> : <SubscriptionPrompt />;
 }
+
+    
 
     
 

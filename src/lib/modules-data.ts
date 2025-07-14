@@ -5,6 +5,7 @@ export const modules = {
   science: [
     { id: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc', name: 'NV Biology', description: 'NYS Living Environment curriculum.', icon: 'dna' },
     { id: 'price_1Pg0yqAk4y2zY5d6n7s8tUvW', name: 'NGSS Biology (OpenSciEd)', description: 'Inquiry-based biology phenomena.', icon: 'leaf' },
+    { id: 'price_1Pg13AAk4y2zY5d6jKlMnOpQ', name: 'AP Biology', description: 'College-level, advanced placement biology.', icon: 'dna' },
     { id: 'price_1Pg0zFAk4y2zY5d6xYz0a1bC', name: 'NGSS Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: 'atom' },
     { id: 'price_1Pg0znAk4y2zY5d6pQrStVwX', name: 'NGSS Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: 'magnet' },
     { id: 'price_1Pg10AAk4y2zY5d6LMN9oPqR', name: 'Earth and Space Science', description: 'NYS Physical Setting curriculum.', icon: 'orbit' },
@@ -33,3 +34,5 @@ export const modules = {
 };
 
 export type ModuleCategory = keyof typeof modules;
+
+    

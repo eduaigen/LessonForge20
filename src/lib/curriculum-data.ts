@@ -17,8 +17,78 @@ export const curriculumData: {
   subjects: string[];
   content: CurriculumContent;
 } = {
-  subjects: ['Biology', 'Chemistry', 'Physics', 'History', 'Literature'],
+  subjects: ['AP Biology', 'Biology', 'Chemistry', 'Physics', 'History', 'Literature'],
   content: {
+    'AP Biology': {
+        units: {
+            "Unit 1: Chemistry of Life": {
+                topics: {
+                    "Properties of Water": { lessons: ["Properties of Water - Part 1"] },
+                    "Biological Macromolecules": { lessons: ["Biological Macromolecules - Part 2"] },
+                    "pH and Buffers": { lessons: ["pH and Buffers - Part 3"] },
+                    "Enzymes": { lessons: ["Enzymes - Part 4"] }
+                }
+            },
+            "Unit 2: Cell Structure and Function": {
+                topics: {
+                    "Cell Organelles": { lessons: ["Cell Organelles - Part 1"] },
+                    "Membrane Transport": { lessons: ["Membrane Transport - Part 2"] },
+                    "Surface Area/Volume Ratio": { lessons: ["Surface Area/Volume Ratio - Part 3"] }
+                }
+            },
+            "Unit 3: Cellular Energetics": {
+                topics: {
+                    "ATP & Enzymes": { lessons: ["ATP & Enzymes - Part 1"] },
+                    "Photosynthesis": { lessons: ["Photosynthesis - Part 2"] },
+                    "Cellular Respiration": { lessons: ["Cellular Respiration - Part 3"] }
+                }
+            },
+            "Unit 4: Cell Communication and Cell Cycle": {
+                topics: {
+                    "Signal Transduction": { lessons: ["Signal Transduction - Part 1"] },
+                    "Mitosis": { lessons: ["Mitosis - Part 2"] },
+                    "Cancer": { lessons: ["Cancer - Part 3"] }
+                }
+            },
+            "Unit 5: Heredity": {
+                topics: {
+                    "Mendelian Genetics": { lessons: ["Mendelian Genetics - Part 1"] },
+                    "Meiosis": { lessons: ["Meiosis - Part 2"] },
+                    "Inheritance Patterns": { lessons: ["Inheritance Patterns - Part 3"] }
+                }
+            },
+            "Unit 6: Gene Expression and Regulation": {
+                topics: {
+                    "DNA Replication": { lessons: ["DNA Replication - Part 1"] },
+                    "Transcription & Translation": { lessons: ["Transcription & Translation - Part 2"] },
+                    "Gene Regulation": { lessons: ["Gene Regulation - Part 3"] }
+                }
+            },
+            "Unit 7: Natural Selection": {
+                topics: {
+                    "Darwin & Evolution": { lessons: ["Darwin & Evolution - Part 1"] },
+                    "Hardy-Weinberg": { lessons: ["Hardy-Weinberg - Part 2"] },
+                    "Speciation": { lessons: ["Speciation - Part 3"] }
+                }
+            },
+            "Unit 8: Ecology": {
+                topics: {
+                    "Ecosystems": { lessons: ["Ecosystems - Part 1"] },
+                    "Energy Flow": { lessons: ["Energy Flow - Part 2"] },
+                    "Population Ecology": { lessons: ["Population Ecology - Part 3"] },
+                    "Human Impact": { lessons: ["Human Impact - Part 4"] }
+                }
+            },
+            "AP Exam Review & Labs": {
+                topics: {
+                    "Review": { lessons: ["Review - Part 1"] },
+                    "Practice FRQs": { lessons: ["Practice FRQs - Part 2"] },
+                    "Lab Wrap-Ups": { lessons: ["Lab Wrap-Ups - Part 3"] },
+                    "Mock Exams": { lessons: ["Mock Exams - Part 4"] }
+                }
+            }
+        }
+    },
     Biology: {
       units: {
         'The Marathon Runner': {
@@ -280,3 +350,5 @@ export const curriculumData: {
     }
   },
 };
+
+    
