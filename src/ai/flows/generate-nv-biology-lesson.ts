@@ -60,7 +60,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **E. CHECK FOR UNDERSTANDING (CFU)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Launch a quick poll).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students respond to CFU items).
-- **CFU Questions**: 2 multiple-choice questions (with options and correct answer) and 1 short-response question.
+- **CFU Questions**: 2 multiple-choice questions and 1 short-response question. For multiple-choice questions, provide the options as a simple array of strings without letters like "a)", "b)".
 
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Clarify expectations with a rubric).
