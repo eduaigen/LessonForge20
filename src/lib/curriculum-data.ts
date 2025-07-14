@@ -1,10 +1,8 @@
 export type CurriculumContent = {
   [subject: string]: {
-    [grade: string]: {
-      units: {
-        [unit: string]: {
-          topics: string[];
-        };
+    units: {
+      [unit: string]: {
+        topics: string[];
       };
     };
   };
@@ -12,101 +10,70 @@ export type CurriculumContent = {
 
 export const curriculumData: {
   subjects: string[];
-  grades: number[];
+  grades: number[]; // This can be removed later if not used anywhere else
   content: CurriculumContent;
 } = {
   subjects: ['Biology', 'Chemistry', 'Physics', 'History', 'Literature'],
   grades: [9, 10, 11, 12],
   content: {
     Biology: {
-      '9': {
-        units: {
-          Ecosystems: {
-            topics: ['Food Webs', 'Energy Flow', 'Biogeochemical Cycles'],
-          },
-          'Cellular Biology': {
-            topics: [
-              'Cell Structure',
-              'Photosynthesis',
-              'Cellular Respiration',
-            ],
-          },
+      units: {
+        'Ecosystems & Cells': {
+          topics: ['Food Webs', 'Cell Structure', 'Photosynthesis', 'Cellular Respiration'],
         },
-      },
-      '10': {
-        units: {
-          Genetics: {
-            topics: ['Mendelian Genetics', 'DNA Structure', 'Gene Expression'],
-          },
-          Evolution: {
-            topics: ['Natural Selection', 'Evidence for Evolution', 'Speciation'],
-          },
+        'Genetics & Evolution': {
+          topics: ['Mendelian Genetics', 'DNA Structure', 'Natural Selection', 'Speciation'],
         },
-      },
-      '11': {
-        units: {
-          'Human Anatomy': {
-            topics: [
-              'Skeletal System',
-              'Nervous System',
-              'Circulatory System',
-            ],
-          },
+        'Human Anatomy': {
+          topics: ['Skeletal System', 'Nervous System', 'Circulatory System'],
         },
-      },
-      '12': {
-        units: {
-          Biotechnology: {
-            topics: ['Genetic Engineering', 'CRISPR', 'Cloning'],
-          },
+        'Biotechnology': {
+          topics: ['Genetic Engineering', 'CRISPR', 'Cloning'],
         },
       },
     },
     Chemistry: {
-      '10': {
-        units: {
-          'Atomic Structure': {
-            topics: [
-              'Protons, Neutrons, Electrons',
-              'Isotopes',
-              'Electron Configurations',
-            ],
-          },
+      units: {
+        'Atomic Structure': {
+          topics: ['Protons, Neutrons, Electrons', 'Isotopes', 'Electron Configurations'],
+        },
+        'Chemical Bonding & Stoichiometry': {
+          topics: ['Ionic Bonds', 'Covalent Bonds', 'The Mole', 'Balancing Equations'],
+        },
+        'Organic Chemistry': {
+          topics: ['Alkanes', 'Alkenes', 'Alkynes', 'Functional Groups'],
         },
       },
-      '11': {
-        units: {
-          'Chemical Bonding': {
-            topics: ['Ionic Bonds', 'Covalent Bonds', 'Metallic Bonds'],
-          },
-          Stoichiometry: {
-            topics: ['The Mole', 'Molar Mass', 'Balancing Equations'],
-          },
-        },
-      },
-      '12': {
-        units: {
-          'Organic Chemistry': {
-            topics: ['Alkanes', 'Alkenes', 'Alkynes', 'Functional Groups'],
-          },
-        }
-      }
     },
     Physics: {
-        '11': {
-            units: {
-                'Kinematics': {
-                    topics: ['Displacement, Velocity, and Acceleration', 'Projectile Motion', 'Uniform Circular Motion']
-                }
-            }
+      units: {
+        'Kinematics': {
+          topics: ['Displacement, Velocity, and Acceleration', 'Projectile Motion', 'Uniform Circular Motion'],
         },
-        '12': {
-            units: {
-                'Electricity & Magnetism': {
-                    topics: ["Ohm's Law", "Kirchhoff's Laws", "Magnetic Fields"]
-                }
-            }
-        }
+        'Electricity & Magnetism': {
+          topics: ["Ohm's Law", "Kirchhoff's Laws", "Magnetic Fields"],
+        },
+      },
+    },
+    History: {
+      units: {
+        'Ancient Civilizations': {
+          topics: ['Mesopotamia', 'Egypt', 'Greece', 'Rome'],
+        },
+        'World Revolutions': {
+          topics: ['American Revolution', 'French Revolution', 'Industrial Revolution'],
+        },
+      },
+    },
+    Literature: {
+      units: {
+        'Shakespeare': {
+          topics: ['Romeo and Juliet', 'Macbeth', 'Hamlet'],
+        },
+        'American Literature': {
+          topics: ['The Great Gatsby', 'To Kill a Mockingbird', 'The Catcher in the Rye'],
+        },
+      },
     }
   },
 };

@@ -51,7 +51,6 @@ export default function LessonPlanGenerator() {
   }, [searchParams]);
 
   const [selectedSubject, setSelectedSubject] = useState<string>(subjectFromUrl);
-  const [selectedGrade, setSelectedGrade] = useState<string>('9');
   const [selectedUnit, setSelectedUnit] = useState<string>('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [lessonTitle, setLessonTitle] = useState('');
@@ -68,20 +67,20 @@ export default function LessonPlanGenerator() {
 
   // Reset and update dropdowns based on selections
   useEffect(() => {
-    if (selectedSubject && selectedGrade) {
-      const gradeContent = curriculumData.content[selectedSubject]?.[selectedGrade];
-      setUnits(gradeContent ? Object.keys(gradeContent.units) : []);
+    if (selectedSubject) {
+      const subjectContent = curriculumData.content[selectedSubject];
+      setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
       setSelectedUnit('');
       setSelectedTopic('');
     } else {
       setUnits([]);
     }
-  }, [selectedSubject, selectedGrade]);
+  }, [selectedSubject]);
 
   useEffect(() => {
-    if (selectedSubject && selectedGrade && selectedUnit) {
+    if (selectedSubject && selectedUnit) {
       const unitContent =
-        curriculumData.content[selectedSubject]?.[selectedGrade]?.units[
+        curriculumData.content[selectedSubject]?.units[
           selectedUnit
         ];
       setTopics(unitContent ? unitContent.topics : []);
@@ -89,15 +88,15 @@ export default function LessonPlanGenerator() {
     } else {
       setTopics([]);
     }
-  }, [selectedSubject, selectedGrade, selectedUnit]);
+  }, [selectedSubject, selectedUnit]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSubject || !selectedGrade || !lessonTitle) {
+    if (!selectedSubject || !lessonTitle) {
       toast({
         title: 'Missing Information',
         description:
-          'Please select a subject, grade, and provide a lesson title.',
+          'Please select a subject and provide a lesson title.',
         variant: 'destructive',
       });
       return;
@@ -107,7 +106,7 @@ export default function LessonPlanGenerator() {
 
     const input: GenerateLessonPlanInput = {
       subject: selectedSubject,
-      gradeLevel: selectedGrade,
+      gradeLevel: '9', // Defaulting grade, can be removed if not needed by AI
       unit: selectedUnit,
       topic: selectedTopic,
       lessonTitle: lessonTitle,
@@ -133,7 +132,6 @@ export default function LessonPlanGenerator() {
 
   const handleReset = () => {
     setSelectedSubject(subjectFromUrl);
-    setSelectedGrade('9');
     setSelectedUnit('');
     setSelectedTopic('');
     setLessonTitle('');
@@ -184,46 +182,25 @@ export default function LessonPlanGenerator() {
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-                <div>
-                    <Label>Subject</Label>
-                    <Select
-                        value={selectedSubject}
-                        onValueChange={setSelectedSubject}
-                        required
-                        disabled={!!subjectFromUrl}
-                    >
-                        <SelectTrigger>
-                        <SelectValue placeholder="Select Subject" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        {curriculumData.subjects.map((subject) => (
-                            <SelectItem key={subject} value={subject}>
-                            {subject}
-                            </SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div>
-                    <Label>Grade</Label>
-                    <Select
-                        value={selectedGrade}
-                        onValueChange={setSelectedGrade}
-                        required
-                    >
-                        <SelectTrigger>
-                        <SelectValue placeholder="Select Grade" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        {curriculumData.grades.map((grade) => (
-                            <SelectItem key={grade} value={grade.toString()}>
-                            {grade}th Grade
-                            </SelectItem>
-                        ))}
-                        </SelectContent>
-                    </Select>
-                </div>
+            <div>
+                <Label>Subject</Label>
+                <Select
+                    value={selectedSubject}
+                    onValueChange={setSelectedSubject}
+                    required
+                    disabled={!!subjectFromUrl}
+                >
+                    <SelectTrigger>
+                    <SelectValue placeholder="Select Subject" />
+                    </SelectTrigger>
+                    <SelectContent>
+                    {curriculumData.subjects.map((subject) => (
+                        <SelectItem key={subject} value={subject}>
+                        {subject}
+                        </SelectItem>
+                    ))}
+                    </SelectContent>
+                </Select>
             </div>
             <div>
                 <Label>Unit (Optional)</Label>
