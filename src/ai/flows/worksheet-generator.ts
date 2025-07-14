@@ -34,7 +34,7 @@ const prompt = ai.definePrompt({
     *   **C. MINI-LESSON:**
         *   Based on the topic and the teacher/student actions from the lesson plan, design a simple note-taking strategy for the student (e.g., a two-column note frame).
         *   **CRITICAL: You MUST embed the full text of any "Embedded Reading Passage" exactly as it appears in the lesson plan. Do not summarize it or refer to it. Generate the full text.**
-        *   **CRITICAL: You MUST embed any "Embedded Diagram" or other visuals (like SVGs) from the lesson plan directly. The visual must be fully rendered in the worksheet.**
+        *   **CRITICAL: You MUST embed any "Embedded Diagram" or other visuals (like SVGs) from the lesson plan directly. The visual must be valid, fully rendered in the worksheet.**
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
         *   Clearly state the instructions for the guided practice activity, taken from the lesson plan.
@@ -46,7 +46,7 @@ const prompt = ai.definePrompt({
     *   **F. INDEPENDENT PRACTICE / PERFORMANCE TASK:**
         *   Copy the full "Embedded Task" prompt (e.g., the CER prompt) from the lesson plan.
         *   Provide clear instructions and ample space for the student to complete the assignment.
-        *   **CRITICAL: You MUST include any necessary "taskData," tables, or graphs from the lesson plan, ensuring they are perfectly rendered.**
+        *   **CRITICAL: You MUST include any necessary "taskData," tables, or graphs from the lesson plan, ensuring they are perfectly rendered and contain valid SVG code if applicable.**
 
     *   **G. CLOSURE / EXIT TICKET:**
         *   Transfer the exact "Exit Ticket Question" from the lesson plan.

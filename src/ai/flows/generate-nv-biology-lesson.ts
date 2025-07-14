@@ -49,7 +49,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Present reading and diagram, model concepts).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students take annotated notes).
 - **Embedded Reading Passage**: A 100–250 word, grade-appropriate reading passage on the topic.
-- **Embedded Diagram**: A fully rendered, labeled SVG scientific diagram related to the reading. Ensure all labels are clear and arrows correctly point to relevant parts. Do not describe it; create the SVG code.
+- **Embedded Diagram**: A fully rendered, labeled, and valid SVG scientific diagram related to the reading. Ensure all labels are clear and arrows correctly point to relevant parts. Do not describe it; create the SVG code.
 - **Concept-Check Questions**: 2-3 questions based on the reading and diagram.
 
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
@@ -65,7 +65,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Clarify expectations with a rubric).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students construct a written explanation using CER).
-- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. If data is needed, provide it in a structured data table, not a graph. Ensure any embedded charts or diagrams are clearly labeled.
+- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. If data is needed, provide it in a structured data table, not a graph. Ensure any embedded charts or diagrams are clearly labeled and contain valid, renderable SVG code.
 
 **G. CLOSURE / EXIT TICKET**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Prompt students to summarize the main point).
@@ -80,7 +80,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 - **Expected Student Outputs with Support**: Bulleted list of potential student outputs (e.g., Students use a graphic frame).
 - **Extension Activity**: A challenge prompt or activity for students who master the content early.
 ---
-**Final Instruction**: Review your entire response. Ensure every single section from I to III is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly. Failure to comply will result in an invalid response.`,
+**Final Instruction**: Review your entire response. Ensure every single section from I to III is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content, especially SVG diagrams, must be created and embedded directly as valid code. Failure to comply will result in an invalid response.`,
 });
 
 const generateNVBiologyLessonFlow = ai.defineFlow(
