@@ -40,43 +40,46 @@ import AiTeacherTools from './AiTeacherTools';
 
 // Helper to dynamically load curriculum data
 const getCurriculumForSubject = async (subject: string) => {
-    switch (subject) {
-        case 'AP Biology':
-            return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
-        case 'NV Biology':
-            return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
-        case 'NGSS Biology (OpenSciEd)':
-            return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
-        case 'Chemistry':
-            return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
-        case 'Earth_Science':
-            return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
-        case 'Physics':
-            return (await import('@/lib/physics-curriculum')).physicsCurriculum;
-        case 'Health':
-            return (await import('@/lib/health-curriculum')).healthCurriculum;
-        case 'Global History I & II':
-            const gh1 = (await import('@/lib/global-history-1-curriculum')).globalHistory1Curriculum;
-            const gh2 = (await import('@/lib/global-history-2-curriculum')).globalHistory2Curriculum;
-            return { units: { ...gh1.units, ...gh2.units } };
-        case 'US History & Government':
-             return (await import('@/lib/us-history-curriculum')).usHistoryCurriculum;
-        case 'Government & Economics':
-             return (await import('@/lib/government-economics-curriculum')).governmentEconomicsCurriculum;
-        case 'Illustrative Math Algebra 1':
-        case 'Illustrative Math Algebra 2':
-        case 'Illustrative Math Geometry':
-             return (await import('@/lib/math-curriculum')).mathCurriculum;
-        case 'ELA 9th Grade':
-            return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
-        case 'ELA 10th Grade':
-            return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
-        case 'ELA 11th Grade':
-            return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
-        case 'ELA 12th Grade':
-            return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
-        default:
-            return null;
+    try {
+        switch (subject) {
+            case 'AP Biology':
+                return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
+            case 'NV Biology':
+                return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+            case 'NGSS Biology (OpenSciEd)':
+                return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
+            case 'Chemistry':
+                return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
+            case 'Earth_Science':
+                return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
+            case 'Physics':
+                return (await import('@/lib/physics-curriculum')).physicsCurriculum;
+            case 'Health':
+                return (await import('@/lib/health-curriculum')).healthCurriculum;
+            case 'Global History I & II':
+                return (await import('@/lib/global-history-curriculum')).globalHistoryCurriculum;
+            case 'US History & Government':
+                 return (await import('@/lib/us-history-curriculum')).usHistoryCurriculum;
+            case 'Government & Economics':
+                 return (await import('@/lib/government-economics-curriculum')).governmentEconomicsCurriculum;
+            case 'Illustrative Math Algebra 1':
+            case 'Illustrative Math Algebra 2':
+            case 'Illustrative Math Geometry':
+                 return (await import('@/lib/math-curriculum')).mathCurriculum;
+            case 'ELA 9th Grade':
+                return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
+            case 'ELA 10th Grade':
+                return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
+            case 'ELA 11th Grade':
+                return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
+            case 'ELA 12th Grade':
+                return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
+            default:
+                return null;
+        }
+    } catch (e) {
+        console.error(`Failed to load curriculum for ${subject}:`, e);
+        return null;
     }
 };
 
