@@ -292,14 +292,20 @@ const ToolSection = ({ title, tools, userSubscriptions, isAdmin }: { title: stri
 
 
 const PremiumDashboardContent = () => {
-  const { subscriptions, isAdmin } = useAuth();
+  const { subscriptions, isAdmin, user } = useAuth();
+  
+  const getAccessMessage = () => {
+    if (isAdmin) return "Admin access: All tools are enabled.";
+    if (subscriptions.length > 0) return "You have access to your subscribed AI generators and free tools.";
+    return "You currently have access to our free tools. Subscribe to unlock premium features!";
+  }
 
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-bold font-headline">Tool Dashboard</h1>
+        <h1 className="text-3xl font-bold font-headline">Welcome back, {user?.name || 'educator'}!</h1>
         <p className="text-muted-foreground">
-           {isAdmin ? "Admin access: All tools are enabled." : "Access your subscribed AI generators and free tools."}
+           {getAccessMessage()}
         </p>
       </div>
 
@@ -339,3 +345,5 @@ export default function PremiumDashboardPage() {
   
   return isSubscribed ? <PremiumDashboardContent /> : <SubscriptionPrompt />;
 }
+
+    

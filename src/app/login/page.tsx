@@ -21,10 +21,12 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
-
+  
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login(email);
+    // For login, we don't have the user's name, so we just pass the email.
+    // The name can be derived from the email or defaulted in the context.
+    login({ email });
     router.push('/auth-dashboard');
   };
   
@@ -80,3 +82,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
