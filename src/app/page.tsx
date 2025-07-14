@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -110,8 +111,8 @@ export default function Home() {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % dynamicContent.length);
         setIsFading(false);
-      }, 1000); // Corresponds to the animation duration
-    }, 20000);
+      }, 500); // Corresponds to the animation duration
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [dynamicContent.length]);
@@ -134,7 +135,7 @@ export default function Home() {
           <div className="container mx-auto max-w-7xl px-4 text-center">
             <h1
               className={cn(
-                'font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl transition-opacity duration-1000',
+                'font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl transition-opacity duration-500',
                 isFading ? 'opacity-0' : 'opacity-100'
               )}
             >
@@ -142,7 +143,7 @@ export default function Home() {
             </h1>
             <p
               className={cn(
-                'mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl transition-opacity duration-1000',
+                'mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl transition-opacity duration-500',
                 isFading ? 'opacity-0' : 'opacity-100'
               )}
             >
@@ -150,7 +151,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                <Link href="/dashboard">Get Started for Free</Link>
+                <Link href="/signup">Get Started for Free</Link>
               </Button>
               <Button size="lg" variant="ghost" asChild>
                 <Link href="/#features">
@@ -161,7 +162,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="features" className="bg-background/50 py-24 sm:py-32">
+        <section id="features" className="bg-muted/50 py-24 sm:py-32">
           <div className="container mx-auto max-w-7xl px-4">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl">

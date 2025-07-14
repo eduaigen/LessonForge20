@@ -104,13 +104,13 @@ export default function PricingPage() {
     }
     setIsLoading(true);
     try {
-        const { url } = await createCheckoutSession(selectedModules);
+        const { url, error } = await createCheckoutSession(selectedModules);
         if (url) {
             window.location.href = url;
         } else {
              toast({
                 title: "Error Creating Checkout",
-                description: "Could not create a checkout session. Please try again.",
+                description: error || "Could not create a checkout session. Please try again.",
                 variant: "destructive"
             });
         }

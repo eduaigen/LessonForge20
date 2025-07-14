@@ -1,4 +1,4 @@
-// This is a new file or has been significantly updated.
+
 'use client';
 
 import Link from 'next/link';
@@ -46,7 +46,7 @@ export function AppHeader() {
            {isLoggedIn && (
             <Link
                 href="/dashboard"
-                className="font-bold text-foreground transition-colors hover:text-foreground/80"
+                className="font-semibold text-foreground transition-colors hover:text-foreground/80"
             >
                 Free Tools
             </Link>
@@ -55,24 +55,17 @@ export function AppHeader() {
         <div className="flex flex-1 items-center justify-end space-x-2">
           {isLoggedIn ? (
             <>
-              <Button variant="outline" asChild>
+              <Button variant="ghost" asChild>
                 <Link href="/auth-dashboard">Premium Dashboard</Link>
               </Button>
               <Button onClick={handleLogout}>Log Out</Button>
             </>
           ) : (
             <>
-              <Button variant="outline" asChild>
-                <Link href="/dashboard">Try our Free Tools</Link>
+              <Button variant="ghost" asChild>
+                <Link href="/login">Login</Link>
               </Button>
-              <Button
-                asChild
-                style={{
-                  backgroundColor: 'hsl(var(--accent))',
-                  color: 'hsl(var(--accent-foreground))',
-                }}
-                className="hover:opacity-90"
-              >
+              <Button asChild>
                 <Link href="/signup">Get Started</Link>
               </Button>
             </>

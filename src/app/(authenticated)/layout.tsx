@@ -1,4 +1,6 @@
-// This is a new file or has been significantly updated.
+
+'use client';
+
 import {
   FileText,
   TestTube,
@@ -6,11 +8,11 @@ import {
   FolderSync,
   PanelLeft,
   Home,
+  Lightbulb,
 } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
-import { Logo } from '@/components/common/Logo';
 import {
   Sheet,
   SheetContent,
@@ -45,6 +47,18 @@ export default function AuthenticatedAppLayout({
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right">Dashboard</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/dashboard"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                >
+                  <Lightbulb className="h-5 w-5" />
+                  <span className="sr-only">Free Tools</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Free Tools</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -116,6 +130,13 @@ export default function AuthenticatedAppLayout({
                   Dashboard
                 </Link>
                 <Link
+                  href="/dashboard"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Lightbulb className="h-5 w-5" />
+                  Free Tools
+                </Link>
+                <Link
                   href="/auth-dashboard/lesson-plan-generator"
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
@@ -142,12 +163,6 @@ export default function AuthenticatedAppLayout({
                 >
                   <FolderSync className="h-5 w-5" />
                   Curriculum Audit
-                </Link>
-                 <Link
-                  href="/dashboard"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  Free Tools
                 </Link>
               </nav>
             </SheetContent>
