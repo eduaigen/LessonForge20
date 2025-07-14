@@ -11,23 +11,25 @@ const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
   input: { schema: WorksheetGeneratorInputSchema },
   output: { schema: WorksheetGeneratorOutputSchema },
-  prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan.
+  prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive worksheet that a student can use in the classroom.
 
 **Instructions:**
-1.  Scan the entire provided lesson plan JSON object.
-2.  Transform the lesson plan into a clear, well-structured, student-facing worksheet in Markdown format.
-3.  Include a header for Name, Class, and Date at the top of the worksheet.
-4.  The worksheet must include all questions, readings, data tables, visuals, and tasks from the lesson plan.
-5.  Where students are expected to answer, provide clear response areas (e.g., "Answer:__________", or several blank lines for longer responses).
-6.  Format the content to be clean, organized, and easy for a student to follow. Use Markdown headings, lists, and bold text to create a clear visual hierarchy.
-7.  All referenced content (readings, charts, models) MUST be embedded directly in the worksheet.
+1.  **Scan the Entire Lesson Plan:** Carefully read through every part of the provided JSON lesson plan object, from "I. LESSON OVERVIEW" to "H. HOMEWORK ACTIVITY".
+2.  **Student-Facing Transformation:** Convert the teacher-facing plan into a document for students. Rephrase teacher instructions into student-friendly directions. For example, instead of "Teacher will ask students to answer the Do Now question," the worksheet should simply present the "Do Now" question for the student to answer.
+3.  **Maintain Structure:** The worksheet's organization must mirror the lesson plan's structure. Create sections for each part of the lesson (e.g., Do Now, Mini-Lesson, Guided Practice, Independent Practice, Homework).
+4.  **Extract All Student Materials:**
+    *   **Questions:** Include every single question from all sections (Do Now, Concept-Check, CFU, Exit Ticket, etc.).
+    *   **Readings & Visuals:** Embed the full text of any reading passages and any SVG diagrams, charts, or data tables directly into the worksheet where they are referenced.
+    *   **Tasks:** Reproduce the full prompts for all activities, including the Guided Practice and the Independent Practice (e.g., the CER prompt).
+5.  **Create Response Areas:** For every question or task that requires a student response, provide a clear space for them to write. Use lines (e.g., "Answer: __________") for short answers or add multiple blank lines for longer responses.
+6.  **Header:** Start the worksheet with a header for Name, Class, and Date.
 
 **Lesson Plan Data:**
 \`\`\`json
 {{{jsonStringify input}}}
 \`\`\`
 
-Generate the complete worksheet content based on these instructions.`,
+Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan is present and correctly placed.`,
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
