@@ -14,8 +14,8 @@ import {z} from 'genkit';
 import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 const GenerateTestInputSchema = z.object({
-  unit: z.string().describe('The unit for which to generate the test.'),
-  topic: z.string().describe('The topic for which to generate the test.'),
+  unit: z.string().describe('The unit or comma-separated list of units for which to generate the test.'),
+  topic: z.string().describe('The topic for which to generate the test. If multiple units are selected, this may be "All Topics".'),
   gradeLevel: z.number().describe('The grade level of the test.'),
   subject: z.string().describe('The subject of the test.'),
   instructions: z.string().optional().describe('Additional instructions for generating the test.'),
@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert educator specializing in creating tests for students.
 ${aiContentGenerationRules}
 
-You will use the unit, topic, grade level and subject information to create a comprehensive test.
+You will use the unit(s), topic, grade level, and subject information to create a comprehensive test.
 The test should assess student understanding of the material and align with educational standards.
 Your output must contain two main sections, clearly marked:
 1. A 'STUDENT VERSION START ---' section, followed by the complete test for the student.
@@ -46,7 +46,7 @@ Your output must contain two main sections, clearly marked:
 
 Use appropriate section markers like 'WORKSHEET SECTION A: Multiple Choice' or 'WORKSHEET SECTION B: Short Answer' to structure the test.
 
-Unit: {{{unit}}}
+Unit(s): {{{unit}}}
 Topic: {{{topic}}}
 Grade Level: {{{gradeLevel}}}
 Subject: {{{subject}}}

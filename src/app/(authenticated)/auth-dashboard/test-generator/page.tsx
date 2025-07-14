@@ -32,11 +32,12 @@ import GeneratingAnimation from '@/components/common/GeneratingAnimation';
 import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Lock } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
     Object.values(modules).flat().forEach(module => {
-        const subject = curriculumData.subjects.find(s => s.toLowerCase().replace(/_/g, ' ') === module.name.split('(')[0].trim().toLowerCase() || s.toLowerCase().replace(/_/g, ' ') === module.name.split(" ")[1]?.toLowerCase());
+        const subject = baseCurriculumData.subjects.find(s => s.toLowerCase().replace(/_/g, ' ') === module.name.split('(')[0].trim().toLowerCase() || s.toLowerCase().replace(/_/g, ' ') === module.name.split(" ")[1]?.toLowerCase());
         if(subject) {
             mapping[module.id] = subject;
         } else if (module.name.includes("Biology")) mapping[module.id] = "Biology";
@@ -80,20 +81,26 @@ export default function TestGeneratorPage() {
   // Form State
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [selectedGrade, setSelectedGrade] = useState<number>(9);
-  const [selectedUnit, setSelectedUnit] = useState<string>('');
+  const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [customPrompt, setCustomPrompt] = useState('');
 
   // Curriculum structure states
   const [units, setUnits] = useState<string[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
+  
+  const handleUnitChange = (unit: string) => {
+    setSelectedUnits(prev => 
+      prev.includes(unit) ? prev.filter(u => u !== unit) : [...prev, unit]
+    );
+  };
 
   // Reset and update dropdowns based on selections
   useEffect(() => {
     if (selectedSubject) {
       const subjectContent = baseCurriculumData.content[selectedSubject];
       setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
-      setSelectedUnit('');
+      setSelectedUnits([]);
       setSelectedTopic('');
     } else {
       setUnits([]);
@@ -101,34 +108,47 @@ export default function TestGeneratorPage() {
   }, [selectedSubject]);
 
   useEffect(() => {
-    if (selectedSubject && selectedUnit) {
+    // If only one unit is selected, populate topics for that unit.
+    if (selectedSubject && selectedUnits.length === 1) {
       const unitContent =
-        baseCurriculumData.content[selectedSubject]?.units[selectedUnit];
+        baseCurriculumData.content[selectedSubject]?.units[selectedUnits[0]];
       setTopics(unitContent ? Object.keys(unitContent.topics) : []);
       setSelectedTopic('');
     } else {
+      // If multiple or no units are selected, clear topics.
       setTopics([]);
+      setSelectedTopic('');
     }
-  }, [selectedSubject, selectedUnit]);
+  }, [selectedSubject, selectedUnits]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSubject || !selectedUnit || !selectedTopic) {
+    if (!selectedSubject || selectedUnits.length === 0) {
       toast({
         title: 'Missing Information',
-        description: 'Please select a subject, unit, and topic.',
+        description: 'Please select a subject and at least one unit.',
         variant: 'destructive',
       });
       return;
     }
+    // If only one unit is selected, topic is required.
+    if (selectedUnits.length === 1 && !selectedTopic) {
+         toast({
+            title: 'Missing Information',
+            description: 'Please select a topic for the selected unit.',
+            variant: 'destructive',
+        });
+        return;
+    }
+
     setIsLoading(true);
     setGeneratedContent(null);
 
     const input: GenerateTestInput = {
       subject: selectedSubject,
       gradeLevel: selectedGrade,
-      unit: selectedUnit,
-      topic: selectedTopic,
+      unit: selectedUnits.join(', '), // Join units for the AI
+      topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics', // Use topic only if one unit is selected
       instructions: customPrompt,
     };
 
@@ -150,7 +170,7 @@ export default function TestGeneratorPage() {
 
   const handleReset = () => {
     setSelectedSubject('');
-    setSelectedUnit('');
+    setSelectedUnits([]);
     setSelectedTopic('');
     setCustomPrompt('');
     setGeneratedContent(null);
@@ -303,35 +323,39 @@ export default function TestGeneratorPage() {
             </Select>
           </div>
           <div>
-            <Label>Unit</Label>
-            <Select
-              value={selectedUnit}
-              onValueChange={setSelectedUnit}
-              disabled={units.length === 0}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Unit" />
-              </SelectTrigger>
-              <SelectContent>
-                {units.map((unit) => (
-                  <SelectItem key={unit} value={unit}>
-                    {unit}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label>Unit(s)</Label>
+             <ScrollArea className="h-40 rounded-md border p-4">
+                <div className="space-y-2">
+                    {units.length > 0 ? units.map((unit) => (
+                        <div key={unit} className="flex items-center space-x-2">
+                            <Checkbox
+                                id={unit}
+                                checked={selectedUnits.includes(unit)}
+                                onCheckedChange={() => handleUnitChange(unit)}
+                            />
+                            <label
+                                htmlFor={unit}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                {unit}
+                            </label>
+                        </div>
+                    )) : (
+                        <p className="text-sm text-muted-foreground">Please select a subject to see available units.</p>
+                    )}
+                </div>
+            </ScrollArea>
           </div>
           <div>
             <Label>Topic</Label>
             <Select
               value={selectedTopic}
               onValueChange={setSelectedTopic}
-              disabled={topics.length === 0}
-              required
+              disabled={selectedUnits.length !== 1}
+              required={selectedUnits.length === 1}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select Topic" />
+                <SelectValue placeholder={selectedUnits.length === 1 ? "Select Topic" : "Select a single unit to enable topics"} />
               </SelectTrigger>
               <SelectContent>
                 {topics.map((topic) => (
