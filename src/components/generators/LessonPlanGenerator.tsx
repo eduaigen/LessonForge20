@@ -38,20 +38,26 @@ import StyledContentDisplay from '../common/StyledContentDisplay';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import AiTeacherTools from './AiTeacherTools';
 
-// Helper function to dynamically import ELA curriculum
-const getElaCurriculum = async (gradeTitle: string) => {
-  switch (gradeTitle) {
-    case 'ELA 9th Grade':
-      return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
-    case 'ELA 10th Grade':
-      return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
-    case 'ELA 11th Grade':
-      return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
-    case 'ELA 12th Grade':
-      return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
-    default:
-      return null;
-  }
+// Helper function to dynamically import curriculum
+const getDynamicCurriculum = async (gradeTitle: string): Promise<CurriculumContent | null> => {
+    if (gradeTitle.startsWith('ELA')) {
+        switch (gradeTitle) {
+            case 'ELA 9th Grade':
+                return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
+            case 'ELA 10th Grade':
+                return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
+            case 'ELA 11th Grade':
+                return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
+            case 'ELA 12th Grade':
+                return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
+            default:
+                return null;
+        }
+    }
+    if (gradeTitle === 'NV Biology') {
+        return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+    }
+    return null;
 };
 
 
@@ -87,10 +93,14 @@ export default function LessonPlanGenerator() {
   useEffect(() => {
     const loadCurriculum = async () => {
         const title = searchParams.get('title');
-        if (title && title.startsWith('ELA')) {
-            const elaContent = await getElaCurriculum(title);
-            if (elaContent) {
-                const newContent: CurriculumContent = { 'Literature': elaContent };
+        if (title) {
+            const dynamicContent = await getDynamicCurriculum(title);
+            if (dynamicContent) {
+                // The dynamic content contains its own subject key, so we merge it in.
+                // For example, ELA curriculum files are structured as { units: { ... } }
+                // and should be placed under the "Literature" key.
+                const subjectKey = title.startsWith('ELA') ? 'Literature' : title;
+                const newContent: CurriculumContent = { [subjectKey]: dynamicContent };
                 setCurriculumData(prev => ({ ...prev, content: { ...prev.content, ...newContent }}));
             }
         }
@@ -157,7 +167,6 @@ export default function LessonPlanGenerator() {
 
     const input: GenerateLessonPlanInput = {
       subject: selectedSubject,
-      gradeLevel: '9', // Defaulting grade, can be removed if not needed by AI
       unit: selectedUnit,
       topic: selectedTopic,
       lessonTitle: selectedLesson,
@@ -368,3 +377,5 @@ export default function LessonPlanGenerator() {
     </div>
   );
 }
+
+    

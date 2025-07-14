@@ -40,29 +40,40 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
     const subjectModules = { ...modules };
-    delete subjectModules.tools; // Exclude tools from this mapping
+    // We don't want to include tools as selectable subjects in the generator
+    delete subjectModules.tools; 
 
     Object.values(subjectModules).flat().forEach(module => {
-      if (module.name === "NV Biology" || module.name === "NGSS Biology (OpenSciEd)" || module.name === "AP Biology") {
-          mapping[module.id] = module.name;
-      } else {
-          mapping[module.id] = subjectNameToCurriculumKey(module.name);
-      }
+        mapping[module.id] = module.name;
     });
     return mapping;
 };
 
 // A reverse mapping to find the key in curriculumData.content
 const subjectNameToCurriculumKey = (subjectName: string): string => {
-    if (subjectName.includes('NV Biology') || subjectName.includes('NGSS Biology') || subjectName.includes('AP Biology')) return 'Biology';
-    if (subjectName.includes('Chemistry')) return 'Chemistry';
-    if (subjectName.includes('Physics')) return 'Physics';
-    if (subjectName.includes('Earth')) return 'Earth_Science';
-    if (subjectName.includes('Health')) return 'Health';
-    if (subjectName.includes('Math')) return 'Math';
-    if (subjectName.includes('ELA')) return 'Literature';
-    if (subjectName.includes('History') || subjectName.includes('Government')) return 'History';
-    return subjectName;
+    switch(subjectName) {
+        case "NV Biology": return "NV Biology";
+        case "NGSS Biology (OpenSciEd)": return "NGSS Biology (OpenSciEd)";
+        case "AP Biology": return "AP Biology";
+        case "NGSS Chemistry (OpenSciEd)": return "Chemistry";
+        case "NGSS Physics (OpenSciEd)": return "Physics";
+        case "Earth and Space Science": return "Earth_Science";
+        case "Health": return "Health";
+        case "Illustrative Math Algebra 1":
+        case "Illustrative Math Algebra 2":
+        case "Illustrative Math Geometry":
+             return "Math";
+        case "ELA 9th Grade":
+        case "ELA 10th Grade":
+        case "ELA 11th Grade":
+        case "ELA 12th Grade":
+             return "Literature";
+        case "Global History I & II":
+        case "US History & Government":
+        case "Government & Economics":
+             return "History";
+        default: return subjectName;
+    }
 }
 
 interface TestQuestion {
@@ -92,7 +103,8 @@ export default function TestGeneratorPage() {
 
   const availableSubjects = useMemo(() => {
     const subjectModules = { ...modules };
-    delete subjectModules.tools; // Exclude tools from the list of available subjects
+    // Exclude tools from the list of available subjects
+    delete subjectModules.tools; 
 
     if (isAdmin) return Object.values(subjectModules).flat().map(m => m.name);
     
@@ -585,3 +597,5 @@ export default function TestGeneratorPage() {
     </>
   );
 }
+
+    

@@ -15,11 +15,9 @@ export type CurriculumContent = {
 
 export const curriculumData: {
   subjects: string[];
-  grades: number[];
   content: CurriculumContent;
 } = {
-  subjects: ['AP Biology', 'Biology', 'Chemistry', 'Earth_Science', 'Physics', 'History', 'Literature', 'Health', 'Math'],
-  grades: [9, 10, 11, 12],
+  subjects: ['AP Biology', 'NGSS Biology (OpenSciEd)', 'NV Biology', 'Chemistry', 'Earth_Science', 'Physics', 'History', 'Literature', 'Health', 'Math'],
   content: {
     'AP Biology': {
         units: {
@@ -117,7 +115,7 @@ export const curriculumData: {
             }
         }
     },
-    'Biology': {
+    'NGSS Biology (OpenSciEd)': {
       units: {
         "The Marathon Runner": {
             topics: {
@@ -304,6 +302,7 @@ export const curriculumData: {
         }
     }
     },
+    'NV Biology': {},
     'Earth_Science': {
         units: {
             "Discovering New Worlds": {
@@ -582,7 +581,7 @@ export const curriculumData: {
             "Global History Regents Review": { "lessons": ["Global History Regents Review"] }
           }
         },
-        "Constitutional Foundations": {
+         "Constitutional Foundations": {
           topics: {
             "Colonial America": { "lessons": ["Colonial America"] },
             "Constitutional Convention": { "lessons": ["Constitutional Convention"] },
@@ -652,9 +651,7 @@ export const curriculumData: {
         }
       }
     },
-    Literature: {
-      units: {}
-    },
+    Literature: {},
     Health: {
         units: {
             "Communication & Healthy Relationships": {
@@ -1285,3 +1282,5 @@ export const curriculumData: {
     }
   }
 };
+
+    
