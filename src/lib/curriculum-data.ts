@@ -1124,6 +1124,293 @@ export const curriculumData: {
               ]
             }
           }
+        },
+        "Geometry - Unit 1: Constructions and Rigid Transformations": {
+            topics: {
+                "Section A: Constructions": {
+                    lessons: [
+                        "Lesson 1: Build It",
+                        "Lesson 2: Constructing Patterns",
+                        "Lesson 3: Construction Techniques 1: Perpendicular Bisectors",
+                        "Lesson 4: Construction Techniques 2: Equilateral Triangles",
+                        "Lesson 5: Construction Techniques 3: Perpendicular Lines and Angle Bisectors",
+                        "Lesson 6: Construction Techniques 4: Parallel and Perpendicular Lines",
+                        "Lesson 7: Construction Techniques 5: Squares",
+                        "Lesson 8: Using Technology for Constructions",
+                        "Lesson 9: Speedy Delivery"
+                    ]
+                },
+                "Section B: Defining Rigid Transformations": {
+                    lessons: [
+                        "Lesson 10: Rigid Transformations",
+                        "Lesson 11: Defining Reflections",
+                        "Lesson 12: Defining Translations",
+                        "Lesson 13: Incorporating Rotations",
+                        "Lesson 14: Defining Rotations"
+                    ]
+                },
+                "Section C: Working with Rigid Transformations": {
+                    lessons: [
+                        "Lesson 15: Symmetry",
+                        "Lesson 16: More Symmetry",
+                        "Lesson 17: Working with Rigid Transformations",
+                        "Lesson 18: Practicing Point-by-Point Transformations"
+                    ]
+                },
+                "Section D: Evidence and Proof": {
+                    lessons: [
+                        "Lesson 19: Evidence, Angles, and Proof",
+                        "Lesson 20: Transformations, Transversals, and Proof",
+                        "Lesson 21: One Hundred Eighty"
+                    ]
+                },
+                "Section E: Let's Put It to Work": {
+                    lessons: [
+                        "Lesson 22: Now What Can You Build?"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 2: Congruence": {
+            topics: {
+                "Section A: Congruent Figures": {
+                    lessons: [
+                        "Lesson 1: Congruent Parts, Part 1",
+                        "Lesson 2: Congruent Parts, Part 2",
+                        "Lesson 3: Congruent Triangles, Part 1",
+                        "Lesson 4: Congruent Triangles, Part 2",
+                        "Lesson 5: Points, Segments, and Zigzags"
+                    ]
+                },
+                "Section B: Triangle Congruence Theorems": {
+                    lessons: [
+                        "Lesson 6: Side-Angle-Side Triangle Congruence",
+                        "Lesson 7: Angle-Side-Angle Triangle Congruence",
+                        "Lesson 8: The Perpendicular Bisector Theorem",
+                        "Lesson 9: Side-Side-Side Triangle Congruence",
+                        "Lesson 10: Practicing Proofs",
+                        "Lesson 11: Side-Side-Angle (Sometimes) Congruence"
+                    ]
+                },
+                "Section C: Proofs about Quadrilaterals": {
+                    lessons: [
+                        "Lesson 12: Proofs about Quadrilaterals",
+                        "Lesson 13: Proofs about Parallelograms",
+                        "Lesson 14: Bisect It"
+                    ]
+                },
+                "Section D: Let’s Put It to Work": {
+                    lessons: [
+                        "Lesson 15: Congruence for Quadrilaterals"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 3: Similarity": {
+            topics: {
+                "Section A: Properties of Dilations": {
+                    lessons: [
+                        "Lesson 1: Scale Drawings",
+                        "Lesson 2: Scale of the Solar System",
+                        "Lesson 3: Measuring Dilations",
+                        "Lesson 4: Dilating Lines and Angles",
+                        "Lesson 5: Splitting Triangle Sides with Dilation (Part 1)"
+                    ]
+                },
+                "Section B: Similarity Transformations and Proportional Reasoning": {
+                    lessons: [
+                        "Lesson 6: Connecting Similarity and Transformations",
+                        "Lesson 7: Reasoning about Similarity with Transformations",
+                        "Lesson 8: Are They All Similar?",
+                        "Lesson 9: Conditions for Triangle Similarity",
+                        "Lesson 10: Other Conditions for Triangle Similarity",
+                        "Lesson 11: Splitting Triangle Sides with Dilation (Part 2)",
+                        "Lesson 12: Practice with Proportional Relationships"
+                    ]
+                },
+                "Section C: Similarity in Right Triangles": {
+                    lessons: [
+                        "Lesson 13: Using the Pythagorean Theorem and Similarity",
+                        "Lesson 14: Proving the Pythagorean Theorem",
+                        "Lesson 15: Converse of the Pythagorean Theorem",
+                        "Lesson 16: Finding All the Unknown Values in Triangles"
+                    ]
+                },
+                "Section D: Let’s Put It to Work": {
+                    lessons: [
+                        "Lesson 17: Reflection Similarity"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 4: Right Triangle Trigonometry": {
+            topics: {
+                "Section A: Angles and Steepness": {
+                    lessons: [
+                        "Lesson 1: Angles and Steepness",
+                        "Lesson 2: Half a Square",
+                        "Lesson 3: Half an Equilateral Triangle",
+                        "Lesson 4: Ratios in Right Triangles",
+                        "Lesson 5: Working with Ratios in Right Triangles"
+                    ]
+                },
+                "Section B: Defining Trigonometric Ratios": {
+                    lessons: [
+                        "Lesson 6: Working with Trigonometric Ratios",
+                        "Lesson 7: Applying Ratios in Right Triangles",
+                        "Lesson 8: Sine and Cosine in the Same Right Triangle",
+                        "Lesson 9: Trigonometry Squared",
+                        "Lesson 10: Using Trigonometric Ratios to Find Angles"
+                    ]
+                },
+                "Section C: Let’s Put It to Work": {
+                    lessons: [
+                        "Lesson 11: Solving Problems with Trigonometry",
+                        "Lesson 12: Approximating Pi"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 5: Solid Geometry": {
+            topics: {
+                "Section A: Cross-Sections, Scaling, and Area": {
+                    lessons: [
+                        "Lesson 1: Solids of Rotation",
+                        "Lesson 2: Slicing Solids",
+                        "Lesson 3: Creating Cross-Sections by Dilating",
+                        "Lesson 4: Scaling and Area",
+                        "Lesson 5: Scaling and Unscaling"
+                    ]
+                },
+                "Section B: Scaling Solids": {
+                    lessons: [
+                        "Lesson 6: Scaling Solids",
+                        "Lesson 7: The Root of the Problem",
+                        "Lesson 8: Speaking of Scaling"
+                    ]
+                },
+                "Section C: Prism and Cylinder Volumes": {
+                    lessons: [
+                        "Lesson 9: Cylinder Volumes",
+                        "Lesson 10: Cross-Sections and Volume",
+                        "Lesson 11: Prisms Practice"
+                    ]
+                },
+                "Section D: Understanding Pyramid Volumes": {
+                    lessons: [
+                        "Lesson 12: Prisms and Pyramids",
+                        "Lesson 13: Building a Volume Formula for a Pyramid",
+                        "Lesson 14: Working with Pyramids",
+                        "Lesson 15: Putting All the Solids Together"
+                    ]
+                },
+                "Section E: Let’s Put It to Work": {
+                    lessons: [
+                        "Lesson 16: Surface Area and Volume",
+                        "Lesson 17: Volume and Density",
+                        "Lesson 18: Volume and Graphing"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 6: Coordinate Geometry": {
+            topics: {
+                "Section A: Transformations in the Plane": {
+                    lessons: [
+                        "Lesson 1: Rigid Transformations in a Plane",
+                        "Lesson 2: Transformations as Functions",
+                        "Lesson 3: Types of Transformations"
+                    ]
+                },
+                "Section B: Distances, Circles, and Parabolas": {
+                    lessons: [
+                        "Lesson 4: Distances and Circles",
+                        "Lesson 5: Squares and Circles",
+                        "Lesson 6: Completing the Square",
+                        "Lesson 7: Distances and Parabolas",
+                        "Lesson 8: Equations and Graphs"
+                    ]
+                },
+                "Section C: Proving Geometric Theorems Algebraically": {
+                    lessons: [
+                        "Lesson 9: Equations of Lines",
+                        "Lesson 10: Parallel Lines in the Plane",
+                        "Lesson 11: Perpendicular Lines in the Plane",
+                        "Lesson 12: It’s All on the Line",
+                        "Lesson 13: Intersection Points",
+                        "Lesson 14: Coordinate Proof",
+                        "Lesson 15: Weighted Averages",
+                        "Lesson 16: Weighted Averages in a Triangle",
+                        "Lesson 17: Lines in Triangles"
+                    ]
+                },
+                "Section D: Let’s Put It to Work": {
+                    lessons: [
+                        "Lesson 18: Applying Area and Perimeter on the Plane"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 7: Circles": {
+            topics: {
+                "Section A: Lines, Angles, and Circles": {
+                    lessons: [
+                        "Lesson 1: Lines, Angles, and Curves",
+                        "Lesson 2: Inscribed Angles",
+                        "Lesson 3: Tangent Lines"
+                    ]
+                },
+                "Section B: Polygons and Circles": {
+                    lessons: [
+                        "Lesson 4: Quadrilaterals in Circles",
+                        "Lesson 5: Triangles in Circles",
+                        "Lesson 6: A Special Point",
+                        "Lesson 7: Circles in Triangles"
+                    ]
+                },
+                "Section C: Measuring Circles": {
+                    lessons: [
+                        "Lesson 8: Arcs and Sectors",
+                        "Lesson 9: Part to Whole",
+                        "Lesson 10: Angles, Arcs, and Radii",
+                        "Lesson 11: A New Way to Measure Angles",
+                        "Lesson 12: Radian Sense",
+                        "Lesson 13: Using Radians"
+                    ]
+                },
+                "Section D: Let’s Put It to Work": {
+                    lessons: [
+                        "Lesson 14: Putting It All Together"
+                    ]
+                }
+            }
+        },
+        "Geometry - Unit 8: Conditional Probability": {
+            topics: {
+                "Section A: Up to Chance": {
+                    lessons: [
+                        "Lesson 1: Up to Chance",
+                        "Lesson 2: Playing with Probability",
+                        "Lesson 3: Sample Spaces",
+                        "Lesson 4: Tables of Relative Frequencies",
+                        "Lesson 5: Combining Events",
+                        "Lesson 6: The Addition Rule"
+                    ]
+                },
+                "Section B: Related Events": {
+                    lessons: [
+                        "Lesson 7: Related Events",
+                        "Lesson 8: Conditional Probability",
+                        "Lesson 9: Using Tables for Conditional Probability",
+                        "Lesson 10: Using Probability to Determine Whether Events Are Independent"
+                    ]
+                },
+                "Section C: Let's Put It to Work": {
+                    lessons: [
+                        "Lesson 11: Probabilities in Games"
+                    ]
+                }
+            }
         }
       }
     }
