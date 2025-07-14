@@ -142,14 +142,14 @@ export default function LessonPlanGenerator() {
   };
 
   const ResultDisplay = () => (
-    <Card className="h-full">
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Generated Lesson Plan</CardTitle>
         <CardDescription>
           Review the AI-generated lesson plan below.
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1 flex flex-col">
         {isLoading ? (
           <div className="space-y-4 p-4">
             <Skeleton className="h-4 w-3/4" />
@@ -159,15 +159,15 @@ export default function LessonPlanGenerator() {
             <Skeleton className="h-4 w-5/6" />
           </div>
         ) : generatedContent ? (
-          <ScrollArea className="h-[calc(100vh-20rem)]">
+          <ScrollArea className="flex-1">
              <div className="prose prose-sm max-w-none dark:prose-invert p-4">
                 <Markdown>{generatedContent}</Markdown>
              </div>
           </ScrollArea>
         ) : (
-          <div className="flex flex-col items-center justify-center h-[calc(100vh-20rem)] text-center">
+          <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
             <BookCopy className="w-16 h-16 text-muted-foreground/50" />
-            <p className="mt-4 text-muted-foreground">
+            <p className="mt-4">
               Your generated lesson plan will appear here.
             </p>
           </div>
@@ -182,15 +182,8 @@ export default function LessonPlanGenerator() {
       description="Craft detailed, standards-aligned lesson plans in minutes."
       resultDisplay={<ResultDisplay />}
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Curriculum Focus</CardTitle>
-            <CardDescription>
-              Select the curriculum context for your lesson plan.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <Label>Subject</Label>
@@ -270,17 +263,9 @@ export default function LessonPlanGenerator() {
                 </SelectContent>
                 </Select>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Lesson Details</CardTitle>
-            <CardDescription>
-              Provide the core details for this specific lesson. The AI will generate objectives from this.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        </div>
+        
+        <div className="space-y-4">
             <div>
                 <Label htmlFor="lesson-title">Lesson</Label>
                 <Input
@@ -300,8 +285,7 @@ export default function LessonPlanGenerator() {
                 placeholder="e.g., Focus on group work, include a specific video, address common misconceptions about..."
                 />
             </div>
-          </CardContent>
-        </Card>
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-2">
           <Button type="submit" disabled={isLoading} className="w-full">
