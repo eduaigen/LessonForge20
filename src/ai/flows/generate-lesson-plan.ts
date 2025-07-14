@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -30,7 +31,6 @@ ${lessonPlanFormattingInstruction}
 Generate a complete and detailed lesson plan based on the following inputs.
 The output language MUST be {{language}}.
 
-- **Grade Level:** {{gradeLevel}}
 - **Subject:** {{subject}}
 {{#if unit}}- **Unit:** {{unit}}{{/if}}
 {{#if topic}}- **Topic:** {{topic}}{{/if}}

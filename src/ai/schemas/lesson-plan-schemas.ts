@@ -140,7 +140,6 @@ ${aiContentGenerationRules}
 
 
 export const GenerateLessonPlanInputSchema = z.object({
-  gradeLevel: z.string().describe('The grade level for the lesson plan.'),
   subject: z.string().describe('The subject for the lesson plan.'),
   unit: z.string().optional().describe('The unit for the lesson plan.'),
   topic: z.string().optional().describe('The topic for the lesson plan.'),

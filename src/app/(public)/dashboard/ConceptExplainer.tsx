@@ -17,19 +17,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import {
   explainConcept,
   type ExplainConceptOutput,
 } from '@/ai/flows/explain-concept';
-import { curriculumData } from '@/lib/curriculum-data';
 import AiToolContainer from './AiToolContainer';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import StyledContentDisplay from '@/components/common/StyledContentDisplay';
@@ -38,7 +30,6 @@ const FormSchema = z.object({
   concept: z.string().min(10, {
     message: 'Please enter a concept or question of at least 10 characters.',
   }),
-  gradeLevel: z.coerce.number(),
 });
 
 const ResultDisplay = ({ data }: { data: ExplainConceptOutput }) => (
@@ -67,7 +58,6 @@ export default function ConceptExplainer() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       concept: '',
-      gradeLevel: 9,
     },
   });
 
@@ -92,7 +82,7 @@ export default function ConceptExplainer() {
   return (
     <AiToolContainer
       title="Concept Explainer"
-      description="Enter a concept or question and select a grade level to get a clear, concise explanation suitable for students."
+      description="Enter a concept or question to get a clear, concise explanation suitable for students."
       isLoading={isLoading}
       result={result ? <ResultDisplay data={result} /> : null}
     >
@@ -110,33 +100,6 @@ export default function ConceptExplainer() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="gradeLevel"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Grade Level</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(parseInt(value))}
-                  defaultValue={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a grade" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {curriculumData.grades.map((grade) => (
-                      <SelectItem key={grade} value={grade.toString()}>
-                        {`${grade}th Grade`}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
                 <FormMessage />
               </FormItem>
             )}

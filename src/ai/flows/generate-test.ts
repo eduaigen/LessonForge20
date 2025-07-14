@@ -16,7 +16,6 @@ import { aiContentGenerationRules } from '../schemas/formatting-rules';
 const GenerateTestInputSchema = z.object({
   unit: z.string().describe('The unit or comma-separated list of units for which to generate the test.'),
   topic: z.string().describe('The topic for which to generate the test. If multiple units are selected, this may be "All Topics".'),
-  gradeLevel: z.number().describe('The grade level of the test.'),
   subject: z.string().describe('The subject of the test.'),
   instructions: z.string().optional().describe('Additional instructions for generating the test.'),
 });
@@ -68,7 +67,6 @@ ${aiContentGenerationRules}
 Generate a test based on the following user request.
 
 - **Subject:** {{{subject}}}
-- **Grade Level:** {{{gradeLevel}}}
 - **Unit(s):** {{{unit}}}
 - **Topic:** {{{topic}}}
 {{#if instructions}}- **Additional Instructions:** {{{instructions}}}{{/if}}

@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -14,7 +15,6 @@ import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 const ExplainConceptInputSchema = z.object({
   concept: z.string().describe('The concept or question to be explained.'),
-  gradeLevel: z.coerce.number().optional().describe('The target grade level. If not provided, assume a general audience.'),
 });
 export type ExplainConceptInput = z.infer<typeof ExplainConceptInputSchema>;
 
@@ -37,11 +37,7 @@ ${aiContentGenerationRules}
 
 User Input:
 - Concept: {{{concept}}}
-{{#if gradeLevel}}
-- Target Audience: {{{gradeLevel}}}th grade students
-{{else}}
 - Target Audience: A general audience with no prior knowledge.
-{{/if}}
 
 Processing Steps:
 1. Define the Concept: Provide a clear, straightforward definition.

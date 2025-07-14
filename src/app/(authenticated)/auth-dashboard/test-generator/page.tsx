@@ -37,17 +37,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
     Object.values(modules).flat().forEach(module => {
-        // Use the specific module name for mapping
         mapping[module.id] = module.name;
     });
-    // Add premium tools
     mapping['price_1Pg12lAk4y2zY5d6pQrStUvW'] = 'All'; // Test Generator can be for any subject
     return mapping;
 };
 
 // A reverse mapping to find the key in curriculumData.content
 const subjectNameToCurriculumKey = (subjectName: string): string => {
-    if (subjectName.includes('Biology')) return 'Biology';
+    if (subjectName.includes('NV Biology') || subjectName.includes('NGSS Biology') || subjectName.includes('AP Biology')) return 'Biology';
     if (subjectName.includes('Chemistry')) return 'Chemistry';
     if (subjectName.includes('Physics')) return 'Physics';
     if (subjectName.includes('Earth')) return 'Earth_Science';
@@ -84,7 +82,6 @@ export default function TestGeneratorPage() {
 
   // Form State
   const [selectedSubject, setSelectedSubject] = useState<string>('');
-  const [selectedGrade, setSelectedGrade] = useState<number>(9);
   const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [customPrompt, setCustomPrompt] = useState('');
@@ -149,7 +146,6 @@ export default function TestGeneratorPage() {
 
     const input: GenerateTestInput = {
       subject: selectedSubject, // Pass the specific name like "NGSS Biology"
-      gradeLevel: selectedGrade,
       unit: selectedUnits.join(', '),
       topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics',
       instructions: customPrompt,
@@ -306,25 +302,7 @@ export default function TestGeneratorPage() {
               </SelectContent>
             </Select>
           </div>
-          <div>
-            <Label>Grade Level</Label>
-            <Select
-              value={String(selectedGrade)}
-              onValueChange={(val) => setSelectedGrade(Number(val))}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Grade Level" />
-              </SelectTrigger>
-              <SelectContent>
-                {baseCurriculumData.grades.map((grade) => (
-                  <SelectItem key={grade} value={String(grade)}>
-                    {grade}th Grade
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          
           <div>
             <Label>Unit(s)</Label>
              <ScrollArea className="h-40 rounded-md border p-4">
@@ -402,5 +380,3 @@ export default function TestGeneratorPage() {
     </AiToolLayout>
   );
 }
-
-    

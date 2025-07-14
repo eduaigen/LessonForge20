@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -15,7 +16,6 @@ import { aiContentGenerationRules } from '../schemas/formatting-rules';
 const GenerateLabExperimentInputSchema = z.object({
   lessonDescription: z.string().describe('The description of the lesson.'),
   subject: z.string().describe('The science subject (e.g., Biology, Chemistry, Physics).'),
-  gradeLevel: z.number().describe('The grade level of the students.'),
   topic: z.string().describe('The specific topic of the lab experiment.'),
 });
 export type GenerateLabExperimentInput = z.infer<typeof GenerateLabExperimentInputSchema>;
@@ -52,11 +52,10 @@ Use the following section headers:
 - CONCLUSION
 
 Subject: {{{subject}}}
-Grade Level: {{{gradeLevel}}}
 Lesson Description: {{{lessonDescription}}}
 Topic: {{{topic}}}
 
-Ensure the lab experiment is appropriate for the specified grade level and aligns with the lesson description.
+Ensure the lab experiment is appropriate for the specified subject and aligns with the lesson description.
 Consider culturally inclusive frameworks in the design of the experiment.
 Be very specific and assume the student knows nothing about the topic.
 The output should be a single block of text formatted according to the rules provided.
