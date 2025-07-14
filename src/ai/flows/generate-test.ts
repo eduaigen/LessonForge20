@@ -15,7 +15,7 @@ import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 const GenerateTestInputSchema = z.object({
   unit: z.string().describe('The unit or comma-separated list of units for which to generate the test.'),
-  topic: z.string().describe('The topic for which to generate the test. If multiple units are selected, this may be "All Topics".'),
+  topic: z.string().describe('The topic or comma-separated list of topics for which to generate the test. If multiple units are selected, this may be "All Topics".'),
   subject: z.string().describe('The subject of the test.'),
   instructions: z.string().optional().describe('Additional instructions for generating the test.'),
   numMultipleChoice: z.number().optional().describe('Number of multiple-choice questions.'),
@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
   name: 'generateTestPrompt',
   input: {schema: GenerateTestInputSchema},
   output: {schema: GenerateTestOutputSchema},
-  prompt: `You are an expert educator and exam creator specializing in New York State Regents Examinations and NGSS-aligned assessments. Your task is to generate a complete, print-ready test based on the provided curriculum details. You must adhere to the following rules with 100% fidelity.
+  prompt: `You are an expert educator and exam creator specializing in New York State Regents Examinations and NGSS-aligned assessments. Your task is to generate a complete, print-ready test based on the provided curriculum details and standards. You must adhere to the following rules with 100% fidelity.
 
 **FOR ALL SCIENCE SUBJECTS (Biology, Earth Science, Physics, Chemistry): You MUST use the Cluster Question Test Generation Rules.**
 **FOR ALL OTHER SUBJECTS (History, ELA, Math): You MUST use the Regents-Style Test Generation Rules.**
@@ -82,11 +82,11 @@ ${aiContentGenerationRules}
 
 
 **Generation Task:**
-Generate a test based on the following user request. The final design must meet the required format for the specified subject.
+Generate a test based on the following user request. The final design must meet the required format for the specified subject. The questions MUST be derived from the curriculum context provided in the Unit(s) and Topic(s).
 
 -   **Subject:** {{{subject}}}
 -   **Unit(s):** {{{unit}}}
--   **Topic:** {{{topic}}}
+-   **Topic(s):** {{{topic}}}
 
 **Test Composition:**
 {{#if numMultipleChoice}}- Multiple Choice Questions: {{numMultipleChoice}}{{/if}}

@@ -111,7 +111,7 @@ export default function TestGeneratorPage() {
   // Form State
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
-  const [selectedTopic, setSelectedTopic] = useState<string>('');
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [customPrompt, setCustomPrompt] = useState('');
   const [numMultipleChoice, setNumMultipleChoice] = useState<number | undefined>();
   const [numShortAnswer, setNumShortAnswer] = useState<number | undefined>();
@@ -128,13 +128,19 @@ export default function TestGeneratorPage() {
     );
   };
 
+  const handleTopicChange = (topic: string) => {
+    setSelectedTopics(prev =>
+        prev.includes(topic) ? prev.filter(t => t !== topic) : [...prev, topic]
+    );
+  };
+
   useEffect(() => {
     if (selectedSubject) {
       const curriculumKey = subjectNameToCurriculumKey(selectedSubject);
       const subjectContent = baseCurriculumData.content[curriculumKey];
       setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
       setSelectedUnits([]);
-      setSelectedTopic('');
+      setSelectedTopics([]);
     } else {
       setUnits([]);
     }
@@ -146,11 +152,10 @@ export default function TestGeneratorPage() {
       const unitContent =
         baseCurriculumData.content[curriculumKey]?.units[selectedUnits[0]];
       setTopics(unitContent ? Object.keys(unitContent.topics) : []);
-      setSelectedTopic('');
     } else {
       setTopics([]);
-      setSelectedTopic('');
     }
+    setSelectedTopics([]);
   }, [selectedSubject, selectedUnits]);
 
   const parseTestContent = (content: string): { student: TestQuestion[], answer: TestQuestion[] } => {
@@ -194,10 +199,10 @@ export default function TestGeneratorPage() {
       });
       return;
     }
-    if (selectedUnits.length === 1 && !selectedTopic) {
+    if (selectedUnits.length === 1 && selectedTopics.length === 0) {
          toast({
             title: 'Missing Information',
-            description: 'Please select a topic for the selected unit.',
+            description: 'Please select at least one topic for the selected unit.',
             variant: 'destructive',
         });
         return;
@@ -210,7 +215,7 @@ export default function TestGeneratorPage() {
     const input: GenerateTestInput = {
       subject: selectedSubject,
       unit: selectedUnits.join(', '),
-      topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics',
+      topic: selectedUnits.length === 1 ? selectedTopics.join(', ') : 'All Topics',
       instructions: customPrompt,
       numMultipleChoice: numMultipleChoice,
       numShortAnswer: numShortAnswer,
@@ -238,7 +243,7 @@ export default function TestGeneratorPage() {
   const handleReset = () => {
     setSelectedSubject('');
     setSelectedUnits([]);
-    setSelectedTopic('');
+    setSelectedTopics([]);
     setCustomPrompt('');
     setNumMultipleChoice(undefined);
     setNumShortAnswer(undefined);
@@ -280,7 +285,7 @@ export default function TestGeneratorPage() {
               originalQuestion: questionToRegenerate.question,
               subject: selectedSubject,
               unit: selectedUnits.join(', '),
-              topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics',
+              topic: selectedUnits.length === 1 ? selectedTopics.join(', ') : 'All Topics',
           });
           
           setStudentVersion(prev => prev.map(q => 
@@ -452,17 +457,17 @@ export default function TestGeneratorPage() {
             
             <div>
                 <Label>Unit(s)</Label>
-                <ScrollArea className="h-40 rounded-md border p-4">
+                <ScrollArea className="h-32 rounded-md border p-4">
                     <div className="space-y-2">
                         {units.length > 0 ? units.map((unit) => (
                             <div key={unit} className="flex items-center space-x-2">
                                 <Checkbox
-                                    id={unit}
+                                    id={`unit-${unit}`}
                                     checked={selectedUnits.includes(unit)}
                                     onCheckedChange={() => handleUnitChange(unit)}
                                 />
                                 <label
-                                    htmlFor={unit}
+                                    htmlFor={`unit-${unit}`}
                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 >
                                     {unit}
@@ -475,24 +480,30 @@ export default function TestGeneratorPage() {
                 </ScrollArea>
             </div>
             <div>
-                <Label>Topic</Label>
-                <Select
-                value={selectedTopic}
-                onValueChange={setSelectedTopic}
-                disabled={selectedUnits.length !== 1}
-                required={selectedUnits.length === 1}
-                >
-                <SelectTrigger>
-                    <SelectValue placeholder={selectedUnits.length === 1 ? "Select Topic" : "Select a single unit to enable topics"} />
-                </SelectTrigger>
-                <SelectContent>
-                    {topics.map((topic) => (
-                    <SelectItem key={topic} value={topic}>
-                        {topic}
-                    </SelectItem>
-                    ))}
-                </SelectContent>
-                </Select>
+                <Label>Topic(s)</Label>
+                 <ScrollArea className="h-32 rounded-md border p-4">
+                    <div className="space-y-2">
+                        {topics.length > 0 && selectedUnits.length === 1 ? topics.map((topic) => (
+                            <div key={topic} className="flex items-center space-x-2">
+                                <Checkbox
+                                    id={`topic-${topic}`}
+                                    checked={selectedTopics.includes(topic)}
+                                    onCheckedChange={() => handleTopicChange(topic)}
+                                />
+                                <label
+                                    htmlFor={`topic-${topic}`}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    {topic}
+                                </label>
+                            </div>
+                        )) : (
+                            <p className="text-sm text-muted-foreground">
+                                {selectedUnits.length > 1 ? "Topic selection is disabled for multiple units." : "Please select a single unit to see available topics."}
+                            </p>
+                        )}
+                    </div>
+                </ScrollArea>
             </div>
             </div>
 
