@@ -150,7 +150,5 @@ export const GenerateLessonPlanInputSchema = z.object({
 });
 export type GenerateLessonPlanInput = z.infer<typeof GenerateLessonPlanInputSchema>;
 
-export const GenerateLessonPlanOutputSchema = z.object({
-  lessonPlan: z.string().describe('The generated lesson plan in structured markdown format.'),
-});
+export const GenerateLessonPlanOutputSchema = z.string().describe('The generated lesson plan in structured markdown format.');
 export type GenerateLessonPlanOutput = z.infer<typeof GenerateLessonPlanOutputSchema>;

@@ -19,18 +19,18 @@ import {
 
 export async function generateLessonPlan(input: GenerateLessonPlanInput): Promise<string> {
   const result = await generateLessonPlanFlow(input);
-  if (!result.lessonPlan) {
+  if (!result) {
     // This could happen if the AI fails or returns an empty string.
     // We can throw an error to be handled by the calling UI component.
     throw new Error('The AI failed to generate a lesson plan. Please try again with a different or more detailed prompt.');
   }
-  return result.lessonPlan;
+  return result;
 }
 
 const prompt = ai.definePrompt({
   name: 'generateLessonPlanPrompt',
   input: {schema: GenerateLessonPlanInputSchema},
-  output: {schema: z.object({ lessonPlan: z.string().nullable() }) },
+  output: {schema: z.string().nullable()},
   prompt: `
 You are an expert teacher creating a lesson plan. 
 ${lessonPlanFormattingInstruction}
@@ -57,6 +57,6 @@ const generateLessonPlanFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return { lessonPlan: output?.lessonPlan ?? "" };
+    return output ?? "";
   }
 );
