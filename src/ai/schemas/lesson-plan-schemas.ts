@@ -2,11 +2,8 @@ import {z} from 'genkit';
 import { aiContentGenerationRules } from './formatting-rules';
 
 export const lessonPlanFormattingInstruction = `
-You are an expert teacher creating a lesson plan. Your output MUST strictly follow the structured format below.
-- Use justified format with the exact section labels (Roman numerals and letters), bold formatting, and 1-line spacing between sections.
-- ALL instructional content (readings, diagrams, questions, etc.) MUST be fully generated and embedded directly within the lesson plan as specified.
-
-${aiContentGenerationRules}
+LESSON PLAN STRUCTURE — REQUIRED OUTPUT FIELDS
+Use justified format with exact section labels, bold formatting, and 1-line spacing between sections.
 
 **I. LESSON OVERVIEW**
 **Unit:** [Insert curriculum-aligned unit name]
@@ -28,92 +25,102 @@ ${aiContentGenerationRules}
 **Lesson Summary:** [Provide a 2–3 sentence teacher-facing summary of the lesson's flow and goals.]
 
 **II. LESSON SEQUENCE**
+Each instructional step (B–H) must include:
+* Label
+* Teacher Actions (bulleted)
+* Expected Student Outputs (bulleted)
+
+All resources used in instruction must be fully generated and included within the lesson. This includes:
+- Reading Passages: 100–250 words, grade-appropriate, aligned to topic
+- Questions: Multiple choice, short response, constructed response
+- Diagrams: Fully rendered labeled scientific diagrams, not text-only descriptions
+- Graphs & Charts: Clear, labeled visuals with axes, titles, and legends
+- Data Tables: Complete and structured with real or simulated values
+- Models: Conceptual visuals or simplified schematics embedded directly
+
 **B. DO NOW (5–8 min)**
 *Teacher Actions:*
-- Post the Essential Question.
-- Prompt students to reflect on the question and use key vocabulary from the previous lesson.
-- Cold call students to share initial thoughts and scaffold understanding.
+- Post the Essential Question
+- Prompt student reflection and vocabulary use
+- Cold call and scaffold
 *Expected Student Outputs:*
-- Students write a 2–3 sentence response in their notebooks.
-- Students verbally use vocabulary terms in their shared responses.
+- 2–3 sentence written response
+- Verbal or notebook use of terms
 ❓ **Student Prompt:** [Include 1 student question prompt tied to the Essential Question here.]
 
 **C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)**
 *Teacher Actions:*
-- Present the embedded reading passage and diagram.
-- Model how to connect vocabulary terms to the concepts in the reading and visual.
-- Use targeted questions to check for and address common misconceptions.
+- Present reading + diagram
+- Model vocabulary and concept connections
+- Check for misconceptions
 *Expected Student Outputs:*
-- Students annotate the reading passage and notes.
-- Students use the diagram to explain the scientific phenomenon.
-- Students provide written or verbal responses to guided prompts.
-📘 **Reading Passage:**
-[Embed a 100–250 word, grade-appropriate reading passage here, directly aligned to the topic.]
-🖼️ **Diagram:**
-[Embed a fully rendered and labeled scientific diagram, chart, or model here. Use the special SVG description format.]
-❓ **Concept-Check Questions:**
-1. [Question 1]
-2. [Question 2]
-3. [Question 3, if applicable]
+- Annotated notes
+- Use of visuals to explain phenomena
+- Written response to guided prompts
+📘 **Reading Passage:** [Embed a 100–250 word, grade-appropriate reading passage here, directly aligned to the topic.]
+🖼️ **Diagram:** [Embed a fully rendered diagram using proper labels and arrows, following the special SVG description format.]
+❓ **Concept-Check Questions:** [Include 2–3 concept-check questions under the reading.]
 
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
 *Teacher Actions:*
-- Organize students into collaborative groups.
-- Provide the embedded graphic organizer, data table, or model for analysis.
-- Facilitate academic dialogue and monitor group progress.
+- Organize into groups
+- Provide a graphic organizer or template
+- Facilitate academic dialogue
 *Expected Student Outputs:*
-- Students complete the scaffolded analysis task in groups.
-- Students engage in collaborative verbal and written explanations.
-📊 **Group Activity Resource:**
-[Embed a complete graph, data table, or visual model for students to analyze, complete, or use.]
+- Completed scaffold
+- Collaborative verbal/written explanations
+📊 **Group Activity Resource:** [Embed a complete graph, data table, or visual model for students to analyze or complete.]
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
 *Teacher Actions:*
-- Launch a quick, technology-based or verbal check for understanding.
-- Analyze student responses in real-time to identify trends in understanding.
-- Provide immediate, targeted feedback to the whole class or small groups.
+- Launch a tech-based or verbal CFU
+- Analyze responses and provide feedback
 *Expected Student Outputs:*
-- Students submit responses to multiple-choice or open-ended questions.
-- Students adjust their initial answers based on class feedback.
-❓ **CFU Items:**
-1. (Multiple Choice) [Question with A, B, C, D options]
-2. (Multiple Choice) [Question with A, B, C, D options]
-3. (Short Response) [Open-ended question requiring a 1-2 sentence answer]
+- Response to MC or open-ended items
+- Adjusted answers based on feedback
+❓ **CFU Items:** [Embed 3 CFU items: 2 multiple choice + 1 short response.]
 
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
 *Teacher Actions:*
-- Clarify expectations for the independent task using a rubric or checklist.
-- Monitor individual student effort and provide targeted support.
+- Clarify expectations with rubric/checklist
+- Monitor individual student effort
 *Expected Student Outputs:*
-- Students produce a written explanation, a completed model, or solve a problem.
-- Students demonstrate use of key vocabulary and content-specific skills.
-✍️ **Student Task:**
-[Embed 1 full CER (Claim-Evidence-Reasoning) prompt or another analytical task. This must include a resource for analysis.]
-📈 **Task Resource:**
-[Embed a graph, data table, or model for students to interpret, label, or extend as part of the performance task.]
+- Written explanation or model
+- Use of vocabulary and content skills
+✍️ **Student Task:** [Embed 1 full CER (Claim-Evidence-Reasoning) prompt or another analytical task. This must include a resource for analysis.]
+📈 **Task Resource:** [Embed a graph, data table, or model for students to interpret, label, or extend as part of the performance task.]
 
 **G. CLOSURE / EXIT TICKET**
 *Teacher Actions:*
-- Revisit the lesson's Aim / Essential Question and key vocabulary.
-- Prompt students to complete the Exit Ticket.
+- Revisit aim/vocabulary
+- Prompt 1-sentence summary or visual reflection
 *Expected Student Outputs:*
-- Students submit a written summary or response.
-- Students demonstrate use of academic vocabulary in their written form.
+- Submission of summary
+- Use of academic vocabulary in written form
 ❓ **Exit Ticket:** [Include 1 exit ticket item, such as a question, matching task, or a prompt requiring use of specific vocabulary.]
 
 **H. HOMEWORK ACTIVITY**
-[Generate a short, meaningful assignment to reinforce or extend the lesson's learning. This should be a complete activity, such as a labeled diagram, a short reading with a question, or a CER prompt.]
+*Teacher Actions:*
+- Explain homework task.
+*Expected Student Outputs:*
+- Completion of homework assignment.
+📝 **Homework:** [Generate a short assignment to reinforce or extend learning (e.g., diagram labeling, CER, reading + question).]
 
 **III. DIFFERENTIATION & SUPPORT**
 *Teacher Actions:*
-- Offer sentence starters for written responses.
-- Provide a leveled or simplified version of the reading passage.
-- Use visuals and manipulatives to support diverse learners.
-- Offer an extension activity or challenge prompt for advanced students.
+- Offer sentence starters, leveled readings, visuals
+- Provide extension activity or challenge prompt
 *Expected Student Outputs:*
-- Students utilize provided scaffolds (e.g., sentence starters, graphic organizers).
-- Students access and use support materials like glossaries or visual aids.
-- Advanced students engage with the extension task.
+- Scaffolded writing or models
+- Visible use of supports (e.g., translated glossary, graphic frame)
+
+AI OUTPUT RULES – NON-NEGOTIABLE
+- Embed all visuals as full diagrams, graphs, tables—not just text descriptions.
+- All questions and tasks must appear at the point of use.
+- Format must match structure exactly (headings, bullets, spacing).
+- No placeholder text or instructional notes in final output.
+- Strict alignment to selected topic and standards.
+${aiContentGenerationRules}
 `;
 
 
