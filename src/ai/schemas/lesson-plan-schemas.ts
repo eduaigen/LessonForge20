@@ -3,7 +3,7 @@ import { aiContentGenerationRules } from './formatting-rules';
 
 export const lessonPlanFormattingInstruction = `
 LESSON PLAN STRUCTURE — REQUIRED OUTPUT FIELDS
-Use justified format with exact section labels, bold formatting, and 1-line spacing between sections.
+Use justified format with exact section labels, bold formatting, and 1-line spacing between sections. The entire output must be a single, clean block of text organized as a clear outline. Main parts should be bolded, and their components should be properly indented.
 
 **I. LESSON OVERVIEW**
 **Unit:** [Insert curriculum-aligned unit name]
