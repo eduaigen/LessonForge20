@@ -5,6 +5,7 @@ config();
 import '@/ai/flows/generate-lesson-plan.ts';
 import '@/ai/flows/generate-teacher-tool.ts';
 import '@/ai/flows/generate-test.ts';
+import '@/ai/flows/regenerate-question.ts';
 import '@/ai/flows/generate-lab.ts';
 import '@/ai/flows/refine-learning-objective.ts';
 import '@/ai/flows/explain-concept.ts';
