@@ -15,9 +15,11 @@ export type CurriculumContent = {
 
 export const curriculumData: {
   subjects: string[];
+  grades: number[];
   content: CurriculumContent;
 } = {
-  subjects: ['AP Biology', 'Biology', 'Chemistry', 'Earth_Science', 'Physics', 'History', 'Literature'],
+  subjects: ['AP Biology', 'Biology', 'Chemistry', 'Earth_Science', 'Physics', 'History', 'Literature', 'Health', 'Math'],
+  grades: [6, 7, 8, 9, 10, 11, 12],
   content: {
     'AP Biology': {
         units: {
@@ -370,6 +372,32 @@ export const curriculumData: {
     },
     History: {
       units: {
+        "Foundations of Civilization": {
+          topics: {
+            "Early Humans": { lessons: ["Early Humans"] },
+            "Neolithic Revolution": { lessons: ["Neolithic Revolution"] },
+            "River Valley Civilizations": { lessons: ["River Valley Civilizations"] }
+          }
+        },
+        "Classical Civilizations": {
+          topics: {
+            "Greece and Rome": { lessons: ["Greece and Rome"] },
+            "India and China": { lessons: ["India and China"] },
+            "Belief Systems": { lessons: ["Belief Systems"] }
+          }
+        },
+        "Post-Classical World": {
+          topics: {
+            "Islamic World": { lessons: ["Islamic World"] },
+            "Byzantines": { lessons: ["Byzantines"] },
+            "Feudalism": { lessons: ["Feudalism"] }
+          }
+        },
+        "Closing Project": {
+          topics: {
+            "Performance-Based Global Synthesis": { lessons: ["Performance-Based Global Synthesis"] }
+          }
+        },
         "Age of Revolutions": {
           topics: {
             "Enlightenment": { "lessons": ["Enlightenment"] },
@@ -490,6 +518,12 @@ export const curriculumData: {
           },
         },
       },
+    },
+    Health: {
+        units: {}
+    },
+    Math: {
+        units: {}
     }
   },
 };
