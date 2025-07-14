@@ -3,7 +3,6 @@
 
 import React from 'react';
 import Markdown from 'react-markdown';
-import { InlineMath, BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
@@ -29,7 +28,14 @@ const renderSimpleMarkdown = (content: string) => {
                 blockquote: ({node, ...props}) => <blockquote {...props} />,
                 svg: ({ node, ...props }) => {
                     const svgString = node?.properties?.src as string;
-                    if (!svgString || typeof svgString !== 'string') return null;
+                    if (!svgString || typeof svgString !== 'string') {
+                      // Attempt to render raw SVG from children if not in src
+                      const rawSvg = node?.children?.map(c => (c as any).value).join('');
+                      if (rawSvg) {
+                         return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: rawSvg }} />
+                      }
+                      return null;
+                    }
                     return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: svgString }} />
                 },
             }}>
@@ -142,7 +148,7 @@ const renderLessonPlan = (lessonPlan: any) => (
             <li key={i}>
               {mc.question}
               <ul className="list-[lower-alpha] pl-6">
-                {mc.options.map((opt, j) => <li key={j}>{opt}</li>)}
+                {mc.options.map((opt: string, j: number) => <li key={j}>{opt}</li>)}
               </ul>
               <p><em>Answer: {mc.answer}</em></p>
             </li>
@@ -274,9 +280,9 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
           <div className="my-4">
             <h4>Visual</h4>
             {cluster.stimulus.visual.startsWith('<svg') ? (
-               <div dangerouslySetInnerHTML={{ __html: cluster.stimulus.visual }} />
+               <div className="flex justify-center" dangerouslySetInnerHTML={{ __html: cluster.stimulus.visual }} />
             ) : (
-                <Markdown>{cluster.stimulus.visual}</Markdown>
+                renderSimpleMarkdown(cluster.stimulus.visual)
             )}
           </div>
         </section>
@@ -289,14 +295,14 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
                 <li>
                   <p>{cluster.questions.mcq1.question}</p>
                   <ul className="list-[lower-alpha] pl-6">
-                    {cluster.questions.mcq1.options.map(opt => <li key={opt}>{opt}</li>)}
+                    {cluster.questions.mcq1.options.map((opt:string) => <li key={opt}>{opt}</li>)}
                   </ul>
                   <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq1.answer}</em></p>
                 </li>
                 <li>
                   <p>{cluster.questions.mcq2.question}</p>
                   <ul className="list-[lower-alpha] pl-6">
-                    {cluster.questions.mcq2.options.map(opt => <li key={opt}>{opt}</li>)}
+                    {cluster.questions.mcq2.options.map((opt:string) => <li key={opt}>{opt}</li>)}
                   </ul>
                    <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq2.answer}</em></p>
                 </li>

@@ -44,7 +44,7 @@ type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: 'worksheet' | 'lesson-plan' | 'reading-material' | 'coaching-advice' | 'slideshow-outline' | 'scaffolded-worksheet' | 'question-cluster' | 'study-sheet';
+  type: ToolName | 'Lesson Plan' | 'Reading Material';
   subContent?: any;
   isSubContentLoading?: boolean;
 };
@@ -75,10 +75,14 @@ const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
-  const [lessonPlan, setLessonPlan] = useState<GenerateNVBiologyLessonOutput | null>(null);
   const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
   
-  const isWorksheetGenerated = useMemo(() => generatedSections.some(s => s.type === 'worksheet'), [generatedSections]);
+  const lessonPlan = useMemo(() => {
+    const lessonSection = generatedSections.find(s => s.type === 'Lesson Plan');
+    return (lessonSection?.content as GenerateNVBiologyLessonOutput) || null;
+  }, [generatedSections]);
+
+  const isWorksheetGenerated = useMemo(() => generatedSections.some(s => s.type === 'Worksheet'), [generatedSections]);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -110,11 +114,15 @@ const GeneratorContent = () => {
 
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
-    setLessonPlan(null);
     setGeneratedSections([]);
     try {
       const result = await generateNVBiologyLesson(values);
-      setLessonPlan(result);
+       setGeneratedSections(prev => [...prev, {
+        id: `lesson-plan-${Date.now()}`,
+        title: result.lessonOverview.lesson,
+        content: result,
+        type: 'Lesson Plan',
+      }]);
     } catch (error) {
       console.error('Lesson generation failed:', error);
       toast({
@@ -137,18 +145,7 @@ const GeneratorContent = () => {
         return;
     }
 
-    const toolTitleMap: Record<ToolName, string> = {
-        'Worksheet': 'Student Worksheet',
-        'Reading Material': 'Reading Material',
-        'Comprehension Qs': 'Comprehension Questions',
-        'Study Sheet': 'Student Study Sheet',
-        'Question Cluster': 'NGSS Question Cluster',
-        'Slideshow Outline': 'Slideshow Outline',
-        'Scaffold Tool': 'Scaffolded Worksheet',
-        'Teacher Coach': 'Teacher Coaching Guide',
-    };
-
-    const title = toolTitleMap[toolName];
+    const title = toolName;
     if (generatedSections.some(sec => sec.title === title) && toolName !== 'Scaffold Tool') {
         toast({ title: "Already Generated", description: `A ${title} has already been generated.` });
         return;
@@ -157,15 +154,11 @@ const GeneratorContent = () => {
     setIsToolLoading(title);
 
     try {
-        let result;
+        let result: any;
+        let contentType: GeneratedContent['type'] = toolName;
+
         if (toolName === 'Worksheet') {
             result = await generateWorksheet(lessonPlan);
-            setGeneratedSections(prev => [...prev, {
-                id: `worksheet-${Date.now()}`,
-                title: title,
-                content: result, // Pass the whole object
-                type: 'worksheet',
-            }]);
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial({
                 topic: lessonPlan.lessonOverview.topic,
@@ -173,61 +166,34 @@ const GeneratorContent = () => {
                 length: 'standard',
                 dokLevel: '1-2'
             });
-            setGeneratedSections(prev => [...prev, {
-                id: `reading-${Date.now()}`,
-                title: result.title,
-                content: result, // Pass the whole object
-                type: 'reading-material',
-            }]);
         } else if (toolName === 'Teacher Coach') {
             result = await generateTeacherCoach(lessonPlan);
-            setGeneratedSections(prev => [...prev, {
-                id: `coach-${Date.now()}`,
-                title: title,
-                content: result,
-                type: 'coaching-advice',
-            }]);
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
-            setGeneratedSections(prev => [...prev, {
-                id: `slideshow-${Date.now()}`,
-                title: title,
-                content: result,
-                type: 'slideshow-outline',
-            }]);
         } else if (toolName === 'Scaffold Tool') {
-            const originalWorksheetSection = generatedSections.find(s => s.type === 'worksheet');
+            const originalWorksheetSection = generatedSections.find(s => s.type === 'Worksheet');
             if (!originalWorksheetSection || !originalWorksheetSection.content.worksheetContent) {
                 toast({ title: "Worksheet Required", description: "Please generate a worksheet before using the scaffold tool.", variant: "destructive" });
+                setIsToolLoading(null);
                 return;
             }
             result = await scaffoldWorksheet({ worksheetContent: originalWorksheetSection.content.worksheetContent });
-             setGeneratedSections(prev => [...prev, {
-                id: `scaffold-${Date.now()}`,
-                title: title,
-                content: result, // Pass the whole object
-                type: 'scaffolded-worksheet',
-            }]);
         } else if (toolName === 'Question Cluster') {
             result = await generateQuestionCluster({
                 lessonTopic: lessonPlan.lessonOverview.topic,
                 lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
             });
-            setGeneratedSections(prev => [...prev, {
-                id: `cluster-${Date.now()}`,
-                title: title,
-                content: result,
-                type: 'question-cluster',
-            }]);
         } else if (toolName === 'Study Sheet') {
             result = await generateStudySheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            setGeneratedSections(prev => [...prev, {
-                id: `study-sheet-${Date.now()}`,
-                title: title,
-                content: result,
-                type: 'study-sheet',
-            }]);
         }
+
+        setGeneratedSections(prev => [...prev, {
+            id: `${toolName}-${Date.now()}`,
+            title: toolName === 'Reading Material' ? result.title : title,
+            content: result,
+            type: contentType,
+        }]);
+
     } catch (error) {
         console.error(`${toolName} generation failed:`, error);
         toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
@@ -384,16 +350,10 @@ const GeneratorContent = () => {
             </div>
         )}
 
-        {lessonPlan && !isLoading && (
-           <CollapsibleSection title={lessonPlan.lessonOverview.lesson}>
-                <StyledContentDisplay content={lessonPlan} />
-            </CollapsibleSection>
-        )}
-
         {generatedSections.map(section => (
             <CollapsibleSection key={section.id} title={section.title}>
                  <StyledContentDisplay content={section.content} />
-                 {section.type === 'reading-material' && !section.subContent && (
+                 {section.type === 'Reading Material' && !section.subContent && (
                     <div className="p-4 border-t">
                         <Button onClick={() => handleGenerateQuestions(section.id, section.content.articleContent)} disabled={section.isSubContentLoading}>
                            {section.isSubContentLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -406,7 +366,7 @@ const GeneratorContent = () => {
                     <div className="p-4 border-t">
                         <h4 className="font-bold text-lg mb-2">Comprehension Questions</h4>
                         <ul className="list-decimal pl-5 space-y-2">
-                           {section.subContent.map((q: string, i: number) => <li key={i}>{q}</li>)}
+                           {(section.subContent as string[]).map((q: string, i: number) => <li key={i}>{q}</li>)}
                         </ul>
                     </div>
                  )}
