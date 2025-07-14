@@ -247,7 +247,7 @@ export default function Home() {
                   </dl>
                 </div>
               </div>
-              <div className="w-full max-w-none sm:w-[57rem] md:-ml-4 lg:-ml-0">
+              <div className="flex items-center justify-center">
                  <EducationalModelDiagram />
               </div>
             </div>
