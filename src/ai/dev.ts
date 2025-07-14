@@ -7,3 +7,5 @@ export * from './flows/vocabulary-deep-dive';
 export * from './flows/objective-refiner';
 export * from './flows/concept-explainer';
 export * from './flows/generate-nv-biology-lesson';
+export * from './flows/worksheet-generator';
+
