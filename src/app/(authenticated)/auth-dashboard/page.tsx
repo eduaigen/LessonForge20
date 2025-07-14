@@ -38,6 +38,14 @@ const tools = {
         isPremium: true,
         priceId: 'price_1Pg12wAk4y2zY5d6xYz0a1bC',
       },
+       {
+        title: 'NV Biology Lab Generator',
+        description: 'Create labs for the NYS Living Environment curriculum.',
+        icon: <TestTube className="w-8 h-8" />,
+        href: '/auth-dashboard/nv-biology-lab-generator',
+        isPremium: true,
+        priceId: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc', 
+      },
       {
         title: 'NV Biology',
         description: 'NYS Living Environment curriculum.',
