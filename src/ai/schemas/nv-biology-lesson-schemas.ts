@@ -37,10 +37,12 @@ const miniLessonSchema = lessonSectionSchema.extend({
 
 const guidedPracticeSchema = lessonSectionSchema.extend({
   dataTable: z.object({
+    title: z.string().describe("Title for the data table."),
     headers: z.array(z.string()),
     rows: z.array(z.array(z.string())),
-  }).optional().describe("A complete and structured data table, graph, or visual model"),
-  activityDescription: z.string().optional().describe("Description of the activity if not a data table."),
+  }).optional().describe("A complete and structured data table."),
+  graph: z.string().optional().describe("A fully rendered, labeled SVG line graph. Not a text description."),
+  activityDescription: z.string().optional().describe("Description of the activity if not a data table or graph."),
 });
 
 const cfuSchema = lessonSectionSchema.extend({
@@ -55,6 +57,7 @@ const cfuSchema = lessonSectionSchema.extend({
 const independentPracticeSchema = lessonSectionSchema.extend({
   taskPrompt: z.string().describe("A full CER (Claim, Evidence, Reasoning) prompt or another analytical task."),
   taskData: z.object({
+    title: z.string().describe("Title for the data table."),
     headers: z.array(z.string()),
     rows: z.array(z.array(z.string())),
   }).optional().describe("Any necessary data, graph, or model to be interpreted."),

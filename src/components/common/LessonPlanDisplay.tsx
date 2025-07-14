@@ -31,8 +31,9 @@ const ActionList = ({ title, items }: { title: string, items: string[] }) => (
   </div>
 );
 
-const DataTable = ({ table }: { table: { headers: string[], rows: string[][] } }) => (
+const DataTable = ({ title, table }: { title: string, table: { headers: string[], rows: string[][] } }) => (
   <div className="overflow-x-auto">
+    <h4>{title}</h4>
     <table className="w-full my-4">
       <thead>
         <tr>
@@ -123,8 +124,13 @@ export default function LessonPlanDisplay({ lessonPlan }: LessonPlanDisplayProps
         <SubSection title="D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)">
           <ActionList title="Teacher Actions" items={guidedPractice.teacherActions} />
           <ActionList title="Expected Student Outputs" items={guidedPractice.expectedStudentOutputs} />
-          <h4>Embedded Data Table/Graph/Model</h4>
-          {guidedPractice.dataTable && <DataTable table={guidedPractice.dataTable} />}
+          {guidedPractice.dataTable && <DataTable title={guidedPractice.dataTable.title} table={guidedPractice.dataTable} />}
+          {guidedPractice.graph && (
+             <>
+                <h4>Embedded Graph</h4>
+                <div dangerouslySetInnerHTML={{ __html: guidedPractice.graph }} className="my-4 flex justify-center" />
+             </>
+          )}
           {guidedPractice.activityDescription && <p>{guidedPractice.activityDescription}</p>}
         </SubSection>
 
@@ -151,7 +157,7 @@ export default function LessonPlanDisplay({ lessonPlan }: LessonPlanDisplayProps
           <ActionList title="Expected Student Outputs" items={independentPractice.expectedStudentOutputs} />
           <h4>Embedded Task</h4>
           <p><strong>Prompt:</strong> {independentPractice.taskPrompt}</p>
-          {independentPractice.taskData && <DataTable table={independentPractice.taskData} />}
+          {independentPractice.taskData && <DataTable title={independentPractice.taskData.title} table={independentPractice.taskData} />}
         </SubSection>
 
         <SubSection title="G. CLOSURE / EXIT TICKET">
