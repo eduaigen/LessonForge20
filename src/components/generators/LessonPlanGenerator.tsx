@@ -55,15 +55,15 @@ const getCurriculumForSubject = async (subject: string) => {
             return (await import('@/lib/physics-curriculum')).physicsCurriculum;
         case 'Health':
             return (await import('@/lib/health-curriculum')).healthCurriculum;
-        case 'History':
         case 'Global History I & II':
         case 'US History & Government':
         case 'Government & Economics':
+        case 'History':
             return (await import('@/lib/history-curriculum')).historyCurriculum;
-        case 'Math':
         case 'Illustrative Math Algebra 1':
         case 'Illustrative Math Algebra 2':
         case 'Illustrative Math Geometry':
+        case 'Math':
             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'ELA 9th Grade':
             return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
