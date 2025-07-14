@@ -37,6 +37,7 @@ const tools = {
         icon: <TestTube className="w-8 h-8" />,
         href: '/auth-dashboard/lab-generator',
         isPremium: true,
+        priceId: 'price_1Pg12wAk4y2zY5d6xYz0a1bC',
       },
       {
         title: 'NGSS Biology (OpenSciEd)',
@@ -44,6 +45,7 @@ const tools = {
         icon: <Leaf className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Biology',
         isPremium: true,
+        priceId: 'price_1Pg0yqAk4y2zY5d6n7s8tUvW',
       },
       {
         title: 'NV Biology',
@@ -51,6 +53,7 @@ const tools = {
         icon: <Dna className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Biology',
         isPremium: true,
+        priceId: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc',
       },
       {
         title: 'NGSS Chemistry (OpenSciEd)',
@@ -58,6 +61,7 @@ const tools = {
         icon: <Atom className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Chemistry',
         isPremium: true,
+        priceId: 'price_1Pg0zFAk4y2zY5d6xYz0a1bC',
       },
       {
         title: 'NGSS Physics (OpenSciEd)',
@@ -65,6 +69,7 @@ const tools = {
         icon: <Magnet className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Physics',
         isPremium: true,
+        priceId: 'price_1Pg0znAk4y2zY5d6pQrStVwX',
       },
        {
         title: 'Earth and Space Science',
@@ -72,6 +77,7 @@ const tools = {
         icon: <Orbit className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Earth_Science',
         isPremium: true,
+        priceId: 'price_1Pg10AAk4y2zY5d6LMN9oPqR',
       },
        {
         title: 'Health',
@@ -79,6 +85,7 @@ const tools = {
         icon: <HeartPulse className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Health',
         isPremium: true,
+        priceId: 'price_1Pg10RAk4y2zY5d6IJK7lMnO',
       },
       {
         title: 'Interactive Simulators',
@@ -96,6 +103,7 @@ const tools = {
         icon: <Sigma className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Math',
         isPremium: true,
+        priceId: 'price_1Pg10jAk4y2zY5d6DEF4gHjK',
       },
       {
         title: 'Illustrative Math Algebra 2',
@@ -103,6 +111,7 @@ const tools = {
         icon: <Sigma className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Math',
         isPremium: true,
+        priceId: 'price_1Pg10wAk4y2zY5d6sTuVwXyZ',
       },
        {
         title: 'Illustrative Math Geometry',
@@ -110,6 +119,7 @@ const tools = {
         icon: <Sigma className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Math',
         isPremium: true,
+        priceId: 'price_1Pg11DAk4y2zY5d6GHIJkLmN',
       },
     ],
     ela: [
@@ -119,6 +129,7 @@ const tools = {
         icon: <Library className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
+        priceId: 'price_1Pg11UAk4y2zY5d6OPQRsTuV',
       },
        {
         title: 'ELA 10th Grade',
@@ -126,6 +137,7 @@ const tools = {
         icon: <Library className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
+        priceId: 'price_1Pg11gAk4y2zY5d6WXYZ0a1b',
       },
        {
         title: 'ELA 11th Grade',
@@ -133,6 +145,7 @@ const tools = {
         icon: <Library className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
+        priceId: 'price_1Pg11sAk4y2zY5d6cdeFgHjK',
       },
        {
         title: 'ELA 12th Grade',
@@ -140,6 +153,7 @@ const tools = {
         icon: <Library className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=Literature',
         isPremium: true,
+        priceId: 'price_1Pg124Ak4y2zY5d6lMnOpQrS',
       },
     ],
     social: [
@@ -149,6 +163,7 @@ const tools = {
         icon: <History className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=History',
         isPremium: true,
+        priceId: 'price_1Pg12DAk4y2zY5d6tUvWxYz0',
       },
        {
         title: 'US History & Government',
@@ -156,6 +171,7 @@ const tools = {
         icon: <History className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=History',
         isPremium: true,
+        priceId: 'price_1Pg12NAk4y2zY5d6a1bCdeFg',
       },
        {
         title: 'Government & Economics',
@@ -163,6 +179,7 @@ const tools = {
         icon: <History className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator?subject=History',
         isPremium: true,
+        priceId: 'price_1Pg12ZAk4y2zY5d6hIjKlMnO',
       },
     ],
     general: [
@@ -172,6 +189,7 @@ const tools = {
         icon: <FileText className="w-8 h-8" />,
         href: '/auth-dashboard/lesson-plan-generator',
         isPremium: true,
+        priceId: null, // Assuming this is part of the base subscription.
       },
       {
         title: 'Curriculum Audit',
@@ -179,6 +197,7 @@ const tools = {
         icon: <FolderSync className="w-8 h-8" />,
         href: '/auth-dashboard/curriculum-audit',
         isPremium: true,
+        priceId: null, // Assuming this is part of the base subscription.
       },
       {
         title: 'Test Generator',
@@ -186,6 +205,7 @@ const tools = {
         icon: <BookCopy className="w-8 h-8" />,
         href: '/auth-dashboard/test-generator',
         isPremium: true,
+        priceId: 'price_1Pg12lAk4y2zY5d6pQrStUvW',
       },
     ],
     free: [
@@ -213,67 +233,64 @@ const tools = {
     ]
 };
 
-const ToolCard = ({ title, description, icon, href, isPremium, requiresScienceSubscription = false }: { title: string, description: string, icon: React.ReactNode, href: string, isPremium: boolean, requiresScienceSubscription?: boolean }) => {
+const ToolCard = ({ title, description, icon, href }: { title: string, description: string, icon: React.ReactNode, href: string }) => {
   const router = useRouter();
-  const { isSubscribed, hasScienceSubscription } = useAuth();
-  const [showSubscriptionDialog, setShowSubscriptionDialog] = useState(false);
 
   const handleCardClick = () => {
-    // Free tools on this page link back to the main free tools dashboard
-    if (href === '/dashboard') {
-       router.push(href);
-       return;
-    }
-
-    let hasAccess = false;
-    if (isPremium && isSubscribed) {
-        if (requiresScienceSubscription) {
-            hasAccess = hasScienceSubscription;
-        } else {
-            hasAccess = true;
-        }
-    } else if (!isPremium) {
-        hasAccess = true;
-    }
-    
-    if (hasAccess) {
-      router.push(href);
-    } else {
-      setShowSubscriptionDialog(true);
-    }
-  };
-
-  const handleSubscribeClick = () => {
-    router.push('/pricing');
+    router.push(href);
   };
 
   return (
-    <>
-      <Card
-        onClick={handleCardClick}
-        className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200"
-      >
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-lg font-medium">{title}</CardTitle>
-          <div className="text-primary">{icon}</div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">{description}</p>
-        </CardContent>
-      </Card>
-      <SubscriptionDialog
-        open={showSubscriptionDialog}
-        onOpenChange={setShowSubscriptionDialog}
-        onConfirm={handleSubscribeClick}
-        toolName={title}
-      />
-    </>
+    <Card
+      onClick={handleCardClick}
+      className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200"
+    >
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-lg font-medium">{title}</CardTitle>
+        <div className="text-primary">{icon}</div>
+      </CardHeader>
+      <CardContent>
+        <p className="text-sm text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
   );
+};
+
+const ToolSection = ({ title, tools, userSubscriptions }: { title: string, tools: any[], userSubscriptions: string[] }) => {
+    const { hasScienceSubscription } = useAuth();
+    
+    const accessibleTools = useMemo(() => {
+        return tools.filter(tool => {
+            if (tool.requiresScienceSubscription) {
+                return hasScienceSubscription;
+            }
+            if (tool.isPremium && tool.priceId) {
+                return userSubscriptions.includes(tool.priceId);
+            }
+            if (tool.isPremium && tool.priceId === null) {
+                return true; // Part of base subscription
+            }
+            return !tool.isPremium;
+        });
+    }, [tools, userSubscriptions, hasScienceSubscription]);
+
+    if (accessibleTools.length === 0) {
+        return null;
+    }
+
+    return (
+        <div>
+            <h2 className="text-2xl font-bold font-headline mb-4">{title}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {accessibleTools.map((tool) => <ToolCard key={tool.title} {...tool} />)}
+            </div>
+        </div>
+    );
 };
 
 
 const PremiumDashboardContent = () => {
-  const { hasScienceSubscription } = useAuth();
+  const { subscriptions } = useAuth();
 
   return (
     <div className="flex flex-col gap-8">
@@ -284,49 +301,12 @@ const PremiumDashboardContent = () => {
         </p>
       </div>
 
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">General Tools</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.general.map((tool) => <ToolCard key={tool.title} {...tool} />)}
-        </div>
-      </div>
-
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">Science</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.science
-            .filter(tool => !tool.requiresScienceSubscription || (tool.requiresScienceSubscription && hasScienceSubscription))
-            .map((tool) => <ToolCard key={tool.title} {...tool} />)}
-        </div>
-      </div>
-
-      <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">Mathematics</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.math.map((tool) => <ToolCard key={tool.title} {...tool} />)}
-        </div>
-      </div>
-      
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">English Language Arts</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.ela.map((tool) => <ToolCard key={tool.title} {...tool} />)}
-        </div>
-      </div>
-
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">Social Studies</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.social.map((tool) => <ToolCard key={tool.title} {...tool} />)}
-        </div>
-      </div>
-
-       <div>
-        <h2 className="text-2xl font-bold font-headline mb-4">Free Tools</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {tools.free.map((tool) => <ToolCard key={tool.title} {...tool} />)}
-        </div>
-      </div>
+       <ToolSection title="General Tools" tools={tools.general} userSubscriptions={subscriptions} />
+       <ToolSection title="Science" tools={tools.science} userSubscriptions={subscriptions} />
+       <ToolSection title="Mathematics" tools={tools.math} userSubscriptions={subscriptions} />
+       <ToolSection title="English Language Arts" tools={tools.ela} userSubscriptions={subscriptions} />
+       <ToolSection title="Social Studies" tools={tools.social} userSubscriptions={subscriptions} />
+       <ToolSection title="Free Tools" tools={tools.free} userSubscriptions={subscriptions} />
     </div>
   );
 };
