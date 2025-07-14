@@ -33,13 +33,13 @@ const prompt = ai.definePrompt({
     *   **C. MINI-LESSON:**
         *   Based on the topic and the teacher/student actions, design a simple note-taking strategy for the student (e.g., a two-column note frame, a simple graphic organizer).
         *   Embed the full text of the "Embedded Reading Passage".
-        *   Embed any SVG "Embedded Diagram" or other visuals.
+        *   **Crucially, embed any SVG "Embedded Diagram" or other visuals directly. The visual must be fully rendered in the worksheet.**
         *   List all "Concept-Check Questions" with space for answers.
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
         *   Clearly state the instructions for the guided practice activity.
         *   Guide the student on how to complete the task.
-        *   Include any "Embedded Data Table," graphs, or other materials needed for the activity. Provide space for completion.
+        *   **Perfectly render and include any "Embedded Data Table," graphs, or other materials needed for the activity. Provide space for completion.**
 
     *   **E. CHECK FOR UNDERSTANDING (CFU):**
         *   Copy all "CFU Questions" (multiple choice and short response) for the student to answer. Provide space for their responses.
@@ -47,7 +47,7 @@ const prompt = ai.definePrompt({
     *   **F. INDEPENDENT PRACTICE / PERFORMANCE TASK:**
         *   Based on the teacher actions and expected outputs, copy the full "Embedded Task" prompt (e.g., the CER prompt).
         *   Provide clear instructions and ample space for the student to complete the assignment.
-        *   Include any necessary "taskData," tables, or graphs.
+        *   **Include any necessary "taskData," tables, or graphs, ensuring they are perfectly rendered.**
 
     *   **G. CLOSURE / EXIT TICKET:**
         *   Transfer the exact same question/activity from the "DO NOW" section here. Add a prompt like: "Let's revisit our Do Now question. Has your thinking changed? Explain your answer now, using what you've learned in today's lesson."
@@ -60,7 +60,7 @@ const prompt = ai.definePrompt({
 {{{worksheetDataJson}}}
 \`\`\`
 
-Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan is present and correctly placed.`,
+Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered.`,
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
