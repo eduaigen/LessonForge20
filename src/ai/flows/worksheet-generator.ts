@@ -4,7 +4,7 @@
  * @fileOverview An AI flow for generating a student-facing worksheet from a lesson plan.
  */
 import { ai } from '@/ai/genkit';
-import { jsonStringify } from 'genkit/zod';
+import { jsonStringify } from 'genkit';
 import { WorksheetGeneratorInputSchema, WorksheetGeneratorOutputSchema, type WorksheetGeneratorInput, type WorksheetGeneratorOutput } from '../schemas/worksheet-generator-schemas';
 
 const prompt = ai.definePrompt({
