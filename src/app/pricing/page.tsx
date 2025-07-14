@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -12,39 +11,41 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import { createCheckoutSession } from '@/actions/stripe';
+import { useToast } from '@/hooks/use-toast';
+
 
 const modules = {
   science: [
-    { id: 'NV_Biology', name: 'NV Biology', description: 'NYS Living Environment curriculum.', icon: <Dna /> },
-    { id: 'NGSS_Biology', name: 'NGSS Biology (OpenSciEd)', description: 'Inquiry-based biology phenomena.', icon: <Leaf /> },
-    { id: 'NGSS_Chemistry', name: 'NGSS Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: <Atom /> },
-    { id: 'NGSS_Physics', name: 'NGSS Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: <Magnet /> },
-    { id: 'Earth_Science', name: 'Earth and Space Science', description: 'NYS Physical Setting curriculum.', icon: <Orbit /> },
-    { id: 'Health', name: 'Health', description: 'Promoting well-being & healthy choices.', icon: <HeartPulse /> },
+    { id: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc', name: 'NV Biology', description: 'NYS Living Environment curriculum.', icon: <Dna /> },
+    { id: 'price_1Pg0yqAk4y2zY5d6n7s8tUvW', name: 'NGSS Biology (OpenSciEd)', description: 'Inquiry-based biology phenomena.', icon: <Leaf /> },
+    { id: 'price_1Pg0zFAk4y2zY5d6xYz0a1bC', name: 'NGSS Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: <Atom /> },
+    { id: 'price_1Pg0znAk4y2zY5d6pQrStVwX', name: 'NGSS Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: <Magnet /> },
+    { id: 'price_1Pg10AAk4y2zY5d6LMN9oPqR', name: 'Earth and Space Science', description: 'NYS Physical Setting curriculum.', icon: <Orbit /> },
+    { id: 'price_1Pg10RAk4y2zY5d6IJK7lMnO', name: 'Health', description: 'Promoting well-being & healthy choices.', icon: <HeartPulse /> },
   ],
   math: [
-    { id: 'IM_Algebra_1', name: 'Illustrative Math Algebra 1', description: 'Linear equations, functions, data.', icon: <Sigma /> },
-    { id: 'IM_Algebra_2', name: 'Illustrative Math Algebra 2', description: 'Polynomials, rational, exponential.', icon: <Sigma /> },
-    { id: 'IM_Geometry', name: 'Illustrative Math Geometry', description: 'Transformations, congruence, trig.', icon: <Sigma /> },
+    { id: 'price_1Pg10jAk4y2zY5d6DEF4gHjK', name: 'Illustrative Math Algebra 1', description: 'Linear equations, functions, data.', icon: <Sigma /> },
+    { id: 'price_1Pg10wAk4y2zY5d6sTuVwXyZ', name: 'Illustrative Math Algebra 2', description: 'Polynomials, rational, exponential.', icon: <Sigma /> },
+    { id: 'price_1Pg11DAk4y2zY5d6GHIJkLmN', name: 'Illustrative Math Geometry', description: 'Transformations, congruence, trig.', icon: <Sigma /> },
   ],
   ela: [
-    { id: 'ELA_9', name: 'ELA 9th Grade', description: 'Analytical reading and writing skills.', icon: <Library /> },
-    { id: 'ELA_10', name: 'ELA 10th Grade', description: 'Complex texts and critical analysis.', icon: <Library /> },
-    { id: 'ELA_11', name: 'ELA 11th Grade', description: 'American literature and research.', icon: <Library /> },
-    { id: 'ELA_12', name: 'ELA 12th Grade', description: 'College-level reading and writing.', icon: <Library /> },
+    { id: 'price_1Pg11UAk4y2zY5d6OPQRsTuV', name: 'ELA 9th Grade', description: 'Analytical reading and writing skills.', icon: <Library /> },
+    { id: 'price_1Pg11gAk4y2zY5d6WXYZ0a1b', name: 'ELA 10th Grade', description: 'Complex texts and critical analysis.', icon: <Library /> },
+    { id: 'price_1Pg11sAk4y2zY5d6cdeFgHjK', name: 'ELA 11th Grade', description: 'American literature and research.', icon: <Library /> },
+    { id: 'price_1Pg124Ak4y2zY5d6lMnOpQrS', name: 'ELA 12th Grade', description: 'College-level reading and writing.', icon: <Library /> },
   ],
   social: [
-    { id: 'Global_History', name: 'Global History I & II', description: 'From ancient civilizations to present.', icon: <History /> },
-    { id: 'US_History', name: 'US History & Government', description: 'American history & constitutional principles.', icon: <History /> },
-    { id: 'Gov_Econ', name: 'Government & Economics', description: 'Study of government and economic principles.', icon: <History /> },
+    { id: 'price_1Pg12DAk4y2zY5d6tUvWxYz0', name: 'Global History I & II', description: 'From ancient civilizations to present.', icon: <History /> },
+    { id: 'price_1Pg12NAk4y2zY5d6a1bCdeFg', name: 'US History & Government', description: 'American history & constitutional principles.', icon: <History /> },
+    { id: 'price_1Pg12ZAk4y2zY5d6hIjKlMnO', name: 'Government & Economics', description: 'Study of government and economic principles.', icon: <History /> },
   ],
   tools: [
-      { id: 'test_generator', name: 'Test Generator', description: 'Generate comprehensive tests for any subject.', icon: <BookCopy /> },
-      { id: 'lab_generator', name: 'Lab Generator', description: 'Instantly create safe lab experiments for science classes.', icon: <TestTube /> },
+      { id: 'price_1Pg12lAk4y2zY5d6pQrStUvW', name: 'Test Generator', description: 'Generate comprehensive tests for any subject.', icon: <BookCopy /> },
+      { id: 'price_1Pg12wAk4y2zY5d6xYz0a1bC', name: 'Lab Generator', description: 'Instantly create safe lab experiments for science classes.', icon: <TestTube /> },
   ]
 };
 
@@ -74,10 +75,10 @@ const ModuleCard = ({ module, isSelected, onSelect }: { module: any, isSelected:
 );
 
 export default function PricingPage() {
-  const router = useRouter();
-  const { subscribe } = useAuth();
+  const { toast } = useToast();
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<ModuleCategory>('science');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSelectModule = (id: string) => {
     setSelectedModules(prev =>
@@ -92,13 +93,37 @@ export default function PricingPage() {
     return pricing.base + (count - 1) * pricing.additional;
   }, [selectedModules]);
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (selectedModules.length === 0) {
-        alert("Please select at least one module or tool to subscribe.");
+        toast({
+            title: "No Selection",
+            description: "Please select at least one module or tool to subscribe.",
+            variant: "destructive"
+        });
         return;
     }
-    subscribe();
-    router.push('/auth-dashboard');
+    setIsLoading(true);
+    try {
+        const { url } = await createCheckoutSession(selectedModules);
+        if (url) {
+            window.location.href = url;
+        } else {
+             toast({
+                title: "Error Creating Checkout",
+                description: "Could not create a checkout session. Please try again.",
+                variant: "destructive"
+            });
+        }
+    } catch (error) {
+        console.error("Stripe checkout error:", error);
+         toast({
+            title: "Subscription Error",
+            description: "An unexpected error occurred. Please contact support.",
+            variant: "destructive"
+        });
+    } finally {
+        setIsLoading(false);
+    }
   };
   
   const subjectTabs: { key: ModuleCategory; label: string; icon: React.ReactNode }[] = [
@@ -187,8 +212,8 @@ export default function PricingPage() {
                          </div>
                     </CardContent>
                     <CardFooter>
-                         <Button onClick={handleSubscribe} className="w-full" size="lg" disabled={selectedModules.length === 0}>
-                            Subscribe Now
+                         <Button onClick={handleSubscribe} className="w-full" size="lg" disabled={isLoading || selectedModules.length === 0}>
+                            {isLoading ? <Loader2 className="animate-spin" /> : 'Subscribe Now'}
                         </Button>
                     </CardFooter>
                 </Card>
