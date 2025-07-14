@@ -36,7 +36,7 @@ export default function EducationalModelDiagram() {
 
         {/* Central Node */}
         <div 
-          className="relative z-10 flex flex-col items-center justify-center w-40 h-40 rounded-full bg-background"
+          className="relative z-10 flex items-center justify-center w-40 h-40 rounded-full bg-background"
         >
             <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow"/>
             <div className="absolute inset-2 rounded-full bg-background shadow-inner"/>
@@ -85,7 +85,7 @@ export default function EducationalModelDiagram() {
                         <div className="absolute inset-2 w-20 h-20 border-2 border-accent/30 rounded-full energy-ring-2"></div>
                     </div>
                  </div>
-                 <span className="font-headline text-lg font-bold gradient-text -mt-4">
+                 <span className="font-headline text-lg font-bold gradient-text mt-1">
                     Eduaigen
                  </span>
             </div>
