@@ -79,7 +79,7 @@ export default function EarthScienceLabGeneratorPage() {
     setGeneratedContent(null);
 
     const input: GenerateLabExperimentInput = {
-      subject: 'Earth Science',
+      subject: 'NV Earth Science',
       topic: selectedTopic,
       lessonDescription: selectedLesson,
     };
@@ -124,7 +124,7 @@ export default function EarthScienceLabGeneratorPage() {
       <CardHeader className='flex-row items-center justify-between'>
         <div>
             <CardTitle>Generated Lab Handout</CardTitle>
-            <CardDescription>Review the Earth Science lab below.</CardDescription>
+            <CardDescription>Review the NV Earth Science lab below.</CardDescription>
         </div>
         <Button variant="outline" size="sm" onClick={handlePrint} disabled={!generatedContent}>
             <Printer className="mr-2 h-4 w-4" />
@@ -158,7 +158,7 @@ export default function EarthScienceLabGeneratorPage() {
             <Lock className="h-8 w-8" />
           </div>
           <CardTitle>Premium Tool Locked</CardTitle>
-          <CardDescription>The Earth Science Lab Generator is a premium feature. Please subscribe to unlock it.</CardDescription>
+          <CardDescription>The NV Earth Science Lab Generator is a premium feature. Please subscribe to unlock it.</CardDescription>
         </CardHeader>
         <CardContent className="text-center">
           <Button asChild>
@@ -171,8 +171,8 @@ export default function EarthScienceLabGeneratorPage() {
 
   return (
     <AiToolLayout
-      title="Earth Science Lab Generator"
-      description="Create labs aligned with the Earth Science curriculum."
+      title="NV Earth Science Lab Generator"
+      description="Create labs aligned with the NV Earth Science curriculum."
       resultDisplay={<ResultDisplay />}
     >
       <form onSubmit={handleSubmit} className="space-y-6">

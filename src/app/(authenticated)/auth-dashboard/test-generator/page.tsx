@@ -47,7 +47,7 @@ const getCurriculumForSubject = async (subject: string) => {
                 return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
             case 'Chemistry':
                 return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
-            case 'Earth_Science':
+            case 'NV Earth Science':
                 return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
             case 'Physics':
                 return (await import('@/lib/physics-curriculum')).physicsCurriculum;
