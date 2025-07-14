@@ -37,22 +37,26 @@ import { Checkbox } from '@/components/ui/checkbox';
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
     Object.values(modules).flat().forEach(module => {
-        const subject = baseCurriculumData.subjects.find(s => s.toLowerCase().replace(/_/g, ' ') === module.name.split('(')[0].trim().toLowerCase() || s.toLowerCase().replace(/_/g, ' ') === module.name.split(" ")[1]?.toLowerCase());
-        if(subject) {
-            mapping[module.id] = subject;
-        } else if (module.name.includes("Biology")) mapping[module.id] = "Biology";
-        else if (module.name.includes("Chemistry")) mapping[module.id] = "Chemistry";
-        else if (module.name.includes("Physics")) mapping[module.id] = "Physics";
-        else if (module.name.includes("Earth")) mapping[module.id] = "Earth_Science";
-        else if (module.name.includes("Health")) mapping[module.id] = "Health";
-        else if (module.name.includes("Math")) mapping[module.id] = "Math";
-        else if (module.name.includes("ELA")) mapping[module.id] = "Literature";
-        else if (module.name.includes("History") || module.name.includes("Government")) mapping[module.id] = "History";
+        // Use the specific module name for mapping
+        mapping[module.id] = module.name;
     });
     // Add premium tools
     mapping['price_1Pg12lAk4y2zY5d6pQrStUvW'] = 'All'; // Test Generator can be for any subject
     return mapping;
 };
+
+// A reverse mapping to find the key in curriculumData.content
+const subjectNameToCurriculumKey = (subjectName: string): string => {
+    if (subjectName.includes('Biology')) return 'Biology';
+    if (subjectName.includes('Chemistry')) return 'Chemistry';
+    if (subjectName.includes('Physics')) return 'Physics';
+    if (subjectName.includes('Earth')) return 'Earth_Science';
+    if (subjectName.includes('Health')) return 'Health';
+    if (subjectName.includes('Math')) return 'Math';
+    if (subjectName.includes('ELA')) return 'Literature';
+    if (subjectName.includes('History') || subjectName.includes('Government')) return 'History';
+    return subjectName;
+}
 
 export default function TestGeneratorPage() {
   const { toast } = useToast();
@@ -64,7 +68,7 @@ export default function TestGeneratorPage() {
   const priceIdToSubject = useMemo(mapPriceIdToSubject, []);
 
   const availableSubjects = useMemo(() => {
-    if (isAdmin) return baseCurriculumData.subjects;
+    if (isAdmin) return Object.values(modules).flat().map(m => m.name); // Admin sees all modules
     
     const testGeneratorSub = subscriptions.includes('price_1Pg12lAk4y2zY5d6pQrStUvW');
     if (!testGeneratorSub) return [];
@@ -98,7 +102,8 @@ export default function TestGeneratorPage() {
   // Reset and update dropdowns based on selections
   useEffect(() => {
     if (selectedSubject) {
-      const subjectContent = baseCurriculumData.content[selectedSubject];
+      const curriculumKey = subjectNameToCurriculumKey(selectedSubject);
+      const subjectContent = baseCurriculumData.content[curriculumKey];
       setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
       setSelectedUnits([]);
       setSelectedTopic('');
@@ -108,14 +113,13 @@ export default function TestGeneratorPage() {
   }, [selectedSubject]);
 
   useEffect(() => {
-    // If only one unit is selected, populate topics for that unit.
     if (selectedSubject && selectedUnits.length === 1) {
+      const curriculumKey = subjectNameToCurriculumKey(selectedSubject);
       const unitContent =
-        baseCurriculumData.content[selectedSubject]?.units[selectedUnits[0]];
+        baseCurriculumData.content[curriculumKey]?.units[selectedUnits[0]];
       setTopics(unitContent ? Object.keys(unitContent.topics) : []);
       setSelectedTopic('');
     } else {
-      // If multiple or no units are selected, clear topics.
       setTopics([]);
       setSelectedTopic('');
     }
@@ -131,7 +135,6 @@ export default function TestGeneratorPage() {
       });
       return;
     }
-    // If only one unit is selected, topic is required.
     if (selectedUnits.length === 1 && !selectedTopic) {
          toast({
             title: 'Missing Information',
@@ -145,10 +148,10 @@ export default function TestGeneratorPage() {
     setGeneratedContent(null);
 
     const input: GenerateTestInput = {
-      subject: selectedSubject,
+      subject: selectedSubject, // Pass the specific name like "NGSS Biology"
       gradeLevel: selectedGrade,
-      unit: selectedUnits.join(', '), // Join units for the AI
-      topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics', // Use topic only if one unit is selected
+      unit: selectedUnits.join(', '),
+      topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics',
       instructions: customPrompt,
     };
 
@@ -297,7 +300,7 @@ export default function TestGeneratorPage() {
               <SelectContent>
                 {availableSubjects.map((subject) => (
                   <SelectItem key={subject} value={subject}>
-                    {subject.replace(/_/g, ' ')}
+                    {subject}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -399,3 +402,5 @@ export default function TestGeneratorPage() {
     </AiToolLayout>
   );
 }
+
+    
