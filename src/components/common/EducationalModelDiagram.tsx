@@ -1,7 +1,7 @@
-import { BrainCircuit, BookOpenText, TestTube, Sigma, History } from 'lucide-react';
+import { BookOpenText, TestTube, Sigma, History } from 'lucide-react';
 
 const Node = ({ icon, label, position, delay }: { icon: React.ReactNode, label: string, position: string, delay: string }) => (
-    <div 
+    <div
       className={`absolute ${position} flex flex-col items-center animate-float-up`}
       style={{ animationDelay: delay }}
     >
@@ -38,8 +38,50 @@ export default function EducationalModelDiagram() {
             <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow"/>
             <div className="absolute inset-2 rounded-full bg-background shadow-inner"/>
             <div className="relative flex flex-col items-center justify-center text-center">
-                <BrainCircuit className="w-12 h-12 text-primary animate-pulse"/>
-                <span className="mt-2 text-sm font-bold text-primary">Eduaigen AI</span>
+                 <div className="relative brain-icon">
+              <svg
+                width="80"
+                height="80"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-primary brain-pulse drop-shadow-lg"
+              >
+                <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+                <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+                <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+                <path d="M17.599 6.5a3 3 0 0 0 .399-1.375" />
+                <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />
+                <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />
+                <path d="M19.938 10.5a4 4 0 0 1 .585.396" />
+                <path d="M6 18a4 4 0 0 1-1.967-.516" />
+                <path d="M19.967 17.484A4 4 0 0 1 18 18" />
+              </svg>
+
+              <div className="absolute -top-2 -right-2">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-yellow-400 lightning-bounce drop-shadow-lg"
+                >
+                  <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" />
+                </svg>
+              </div>
+
+              <div className="absolute inset-0 -m-4">
+                <div className="w-24 h-24 border-2 border-primary/30 rounded-full energy-ring-1"></div>
+                <div className="absolute inset-2 w-20 h-20 border-2 border-accent/30 rounded-full energy-ring-2"></div>
+              </div>
+            </div>
             </div>
         </div>
   
