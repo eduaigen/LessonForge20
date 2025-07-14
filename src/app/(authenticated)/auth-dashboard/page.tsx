@@ -126,14 +126,6 @@ const tools = {
         isPremium: true,
         priceId: 'price_1Pg10AAk4y2zY5d6LMN9oPqR',
       },
-       {
-        title: 'Health',
-        description: 'Promoting well-being & healthy choices.',
-        icon: <HeartPulse className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=Health',
-        isPremium: true,
-        priceId: 'price_1Pg10RAk4y2zY5d6IJK7lMnO',
-      },
       {
         title: 'Interactive Simulators',
         description: 'Engaging digital simulators for science concepts.',
@@ -238,14 +230,6 @@ const tools = {
       },
     ],
     general: [
-      {
-        title: 'Generic Lesson Plan Generator',
-        description: 'Craft detailed, standards-aligned lesson plans for any subject.',
-        icon: <FileText className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator',
-        isPremium: true,
-        priceId: null, // Assuming this is part of the base subscription.
-      },
       {
         title: 'Curriculum Audit',
         description: 'Analyze and simplify your existing curriculum documents.',

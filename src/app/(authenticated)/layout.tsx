@@ -76,18 +76,6 @@ export default function AuthenticatedAppLayout({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                  href="/auth-dashboard/lesson-plan-generator"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
-                  <FileText className="h-5 w-5" />
-                  <span className="sr-only">Lesson Plan Generator</span>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">Lesson Plan Generator</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
                   href="/auth-dashboard/test-generator"
                   className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                 >
@@ -143,13 +131,6 @@ export default function AuthenticatedAppLayout({
                 >
                   <DollarSign className="h-5 w-5" />
                   Pricing
-                </Link>
-                <Link
-                  href="/auth-dashboard/lesson-plan-generator"
-                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                >
-                  <FileText className="h-5 w-5" />
-                  Lesson Plan Generator
                 </Link>
                 <Link
                   href="/auth-dashboard/test-generator"
