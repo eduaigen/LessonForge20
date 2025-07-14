@@ -12,6 +12,7 @@ import StyledContentDisplay from './StyledContentDisplay';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { ScrollArea } from '../ui/scroll-area';
 import GeneratingAnimation from './GeneratingAnimation';
+import * as htmlToText from 'html-to-text';
 
 type CollapsibleSectionProps = {
   title: string;
@@ -27,26 +28,28 @@ const supportedLanguages = [
 ];
 
 const extractContentAsString = (children: React.ReactNode): string => {
-    let contentToProcess = '';
-    if (React.isValidElement(children) && (children.type === StyledContentDisplay)) {
-        const contentProp = (children.props as any).content;
-        if (typeof contentProp === 'string') {
-            contentToProcess = contentProp;
-        } else if (typeof contentProp === 'object' && contentProp !== null) {
-            if (contentProp.worksheetContent) {
-                contentToProcess = contentProp.worksheetContent;
-            } else if (contentProp.scaffoldedContent) {
-                contentToProcess = contentProp.scaffoldedContent;
-            } else if (contentProp.articleContent) {
-                contentToProcess = contentProp.articleContent;
-            } else {
-                contentToProcess = JSON.stringify(contentProp, null, 2);
-            }
-        }
+    if (!React.isValidElement(children) || children.type !== StyledContentDisplay) {
+        return '';
     }
-    return contentToProcess;
-};
+    const contentProp = (children.props as any).content;
 
+    if (typeof contentProp === 'string') {
+        return contentProp;
+    }
+    
+    // For objects (like lesson plans, worksheets), stringify them to preserve structure.
+    if (typeof contentProp === 'object' && contentProp !== null) {
+        // Special handling for content that might be nested
+        if (contentProp.worksheetContent) return contentProp.worksheetContent;
+        if (contentProp.scaffoldedContent) return contentProp.scaffoldedContent;
+        if (contentProp.articleContent) return contentProp.articleContent;
+        
+        // Default to stringifying the whole object for translation context
+        return JSON.stringify(contentProp, null, 2);
+    }
+
+    return '';
+};
 
 export default function CollapsibleSection({ title, children }: CollapsibleSectionProps) {
     const { toast } = useToast();
@@ -59,51 +62,51 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
     const handlePrint = () => {
         const printableContent = contentRef.current;
         if (printableContent) {
-            const printWindow = window.open('', '', 'height=600,width=800');
+            const printWindow = window.open('', '', 'height=800,width=1000');
             if (printWindow) {
                 printWindow.document.write('<html><head><title>Print</title>');
-                // Link to globals.css to maintain styling
                 const styles = Array.from(document.styleSheets)
                     .map(styleSheet => {
                         try {
-                            return Array.from(styleSheet.cssRules)
-                                .map(rule => rule.cssText)
-                                .join('');
+                            if (styleSheet.href) {
+                                return `<link rel="stylesheet" href="${styleSheet.href}">`;
+                            }
+                            return `<style>${Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('')}</style>`;
                         } catch (e) {
-                            // Can't access cross-origin stylesheets
                             if (styleSheet.href) {
                                 return `<link rel="stylesheet" href="${styleSheet.href}">`;
                             }
                             return '';
                         }
                     })
-                    .join('');
-
-                printWindow.document.write(`<style>${styles}</style></head><body>`);
+                    .join('\n');
+                printWindow.document.write(styles);
+                printWindow.document.write('</head><body><div class="p-4">');
                 printWindow.document.write(printableContent.innerHTML);
-                printWindow.document.write('</body></html>');
+                printWindow.document.write('</div></body></html>');
                 printWindow.document.close();
-                printWindow.print();
+                setTimeout(() => {
+                    printWindow.print();
+                }, 250); 
             }
         }
     };
 
     const handleDownload = () => {
-        const contentToDownload = extractContentAsString(children);
-        if (!contentToDownload) {
-            toast({ title: "Download Failed", description: "Could not extract content to download.", variant: "destructive" });
-            return;
+        if (contentRef.current) {
+            const textContent = htmlToText.convert(contentRef.current.innerHTML, {
+                wordwrap: 130
+            });
+            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${title.replace(/ /g, '_')}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
-
-        const blob = new Blob([contentToDownload], { type: 'text/markdown;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${title.replace(/ /g, '_')}.md`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
     };
 
     const handleTranslate = async () => {
@@ -117,14 +120,24 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
             }
 
             const result = await translateContent({ content: contentToTranslate, targetLanguage: selectedLanguage });
-            setTranslatedContent(result.translatedContent);
+            // The AI returns a string, which might be a JSON string. We parse it.
+            const parsedContent = JSON.parse(result.translatedContent);
+            setTranslatedContent(parsedContent);
             setTranslatedLanguage(selectedLanguage);
 
         } catch (error) {
             console.error("Translation failed:", error);
+            let description = 'An error occurred while translating the content. Please try again.';
+            if (error instanceof Error) {
+                if (error.message.includes("JSON")) {
+                    description = "The AI returned an invalid format for translation. Please try again.";
+                } else {
+                    description = error.message;
+                }
+            }
             toast({
                 title: "Translation Failed",
-                description: `An error occurred while translating the content. ${error instanceof Error ? error.message : ''}`,
+                description: description,
                 variant: "destructive",
             });
         } finally {
@@ -146,7 +159,7 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>
                     </Button>
-                    <Button variant="outline" size="icon" onClick={handleDownload} title="Download as Markdown">
+                    <Button variant="outline" size="icon" onClick={handleDownload} title="Download as Text">
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
                     </Button>
