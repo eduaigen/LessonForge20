@@ -226,7 +226,7 @@ export const nvBiologyCurriculum: CurriculumContent['NV Biology'] = {
             topics: {
                 "Unit Opening": {
                     lessons: [
-                        "Anchor Phenomenon: Why did some groups of people get sick during the pellagra epidemic, while others did not?",
+                        "Why did some groups of people get sick during the pellagra epidemic, while others did not?",
                         "Driving Question Board",
                         "Performance Task (Initial explanation of pellagra)",
                     ]
@@ -280,7 +280,7 @@ export const nvBiologyCurriculum: CurriculumContent['NV Biology'] = {
             topics: {
                 "Unit Opening": {
                     lessons: [
-                        "Anchor Phenomenon: What is the story of woolly mammoth extinction? What types of information do we need to know in order to evaluate the cause of a species’ extinction?",
+                        "What is the story of woolly mammoth extinction? What types of information do we need to know in order to evaluate the cause of a species’ extinction?",
                         "Performance Task (Initial model of mammoth extinction)",
                     ]
                 },
