@@ -33,11 +33,16 @@ import Link from 'next/link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Lock } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
 
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
     Object.values(modules).flat().forEach(module => {
-        mapping[module.id] = module.name;
+      if (module.name === "NV Biology" || module.name === "NGSS Biology (OpenSciEd)" || module.name === "AP Biology") {
+          mapping[module.id] = module.name;
+      } else {
+          mapping[module.id] = subjectNameToCurriculumKey(module.name);
+      }
     });
     mapping['price_1Pg12lAk4y2zY5d6pQrStUvW'] = 'All'; // Test Generator can be for any subject
     return mapping;
@@ -45,7 +50,7 @@ const mapPriceIdToSubject = (): { [key: string]: string } => {
 
 // A reverse mapping to find the key in curriculumData.content
 const subjectNameToCurriculumKey = (subjectName: string): string => {
-    if (subjectName.includes('NV Biology') || subjectName.includes('NGSS Biology') || subjectName.includes('AP Biology')) return 'Biology';
+    if (subjectName.includes('Biology')) return 'Biology';
     if (subjectName.includes('Chemistry')) return 'Chemistry';
     if (subjectName.includes('Physics')) return 'Physics';
     if (subjectName.includes('Earth')) return 'Earth_Science';
@@ -85,6 +90,10 @@ export default function TestGeneratorPage() {
   const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [customPrompt, setCustomPrompt] = useState('');
+  const [numMultipleChoice, setNumMultipleChoice] = useState<number | undefined>();
+  const [numShortAnswer, setNumShortAnswer] = useState<number | undefined>();
+  const [numConstructedResponse, setNumConstructedResponse] = useState<number | undefined>();
+  const [numEssay, setNumEssay] = useState<number | undefined>();
 
   // Curriculum structure states
   const [units, setUnits] = useState<string[]>([]);
@@ -149,6 +158,10 @@ export default function TestGeneratorPage() {
       unit: selectedUnits.join(', '),
       topic: selectedUnits.length === 1 ? selectedTopic : 'All Topics',
       instructions: customPrompt,
+      numMultipleChoice: numMultipleChoice,
+      numShortAnswer: numShortAnswer,
+      numConstructedResponse: numConstructedResponse,
+      numEssay: numEssay,
     };
 
     try {
@@ -172,6 +185,10 @@ export default function TestGeneratorPage() {
     setSelectedUnits([]);
     setSelectedTopic('');
     setCustomPrompt('');
+    setNumMultipleChoice(undefined);
+    setNumShortAnswer(undefined);
+    setNumConstructedResponse(undefined);
+    setNumEssay(undefined);
     setGeneratedContent(null);
   };
 
@@ -349,14 +366,36 @@ export default function TestGeneratorPage() {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 border-t pt-4">
+            <h3 className="text-md font-semibold">Test Composition</h3>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="num-mc"># of Multiple Choice</Label>
+                    <Input id="num-mc" type="number" min="0" value={numMultipleChoice || ''} onChange={e => setNumMultipleChoice(e.target.value ? parseInt(e.target.value) : undefined)} placeholder="e.g., 10" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="num-sa"># of Short Answer</Label>
+                    <Input id="num-sa" type="number" min="0" value={numShortAnswer || ''} onChange={e => setNumShortAnswer(e.target.value ? parseInt(e.target.value) : undefined)} placeholder="e.g., 5" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="num-cr"># of Constructed Response</Label>
+                    <Input id="num-cr" type="number" min="0" value={numConstructedResponse || ''} onChange={e => setNumConstructedResponse(e.target.value ? parseInt(e.target.value) : undefined)} placeholder="e.g., 3" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="num-essay"># of Essays</Label>
+                    <Input id="num-essay" type="number" min="0" value={numEssay || ''} onChange={e => setNumEssay(e.target.value ? parseInt(e.target.value) : undefined)} placeholder="e.g., 1" />
+                </div>
+            </div>
+        </div>
+
+        <div className="space-y-4 border-t pt-4">
           <div>
-            <Label htmlFor="extra-info">Extra Info (Optional)</Label>
+            <Label htmlFor="extra-info">Additional Instructions (Optional)</Label>
             <Textarea
               id="extra-info"
               value={customPrompt}
               onChange={(e) => setCustomPrompt(e.target.value)}
-              placeholder="e.g., Include 5 multiple-choice and 2 short-answer questions. Focus on..."
+              placeholder="e.g., Focus on lab safety, include a question about the Scientific Revolution..."
             />
           </div>
         </div>
@@ -380,3 +419,5 @@ export default function TestGeneratorPage() {
     </AiToolLayout>
   );
 }
+
+    
