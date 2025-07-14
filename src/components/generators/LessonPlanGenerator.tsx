@@ -20,7 +20,6 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   generateLessonPlan,
@@ -35,9 +34,9 @@ import {
   Printer,
 } from 'lucide-react';
 import { Label } from '../ui/label';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import GeneratingAnimation from '../common/GeneratingAnimation';
+import AiTeacherTools from './AiTeacherTools';
 
 // Helper function to dynamically import ELA curriculum
 const getElaCurriculum = async (gradeTitle: string) => {
@@ -198,7 +197,7 @@ export default function LessonPlanGenerator() {
         if (contentElement) {
             printWindow.document.write('<html><head><title>Print Lesson Plan</title>');
             // Include styles if needed, especially for the prose classes
-            printWindow.document.write('<style>body { font-family: sans-serif; } .prose { max-w: 100%; } </style>');
+            printWindow.document.write('<style>body { font-family: sans-serif; } .prose { max-w: 100%; } .document-view { background-color: white; padding: 1rem; } h3 { font-size: 1.25rem; font-weight: bold; margin-top: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid #ccc; padding-bottom: 0.25rem; } </style>');
             printWindow.document.write('</head><body>');
             printWindow.document.write(contentElement.innerHTML);
             printWindow.document.write('</body></html>');
@@ -226,7 +225,7 @@ export default function LessonPlanGenerator() {
         {isLoading ? (
           <GeneratingAnimation />
         ) : generatedContent ? (
-           <ScrollArea className="flex-1">
+           <ScrollArea className="flex-1 rounded-md bg-background shadow-inner">
             <div id="printable-content" className="document-view">
               <StyledContentDisplay content={generatedContent} />
             </div>
@@ -244,123 +243,128 @@ export default function LessonPlanGenerator() {
   );
 
   return (
-    <AiToolLayout
-      title={pageTitle}
-      description="Craft detailed, standards-aligned lesson plans in minutes."
-      resultDisplay={<ResultDisplay />}
-    >
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-4">
-            <div>
-                <Label>Subject</Label>
-                <Select
-                    value={selectedSubject}
-                    onValueChange={setSelectedSubject}
-                    required
-                    disabled={!!subjectFromUrl}
-                >
-                    <SelectTrigger>
-                    <SelectValue placeholder="Select Subject" />
-                    </SelectTrigger>
-                    <SelectContent>
-                    {curriculumData.subjects.map((subject) => (
-                        <SelectItem key={subject} value={subject}>
-                        {subject}
-                        </SelectItem>
-                    ))}
-                    </SelectContent>
-                </Select>
-            </div>
-            <div>
-                <Label>Unit</Label>
-                <Select
-                    value={selectedUnit}
-                    onValueChange={setSelectedUnit}
-                    disabled={units.length === 0}
-                    required
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Unit" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {units.map((unit) => (
-                        <SelectItem key={unit} value={unit}>
-                            {unit}
-                        </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-             <div>
-                <Label>Topic</Label>
-                <Select
-                    value={selectedTopic}
-                    onValueChange={setSelectedTopic}
-                    disabled={topics.length === 0}
-                    required
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Topic" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {topics.map((topic) => (
-                        <SelectItem key={topic} value={topic}>
-                            {topic}
-                        </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-             <div>
-                <Label>Lesson</Label>
-                <Select
-                    value={selectedLesson}
-                    onValueChange={setSelectedLesson}
-                    disabled={lessons.length === 0}
-                    required
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Lesson" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {lessons.map((lesson) => (
-                        <SelectItem key={lesson} value={lesson}>
-                            {lesson}
-                        </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-        </div>
-        
-        <div className="space-y-4">
-            <div>
-                <Label htmlFor="extra-info">Extra Info (Optional)</Label>
-                <Textarea
-                id="extra-info"
-                value={customPrompt}
-                onChange={(e) => setCustomPrompt(e.target.value)}
-                placeholder="e.g., Focus on group work, include a specific video, address common misconceptions about..."
-                />
-            </div>
-        </div>
+    <div className="flex flex-col flex-1 gap-8">
+        <AiToolLayout
+            title={pageTitle}
+            description="Craft detailed, standards-aligned lesson plans in minutes."
+            resultDisplay={<ResultDisplay />}
+            >
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-4">
+                    <div>
+                        <Label>Subject</Label>
+                        <Select
+                            value={selectedSubject}
+                            onValueChange={setSelectedSubject}
+                            required
+                            disabled={!!subjectFromUrl}
+                        >
+                            <SelectTrigger>
+                            <SelectValue placeholder="Select Subject" />
+                            </SelectTrigger>
+                            <SelectContent>
+                            {curriculumData.subjects.map((subject) => (
+                                <SelectItem key={subject} value={subject}>
+                                {subject}
+                                </SelectItem>
+                            ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label>Unit</Label>
+                        <Select
+                            value={selectedUnit}
+                            onValueChange={setSelectedUnit}
+                            disabled={units.length === 0}
+                            required
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Unit" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {units.map((unit) => (
+                                <SelectItem key={unit} value={unit}>
+                                    {unit}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label>Topic</Label>
+                        <Select
+                            value={selectedTopic}
+                            onValueChange={setSelectedTopic}
+                            disabled={topics.length === 0}
+                            required
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Topic" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {topics.map((topic) => (
+                                <SelectItem key={topic} value={topic}>
+                                    {topic}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div>
+                        <Label>Lesson</Label>
+                        <Select
+                            value={selectedLesson}
+                            onValueChange={setSelectedLesson}
+                            disabled={lessons.length === 0}
+                            required
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Lesson" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {lessons.map((lesson) => (
+                                <SelectItem key={lesson} value={lesson}>
+                                    {lesson}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+                
+                <div className="space-y-4">
+                    <div>
+                        <Label htmlFor="extra-info">Extra Info (Optional)</Label>
+                        <Textarea
+                        id="extra-info"
+                        value={customPrompt}
+                        onChange={(e) => setCustomPrompt(e.target.value)}
+                        placeholder="e.g., Focus on group work, include a specific video, address common misconceptions about..."
+                        />
+                    </div>
+                </div>
 
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Button type="submit" disabled={isLoading} className="w-full">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            {isLoading ? 'Generating...' : 'Generate Lesson Plan'}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleReset}
-            className="w-full"
-          >
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Reset
-          </Button>
-        </div>
-      </form>
-    </AiToolLayout>
+                <div className="flex flex-col sm:flex-row gap-2">
+                <Button type="submit" disabled={isLoading} className="w-full">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    {isLoading ? 'Generating...' : 'Generate Lesson Plan'}
+                </Button>
+                <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleReset}
+                    className="w-full"
+                >
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    Reset
+                </Button>
+                </div>
+            </form>
+        </AiToolLayout>
+        
+        {generatedContent && <AiTeacherTools lessonPlanContent={generatedContent} />}
+
+    </div>
   );
 }

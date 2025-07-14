@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 config();
 
 import '@/ai/flows/generate-lesson-plan.ts';
+import '@/ai/flows/generate-teacher-tool.ts';
 import '@/ai/flows/generate-test.ts';
 import '@/ai/flows/generate-lab.ts';
 import '@/ai/flows/refine-learning-objective.ts';
