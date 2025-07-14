@@ -29,7 +29,7 @@ export async function createCheckoutSession(
     quantity: 1,
   }));
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002';
   const priceIdsString = priceIds.join(',');
 
   try {
