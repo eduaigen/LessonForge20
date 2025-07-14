@@ -7,6 +7,7 @@ import { InlineMath, BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
+import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
 
 // This component now intelligently decides how to render content.
 
@@ -257,6 +258,70 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
     );
 };
 
+const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
+    return (
+      <div className="document-view">
+        <h1>NGSS Question Cluster</h1>
+        <section className="mb-6">
+          <h2>Phenomenon</h2>
+          <p className="italic">{cluster.phenomenon}</p>
+        </section>
+        <section className="mb-6">
+          <h2>Stimulus Material</h2>
+          <h4>Passage</h4>
+          <p>{cluster.stimulus.passage}</p>
+          <div className="my-4">
+            <h4>Visual</h4>
+            {cluster.stimulus.visual.startsWith('<svg') ? (
+               <div dangerouslySetInnerHTML={{ __html: cluster.stimulus.visual }} />
+            ) : (
+                <Markdown>{cluster.stimulus.visual}</Markdown>
+            )}
+          </div>
+        </section>
+        <section className="mb-6">
+          <h2>Questions</h2>
+          <div className="space-y-6">
+            <div>
+              <h3>Multiple Choice</h3>
+              <ol className="list-decimal pl-5 space-y-4">
+                <li>
+                  <p>{cluster.questions.mcq1.question}</p>
+                  <ul className="list-[lower-alpha] pl-6">
+                    {cluster.questions.mcq1.options.map(opt => <li key={opt}>{opt}</li>)}
+                  </ul>
+                  <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq1.answer}</em></p>
+                </li>
+                <li>
+                  <p>{cluster.questions.mcq2.question}</p>
+                  <ul className="list-[lower-alpha] pl-6">
+                    {cluster.questions.mcq2.options.map(opt => <li key={opt}>{opt}</li>)}
+                  </ul>
+                   <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq2.answer}</em></p>
+                </li>
+              </ol>
+            </div>
+            <div>
+              <h3>Short Response</h3>
+              <ol className="list-decimal pl-5 space-y-4">
+                <li>{cluster.questions.shortResponse1}</li>
+                <li>{cluster.questions.shortResponse2}</li>
+              </ol>
+            </div>
+            <div>
+              <h3>Modeling</h3>
+              <p>{cluster.questions.modeling}</p>
+            </div>
+            <div>
+              <h3>Prediction</h3>
+              <p>{cluster.questions.prediction}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  };
+
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -268,6 +333,7 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
     const isCoachingObject = typeof content === 'object' && content !== null && 'doNow' in content && 'pedagogicalRationale' in content.doNow;
     const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
+    const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
 
     if (isLessonPlanObject) {
       return renderLessonPlan(content);
@@ -279,6 +345,10 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
 
     if (isSlideshowObject) {
         return renderSlideshowOutline(content);
+    }
+
+    if (isQuestionClusterObject) {
+        return renderQuestionCluster(content);
     }
 
     if (typeof content === 'string') {

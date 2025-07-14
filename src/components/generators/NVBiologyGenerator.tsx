@@ -21,6 +21,7 @@ import { generateComprehensionQuestions } from '@/ai/flows/comprehension-questio
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
 import { scaffoldWorksheet } from '@/ai/flows/scaffold-worksheet';
+import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -42,7 +43,7 @@ type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: 'worksheet' | 'lesson-plan' | 'reading-material' | 'coaching-advice' | 'slideshow-outline' | 'scaffolded-worksheet';
+  type: 'worksheet' | 'lesson-plan' | 'reading-material' | 'coaching-advice' | 'slideshow-outline' | 'scaffolded-worksheet' | 'question-cluster';
   subContent?: any;
   isSubContentLoading?: boolean;
 };
@@ -140,7 +141,7 @@ const GeneratorContent = () => {
         'Reading Material': 'Reading Material',
         'Comprehension Qs': 'Comprehension Questions',
         'Study Sheet': 'Study Sheet',
-        'Question Cluster': 'Question Cluster',
+        'Question Cluster': 'NGSS Question Cluster',
         'Slideshow Outline': 'Slideshow Outline',
         'Scaffold Tool': 'Scaffolded Worksheet',
         'Teacher Coach': 'Teacher Coaching Guide',
@@ -205,6 +206,17 @@ const GeneratorContent = () => {
                 title: title,
                 content: result.scaffoldedContent,
                 type: 'scaffolded-worksheet',
+            }]);
+        } else if (toolName === 'Question Cluster') {
+            result = await generateQuestionCluster({
+                lessonTopic: lessonPlan.lessonOverview.topic,
+                lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
+            });
+            setGeneratedSections(prev => [...prev, {
+                id: `cluster-${Date.now()}`,
+                title: title,
+                content: result,
+                type: 'question-cluster',
             }]);
         }
     } catch (error) {

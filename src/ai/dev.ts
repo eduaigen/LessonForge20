@@ -13,3 +13,4 @@ export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
 export * from './flows/slideshow-outline-generator';
 export * from './flows/scaffold-worksheet';
+export * from './flows/question-cluster-generator';
