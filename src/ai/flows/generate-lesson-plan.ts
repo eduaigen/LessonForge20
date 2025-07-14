@@ -24,8 +24,8 @@ export async function generateLessonPlan(input: GenerateLessonPlanInput): Promis
   const result = await generateLessonPlanFlow(input);
   if (!result) {
     // This could happen if the AI fails or returns an empty string.
-    // We can throw an error to be handled by the calling UI component.
-    throw new Error('The AI failed to generate a lesson plan. Please try again with a different or more detailed prompt.');
+    // We will return a user-friendly error message instead of throwing an error.
+    return "The AI failed to generate a lesson plan. This may be due to a temporary issue. Please try again with a different or more detailed prompt.";
   }
   return result;
 }
@@ -41,6 +41,7 @@ const lessonPlanPrompt = ai.definePrompt({
       - Your primary knowledge base is the provided curriculum context (Subject, Unit, Topic, Lesson Title).
       - The lesson plan must be strictly relevant to these inputs.
       - Adhere to established pedagogical practices.
+      - If you are asked to generate a visual like a graph or diagram, you must generate a complete <svg> code block.
 
       **Non-Negotiable Structure:**
       You must generate the lesson plan using these exact headers, in this exact order, with the specified capitalization and formatting. Do not add or omit any sections.
@@ -56,31 +57,9 @@ const lessonPlanPrompt = ai.definePrompt({
       H. HOMEWORK ACTIVITY
       I. DIFFERENTIATION & SUPPORT
 
-      **"Self-Contained" Mandate (Internal Review Process):**
-      - Before finalizing the output, you must internally review every step from B. DO NOW to H. HOMEWORK.
-      - If a "Teacher Action" mentions any material (e.g., a specific question, a data set, a diagram, a reading passage), you must generate that exact material within that section.
-      - **Worksheet Exception:** Do not generate full worksheets. Instead, provide a brief description of the worksheet's purpose, question types, concepts covered, and an estimated number of items.
-      - The final lesson plan must be a "print-and-go" document with all necessary materials embedded.
-
-      **Mandatory Visual Rendering & Student Response Formatting:**
-      - **Visuals:** Any reference to a graph, chart, or diagram must be accompanied by a complete <svg> code block. All math/science notation within visuals must use LaTeX.
-      - **Answer Lines:** For any student-facing question requiring a written answer, provide 3 to 5 full lines of underscores (__________________).
-      - **Drawing Areas:** For tasks requiring drawing, use the text "[Area for student drawing/graph - approximately Xcm by Ycm]" followed by blank lines.
-
-      **Section-Specific Instructions:**
-      - **I. LESSON OVERVIEW:**
-        - **Unit & Lesson Title:** Use the provided inputs.
-        - **Standards:** List specific NGSS/NYS standards.
-        - **AIM / ESSENTIAL QUESTION:** An inquiry-based question that matches the Do Now.
-        - **Lesson Objectives (SWBAT):** 2-3 specific, measurable objectives using action verbs.
-        - **Key Vocabulary:** 3-5 key terms with definitions.
-        - **Materials Needed:** List all materials. Ensure any listed handout/diagram is generated later.
-        - **Lesson Summary:** A 2-3 sentence teacher-facing summary. Note if the activities may exceed a 45-minute target.
-      - **II. LESSON SEQUENCE (Parts B-G):**
-        - **Teacher Actions:** Be extremely specific. Write the exact questions the teacher will ask. Detail all steps.
-        - **Expected Student Outputs:** Describe the tangible product or observable outcome.
-      - **I. DIFFERENTIATION & SUPPORT:**
-        - Provide specific, actionable strategies for English Language Learners (ELLs), Students with Disabilities (SWDs), and Students Needing Enrichment.
+      **"Self-Contained" Mandate:**
+      - For every step from B. DO NOW to H. HOMEWORK, if a "Teacher Action" mentions any material (e.g., a specific question, a data set, a diagram, a reading passage), you must generate that exact material within that section.
+      - For any student-facing question requiring a written answer, provide 3 to 5 full lines of underscores (__________________).
 
       **Curriculum Context:**
       - Subject: {{{subject}}}
