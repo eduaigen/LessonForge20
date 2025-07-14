@@ -43,6 +43,10 @@ export default function LessonPlanGenerator() {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
 
+  const pageTitle = useMemo(() => {
+    return searchParams.get('title') || 'Lesson Plan Generator';
+  }, [searchParams]);
+
   // Form State
   const subjectFromUrl = useMemo(() => {
     const subject = searchParams.get('subject');
@@ -188,7 +192,7 @@ export default function LessonPlanGenerator() {
 
   return (
     <AiToolLayout
-      title="Lesson Plan Generator"
+      title={pageTitle}
       description="Craft detailed, standards-aligned lesson plans in minutes."
       resultDisplay={<ResultDisplay />}
     >
@@ -307,3 +311,5 @@ export default function LessonPlanGenerator() {
     </AiToolLayout>
   );
 }
+
+    
