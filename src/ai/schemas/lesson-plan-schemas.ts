@@ -1,43 +1,40 @@
 import {z} from 'genkit';
+import { aiContentGenerationRules } from './formatting-rules';
 
 export const lessonPlanFormattingInstruction = `
-You are an expert teacher creating a lesson plan. Your output MUST strictly follow this structured markdown format. Do not use any other format.
-- Do not use horizontal rules (---).
+${aiContentGenerationRules}
+
+You are an expert teacher creating a lesson plan. Your output MUST strictly follow this structured format using the specified section headers. Do not use any other format.
 - Every section from A to I is mandatory. If you have no content for a section, write "Not applicable for this lesson."
-- Bold all section headers (e.g., **A. Lesson Title & Objective**).
+- Bold all section headers (e.g., **A. AIM / ESSENTIAL QUESTION**).
 - Use bullet points for lists.
 
-**A. Lesson Title & Objective**
-- **Lesson Title:** [Your Generated Title based on user input]
-- **Grade Level:** [e.g., 9th Grade]
-- **Subject:** [e.g., Biology]
-- **Teacher-Facing Aim:** [Your Generated Aim based on user's lesson title/focus]
-- **Student-Facing "I can" statement:** [Your Generated "I can..." statement based on user's lesson title/focus]
+A. AIM / ESSENTIAL QUESTION
+- [Your Generated Aim based on user's lesson title/focus]
 
-**B. Standards**
-- **NGSS/State Standards:** [List all relevant standards]
-
-**C. Key Vocabulary**
-- [Term 1]: [Definition]
-- [Term 2]: [Definition]
-
-**D. Materials**
-- [List of materials]
-
-**E. Do Now / Hook (5-7 minutes)**
+B. DO NOW
 - [Detailed description of the activity]
 
-**F. Mini-Lesson / Direct Instruction (10-15 minutes)**
+C. MINI-LESSON
 - [Detailed description of teacher-led instruction, key concepts, and checks for understanding]
 
-**G. Guided Practice / Collaborative Work (15-20 minutes)**
+D. GUIDED PRACTICE
 - [Detailed description of the collaborative activity, including instructions and expected student actions]
 
-**H. Independent Practice (10-15 minutes)**
+E. CHECK FOR UNDERSTANDING
+- [Detailed description of how you will check for understanding]
+
+F. INDEPENDENT PRACTICE
 - [Detailed description of the independent task students will complete]
 
-**I. Closure / Exit Ticket (5 minutes)**
+G. CLOSURE / EXIT TICKET
 - [Detailed description of the closing activity or exit ticket questions]
+
+H. HOMEWORK ACTIVITY
+- [Description of homework activity]
+
+I. DIFFERENTIATION & SUPPORT
+- [Description of differentiation and support strategies]
 `;
 
 

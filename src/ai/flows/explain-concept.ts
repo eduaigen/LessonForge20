@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 const ExplainConceptInputSchema = z.object({
   concept: z.string().describe('The concept or question to be explained.'),
@@ -18,17 +19,13 @@ const ExplainConceptInputSchema = z.object({
 export type ExplainConceptInput = z.infer<typeof ExplainConceptInputSchema>;
 
 const ExplainConceptOutputSchema = z.object({
-  conceptName: z.string().describe('The concept being explained.'),
-  definition: z.string().describe('A clear, straightforward definition of the concept.'),
-  simpleExplanation: z.string().describe('An explanation of the concept in simple, accessible terms.'),
-  analogy: z.string().describe('A relatable analogy or metaphor to aid understanding.'),
-  examples: z.array(z.string()).describe('Concrete real-world or hypothetical examples.'),
-  keyComponents: z.array(z.string()).optional().describe('A bulleted list of key steps, components, or principles if the concept is complex.'),
+  explanation: z.string().describe('The generated explanation in structured markdown format.'),
 });
 export type ExplainConceptOutput = z.infer<typeof ExplainConceptOutputSchema>;
 
 export async function explainConcept(input: ExplainConceptInput): Promise<ExplainConceptOutput> {
-  return explainConceptFlow(input);
+  const result = await explainConceptFlow(input);
+  return { explanation: result.explanation };
 }
 
 const prompt = ai.definePrompt({
@@ -36,6 +33,7 @@ const prompt = ai.definePrompt({
   input: {schema: ExplainConceptInputSchema},
   output: {schema: ExplainConceptOutputSchema},
   prompt: `You are an expert educator capable of explaining complex concepts clearly and concisely for various learning levels and styles.
+${aiContentGenerationRules}
 
 User Input:
 - Concept: {{{concept}}}
@@ -53,7 +51,13 @@ Processing Steps:
 5. Break it Down (Optional/If Complex): For more intricate concepts, offer a bulleted list of key steps, components, or principles.
 6. Consider Different Levels: Adjust the language, complexity of examples, and depth of explanation based on the specified audience.
 
-Provide the output in the specified JSON format.
+Format the output as a single block of text using the following section headers:
+- A. Concept Name
+- B. Definition
+- C. Simple Explanation
+- D. Analogy
+- E. Examples
+- F. Key Components (Optional)
 `,
 });
 

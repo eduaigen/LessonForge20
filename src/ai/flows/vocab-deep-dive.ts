@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 const VocabDeepDiveInputSchema = z.object({
   term: z.string().describe('The vocabulary term to explore.'),
@@ -17,20 +18,13 @@ const VocabDeepDiveInputSchema = z.object({
 export type VocabDeepDiveInput = z.infer<typeof VocabDeepDiveInputSchema>;
 
 const VocabDeepDiveOutputSchema = z.object({
-  word: z.string(),
-  definition: z.string().describe('A clear and concise definition of the term.'),
-  partOfSpeech: z.string().describe('The primary part(s) of speech.'),
-  etymology: z.string().describe("The word's origin and historical development."),
-  synonyms: z.array(z.string()).describe('A list of relevant synonyms.'),
-  antonyms: z.array(z.string()).describe('A list of relevant antonyms.'),
-  exampleSentences: z.array(z.string()).describe('2-3 varied example sentences.'),
-  nuances: z.string().optional().describe('Subtle differences in meaning with similar words or related concepts.'),
-  pronunciation: z.string().describe('A simple phonetic pronunciation guide (e.g., yoo-BIK-wuh-tuhs).'),
+  vocabAnalysis: z.string().describe('The generated vocabulary analysis in structured markdown format.'),
 });
 export type VocabDeepDiveOutput = z.infer<typeof VocabDeepDiveOutputSchema>;
 
 export async function vocabDeepDive(input: VocabDeepDiveInput): Promise<VocabDeepDiveOutput> {
-  return vocabDeepDiveFlow(input);
+  const result = await vocabDeepDiveFlow(input);
+  return { vocabAnalysis: result.vocabAnalysis };
 }
 
 const prompt = ai.definePrompt({
@@ -38,6 +32,7 @@ const prompt = ai.definePrompt({
   input: {schema: VocabDeepDiveInputSchema},
   output: {schema: VocabDeepDiveOutputSchema},
   prompt: `You are a master lexicographer and etymologist, capable of dissecting and explaining single vocabulary words in a rich and educational manner.
+${aiContentGenerationRules}
 
 User Input: The user will provide a single vocabulary word: "{{{term}}}"
 
@@ -50,7 +45,16 @@ Processing Steps:
 6. Nuances/Related Concepts (If Applicable): Explain any subtle differences in meaning with similar words, or related concepts that use the word.
 7. Pronunciation (Text-based): Offer a simple phonetic pronunciation guide (e.g., for "ubiquitous": (yoo-BIK-wuh-tuhs)).
 
-Provide the output in the specified JSON format.
+Format the output as a single block of structured text using the following section headers:
+- A. Word
+- B. Definition
+- C. Part of Speech
+- D. Etymology
+- E. Synonyms
+- F. Antonyms
+- G. Example Sentences
+- H. Nuances (Optional)
+- I. Pronunciation
 `,
 });
 

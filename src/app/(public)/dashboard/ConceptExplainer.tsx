@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Rocket } from 'lucide-react';
+import Markdown from 'react-markdown';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -40,56 +41,20 @@ const FormSchema = z.object({
   gradeLevel: z.coerce.number(),
 });
 
-const SubscriptionCTA = () => (
-  <Alert className="mt-6 border-primary/50 text-primary">
-    <Rocket className="h-4 w-4" />
-    <AlertTitle className="font-bold">Unlock deeper understanding!</AlertTitle>
-    <AlertDescription>
-      Our premium subscription offers interactive concept maps, personalized
-      learning paths, and even AI-generated quizzes to solidify comprehension.{' '}
-      <Link href="/pricing" className="font-semibold underline">
-        Explore Premium Features
-      </Link>
-    </AlertDescription>
-  </Alert>
-);
-
 const ResultDisplay = ({ data }: { data: ExplainConceptOutput }) => (
-  <div className="space-y-4">
-    <h3 className="font-headline text-2xl font-bold text-primary">
-      {data.conceptName}
-    </h3>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">What is it?</h4>
-      <p>{data.definition}</p>
-    </div>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">In Simple Terms</h4>
-      <p>{data.simpleExplanation}</p>
-    </div>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">Analogy</h4>
-      <p className="rounded-md bg-muted/80 p-3 italic">"{data.analogy}"</p>
-    </div>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">Examples</h4>
-      <ul className="list-disc pl-5 space-y-2">
-        {data.examples.map((example, i) => (
-          <li key={i}>{example}</li>
-        ))}
-      </ul>
-    </div>
-    {data.keyComponents && data.keyComponents.length > 0 && (
-      <div>
-        <h4 className="font-headline font-semibold mb-1">Key Components</h4>
-        <ul className="list-disc pl-5 space-y-2">
-          {data.keyComponents.map((component, i) => (
-            <li key={i}>{component}</li>
-          ))}
-        </ul>
-      </div>
-    )}
-    <SubscriptionCTA />
+  <div className="prose prose-sm max-w-none dark:prose-invert">
+    <Markdown>{data.explanation}</Markdown>
+    <Alert className="mt-6 border-primary/50 text-primary">
+      <Rocket className="h-4 w-4" />
+      <AlertTitle className="font-bold">Unlock deeper understanding!</AlertTitle>
+      <AlertDescription>
+        Our premium subscription offers interactive concept maps, personalized
+        learning paths, and even AI-generated quizzes to solidify comprehension.{' '}
+        <Link href="/pricing" className="font-semibold underline">
+          Explore Premium Features
+        </Link>
+      </AlertDescription>
+    </Alert>
   </div>
 );
 

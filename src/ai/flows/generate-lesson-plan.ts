@@ -24,6 +24,7 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateLessonPlanInputSchema},
   output: {schema: GenerateLessonPlanOutputSchema},
   prompt: `
+You are an expert teacher creating a lesson plan. 
 ${lessonPlanFormattingInstruction}
 
 Generate a complete and detailed lesson plan based on the following inputs.
@@ -37,7 +38,7 @@ The output language MUST be {{language}}.
 {{#if standards}}- **Selected Standards:** {{#each standards}}{{this}}; {{/each}}{{else}}- **Selected Standards:** General curriculum alignment{{/if}}
 {{#if customPrompt}}- **Additional Instructions:** {{customPrompt}}{{/if}}
 
-From the "Lesson Title/Focus", you must infer and generate a teacher-facing aim and a student-facing "I can" statement.
+The AIM / ESSENTIAL QUESTION section should be derived from the "Lesson Title/Focus".
 `,
 });
 

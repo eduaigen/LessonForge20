@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 const RefineLearningObjectiveInputSchema = z.object({
   objective: z.string().describe('The learning objective to refine.'),
@@ -18,16 +19,14 @@ const RefineLearningObjectiveInputSchema = z.object({
 export type RefineLearningObjectiveInput = z.infer<typeof RefineLearningObjectiveInputSchema>;
 
 const RefineLearningObjectiveOutputSchema = z.object({
-  originalObjective: z.string().describe("The user's original objective."),
-  refinedObjectives: z.array(z.string()).describe('1-3 improved versions of the objective that are more specific, measurable, and action-oriented.'),
-  explanation: z.string().describe('A brief explanation of why the changes were made.'),
-  tips: z.string().describe('General best practices for crafting effective learning objectives.'),
+  refinedObjective: z.string().describe('The generated refinement in structured markdown format.'),
 });
 
 export type RefineLearningObjectiveOutput = z.infer<typeof RefineLearningObjectiveOutputSchema>;
 
 export async function refineLearningObjective(input: RefineLearningObjectiveInput): Promise<RefineLearningObjectiveOutput> {
-  return refineLearningObjectiveFlow(input);
+  const result = await refineLearningObjectiveFlow(input);
+  return { refinedObjective: result.refinedObjective };
 }
 
 const refineLearningObjectivePrompt = ai.definePrompt({
@@ -35,6 +34,7 @@ const refineLearningObjectivePrompt = ai.definePrompt({
   input: {schema: RefineLearningObjectiveInputSchema},
   output: {schema: RefineLearningObjectiveOutputSchema},
   prompt: `You are an expert in instructional design and educational pedagogy. Your task is to refine and improve learning objectives provided by a teacher.
+${aiContentGenerationRules}
 
 User Input: The user will provide a learning objective.
 
@@ -52,7 +52,11 @@ Processing Steps:
 
 The user's objective is: "{{{objective}}}"
 
-Provide your response in the specified JSON format.
+Format your response as a single block of structured text using the following section headers:
+- A. Original Objective
+- B. Refined Objectives
+- C. Explanation of Refinement
+- D. Tips for Writing Learning Objectives
 `,
 });
 

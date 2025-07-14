@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Rocket } from 'lucide-react';
+import Markdown from 'react-markdown';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -31,81 +32,20 @@ const FormSchema = z.object({
   }),
 });
 
-const SubscriptionCTA = () => (
-  <Alert className="mt-6 border-primary/50 text-primary">
-    <Rocket className="h-4 w-4" />
-    <AlertTitle className="font-bold">Dive even deeper into language!</AlertTitle>
-    <AlertDescription>
-      Our premium subscription unlocks personalized vocabulary lists,
-      interactive flashcards, and advanced linguistic analysis for any text.{' '}
-      <Link href="/pricing" className="font-semibold underline">
-        Explore Premium Features
-      </Link>
-    </AlertDescription>
-  </Alert>
-);
-
 const ResultDisplay = ({ data }: { data: VocabDeepDiveOutput }) => (
-  <div className="space-y-4">
-    <h3 className="font-headline text-2xl font-bold text-primary">
-      {data.word}
-    </h3>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">Definition</h4>
-      <p>
-        <span className="font-medium italic text-muted-foreground mr-2">
-          ({data.partOfSpeech})
-        </span>
-        {data.definition}
-      </p>
-    </div>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">Example Sentences</h4>
-      <ul className="list-decimal pl-5 space-y-2">
-        {data.exampleSentences.map((sentence, i) => (
-          <li key={i} className="italic">
-            "{sentence}"
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">Etymology (Origin)</h4>
-      <p>{data.etymology}</p>
-    </div>
-     {data.nuances && (
-      <div>
-        <h4 className="font-headline font-semibold mb-1">Nuances & Related Concepts</h4>
-        <p>{data.nuances}</p>
-      </div>
-    )}
-    <div className="grid grid-cols-2 gap-4">
-      <div>
-        <h4 className="font-headline font-semibold mb-1">Synonyms</h4>
-        <div className="flex flex-wrap gap-2">
-          {data.synonyms.map((s) => (
-            <span key={s} className="bg-muted px-2 py-1 rounded-md text-sm">
-              {s}
-            </span>
-          ))}
-        </div>
-      </div>
-      <div>
-        <h4 className="font-headline font-semibold mb-1">Antonyms</h4>
-        <div className="flex flex-wrap gap-2">
-          {data.antonyms.map((a) => (
-            <span key={a} className="bg-muted px-2 py-1 rounded-md text-sm">
-              {a}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-    <div>
-      <h4 className="font-headline font-semibold mb-1">Pronunciation</h4>
-      <p className="text-lg font-mono text-primary">{data.pronunciation}</p>
-    </div>
-    <SubscriptionCTA />
+  <div className="prose prose-sm max-w-none dark:prose-invert">
+    <Markdown>{data.vocabAnalysis}</Markdown>
+    <Alert className="mt-6 border-primary/50 text-primary">
+      <Rocket className="h-4 w-4" />
+      <AlertTitle className="font-bold">Dive even deeper into language!</AlertTitle>
+      <AlertDescription>
+        Our premium subscription unlocks personalized vocabulary lists,
+        interactive flashcards, and advanced linguistic analysis for any text.{' '}
+        <Link href="/pricing" className="font-semibold underline">
+          Explore Premium Features
+        </Link>
+      </AlertDescription>
+    </Alert>
   </div>
 );
 
