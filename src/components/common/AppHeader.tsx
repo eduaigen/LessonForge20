@@ -16,6 +16,8 @@ export function AppHeader() {
     router.push('/');
   };
 
+  const pricingHref = isLoggedIn ? '/pricing' : '/signup';
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center px-4">
@@ -38,7 +40,7 @@ export function AppHeader() {
             Curriculum
           </Link>
           <Link
-            href="/pricing"
+            href={pricingHref}
             className="text-foreground/60 transition-colors hover:text-foreground/80"
           >
             Pricing

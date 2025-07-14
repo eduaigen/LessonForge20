@@ -211,11 +211,11 @@ const ToolCard = ({ title, description, icon, href, isPremium }: { title: string
 
   const handleCardClick = () => {
     // Free tools on this page link back to the main free tools dashboard
-    if (!isPremium) {
-       router.push('/dashboard');
+    if (href === '/dashboard') {
+       router.push(href);
        return;
     }
-
+    
     if (isPremium && !isSubscribed) {
       setShowSubscriptionDialog(true);
     } else {

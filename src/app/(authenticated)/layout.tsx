@@ -9,6 +9,7 @@ import {
   PanelLeft,
   Home,
   Lightbulb,
+  DollarSign,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -59,6 +60,18 @@ export default function AuthenticatedAppLayout({
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right">Free Tools</TooltipContent>
+            </Tooltip>
+             <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/pricing"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                >
+                  <DollarSign className="h-5 w-5" />
+                  <span className="sr-only">Pricing</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">Pricing</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -135,6 +148,13 @@ export default function AuthenticatedAppLayout({
                 >
                   <Lightbulb className="h-5 w-5" />
                   Free Tools
+                </Link>
+                 <Link
+                  href="/pricing"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <DollarSign className="h-5 w-5" />
+                  Pricing
                 </Link>
                 <Link
                   href="/auth-dashboard/lesson-plan-generator"
