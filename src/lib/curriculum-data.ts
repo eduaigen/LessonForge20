@@ -272,55 +272,55 @@ export const curriculumData: {
         units: {
             "Unit 1: Discovering New Worlds": {
                 topics: {
-                    "Engage & Explore": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
-                    "Earth and the Moon": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
-                    "Modeling the Sun": { lessons: ["Lesson 7", "Lesson 8", "Lesson 9"] },
-                    "Interpreting Data About Distant Objects": { lessons: ["Lesson 10", "Lesson 11", "Lesson 12"] },
-                    "Unit Closing": { lessons: ["Lesson 13"] }
+                    "Engage & Explore": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Naked-Eye Observations", "Lesson 3: Tools for Observation"] },
+                    "Earth and the Moon": { lessons: ["Lesson 4: Earth's Rotation", "Lesson 5: Moon Phases", "Lesson 6: Eclipses"] },
+                    "Modeling the Sun": { lessons: ["Lesson 7: Sun's Apparent Path", "Lesson 8: Seasonal Changes", "Lesson 9: Solar Energy"] },
+                    "Interpreting Data About Distant Objects": { lessons: ["Lesson 10: Light from Stars", "Lesson 11: The H-R Diagram", "Lesson 12: Galaxies"] },
+                    "Unit Closing": { lessons: ["Lesson 13: Final Performance Task"] }
                 }
             },
             "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
                 topics: {
-                    "Engage & Launch": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
-                    "Tectonic Movement and Plate Boundaries": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
-                    "Natural Hazard Data": { lessons: ["Lesson 7", "Lesson 8", "Lesson 9"] },
-                    "Earthquake Engineering": { lessons: ["Lesson 10", "Lesson 11"] },
-                    "Unit Closing": { lessons: ["Lesson 12"] }
+                    "Engage & Launch": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Earth's Layers", "Lesson 3: Plate Tectonics"] },
+                    "Tectonic Movement and Plate Boundaries": { lessons: ["Lesson 4: Plate Boundaries", "Lesson 5: Earthquakes", "Lesson 6: Volcanoes"] },
+                    "Natural Hazard Data": { lessons: ["Lesson 7: Mapping Hazards", "Lesson 8: Tsunami Risk", "Lesson 9: Social Vulnerability"] },
+                    "Earthquake Engineering": { lessons: ["Lesson 10: Engineering for Earthquakes", "Lesson 11: Community Resilience"] },
+                    "Unit Closing": { lessons: ["Lesson 12: Final Performance Task"] }
                 }
             },
             "Unit 3: Climate Change Throughout Human History": {
                 topics: {
-                    "Engage and Ice Core Data": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
-                    "Global Warming and Carbon Emissions": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
-                    "Sea Level and Ecosystem Effects": { lessons: ["Lesson 7", "Lesson 8"] },
-                    "Geoengineering and Mitigation": { lessons: ["Lesson 9", "Lesson 10"] },
-                    "Unit Closing": { lessons: ["Lesson 11"] }
+                    "Engage and Ice Core Data": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Ice Cores", "Lesson 3: Analyzing Ice Core Data"] },
+                    "Global Warming and Carbon Emissions": { lessons: ["Lesson 4: The Greenhouse Effect", "Lesson 5: The Carbon Cycle", "Lesson 6: Human Impact on Climate"] },
+                    "Sea Level and Ecosystem Effects": { lessons: ["Lesson 7: Sea Level Rise", "Lesson 8: Ecosystem Impacts"] },
+                    "Geoengineering and Mitigation": { lessons: ["Lesson 9: Mitigation Strategies", "Lesson 10: Geoengineering"] },
+                    "Unit Closing": { lessons: ["Lesson 11: Final Performance Task"] }
                 }
             },
             "Unit 4: More Hurricanes and Blizzards in NYC?": {
                 topics: {
-                    "Extreme Weather Patterns": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3"] },
-                    "Hurricane Frequency": { lessons: ["Lesson 4", "Lesson 5", "Lesson 6"] },
-                    "Blizzard Analysis": { lessons: ["Lesson 7", "Lesson 8"] },
-                    "Infrastructure Resilience": { lessons: ["Lesson 9", "Lesson 10"] },
-                    "Unit Closing": { lessons: ["Lesson 11"] }
+                    "Extreme Weather Patterns": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Weather vs. Climate", "Lesson 3: Air Masses and Fronts"] },
+                    "Hurricane Frequency": { lessons: ["Lesson 4: Hurricane Formation", "Lesson 5: Hurricane Data Analysis", "Lesson 6: Climate Change and Hurricanes"] },
+                    "Blizzard Analysis": { lessons: ["Lesson 7: Blizzard Formation", "Lesson 8: Blizzard Data Analysis"] },
+                    "Infrastructure Resilience": { lessons: ["Lesson 9: Infrastructure Vulnerability", "Lesson 10: Designing for Resilience"] },
+                    "Unit Closing": { lessons: ["Lesson 11: Final Performance Task"] }
                 }
             },
             "Unit 5: Solutions for a Sustainable Future": {
                 topics: {
-                    "Burning Fossil Fuels": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6", "Lesson 7", "Lesson 8", "Lesson 9", "Lesson 10"] },
-                    "Land Use & Biodiversity": { lessons: ["Lesson 11", "Lesson 12", "Lesson 13", "Lesson 14", "Lesson 15", "Lesson 16"] },
-                    "Mining": { lessons: ["Lesson 17", "Lesson 18", "Lesson 19", "Lesson 20", "Lesson 21", "Lesson 22", "Lesson 23"] },
-                    "Unit Closing": { lessons: ["Lesson 24", "Lesson 25", "Lesson 26"] }
+                    "Burning Fossil Fuels": { lessons: ["Lesson 1: Fossil Fuels and Energy", "Lesson 2: Air Pollution", "Lesson 3: Water Pollution", "Lesson 4: Acid Rain", "Lesson 5: The Ozone Layer", "Lesson 6: Renewable Energy", "Lesson 7: Nuclear Energy", "Lesson 8: Energy Efficiency", "Lesson 9: Policy Solutions", "Lesson 10: Individual Action"] },
+                    "Land Use & Biodiversity": { lessons: ["Lesson 11: Deforestation", "Lesson 12: Urbanization", "Lesson 13: Agriculture", "Lesson 14: Biodiversity", "Lesson 15: Habitat Destruction", "Lesson 16: Conservation"] },
+                    "Mining": { lessons: ["Lesson 17: Mineral Resources", "Lesson 18: Mining Techniques", "Lesson 19: Environmental Impacts of Mining", "Lesson 20: Social Impacts of Mining", "Lesson 21: Sustainable Mining Practices", "Lesson 22: Recycling Minerals", "Lesson 23: Conflict Minerals"] },
+                    "Unit Closing": { lessons: ["Lesson 24: Stakeholder Meeting Simulation", "Lesson 25: Sustainability Plan", "Lesson 26: Final Presentation"] }
                 }
             },
             "Unit 6: Probability of Life Elsewhere": {
                 topics: {
-                    "Stability of the Solar System": { lessons: ["Lesson 1", "Lesson 2", "Lesson 3", "Lesson 4", "Lesson 5", "Lesson 6", "Lesson 7"] },
-                    "Coevolution of Earth and Life": { lessons: ["Lesson 8", "Lesson 9", "Lesson 10", "Lesson 11", "Lesson 12"] },
-                    "Origin of the Universe": { lessons: ["Lesson 13", "Lesson 14", "Lesson 15", "Lesson 16", "Lesson 17"] },
-                    "Asteroid Orbits": { lessons: ["Lesson 18", "Lesson 19", "Lesson 20", "Lesson 21", "Lesson 22"] },
-                    "Unit Closing": { lessons: ["Lesson 23"] }
+                    "Stability of the Solar System": { lessons: ["Lesson 1: Gravity and Orbits", "Lesson 2: The Goldilocks Zone", "Lesson 3: Earth's Magnetic Field", "Lesson 4: The Role of Jupiter", "Lesson 5: The Moon's Influence", "Lesson 6: Long-Term Stability", "Lesson 7: Exoplanets"] },
+                    "Coevolution of Earth and Life": { lessons: ["Lesson 8: Early Earth", "Lesson 9: Origin of Life", "Lesson 10: Photosynthesis and Oxygen", "Lesson 11: Mass Extinctions", "Lesson 12: Humans and the Biosphere"] },
+                    "Origin of the Universe": { lessons: ["Lesson 13: The Big Bang", "Lesson 14: Evidence for the Big Bang", "Lesson 15: Stellar Evolution", "Lesson 16: Formation of Elements", "Lesson 17: The Drake Equation"] },
+                    "Asteroid Orbits": { lessons: ["Lesson 18: Asteroids and Comets", "Lesson 19: Impact Events", "Lesson 20: Near-Earth Objects", "Lesson 21: Planetary Defense", "Lesson 22: The Search for Extraterrestrial Intelligence (SETI)"] },
+                    "Unit Closing": { lessons: ["Lesson 23: Final Performance Task"] }
                 }
             }
         }
@@ -1351,7 +1351,7 @@ export const curriculumData: {
                 }
             }
         }
-      },
+      }
     },
     Health: {
         units: {}
@@ -2252,5 +2252,3 @@ export const curriculumData: {
     }
   },
 };
-
-    
