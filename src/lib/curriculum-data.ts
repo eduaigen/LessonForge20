@@ -15,11 +15,9 @@ export type CurriculumContent = {
 
 export const curriculumData: {
   subjects: string[];
-  grades: number[];
   content: CurriculumContent;
 } = {
   subjects: ['AP Biology', 'Biology', 'Chemistry', 'Earth_Science', 'Physics', 'History', 'Literature', 'Health', 'Math'],
-  grades: [6, 7, 8, 9, 10, 11, 12],
   content: {
     'AP Biology': {
         units: {
@@ -524,7 +522,7 @@ export const curriculumData: {
     },
     Math: {
       units: {
-        "Unit 1: One-Variable Statistics": {
+        "Algebra 1 - Unit 1: One-Variable Statistics": {
           topics: {
             "Section A: Getting to Know You": {
               lessons: [
@@ -564,7 +562,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 2: Linear Equations and Systems": {
+        "Algebra 1 - Unit 2: Linear Equations and Systems": {
           topics: {
             "Section A: Writing and Modeling with Equations": {
               lessons: [
@@ -603,7 +601,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 3: Two-Variable Statistics": {
+        "Algebra 1 - Unit 3: Two-Variable Statistics": {
           topics: {
             "Section A: Two-Way Tables": {
               lessons: [
@@ -633,7 +631,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 4: Linear Inequalities and Systems": {
+        "Algebra 1 - Unit 4: Linear Inequalities and Systems": {
           topics: {
             "Section A: Linear Inequalities in One Variable": {
               lessons: [
@@ -658,7 +656,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 5: Functions": {
+        "Algebra 1 - Unit 5: Functions": {
           topics: {
             "Section A: Functions and Their Representations": {
               lessons: [
@@ -700,7 +698,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 6: Introduction to Exponential Functions": {
+        "Algebra 1 - Unit 6: Introduction to Exponential Functions": {
           topics: {
             "Section A: Looking at Growth": {
               lessons: [
@@ -749,7 +747,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 7: Introduction to Quadratic Functions": {
+        "Algebra 1 - Unit 7: Introduction to Quadratic Functions": {
           topics: {
             "Section A: A Different Kind of Change": {
               lessons: [
@@ -786,7 +784,7 @@ export const curriculumData: {
             }
           }
         },
-        "Unit 8: Quadratic Equations": {
+        "Algebra 1 - Unit 8: Quadratic Equations": {
           topics: {
             "Section A: Finding Unknown Inputs": {
               lessons: [
@@ -837,10 +835,297 @@ export const curriculumData: {
               ]
             }
           }
+        },
+        "Algebra 2 - Unit 1: Sequences and Functions": {
+          topics: {
+            "Section A: Sequences": {
+              lessons: [
+                "Lesson 1: A Towering Sequence",
+                "Lesson 2: Introducing Geometric Sequences",
+                "Lesson 3: Different Types of Sequences",
+                "Lesson 4: Using Technology to Work with Sequences"
+              ]
+            },
+            "Section B: Representing Sequences": {
+              lessons: [
+                "Lesson 5: Sequences Are Functions",
+                "Lesson 6: Representing Sequences",
+                "Lesson 7: Representing More Sequences"
+              ]
+            },
+            "Section C: What’s the Equation?": {
+              lessons: [
+                "Lesson 8: The nth Term",
+                "Lesson 9: What’s the Equation?",
+                "Lesson 10: Situations and Sequence Types",
+                "Lesson 11: Adding Up"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 2: Polynomial Functions": {
+          topics: {
+            "Section A: What Is a Polynomial?": {
+              lessons: [
+                "Lesson 1: Let’s Make a Box",
+                "Lesson 2: Funding the Future",
+                "Lesson 3: Introducing Polynomials",
+                "Lesson 4: Combining Polynomials"
+              ]
+            },
+            "Section B: Working with Polynomials": {
+              lessons: [
+                "Lesson 5: Connecting Factors and Zeros",
+                "Lesson 6: Different Forms",
+                "Lesson 7: Using Factors and Zeros"
+              ]
+            },
+            "Section C: Graphs of Polynomials": {
+              lessons: [
+                "Lesson 8: End Behavior (Part 1)",
+                "Lesson 9: End Behavior (Part 2)",
+                "Lesson 10: Multiplicity",
+                "Lesson 11: Finding Intersections"
+              ]
+            },
+            "Section D: Polynomial Division": {
+              lessons: [
+                "Lesson 12: Polynomial Division (Part 1)",
+                "Lesson 13: Polynomial Division (Part 2)",
+                "Lesson 14: What Do You Know about Polynomials?",
+                "Lesson 15: The Remainder Theorem"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 3: Rational Functions and Equations": {
+          topics: {
+            "Section A: Rational Functions": {
+              lessons: [
+                "Lesson 1: Minimizing Surface Area",
+                "Lesson 2: Graphs of Rational Functions (Part 1)",
+                "Lesson 3: Graphs of Rational Functions (Part 2)",
+                "Lesson 4: End Behavior of Rational Functions"
+              ]
+            },
+            "Section B: Rational Equations": {
+              lessons: [
+                "Lesson 5: Rational Equations (Part 1)",
+                "Lesson 6: Rational Equations (Part 2)",
+                "Lesson 7: Solving Rational Equations"
+              ]
+            },
+            "Section C: Polynomial Identities": {
+              lessons: [
+                "Lesson 8: Polynomial Identities (Part 1)",
+                "Lesson 9: Polynomial Identities (Part 2)",
+                "Lesson 10: Summing Up",
+                "Lesson 11: Using the Sum"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 4: Complex Numbers and Rational Exponents": {
+          topics: {
+            "Section A: Exponent Properties": {
+              lessons: [
+                "Lesson 1: Properties of Exponents",
+                "Lesson 2: Square Roots and Cube Roots",
+                "Lesson 3: Exponents That Are Unit Fractions",
+                "Lesson 4: Positive Rational Exponents",
+                "Lesson 5: Negative Rational Exponents"
+              ]
+            },
+            "Section B: Solving Equations with Square and Cube Roots": {
+              lessons: [
+                "Lesson 6: Squares and Square Roots",
+                "Lesson 7: Inequivalent Equations?",
+                "Lesson 8: Cubes and Cube Roots",
+                "Lesson 9: Solving Radical Equations"
+              ]
+            },
+            "Section C: A New Kind of Number": {
+              lessons: [
+                "Lesson 10: A New Kind of Number",
+                "Lesson 11: Introducing the Number i",
+                "Lesson 12: Arithmetic with Complex Numbers",
+                "Lesson 13: Multiplying Complex Numbers",
+                "Lesson 14: More Arithmetic with Complex Numbers",
+                "Lesson 15: Working Backward"
+              ]
+            },
+            "Section D: Solving Quadratics with Complex Numbers": {
+              lessons: [
+                "Lesson 16: Solving Quadratics",
+                "Lesson 17: Completing the Square and Complex Solutions",
+                "Lesson 18: The Quadratic Formula and Complex Solutions",
+                "Lesson 19: Real and Non-Real Solutions"
+              ]
+            },
+            "Section E: Let's Put It to Work": {
+              lessons: [
+                "Lesson 20: Drawing Proportional Circles"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 5: Exponential Functions and Equations": {
+          topics: {
+            "Section A: Growing and Shrinking": {
+              lessons: [
+                "Lesson 1: Growing and Shrinking",
+                "Lesson 2: Representations of Growth and Decay",
+                "Lesson 3: Understanding Rational Inputs",
+                "Lesson 4: Representing Functions at Rational Inputs",
+                "Lesson 5: Changes Over Rational Intervals",
+                "Lesson 6: Writing Equations for Exponential Functions",
+                "Lesson 7: Interpreting and Using Exponential Functions"
+              ]
+            },
+            "Section B: Missing Exponents": {
+              lessons: [
+                "Lesson 8: Unknown Exponents",
+                "Lesson 9: What Is a Logarithm?",
+                "Lesson 10: Interpreting and Writing Logarithmic Equations",
+                "Lesson 11: Evaluating Logarithmic Expressions"
+              ]
+            },
+            "Section C: The Constant e": {
+              lessons: [
+                "Lesson 12: The Number e",
+                "Lesson 13: Exponential Functions with Base e",
+                "Lesson 14: Solving Exponential Equations"
+              ]
+            },
+            "Section D: Logarithmic Functions and Graphs": {
+              lessons: [
+                "Lesson 15: Using Graphs and Logarithms to Solve Problems (Part 1)",
+                "Lesson 16: Using Graphs and Logarithms to Solve Problems (Part 2)",
+                "Lesson 17: Logarithmic Functions"
+              ]
+            },
+            "Section E: Let's Put It to Work": {
+              lessons: [
+                "Lesson 18: Applications of Logarithmic Functions"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 6: Transformations of Functions": {
+          topics: {
+            "Section A: Translations, Reflections, and Symmetry": {
+              lessons: [
+                "Lesson 1: Matching Up to Data",
+                "Lesson 2: Moving Functions",
+                "Lesson 3: More Movement",
+                "Lesson 4: Reflecting Functions",
+                "Lesson 5: Some Functions Have Symmetry",
+                "Lesson 6: Symmetry in Equations",
+                "Lesson 7: Expressing Transformations of Functions Algebraically"
+              ]
+            },
+            "Section B: Scaling Outputs and Inputs": {
+              lessons: [
+                "Lesson 8: Scaling the Outputs",
+                "Lesson 9: Scaling the Inputs",
+                "Lesson 10: Combining Functions"
+              ]
+            },
+            "Section C: Transformations of Functions": {
+              lessons: [
+                "Lesson 11: Transforming from an Original Function",
+                "Lesson 12: Transformation Effects",
+                "Lesson 13: Transforming Parabolas",
+                "Lesson 14: Transforming Circles"
+              ]
+            },
+            "Section D: Let’s Put It to Work": {
+              lessons: [
+                "Lesson 15: Making a Model for Data"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 7: Trigonometric Functions": {
+          topics: {
+            "Section A: The Unit Circle": {
+              lessons: [
+                "Lesson 1: Moving in Circles",
+                "Lesson 2: Revisiting Right Triangles",
+                "Lesson 3: The Unit Circle (Part 1)",
+                "Lesson 4: The Unit Circle (Part 2)",
+                "Lesson 5: The Pythagorean Identity (Part 1)",
+                "Lesson 6: The Pythagorean Identity (Part 2)",
+                "Lesson 7: Finding Unknown Coordinates on a Circle"
+              ]
+            },
+            "Section B: Periodic Functions": {
+              lessons: [
+                "Lesson 8: Rising and Falling",
+                "Lesson 9: Introduction to Trigonometric Functions",
+                "Lesson 10: Beyond 2pi",
+                "Lesson 11: Extending the Domain of Trigonometric Functions",
+                "Lesson 12: Tangent",
+                "Lesson 13: Some New Ratios"
+              ]
+            },
+            "Section C: Trigonometry Transformations": {
+              lessons: [
+                "Lesson 14: Amplitude and Midline",
+                "Lesson 15: Transforming Trigonometric Functions",
+                "Lesson 16: Features of Trigonometric Graphs (Part 1)",
+                "Lesson 17: Features of Trigonometric Graphs (Part 2)",
+                "Lesson 18: Comparing Transformations",
+                "Lesson 19: Modeling Circular Motion"
+              ]
+            },
+            "Section D: Let’s Put It to Work": {
+              lessons: [
+                "Lesson 20: Beyond Circles"
+              ]
+            }
+          }
+        },
+        "Algebra 2 - Unit 8: Statistical Inferences": {
+          topics: {
+            "Section A: Study Types": {
+              lessons: [
+                "Lesson 1: Being Skeptical",
+                "Lesson 2: Study Types",
+                "Lesson 3: Randomness in Groups"
+              ]
+            },
+            "Section B: Distributions": {
+              lessons: [
+                "Lesson 4: Describing Distributions",
+                "Lesson 5: Normal Distributions",
+                "Lesson 6: Areas in Histograms",
+                "Lesson 7: Areas under a Normal Curve"
+              ]
+            },
+            "Section C: Not All Samples Are the Same": {
+              lessons: [
+                "Lesson 8: Not Always Ideal",
+                "Lesson 9: Variability in Samples",
+                "Lesson 10: Estimating Proportions from Samples",
+                "Lesson 11: Estimating a Population Mean"
+              ]
+            },
+            "Section D: Analyzing Experimental Data": {
+              lessons: [
+                "Lesson 12: Experimenting",
+                "Lesson 13: Using Normal Distributions for Experiment Analysis",
+                "Lesson 14: Questioning Experimenting"
+              ]
+            },
+            "Section E: Let's Put It to Work": {
+              lessons: [
+                "Lesson 15: Heart Rates"
+              ]
+            }
+          }
         }
       }
     }
   },
 };
-
-    
