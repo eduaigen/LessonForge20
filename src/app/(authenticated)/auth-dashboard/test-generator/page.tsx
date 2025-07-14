@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,7 +23,6 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { generateTest, type GenerateTestInput } from '@/ai/flows/generate-test';
 import { regenerateQuestion } from '@/ai/flows/regenerate-question';
-import { curriculumData as baseCurriculumData } from '@/lib/curriculum-data';
 import { modules } from '@/lib/modules-data';
 import AiToolLayout from '@/components/generators/AiToolLayout';
 import { BookCopy, PlusCircle, RefreshCw, Printer, Edit, Trash2, Sparkles, Loader2 } from 'lucide-react';
@@ -31,16 +30,54 @@ import { Label } from '@/components/ui/label';
 import StyledContentDisplay from '@/components/common/StyledContentDisplay';
 import GeneratingAnimation from '@/components/common/GeneratingAnimation';
 import Link from 'next/link';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Lock } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
+
+// Helper to dynamically load curriculum data
+const getCurriculumForSubject = async (subject: string) => {
+    switch (subject) {
+        case 'AP Biology':
+            return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
+        case 'NGSS Biology (OpenSciEd)':
+            return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
+        case 'NV Biology':
+            return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+        case 'Chemistry':
+            return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
+        case 'Earth_Science':
+            return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
+        case 'Physics':
+            return (await import('@/lib/physics-curriculum')).physicsCurriculum;
+        case 'Health':
+            return (await import('@/lib/health-curriculum')).healthCurriculum;
+        case 'History':
+        case 'Global History I & II':
+        case 'US History & Government':
+        case 'Government & Economics':
+            return (await import('@/lib/history-curriculum')).historyCurriculum;
+        case 'Math':
+        case 'Illustrative Math Algebra 1':
+        case 'Illustrative Math Algebra 2':
+        case 'Illustrative Math Geometry':
+            return (await import('@/lib/math-curriculum')).mathCurriculum;
+        case 'ELA 9th Grade':
+            return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
+        case 'ELA 10th Grade':
+            return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
+        case 'ELA 11th Grade':
+            return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
+        case 'ELA 12th Grade':
+            return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
+        default:
+            return null;
+    }
+};
 
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
     const subjectModules = { ...modules };
-    // We don't want to include tools as selectable subjects in the generator
     delete subjectModules.tools; 
 
     Object.values(subjectModules).flat().forEach(module => {
@@ -48,33 +85,6 @@ const mapPriceIdToSubject = (): { [key: string]: string } => {
     });
     return mapping;
 };
-
-// A reverse mapping to find the key in curriculumData.content
-const subjectNameToCurriculumKey = (subjectName: string): string => {
-    switch(subjectName) {
-        case "NV Biology": return "NV Biology";
-        case "NGSS Biology (OpenSciEd)": return "NGSS Biology (OpenSciEd)";
-        case "AP Biology": return "AP Biology";
-        case "NGSS Chemistry (OpenSciEd)": return "Chemistry";
-        case "NGSS Physics (OpenSciEd)": return "Physics";
-        case "Earth and Space Science": return "Earth_Science";
-        case "Health": return "Health";
-        case "Illustrative Math Algebra 1":
-        case "Illustrative Math Algebra 2":
-        case "Illustrative Math Geometry":
-             return "Math";
-        case "ELA 9th Grade":
-        case "ELA 10th Grade":
-        case "ELA 11th Grade":
-        case "ELA 12th Grade":
-             return "Literature";
-        case "Global History I & II":
-        case "US History & Government":
-        case "Government & Economics":
-             return "History";
-        default: return subjectName;
-    }
-}
 
 interface TestQuestion {
     id: number;
@@ -103,7 +113,6 @@ export default function TestGeneratorPage() {
 
   const availableSubjects = useMemo(() => {
     const subjectModules = { ...modules };
-    // Exclude tools from the list of available subjects
     delete subjectModules.tools; 
 
     if (isAdmin) return Object.values(subjectModules).flat().map(m => m.name);
@@ -133,6 +142,7 @@ export default function TestGeneratorPage() {
   // Curriculum structure states
   const [units, setUnits] = useState<string[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
+  const [currentCurriculum, setCurrentCurriculum] = useState<any>(null);
   
   const handleUnitChange = (unit: string) => {
     setSelectedUnits(prev => 
@@ -146,29 +156,42 @@ export default function TestGeneratorPage() {
     );
   };
 
-  useEffect(() => {
-    if (selectedSubject) {
-      const curriculumKey = subjectNameToCurriculumKey(selectedSubject);
-      const subjectContent = baseCurriculumData.content[curriculumKey];
-      setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
-      setSelectedUnits([]);
-      setSelectedTopics([]);
+  const updateDropdowns = useCallback(() => {
+    if (currentCurriculum) {
+      setUnits(Object.keys(currentCurriculum.units));
+      if (selectedUnits.length === 1) {
+          const unitContent = currentCurriculum.units[selectedUnits[0]];
+          setTopics(unitContent ? Object.keys(unitContent.topics) : []);
+      } else {
+          setTopics([]);
+          setSelectedTopics([]);
+      }
     } else {
       setUnits([]);
+      setTopics([]);
+      setSelectedUnits([]);
+      setSelectedTopics([]);
     }
+  }, [currentCurriculum, selectedUnits]);
+
+  useEffect(() => {
+    const loadCurriculum = async () => {
+        if (selectedSubject) {
+            setIsLoading(true);
+            const data = await getCurriculumForSubject(selectedSubject);
+            setCurrentCurriculum(data);
+            setIsLoading(false);
+        } else {
+            setCurrentCurriculum(null);
+        }
+    };
+    loadCurriculum();
   }, [selectedSubject]);
 
   useEffect(() => {
-    if (selectedSubject && selectedUnits.length === 1) {
-      const curriculumKey = subjectNameToCurriculumKey(selectedSubject);
-      const unitContent =
-        baseCurriculumData.content[curriculumKey]?.units[selectedUnits[0]];
-      setTopics(unitContent ? Object.keys(unitContent.topics) : []);
-    } else {
-      setTopics([]);
-    }
-    setSelectedTopics([]);
-  }, [selectedSubject, selectedUnits]);
+    updateDropdowns();
+  }, [selectedUnits, currentCurriculum, updateDropdowns]);
+
 
   const parseTestContent = (content: string): { student: TestQuestion[], answer: TestQuestion[] } => {
     const studentMarker = 'STUDENT VERSION START ---';
@@ -358,7 +381,7 @@ export default function TestGeneratorPage() {
         </Button>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col bg-muted/30 p-4">
-        {isLoading ? (
+        {isLoading && !currentCurriculum ? (
           <GeneratingAnimation />
         ) : studentVersion.length > 0 ? (
           <ScrollArea className="flex-1 rounded-md bg-background shadow-inner">
@@ -450,9 +473,13 @@ export default function TestGeneratorPage() {
             <div>
                 <Label>Subject</Label>
                 <Select
-                value={selectedSubject}
-                onValueChange={setSelectedSubject}
-                required
+                    value={selectedSubject}
+                    onValueChange={(value) => {
+                        setSelectedSubject(value);
+                        setSelectedUnits([]);
+                        setSelectedTopics([]);
+                    }}
+                    required
                 >
                 <SelectTrigger>
                     <SelectValue placeholder="Select a Subscribed Subject" />
@@ -477,6 +504,7 @@ export default function TestGeneratorPage() {
                                     id={`unit-${unit}`}
                                     checked={selectedUnits.includes(unit)}
                                     onCheckedChange={() => handleUnitChange(unit)}
+                                    disabled={isLoading}
                                 />
                                 <label
                                     htmlFor={`unit-${unit}`}
@@ -501,6 +529,7 @@ export default function TestGeneratorPage() {
                                     id={`topic-${topic}`}
                                     checked={selectedTopics.includes(topic)}
                                     onCheckedChange={() => handleTopicChange(topic)}
+                                    disabled={isLoading}
                                 />
                                 <label
                                     htmlFor={`topic-${topic}`}
@@ -597,5 +626,3 @@ export default function TestGeneratorPage() {
     </>
   );
 }
-
-    

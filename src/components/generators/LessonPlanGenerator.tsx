@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,7 +25,7 @@ import {
   generateLessonPlan,
   type GenerateLessonPlanInput,
 } from '@/ai/flows/generate-lesson-plan';
-import { curriculumData as baseCurriculumData, type CurriculumContent } from '@/lib/curriculum-data';
+import { curriculumData } from '@/lib/curriculum-data';
 import AiToolLayout from './AiToolLayout';
 import {
   BookCopy,
@@ -38,26 +38,44 @@ import StyledContentDisplay from '../common/StyledContentDisplay';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import AiTeacherTools from './AiTeacherTools';
 
-// Helper function to dynamically import curriculum
-const getDynamicCurriculum = async (gradeTitle: string): Promise<CurriculumContent | null> => {
-    if (gradeTitle.startsWith('ELA')) {
-        switch (gradeTitle) {
-            case 'ELA 9th Grade':
-                return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
-            case 'ELA 10th Grade':
-                return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
-            case 'ELA 11th Grade':
-                return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
-            case 'ELA 12th Grade':
-                return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
-            default:
-                return null;
-        }
+// Helper to dynamically load curriculum data
+const getCurriculumForSubject = async (subject: string) => {
+    switch (subject) {
+        case 'AP Biology':
+            return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
+        case 'NGSS Biology (OpenSciEd)':
+            return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
+        case 'NV Biology':
+            return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+        case 'Chemistry':
+            return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
+        case 'Earth_Science':
+            return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
+        case 'Physics':
+            return (await import('@/lib/physics-curriculum')).physicsCurriculum;
+        case 'Health':
+            return (await import('@/lib/health-curriculum')).healthCurriculum;
+        case 'History':
+        case 'Global History I & II':
+        case 'US History & Government':
+        case 'Government & Economics':
+            return (await import('@/lib/history-curriculum')).historyCurriculum;
+        case 'Math':
+        case 'Illustrative Math Algebra 1':
+        case 'Illustrative Math Algebra 2':
+        case 'Illustrative Math Geometry':
+            return (await import('@/lib/math-curriculum')).mathCurriculum;
+        case 'ELA 9th Grade':
+            return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
+        case 'ELA 10th Grade':
+            return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
+        case 'ELA 11th Grade':
+            return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
+        case 'ELA 12th Grade':
+            return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
+        default:
+            return null;
     }
-    if (gradeTitle === 'NV Biology') {
-        return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
-    }
-    return null;
 };
 
 
@@ -67,17 +85,16 @@ export default function LessonPlanGenerator() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
-  const [curriculumData, setCurriculumData] = useState(baseCurriculumData);
-
+  
   const pageTitle = useMemo(() => {
     return searchParams.get('title') || 'Lesson Plan Generator';
   }, [searchParams]);
 
   // Form State
   const subjectFromUrl = useMemo(() => {
-    const subject = searchParams.get('subject');
+    const subject = searchParams.get('subject') || searchParams.get('title');
     return subject && curriculumData.subjects.includes(subject) ? subject : '';
-  }, [searchParams, curriculumData.subjects]);
+  }, [searchParams]);
 
   const [selectedSubject, setSelectedSubject] = useState<string>(subjectFromUrl);
   const [selectedUnit, setSelectedUnit] = useState<string>('');
@@ -89,66 +106,66 @@ export default function LessonPlanGenerator() {
   const [units, setUnits] = useState<string[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
   const [lessons, setLessons] = useState<string[]>([]);
+  
+  const [currentCurriculum, setCurrentCurriculum] = useState<any>(null);
 
-  useEffect(() => {
-    const loadCurriculum = async () => {
-        const title = searchParams.get('title');
-        if (title) {
-            const dynamicContent = await getDynamicCurriculum(title);
-            if (dynamicContent) {
-                // The dynamic content contains its own subject key, so we merge it in.
-                // For example, ELA curriculum files are structured as { units: { ... } }
-                // and should be placed under the "Literature" key.
-                const subjectKey = title.startsWith('ELA') ? 'Literature' : title;
-                const newContent: CurriculumContent = { [subjectKey]: dynamicContent };
-                setCurriculumData(prev => ({ ...prev, content: { ...prev.content, ...newContent }}));
-            }
-        }
-    };
-    loadCurriculum();
-  }, [searchParams]);
+  const updateDropdowns = useCallback(() => {
+    if (currentCurriculum) {
+      const newUnits = Object.keys(currentCurriculum.units);
+      setUnits(newUnits);
+
+      if (selectedUnit && newUnits.includes(selectedUnit)) {
+          const newTopics = Object.keys(currentCurriculum.units[selectedUnit].topics);
+          setTopics(newTopics);
+
+          if (selectedTopic && newTopics.includes(selectedTopic)) {
+              const newLessons = currentCurriculum.units[selectedUnit].topics[selectedTopic].lessons;
+              setLessons(newLessons);
+          } else {
+              setLessons([]);
+              setSelectedLesson('');
+          }
+      } else {
+          setTopics([]);
+          setSelectedTopic('');
+          setLessons([]);
+          setSelectedLesson('');
+      }
+    } else {
+        setUnits([]);
+        setTopics([]);
+        setLessons([]);
+        setSelectedUnit('');
+        setSelectedTopic('');
+        setSelectedLesson('');
+    }
+  }, [currentCurriculum, selectedUnit, selectedTopic]);
 
 
   // Pre-fill subject from URL search params
   useEffect(() => {
     setSelectedSubject(subjectFromUrl);
   }, [subjectFromUrl]);
-
-  // Reset and update dropdowns based on selections
+  
+  // Load curriculum when subject changes
   useEffect(() => {
-    if (selectedSubject) {
-      const subjectContent = curriculumData.content[selectedSubject];
-      setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
-      setSelectedUnit('');
-      setSelectedTopic('');
-      setSelectedLesson('');
-    } else {
-      setUnits([]);
-    }
-  }, [selectedSubject, curriculumData]);
+    const loadCurriculum = async () => {
+        if (selectedSubject) {
+            setIsLoading(true);
+            const data = await getCurriculumForSubject(selectedSubject);
+            setCurrentCurriculum(data);
+            setIsLoading(false);
+        } else {
+            setCurrentCurriculum(null);
+        }
+    };
+    loadCurriculum();
+  }, [selectedSubject]);
 
+  // Update dropdown options when curriculum or selections change
   useEffect(() => {
-    if (selectedSubject && selectedUnit) {
-      const unitContent =
-        curriculumData.content[selectedSubject]?.units[selectedUnit];
-      setTopics(unitContent ? Object.keys(unitContent.topics) : []);
-      setSelectedTopic('');
-      setSelectedLesson('');
-    } else {
-      setTopics([]);
-    }
-  }, [selectedSubject, selectedUnit, curriculumData]);
-
-   useEffect(() => {
-    if (selectedSubject && selectedUnit && selectedTopic) {
-      const topicContent =
-        curriculumData.content[selectedSubject]?.units[selectedUnit]?.topics[selectedTopic];
-      setLessons(topicContent ? topicContent.lessons : []);
-      setSelectedLesson('');
-    } else {
-      setLessons([]);
-    }
-  }, [selectedSubject, selectedUnit, selectedTopic, curriculumData]);
+    updateDropdowns();
+  }, [currentCurriculum, selectedUnit, selectedTopic, updateDropdowns]);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -211,7 +228,7 @@ export default function LessonPlanGenerator() {
             printWindow.document.write(contentElement.innerHTML);
             printWindow.document.write('</body></html>');
             printWindow.document.close();
-            printWindow.print();
+            printWindow.document.print();
         }
     }
   };
@@ -264,7 +281,13 @@ export default function LessonPlanGenerator() {
                         <Label>Subject</Label>
                         <Select
                             value={selectedSubject}
-                            onValueChange={setSelectedSubject}
+                            onValueChange={(value) => {
+                                setSelectedSubject(value);
+                                // Reset dependent dropdowns
+                                setSelectedUnit('');
+                                setSelectedTopic('');
+                                setSelectedLesson('');
+                            }}
                             required
                             disabled={!!subjectFromUrl}
                         >
@@ -284,8 +307,13 @@ export default function LessonPlanGenerator() {
                         <Label>Unit</Label>
                         <Select
                             value={selectedUnit}
-                            onValueChange={setSelectedUnit}
-                            disabled={units.length === 0}
+                            onValueChange={(value) => {
+                                setSelectedUnit(value);
+                                // Reset dependent dropdowns
+                                setSelectedTopic('');
+                                setSelectedLesson('');
+                            }}
+                            disabled={units.length === 0 || isLoading}
                             required
                         >
                             <SelectTrigger>
@@ -304,8 +332,12 @@ export default function LessonPlanGenerator() {
                         <Label>Topic</Label>
                         <Select
                             value={selectedTopic}
-                            onValueChange={setSelectedTopic}
-                            disabled={topics.length === 0}
+                            onValueChange={(value) => {
+                                setSelectedTopic(value);
+                                // Reset dependent dropdown
+                                setSelectedLesson('');
+                            }}
+                            disabled={topics.length === 0 || isLoading}
                             required
                         >
                             <SelectTrigger>
@@ -325,7 +357,7 @@ export default function LessonPlanGenerator() {
                         <Select
                             value={selectedLesson}
                             onValueChange={setSelectedLesson}
-                            disabled={lessons.length === 0}
+                            disabled={lessons.length === 0 || isLoading}
                             required
                         >
                             <SelectTrigger>
@@ -377,5 +409,3 @@ export default function LessonPlanGenerator() {
     </div>
   );
 }
-
-    

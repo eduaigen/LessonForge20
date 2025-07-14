@@ -53,7 +53,7 @@ ${aiContentGenerationRules}
 ---
 ### **Rule Set 2: Subject-Specific Exam Structures**
 
-**A. FOR ALL SCIENCE SUBJECTS (Biology, Earth Science, Physics, Chemistry, NV Biology, NGSS Biology): You MUST use the NGSS Cluster Question Test Generation Rules.**
+**A. FOR ALL SCIENCE SUBJECTS (AP Biology, NGSS Biology (OpenSciEd), NV Biology, Earth Science, Physics, Chemistry): You MUST use the NGSS Cluster Question Test Generation Rules.**
 
 **1. Foundational Principles: Phenomena and Three-Dimensional Learning**
 -   **Phenomenon-Driven**: Every cluster of questions must be built around a central, engaging, real-world phenomenon (an event, observation, or complex problem). This phenomenon is the context for all subsequent questions.
@@ -95,7 +95,7 @@ ${aiContentGenerationRules}
 ---
 ### **Generation Task:**
 
-Generate a test based on the following user request. The final design must meet the required format for the specified subject.
+Generate a test based on the following user request. The final design must meet the required format for the specified subject. The questions MUST be derived from the curriculum context provided in the Unit(s) and Topic(s).
 
 -   **Subject:** {{{subject}}}
 -   **Unit(s):** {{{unit}}}
