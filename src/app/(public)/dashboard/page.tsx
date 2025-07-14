@@ -1,30 +1,20 @@
+
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ObjectiveRefiner from './ObjectiveRefiner';
 import ConceptExplainer from './ConceptExplainer';
 import VocabDeepDive from './VocabDeepDive';
-import { Lock } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4">
-        <div className="mb-4 sm:mb-0">
-          <h1 className="text-2xl font-bold">Free AI Tools</h1>
-          <p className="text-muted-foreground">
-            Explore our foundational AI tools, available for free to all
-            educators.
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/curriculum">
-            <Lock className="w-4 h-4 mr-2" />
-            Unlock Premium Tools & Curriculum
-          </Link>
-        </Button>
+      <div className="mb-4">
+        <h1 className="text-2xl font-bold">Free AI Tools</h1>
+        <p className="text-muted-foreground">
+          Explore our foundational AI tools, available for free to all
+          educators.
+        </p>
       </div>
       <Tabs defaultValue="objective-refiner" className="w-full">
         <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
