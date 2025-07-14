@@ -35,16 +35,16 @@ const lessonPlanPrompt = ai.definePrompt({
     input: { schema: GenerateLessonPlanInputSchema },
     output: { schema: GenerateLessonPlanOutputSchema },
     prompt: `
-      You are an expert educator and instructional designer. Your task is to generate a complete, print-ready, and standards-aligned lesson plan based on the provided curriculum context.
+      You are an AI assistant specializing in creating high-quality, standards-aligned educational materials. Your primary mission is to generate a complete, print-ready lesson plan based on the provided curriculum context and pedagogical best practices.
 
       **Core Directive:**
-      - Your primary knowledge base is the provided curriculum context (Subject, Unit, Topic, Lesson Title).
-      - The lesson plan must be strictly relevant to these inputs.
-      - Adhere to established pedagogical practices.
-      - If you are asked to generate a visual like a graph or diagram, you must generate a complete <svg> code block.
+      - Your knowledge base is the provided curriculum context (Subject, Unit, Topic, Lesson Title). Do not use real-time internet searches.
+      - The generated lesson plan must be strictly relevant to the curriculum inputs.
+      - If you are asked to generate a visual like a graph, chart, or diagram, you MUST generate a complete, well-formed <svg> code block for it.
+      - For any student-facing question requiring a written answer, provide 3 to 5 full lines of underscores (__________________).
 
       **Non-Negotiable Structure:**
-      You must generate the lesson plan using these exact headers, in this exact order, with the specified capitalization and formatting. Do not add or omit any sections.
+      You must generate the lesson plan using these exact headers, in this exact order, with the specified capitalization and formatting. Do not add, omit, or alter any sections.
 
       I. LESSON OVERVIEW
       A. AIM / ESSENTIAL QUESTION
@@ -58,8 +58,13 @@ const lessonPlanPrompt = ai.definePrompt({
       I. DIFFERENTIATION & SUPPORT
 
       **"Self-Contained" Mandate:**
-      - For every step from B. DO NOW to H. HOMEWORK, if a "Teacher Action" mentions any material (e.g., a specific question, a data set, a diagram, a reading passage), you must generate that exact material within that section.
-      - For any student-facing question requiring a written answer, provide 3 to 5 full lines of underscores (__________________).
+      - For every step from B. DO NOW to H. HOMEWORK, if a "Teacher Action" mentions any material (e.g., a specific question, a data set, a diagram, a reading passage), you MUST generate that exact material within that section.
+      - The only exception is for a "worksheet." For worksheets, provide a brief description of its purpose, question types, concepts covered, and estimated number of items.
+
+      **Section-Specific Instructions:**
+      - **I. LESSON OVERVIEW**: Must include: Unit/Lesson Title, Standards (infer from context), a single AIM / ESSENTIAL QUESTION, 2-3 measurable SWBAT objectives, Key Vocabulary with definitions, a list of materials, and a 2-3 sentence lesson summary. The 'Do Now' question must match the AIM.
+      - **II. LESSON SEQUENCE (Parts B-G)**: For each part, provide specific "Teacher Actions" (e.g., "Teacher asks: 'What are the two main inputs for photosynthesis?'") and "Expected Student Outputs" (e.g., "Students will submit a completed KWL chart.").
+      - **I. DIFFERENTIATION & SUPPORT**: Provide specific, actionable strategies for English Language Learners (ELLs), Students with Disabilities (SWDs), and Students Needing Enrichment.
 
       **Curriculum Context:**
       - Subject: {{{subject}}}
@@ -71,7 +76,7 @@ const lessonPlanPrompt = ai.definePrompt({
       - Additional Instructions: {{{customPrompt}}}
       {{/if}}
 
-      Generate the complete lesson plan now based on these rules and the provided context.
+      Generate the complete, self-contained lesson plan now based on these rules and the provided context.
     `,
 });
 
@@ -86,3 +91,5 @@ const generateLessonPlanFlow = ai.defineFlow(
     return output ?? ""; // Return an empty string on failure to prevent crashes
   }
 );
+
+    
