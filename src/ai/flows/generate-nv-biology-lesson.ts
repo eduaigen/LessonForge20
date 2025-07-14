@@ -24,7 +24,7 @@ The user has provided the following context from the NV Biology curriculum:
 
 Based on this context, generate a complete and detailed lesson plan that is ready for a teacher to use in a classroom tomorrow.
 
-**Your response MUST follow this exact structure and include all specified components. Do not omit any section or field. All content must be created and embedded directly.**
+**Your response MUST follow this exact structure and include all specified components. Do not omit any section or field. All content, including reading passages, diagrams, charts, and data tables referenced in the lesson, must be created and embedded directly within the response.**
 
 ---
 **I. LESSON OVERVIEW**
@@ -80,7 +80,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 - **Expected Student Outputs with Support**: Bulleted list of potential student outputs (e.g., Students use a graphic frame).
 - **Extension Activity**: A challenge prompt or activity for students who master the content early.
 ---
-**Final Instruction**: Review your entire response. Ensure every single section from I to III is present and fully generated. Do not use placeholders. All content must be created and embedded directly. Failure to comply will result in an invalid response.`,
+**Final Instruction**: Review your entire response. Ensure every single section from I to III is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly. Failure to comply will result in an invalid response.`,
 });
 
 const generateNVBiologyLessonFlow = ai.defineFlow(
