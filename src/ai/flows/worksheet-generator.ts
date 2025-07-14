@@ -11,12 +11,12 @@ const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
   input: { schema: z.object({ worksheetDataJson: z.string() }) },
   output: { schema: WorksheetGeneratorOutputSchema },
-  prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive worksheet that a student can use in the classroom. The worksheet must be differentiated for Multilingual Learners (MLLs) and Students with Disabilities (SWDs).
+  prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive worksheet that a student can use in the classroom. The worksheet must be a direct reflection of the lesson plan, not an interpretation or a new document.
 
 **Instructions:**
 1.  **Analyze the Lesson Plan:** Carefully read through every part of the provided JSON lesson plan object, from "I. LESSON OVERVIEW" to "H. HOMEWORK ACTIVITY".
-2.  **Student-Facing Transformation:** Convert the teacher-facing plan into a document for students. Rephrase teacher instructions into student-friendly directions. For example, instead of "Teacher will ask students to answer the Do Now question," the worksheet should simply present the "Do Now" question for the student to answer.
-3.  **Maintain Structure:** The worksheet's organization must mirror the lesson plan's structure. Create sections for each part of the lesson.
+2.  **Student-Facing Transformation:** Convert the teacher-facing plan into a document for students. Rephrase teacher instructions into student-friendly directions. For example, instead of "Teacher will ask students to answer the Do Now question," the worksheet should simply present the "Do Now" question for the student to answer. **Do not add new questions or activities.**
+3.  **Maintain Structure:** The worksheet's organization must mirror the lesson plan's structure. Create sections for each part of the lesson (Aim, Do Now, Mini-Lesson, etc.) and ensure they appear in the same order.
 4.  **Formatting for Student Use:** For every question, prompt, or note-taking area, ensure there is ample blank space for a student to write their full response. Use extra line breaks to create visible space for answers.
 5.  **Follow Section-Specific Rules:**
 
@@ -25,33 +25,32 @@ const prompt = ai.definePrompt({
     *   **A. Aim & Vocabulary:**
         *   Copy the "Aim / Essential Question" exactly as it appears in the lesson plan.
         *   Provide space for the student to rewrite the Aim in their own words.
-        *   List all "Key Vocabulary" terms. For each term, provide its definition but turn key words into fill-in-the-blanks for students to complete (e.g., "Homeostasis: The process by which an organism maintains a stable internal ________.").
+        *   List all "Key Vocabulary" terms from the lesson plan. For each term, provide its definition from the plan.
 
     *   **B. DO NOW:**
-        *   Specifically copy the student activity/question from the "Do Now" section.
+        *   Specifically copy the student activity/question from the "Do Now" section of the lesson plan.
         *   Provide ample space for the student to write their answer.
 
     *   **C. MINI-LESSON:**
-        *   Based on the topic and the teacher/student actions, design a simple note-taking strategy for the student (e.g., a two-column note frame, a simple graphic organizer).
-        *   Embed the full text of the "Embedded Reading Passage".
-        *   **Crucially, embed any SVG "Embedded Diagram" or other visuals directly. The visual must be fully rendered in the worksheet.**
-        *   List all "Concept-Check Questions" with space for answers.
+        *   Based on the topic and the teacher/student actions from the lesson plan, design a simple note-taking strategy for the student (e.g., a two-column note frame).
+        *   Embed the full text of the "Embedded Reading Passage" exactly as it appears in the lesson plan.
+        *   **Crucially, embed any SVG "Embedded Diagram" or other visuals from the lesson plan directly. The visual must be fully rendered in the worksheet.**
+        *   List all "Concept-Check Questions" from the lesson plan with space for answers.
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
-        *   Clearly state the instructions for the guided practice activity.
-        *   Guide the student on how to complete the task.
-        *   **Perfectly render and include any "Embedded Data Table," graphs, or other materials needed for the activity. Provide space for completion.**
+        *   Clearly state the instructions for the guided practice activity, taken from the lesson plan.
+        *   **Perfectly render and include any "Embedded Data Table," graphs, or other materials from the lesson plan needed for the activity. Provide space for completion.**
 
     *   **E. CHECK FOR UNDERSTANDING (CFU):**
-        *   Copy all "CFU Questions" (multiple choice and short response) for the student to answer. Provide space for their responses.
+        *   Copy all "CFU Questions" (multiple choice and short response) from the lesson plan for the student to answer. Provide space for their responses.
 
     *   **F. INDEPENDENT PRACTICE / PERFORMANCE TASK:**
-        *   Based on the teacher actions and expected outputs, copy the full "Embedded Task" prompt (e.g., the CER prompt).
+        *   Copy the full "Embedded Task" prompt (e.g., the CER prompt) from the lesson plan.
         *   Provide clear instructions and ample space for the student to complete the assignment.
-        *   **Include any necessary "taskData," tables, or graphs, ensuring they are perfectly rendered.**
+        *   **Include any necessary "taskData," tables, or graphs from the lesson plan, ensuring they are perfectly rendered.**
 
     *   **G. CLOSURE / EXIT TICKET:**
-        *   Transfer the exact same question/activity from the "DO NOW" section here. Add a prompt like: "Let's revisit our Do Now question. Has your thinking changed? Explain your answer now, using what you've learned in today's lesson."
+        *   Transfer the exact "Exit Ticket Question" from the lesson plan.
 
     *   **H. HOMEWORK ACTIVITY:**
         *   Include the full "Homework Activity" as described in the lesson plan.
@@ -61,7 +60,8 @@ const prompt = ai.definePrompt({
 {{{worksheetDataJson}}}
 \`\`\`
 
-Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered. Ensure there is sufficient blank space for students to write their answers for all questions.`,
+Generate the complete worksheet content in Markdown format based on these strict instructions. Ensure every student-facing element from the lesson plan, especially all visual data like tables and diagrams, is present and correctly rendered. Ensure there is sufficient blank space for students to write their answers for all questions.
+`,
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
