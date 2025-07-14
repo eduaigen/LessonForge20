@@ -289,6 +289,15 @@ body {
     @apply text-primary hover:underline;
 }
 
+.prose table {
+    @apply w-full table-fixed;
+}
+
+.prose th, .prose td {
+    @apply break-words;
+}
+
+
 .dark .prose-invert h1, .dark .prose-invert h2, .dark .prose-invert h3, .dark .prose-invert h4, .dark .prose-invert h5, .dark .prose-invert h6 {
     @apply text-primary-foreground;
 }
@@ -307,4 +316,12 @@ body {
 
 .document-view {
     @apply bg-background p-6 rounded-md shadow-sm w-full mx-auto;
+}
+
+.document-view table {
+    @apply w-full table-fixed;
+}
+
+.document-view th, .document-view td {
+    @apply break-words;
 }
