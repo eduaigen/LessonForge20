@@ -76,21 +76,30 @@ const parseContent = (content: string) => {
   ];
 
   // Regex to match section headers: either an exact keyword, or a letter/numbering pattern
-  const sectionRegex = new RegExp(`^(${sectionHeaders.join('|').replace(/\./g, '\\.')}|[A-Z]\\. |\\d+\\.|\\*\\*I\\. |\\*\\*II\\. |\\*\\*III\\. )`, 'i');
+  const sectionRegex = new RegExp(`^(${sectionHeaders.join('|').replace(/\./g, '\\.').replace(/\*/g, '\\*')}|[A-Z]\\. |\\d+\\.|\\*\\*I\\. |\\*\\*II\\. |\\*\\*III\\. )`, 'i');
   
   lines.forEach(line => {
-    const trimmedLine = line.trim();
+    // Bolded headers like **I. LESSON OVERVIEW** are section titles
+    if (line.trim().startsWith('**')) {
+        if (currentSection) {
+            sections.push(currentSection);
+        }
+        currentSection = { title: line.trim().replace(/\*/g, ''), content: [] };
+        return;
+    }
 
-    const match = trimmedLine.match(sectionRegex);
+    // Other section headers
+    const match = line.trim().match(sectionRegex);
     if (match) {
         if (currentSection) {
             sections.push(currentSection);
         }
-        currentSection = { title: trimmedLine.replace(/\*+/g, ''), content: [] };
+        currentSection = { title: line.trim().replace(/\*/g, ''), content: [] };
     } else if (currentSection) {
         currentSection.content.push(line);
     } else {
-       if (trimmedLine.length > 0) {
+       // Handle content before the first section header
+       if (line.trim().length > 0) {
            if (sections.length === 0) {
              sections.push({ title: 'Introduction', content: []});
            }
@@ -103,7 +112,21 @@ const parseContent = (content: string) => {
     sections.push(currentSection);
   }
   
-  return sections.map(sec => ({...sec, content: sec.content.join('\n').split(/\n\s*\n/)})).filter(s => s.title !== 'Introduction' || s.content.some(c => c.trim().length > 0));
+  // Process the content of each section to handle SVGs correctly
+  return sections.map(sec => {
+    const rawContent = sec.content.join('\n');
+    const svgRegex = /(<svg[\s\S]*?<\/svg>)/g;
+    const contentParts = rawContent.split(svgRegex).filter(part => part && part.trim() !== '');
+
+    const processedContent = contentParts.flatMap(part => {
+        if (part.trim().startsWith('<svg')) {
+            return [part.trim()]; // Keep SVG as a single block
+        }
+        return part.split(/\n\s*\n/); // Split non-SVG content by paragraphs
+    });
+
+    return {...sec, content: processedContent};
+  }).filter(s => s.title !== 'Introduction' || s.content.some(c => c.trim().length > 0));
 };
 
 const SimpleFlowDiagram = ({ data }: { data: string }) => {
