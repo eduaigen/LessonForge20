@@ -16,7 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import GeneratingAnimation from '../common/GeneratingAnimation';
-import StyledContentDisplay from '../common/StyledContentDisplay';
+import LessonPlanDisplay from '../common/LessonPlanDisplay';
 import { useAuth } from '@/context/AuthContext';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
@@ -236,9 +236,9 @@ const GeneratorContent = () => {
             </div>
         )}
 
-        {output?.lessonPlan && (
+        {output && (
           <div className="mt-8 border-t pt-8">
-            <StyledContentDisplay content={output.lessonPlan} />
+            <LessonPlanDisplay lessonPlan={output} />
           </div>
         )}
     </Card>
