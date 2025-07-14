@@ -13,7 +13,7 @@ const renderContentItem = (item: string, index: number): React.ReactNode => {
 
   // LaTeX rendering
   const latexParts = trimmedItem.split(/(\$[^$]+\$|\\\(.+?\\\)|\\\[.+?\\\]|\$\$[^$]+\$\$)/g);
-  if (latexParts.length > 1) {
+  if (latexParts.length > 1 && latexParts.some(p => p.startsWith('$') || p.startsWith('\\'))) {
     return (
       <p key={index} className="leading-relaxed">
         {latexParts.map((part, i) => {
@@ -68,18 +68,28 @@ const parseContent = (content: string) => {
     'CRSE & EQUITY LENS', 'ASSESSMENT ALIGNMENT', 'INSTRUCTIONAL COHERENCE', 'EXPORT FORMAT OPTIONS',
     'KEY ELEMENTS FOR STRONG ANSWER', 'MODEL ANSWER POINTS', 'A. AIM / ESSENTIAL QUESTION', 'B. DO NOW',
     'C. MINI-LESSON', 'D. GUIDED PRACTICE', 'E. CHECK FOR UNDERSTANDING', 'F. INDEPENDENT PRACTICE',
-    'G. CLOSURE / EXIT TICKET', 'H. HOMEWORK ACTIVITY', 'I. DIFFERENTIATION & SUPPORT'
+    'G. CLOSURE / EXIT TICKET', 'H. HOMEWORK ACTIVITY', 'I. DIFFERENTIATION & SUPPORT',
+    // More specific regex patterns
+    'WORKSHEET SECTION [A-Z]:', 'PART [IVXLCDM]+:', 'SECTION [A-Z0-9]+:'
   ];
 
-  const sectionRegex = new RegExp(`^(${sectionHeaders.join('|')}|[A-Z]\\.|\\d+\\.)`, 'i');
+  // Regex to match section headers: either an exact keyword, or a letter/numbering pattern
+  const sectionRegex = new RegExp(`^(${sectionHeaders.join('|')}|[A-Z]\\. |\\d+\\.)`, 'i');
   
   lines.forEach(line => {
-    const match = line.trim().match(sectionRegex);
+    const trimmedLine = line.trim();
+    if (trimmedLine.length === 0 && currentSection) {
+        // preserve paragraph breaks
+        currentSection.content.push('');
+        return;
+    }
+
+    const match = trimmedLine.match(sectionRegex);
     if (match) {
       if (currentSection) {
         sections.push(currentSection);
       }
-      currentSection = { title: line.trim(), content: [] };
+      currentSection = { title: trimmedLine, content: [] };
     } else if (currentSection) {
       currentSection.content.push(line);
     } else {
@@ -94,7 +104,7 @@ const parseContent = (content: string) => {
     sections.push(currentSection);
   }
   
-  return sections;
+  return sections.map(sec => ({...sec, content: sec.content.join('\n').split(/\n\s*\n/)})).filter(s => s.title !== 'Introduction' || s.content.some(c => c.trim().length > 0));
 };
 
 const SimpleFlowDiagram = ({ data }: { data: string }) => {
@@ -179,7 +189,7 @@ const renderSection = (section: { title: string; content: string[] }, index: num
         <div key={index} className="mb-4 break-inside-avoid">
             <h3 className="font-bold text-lg mt-4 mb-2 border-b pb-1 text-primary">{section.title}</h3>
             <div className="space-y-2">
-                {section.content.join('\n').split(/\n\s*\n/).map(renderContentItem)}
+                {section.content.map(renderContentItem)}
             </div>
         </div>
     );

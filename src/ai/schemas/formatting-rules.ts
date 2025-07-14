@@ -121,7 +121,7 @@ PART [Roman Numeral]: (e.g., PART I: Overview)
 
 SECTION [Alphanumeric]: (e.g., SECTION 1: Details, SECTION A: Basics)
 
-Place each section marker on its own line.
+**Place each section marker on its own line.**
 
 2. Text Formatting
 
@@ -325,4 +325,4 @@ DESCRIPTION: This graph illustrates the rapid increase in global population.
 ELEMENT: Point, LABEL: Point A, LABEL_LATEX: (1950, 2.5)
 ELEMENT: Trend, LABEL: Exponential Growth
 [END_SVG_DESCRIPTION]
-`;
+`
