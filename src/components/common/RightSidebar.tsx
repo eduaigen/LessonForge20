@@ -29,16 +29,17 @@ const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Study Sheet', icon: <FileQuestion className="h-5 w-5" />, disabled: true },
   { name: 'Question Cluster', icon: <FileQuestion className="h-5 w-5" />, disabled: true },
   { name: 'Slideshow Outline', icon: <Presentation className="h-5 w-5" />, disabled: false },
-  { name: 'Scaffold Tool', icon: <Accessibility className="h-5 w-5" />, disabled: true },
+  { name: 'Scaffold Tool', icon: <Accessibility className="h-5 w-5" />, disabled: false },
   { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
 ];
 
 type RightSidebarProps = {
   onToolClick: (toolName: ToolName) => void;
   isGenerating: boolean;
+  isWorksheetGenerated: boolean;
 };
 
-export default function RightSidebar({ onToolClick, isGenerating }: RightSidebarProps) {
+export default function RightSidebar({ onToolClick, isGenerating, isWorksheetGenerated }: RightSidebarProps) {
   const { toast } = useToast();
 
   const handleToolClick = (tool: (typeof tools)[0]) => {
@@ -51,6 +52,12 @@ export default function RightSidebar({ onToolClick, isGenerating }: RightSidebar
     }
     onToolClick(tool.name);
   };
+  
+  const getIsDisabled = (tool: (typeof tools)[0]) => {
+    if (isGenerating) return true;
+    if (tool.name === 'Scaffold Tool' && !isWorksheetGenerated) return true;
+    return tool.disabled;
+  }
 
   return (
     <aside className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
@@ -63,7 +70,7 @@ export default function RightSidebar({ onToolClick, isGenerating }: RightSidebar
                   variant="ghost"
                   size="icon"
                   onClick={() => handleToolClick(tool)}
-                  disabled={isGenerating || tool.disabled}
+                  disabled={getIsDisabled(tool)}
                   aria-label={tool.name}
                 >
                   {tool.icon}
@@ -72,6 +79,7 @@ export default function RightSidebar({ onToolClick, isGenerating }: RightSidebar
               </TooltipTrigger>
               <TooltipContent side="left">
                 <p>{tool.name}</p>
+                 {tool.name === 'Scaffold Tool' && !isWorksheetGenerated && <p className="text-xs text-muted-foreground">(Requires Worksheet)</p>}
               </TooltipContent>
             </Tooltip>
           ))}

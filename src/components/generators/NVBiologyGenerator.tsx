@@ -20,6 +20,7 @@ import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
 import { generateComprehensionQuestions } from '@/ai/flows/comprehension-question-generator';
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
+import { scaffoldWorksheet } from '@/ai/flows/scaffold-worksheet';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -41,6 +42,7 @@ type GeneratedContent = {
   id: string;
   title: string;
   content: any;
+  type: 'worksheet' | 'lesson-plan' | 'reading-material' | 'coaching-advice' | 'slideshow-outline' | 'scaffolded-worksheet';
   subContent?: any;
   isSubContentLoading?: boolean;
 };
@@ -73,6 +75,8 @@ const GeneratorContent = () => {
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   const [lessonPlan, setLessonPlan] = useState<GenerateNVBiologyLessonOutput | null>(null);
   const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
+  
+  const isWorksheetGenerated = useMemo(() => generatedSections.some(s => s.type === 'worksheet'), [generatedSections]);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -138,12 +142,12 @@ const GeneratorContent = () => {
         'Study Sheet': 'Study Sheet',
         'Question Cluster': 'Question Cluster',
         'Slideshow Outline': 'Slideshow Outline',
-        'Scaffold Tool': 'Scaffolded Tool',
-        'Teacher Coach': 'Teacher Coach Guide',
+        'Scaffold Tool': 'Scaffolded Worksheet',
+        'Teacher Coach': 'Teacher Coaching Guide',
     };
 
     const title = toolTitleMap[toolName];
-    if (generatedSections.some(sec => sec.title === title)) {
+    if (generatedSections.some(sec => sec.title === title) && toolName !== 'Scaffold Tool') {
         toast({ title: "Already Generated", description: `A ${title} has already been generated.` });
         return;
     }
@@ -158,6 +162,7 @@ const GeneratorContent = () => {
                 id: `worksheet-${Date.now()}`,
                 title: title,
                 content: result.worksheetContent,
+                type: 'worksheet',
             }]);
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial({
@@ -170,6 +175,7 @@ const GeneratorContent = () => {
                 id: `reading-${Date.now()}`,
                 title: result.title,
                 content: result.articleContent,
+                type: 'reading-material',
             }]);
         } else if (toolName === 'Teacher Coach') {
             result = await generateTeacherCoach(lessonPlan);
@@ -177,6 +183,7 @@ const GeneratorContent = () => {
                 id: `coach-${Date.now()}`,
                 title: title,
                 content: result,
+                type: 'coaching-advice',
             }]);
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
@@ -184,6 +191,20 @@ const GeneratorContent = () => {
                 id: `slideshow-${Date.now()}`,
                 title: title,
                 content: result,
+                type: 'slideshow-outline',
+            }]);
+        } else if (toolName === 'Scaffold Tool') {
+            const originalWorksheet = generatedSections.find(s => s.type === 'worksheet');
+            if (!originalWorksheet) {
+                toast({ title: "Worksheet Required", description: "Please generate a worksheet before using the scaffold tool.", variant: "destructive" });
+                return;
+            }
+            result = await scaffoldWorksheet({ worksheetContent: originalWorksheet.content });
+             setGeneratedSections(prev => [...prev, {
+                id: `scaffold-${Date.now()}`,
+                title: title,
+                content: result.scaffoldedContent,
+                type: 'scaffolded-worksheet',
             }]);
         }
     } catch (error) {
@@ -351,7 +372,7 @@ const GeneratorContent = () => {
         {generatedSections.map(section => (
             <CollapsibleSection key={section.id} title={section.title}>
                  <StyledContentDisplay content={section.content} />
-                 {section.title.startsWith('Reading Material') && !section.subContent && (
+                 {section.type === 'reading-material' && !section.subContent && (
                     <div className="p-4 border-t">
                         <Button onClick={() => handleGenerateQuestions(section.id, section.content)} disabled={section.isSubContentLoading}>
                            {section.isSubContentLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -379,7 +400,7 @@ const GeneratorContent = () => {
 
       </div>
 
-      {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} />}
+      {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} isWorksheetGenerated={isWorksheetGenerated} />}
     </div>
   );
 }
