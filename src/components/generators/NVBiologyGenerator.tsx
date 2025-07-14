@@ -16,13 +16,15 @@ import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { generateWorksheet } from '@/ai/flows/worksheet-generator';
+import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
+import { generateComprehensionQuestions } from '@/ai/flows/comprehension-question-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
-import RightSidebar from '../common/RightSidebar';
+import RightSidebar, { type ToolName } from '../common/RightSidebar';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -37,6 +39,8 @@ type GeneratedContent = {
   id: string;
   title: string;
   content: any;
+  subContent?: any;
+  isSubContentLoading?: boolean;
 };
 
 const SubscriptionPrompt = () => (
@@ -115,7 +119,7 @@ const GeneratorContent = () => {
     }
   }
 
-  const handleToolClick = async (toolName: string) => {
+  const handleToolClick = async (toolName: ToolName) => {
     if (!lessonPlan) {
         toast({
             title: "No Lesson Plan",
@@ -125,37 +129,65 @@ const GeneratorContent = () => {
         return;
     }
 
-    // Prevent duplicate sections
-    if (generatedSections.some(sec => sec.title === toolName)) {
-        toast({
-            title: "Already Generated",
-            description: `A ${toolName} has already been generated for this lesson plan.`,
-        });
+    const toolTitleMap: Record<ToolName, string> = {
+        'Worksheet': 'Student Worksheet',
+        'Reading Material': 'Reading Material',
+        'Comprehension Qs': 'Comprehension Questions',
+        'Study Sheet': 'Study Sheet',
+        'Question Cluster': 'Question Cluster',
+        'Slideshow Outline': 'Slideshow Outline',
+        'Scaffold Tool': 'Scaffolded Tool',
+        'Teacher Coach': 'Teacher Coach',
+    };
+
+    const title = toolTitleMap[toolName];
+    if (generatedSections.some(sec => sec.title === title)) {
+        toast({ title: "Already Generated", description: `A ${title} has already been generated.` });
         return;
     }
 
-    setIsToolLoading(toolName);
+    setIsToolLoading(title);
 
     try {
         if (toolName === 'Worksheet') {
             const result = await generateWorksheet(lessonPlan);
             setGeneratedSections(prev => [...prev, {
                 id: `worksheet-${Date.now()}`,
-                title: 'Student Worksheet',
+                title: title,
                 content: result.worksheetContent,
+            }]);
+        } else if (toolName === 'Reading Material') {
+            const result = await generateReadingMaterial({
+                topic: lessonPlan.lessonOverview.topic,
+                gradeLevel: '10th',
+                length: 'standard',
+                dokLevel: '1-2'
+            });
+            setGeneratedSections(prev => [...prev, {
+                id: `reading-${Date.now()}`,
+                title: result.title,
+                content: result.articleContent,
             }]);
         }
     } catch (error) {
         console.error(`${toolName} generation failed:`, error);
-        toast({
-            title: "Generation Failed",
-            description: `An error occurred while generating the ${toolName}.`,
-            variant: "destructive",
-        });
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
     } finally {
         setIsToolLoading(null);
     }
   };
+
+  const handleGenerateQuestions = async (sectionId: string, articleContent: string) => {
+    setGeneratedSections(prev => prev.map(s => s.id === sectionId ? { ...s, isSubContentLoading: true } : s));
+    try {
+        const result = await generateComprehensionQuestions({ articleContent });
+        setGeneratedSections(prev => prev.map(s => s.id === sectionId ? { ...s, subContent: result.questions, isSubContentLoading: false } : s));
+    } catch (error) {
+        console.error("Question generation failed:", error);
+        toast({ title: "Question Generation Failed", variant: "destructive" });
+        setGeneratedSections(prev => prev.map(s => s.id === sectionId ? { ...s, isSubContentLoading: false } : s));
+    }
+  }
   
   return (
     <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8">
@@ -302,6 +334,23 @@ const GeneratorContent = () => {
         {generatedSections.map(section => (
             <CollapsibleSection key={section.id} title={section.title}>
                  <StyledContentDisplay content={section.content} />
+                 {section.title.startsWith('Reading Material') && !section.subContent && (
+                    <div className="p-4 border-t">
+                        <Button onClick={() => handleGenerateQuestions(section.id, section.content)} disabled={section.isSubContentLoading}>
+                           {section.isSubContentLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                           Generate Comprehension Questions
+                        </Button>
+                    </div>
+                 )}
+                 {section.isSubContentLoading && <GeneratingAnimation />}
+                 {section.subContent && (
+                    <div className="p-4 border-t">
+                        <h4 className="font-bold text-lg mb-2">Comprehension Questions</h4>
+                        <ul className="list-decimal pl-5 space-y-2">
+                           {section.subContent.map((q: string, i: number) => <li key={i}>{q}</li>)}
+                        </ul>
+                    </div>
+                 )}
             </CollapsibleSection>
         ))}
 

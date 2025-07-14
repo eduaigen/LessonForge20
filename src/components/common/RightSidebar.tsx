@@ -20,11 +20,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-type ToolName = 'Worksheet' | 'Reading Material' | 'Comprehension Qs' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Scaffold Tool' | 'Teacher Coach';
+export type ToolName = 'Worksheet' | 'Reading Material' | 'Comprehension Qs' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Scaffold Tool' | 'Teacher Coach';
 
 const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Worksheet', icon: <ScrollText className="h-5 w-5" />, disabled: false },
-  { name: 'Reading Material', icon: <BookOpen className="h-5 w-5" />, disabled: true },
+  { name: 'Reading Material', icon: <BookOpen className="h-5 w-5" />, disabled: false },
   { name: 'Comprehension Qs', icon: <HelpCircle className="h-5 w-5" />, disabled: true },
   { name: 'Study Sheet', icon: <FileQuestion className="h-5 w-5" />, disabled: true },
   { name: 'Question Cluster', icon: <FileQuestion className="h-5 w-5" />, disabled: true },
