@@ -55,7 +55,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Organize students into groups, provide graphic organizer).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students collaboratively complete the graphic organizer).
-- **Embedded Data Table/Graph/Model**: A complete and structured data table with a title, clear headers, and logically organized data. For graphs (especially line graphs), generate a fully rendered SVG in the 'graph' field. Ensure axes are labeled, a title is included, and a legend is present if necessary.
+- **Embedded Data Table/Graph/Model**: A complete and structured data table with a title, clear headers, and logically organized data. For graphs (especially line graphs), generate a fully rendered SVG in the 'graph' field. Ensure axes are labeled, a title is included, and a legend is present if necessary. **Crucially, the graph must be a direct and factual visual representation of the data in the provided data table.**
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Launch a quick poll).
