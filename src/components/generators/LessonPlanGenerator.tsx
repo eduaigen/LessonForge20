@@ -32,9 +32,11 @@ import {
   BookCopy,
   PlusCircle,
   RefreshCw,
+  Printer,
 } from 'lucide-react';
-import Markdown from 'react-markdown';
 import { Label } from '../ui/label';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import StyledContentDisplay from '../common/StyledContentDisplay';
 
 // Helper function to dynamically import ELA curriculum
 const getElaCurriculum = async (gradeTitle: string) => {
@@ -187,14 +189,37 @@ export default function LessonPlanGenerator() {
     setCustomPrompt('');
     setGeneratedContent(null);
   };
+  
+  const handlePrint = () => {
+    const printWindow = window.open('', '', 'height=800,width=800');
+    if (printWindow) {
+        const contentElement = document.getElementById('printable-content');
+        if (contentElement) {
+            printWindow.document.write('<html><head><title>Print Lesson Plan</title>');
+            // Include styles if needed, especially for the prose classes
+            printWindow.document.write('<style>body { font-family: sans-serif; } .prose { max-width: 100%; } </style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(contentElement.innerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    }
+  };
 
   const ResultDisplay = () => (
     <Card className="h-full flex flex-col">
-      <CardHeader>
-        <CardTitle>Generated Lesson Plan</CardTitle>
-        <CardDescription>
-          Review the AI-generated lesson plan below.
-        </CardDescription>
+      <CardHeader className='flex-row items-center justify-between'>
+        <div>
+            <CardTitle>Generated Lesson Plan</CardTitle>
+            <CardDescription>
+            Review the AI-generated lesson plan below.
+            </CardDescription>
+        </div>
+        <Button variant="outline" size="sm" onClick={handlePrint} disabled={!generatedContent}>
+            <Printer className="mr-2 h-4 w-4" />
+            Print
+        </Button>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
         {isLoading ? (
@@ -206,10 +231,8 @@ export default function LessonPlanGenerator() {
             <Skeleton className="h-4 w-5/6" />
           </div>
         ) : generatedContent ? (
-          <ScrollArea className="flex-1">
-             <div className="prose prose-sm max-w-none dark:prose-invert p-4">
-                <Markdown>{generatedContent}</Markdown>
-             </div>
+          <ScrollArea className="flex-1 border rounded-md" id="printable-content">
+             <StyledContentDisplay content={generatedContent} />
           </ScrollArea>
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">

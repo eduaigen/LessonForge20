@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -5,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Link from 'next/link';
-import Markdown from 'react-markdown';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +25,7 @@ import {
 import AiToolContainer from './AiToolContainer';
 import { Rocket } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import StyledContentDisplay from '@/components/common/StyledContentDisplay';
 
 const FormSchema = z.object({
   objective: z.string().min(10, {
@@ -34,7 +35,7 @@ const FormSchema = z.object({
 
 const ResultDisplay = ({ data }: { data: RefineLearningObjectiveOutput }) => (
   <div className="prose prose-sm max-w-none dark:prose-invert">
-    <Markdown>{data.refinedObjective}</Markdown>
+    <StyledContentDisplay content={data.refinedObjective} />
     <Alert className="mt-6 border-primary/50 text-primary">
       <Rocket className="h-4 w-4" />
       <AlertTitle className="font-bold">Supercharge your teaching!</AlertTitle>

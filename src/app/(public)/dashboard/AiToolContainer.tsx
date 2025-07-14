@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -6,6 +7,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import StyledContentDisplay from '@/components/common/StyledContentDisplay';
 
 type AiToolContainerProps = {
   title: string;
@@ -51,10 +54,15 @@ export default function AiToolContainer({
                 <Skeleton className="h-4 w-[80%]" />
               </div>
             ) : (
-              result && (
-                <div className="max-w-none whitespace-pre-wrap rounded-md bg-muted/50 p-4 text-sm text-foreground">
-                  {typeof result === 'string' ? result : <>{result}</>}
-                </div>
+                result && (
+                  <Accordion type="single" collapsible defaultValue="item-1" className="w-full">
+                    <AccordionItem value="item-1">
+                      <AccordionTrigger className="text-lg font-semibold">View Generated Content</AccordionTrigger>
+                      <AccordionContent>
+                        {typeof result === 'string' ? <StyledContentDisplay content={result} /> : <>{result}</>}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
               )
             )}
           </CardContent>

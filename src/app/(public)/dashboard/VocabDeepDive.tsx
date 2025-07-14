@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -6,8 +7,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Rocket } from 'lucide-react';
-import Markdown from 'react-markdown';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -25,6 +24,8 @@ import {
 } from '@/ai/flows/vocab-deep-dive';
 import AiToolContainer from './AiToolContainer';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import StyledContentDisplay from '@/components/common/StyledContentDisplay';
+
 
 const FormSchema = z.object({
   term: z.string().min(2, {
@@ -34,7 +35,7 @@ const FormSchema = z.object({
 
 const ResultDisplay = ({ data }: { data: VocabDeepDiveOutput }) => (
   <div className="prose prose-sm max-w-none dark:prose-invert">
-    <Markdown>{data.vocabAnalysis}</Markdown>
+    <StyledContentDisplay content={data.vocabAnalysis} />
     <Alert className="mt-6 border-primary/50 text-primary">
       <Rocket className="h-4 w-4" />
       <AlertTitle className="font-bold">Dive even deeper into language!</AlertTitle>

@@ -259,3 +259,40 @@ body {
 .logo-container:hover .brain-icon {
   transform: scale(1.1);
 }
+
+/* Prose styles for markdown content */
+.prose {
+    @apply max-w-none;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply text-foreground;
+}
+
+.prose p, .prose ul, .prose ol, .prose blockquote {
+    @apply text-card-foreground;
+}
+
+.prose strong {
+    @apply text-foreground font-semibold;
+}
+
+.prose a {
+    @apply text-primary hover:underline;
+}
+
+.dark .prose-invert h1, .dark .prose-invert h2, .dark .prose-invert h3, .dark .prose-invert h4, .dark .prose-invert h5, .dark .prose-invert h6 {
+    @apply text-primary-foreground;
+}
+
+.dark .prose-invert p, .dark .prose-invert ul, .dark .prose-invert ol, .dark .prose-invert blockquote {
+    @apply text-card-foreground;
+}
+
+.dark .prose-invert strong {
+    @apply text-primary-foreground font-semibold;
+}
+
+.dark .prose-invert a {
+    @apply text-accent hover:underline;
+}
