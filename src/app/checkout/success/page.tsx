@@ -34,9 +34,9 @@ export default function CheckoutSuccessPage() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center text-center p-8">
         <CheckCircle2 className="w-24 h-24 text-green-500 mb-6 animate-pulse" />
-        <h1 className="text-4xl font-bold font-headline mb-4">Payment Successful!</h1>
+        <h1 className="text-4xl font-bold font-headline mb-4">Success! Your Free Trial Has Started.</h1>
         <p className="text-lg text-muted-foreground max-w-lg">
-            Thank you for subscribing! Your premium tools are now unlocked. We're redirecting you to your personalized dashboard.
+            Thank you! Your premium tools are now unlocked for your 3-day trial. We're redirecting you to your personalized dashboard.
         </p>
     </div>
   );

@@ -122,7 +122,7 @@ export default function PricingPage() {
           Build Your Perfect Toolkit
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-          Select the subjects and tools you need. The first item is ${pricing.base}/month, and each additional is only ${pricing.additional}/month.
+          Select the subjects and tools you need. The first item is ${pricing.base}/month, and each additional is only ${pricing.additional}/month. All subscriptions start with a 3-day free trial.
         </p>
       </section>
 
@@ -181,8 +181,8 @@ export default function PricingPage() {
                             </div>
                           )}
                         </div>
-                         <div className="border-t pt-4">
-                            <div className="flex items-baseline justify-center text-center">
+                         <div className="border-t pt-4 text-center">
+                            <div className="flex items-baseline justify-center">
                                 <span className="text-4xl font-bold tracking-tighter text-foreground">
                                     ${totalPrice.toFixed(2)}
                                 </span>
@@ -190,11 +190,14 @@ export default function PricingPage() {
                                     / month
                                 </span>
                             </div>
+                            <p className="text-xs text-muted-foreground mt-2">
+                                You will be charged after your 3-day free trial ends.
+                            </p>
                          </div>
                     </CardContent>
                     <CardFooter>
                          <Button onClick={handleSubscribe} className="w-full" size="lg" disabled={isLoading || selectedModules.length === 0}>
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Subscribe Now'}
+                            {isLoading ? <Loader2 className="animate-spin" /> : 'Start Free Trial'}
                         </Button>
                     </CardFooter>
                 </Card>

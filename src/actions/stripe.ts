@@ -40,7 +40,7 @@ export async function createCheckoutSession(
       success_url: `${appUrl}/checkout/success?price_ids=${priceIdsString}`,
       cancel_url: `${appUrl}/checkout/cancel`,
       subscription_data: {
-        trial_period_days: 7,
+        trial_period_days: 3,
       },
     });
 
