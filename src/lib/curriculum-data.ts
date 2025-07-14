@@ -193,55 +193,84 @@ export const curriculumData: {
         units: {
             "Unit 1: Discovering New Worlds": {
                 topics: {
-                    "Engage & Explore": { lessons: ["Anchor Phenomenon - How do we know what’s out there in space?", "Naked-Eye Observations", "Tools for Observation"] },
-                    "Earth and the Moon": { lessons: ["Earth's Rotation", "Moon Phases", "Eclipses"] },
-                    "Modeling the Sun": { lessons: ["Sun's Apparent Path", "Seasonal Changes", "Solar Energy"] },
-                    "Interpreting Data About Distant Objects": { lessons: ["Light from Stars", "The H-R Diagram", "Galaxies"] },
-                    "Unit Closing": { lessons: ["Final Performance Task"] }
+                    "How do we know what’s out there in space?": { lessons: ["Anchor Phenomenon - How do we know what’s out there in space?"] },
+                    "Naked-Eye Observations": { lessons: ["Naked-Eye Observations"] },
+                    "Tools for Observation": { lessons: ["Tools for Observation"] },
+                    "Earth's Rotation": { lessons: ["Earth's Rotation"] },
+                    "Moon Phases": { lessons: ["Moon Phases"] },
+                    "Eclipses": { lessons: ["Eclipses"] },
+                    "Sun's Apparent Path": { lessons: ["Sun's Apparent Path"] },
+                    "Seasonal Changes": { lessons: ["Seasonal Changes"] },
+                    "Solar Energy": { lessons: ["Solar Energy"] },
+                    "Light from Stars": { lessons: ["Light from Stars"] },
+                    "The H-R Diagram": { lessons: ["The H-R Diagram"] },
+                    "Galaxies": { lessons: ["Galaxies"] },
+                    "Final Performance Task: Discovering New Worlds": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
                 topics: {
-                    "Engage & Launch": { lessons: ["Anchor Phenomenon - Natural Hazard Risk", "Earth's Layers", "Plate Tectonics"] },
-                    "Tectonic Movement and Plate Boundaries": { lessons: ["Plate Boundaries", "Earthquakes", "Volcanoes"] },
-                    "Natural Hazard Data": { lessons: ["Mapping Hazards", "Tsunami Risk", "Social Vulnerability"] },
-                    "Earthquake Engineering": { lessons: ["Engineering for Earthquakes", "Community Resilience"] },
-                    "Unit Closing": { lessons: ["Final Performance Task"] }
+                    "Natural Hazard Risk": { lessons: ["Anchor Phenomenon - Natural Hazard Risk"] },
+                    "Earth's Layers": { lessons: ["Earth's Layers"] },
+                    "Plate Tectonics": { lessons: ["Plate Tectonics"] },
+                    "Plate Boundaries": { lessons: ["Plate Boundaries"] },
+                    "Earthquakes": { lessons: ["Earthquakes"] },
+                    "Volcanoes": { lessons: ["Volcanoes"] },
+                    "Mapping Hazards": { lessons: ["Mapping Hazards"] },
+                    "Tsunami Risk": { lessons: ["Tsunami Risk"] },
+                    "Social Vulnerability": { lessons: ["Social Vulnerability"] },
+                    "Engineering for Earthquakes": { lessons: ["Engineering for Earthquakes"] },
+                    "Community Resilience": { lessons: ["Community Resilience"] },
+                    "Final Performance Task: Risk Assessment": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 3: Climate Change Throughout Human History": {
                 topics: {
-                    "Engage and Ice Core Data": { lessons: ["Anchor Phenomenon - Past & Future Climate", "Ice Cores", "Analyzing Ice Core Data"] },
-                    "Global Warming and Carbon Emissions": { lessons: ["The Greenhouse Effect", "The Carbon Cycle", "Human Impact on Climate"] },
-                    "Sea Level and Ecosystem Effects": { lessons: ["Sea Level Rise", "Ecosystem Impacts"] },
-                    "Geoengineering and Mitigation": { lessons: ["Mitigation Strategies", "Geoengineering"] },
-                    "Unit Closing": { lessons: ["Final Performance Task"] }
+                    "Past & Future Climate": { lessons: ["Anchor Phenomenon - Past & Future Climate"] },
+                    "Ice Cores": { lessons: ["Ice Cores"] },
+                    "Analyzing Ice Core Data": { lessons: ["Analyzing Ice Core Data"] },
+                    "The Greenhouse Effect": { lessons: ["The Greenhouse Effect"] },
+                    "The Carbon Cycle": { lessons: ["The Carbon Cycle"] },
+                    "Human Impact on Climate": { lessons: ["Human Impact on Climate"] },
+                    "Sea Level Rise": { lessons: ["Sea Level Rise"] },
+                    "Ecosystem Impacts": { lessons: ["Ecosystem Impacts"] },
+                    "Mitigation Strategies": { lessons: ["Mitigation Strategies"] },
+                    "Geoengineering": { lessons: ["Geoengineering"] },
+                    "Final Performance Task: Climate Communication": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 4: More Hurricanes and Blizzards in NYC?": {
                 topics: {
-                    "Extreme Weather Patterns": { lessons: ["Anchor Phenomenon - Extreme Weather", "Weather vs. Climate", "Air Masses and Fronts"] },
-                    "Hurricane Frequency": { lessons: ["Hurricane Formation", "Hurricane Data Analysis", "Climate Change and Hurricanes"] },
-                    "Blizzard Analysis": { lessons: ["Blizzard Formation", "Blizzard Data Analysis"] },
-                    "Infrastructure Resilience": { lessons: ["Infrastructure Vulnerability", "Designing for Resilience"] },
-                    "Unit Closing": { lessons: ["Final Performance Task"] }
+                    "Extreme Weather": { lessons: ["Anchor Phenomenon - Extreme Weather"] },
+                    "Weather vs. Climate": { lessons: ["Weather vs. Climate"] },
+                    "Air Masses and Fronts": { lessons: ["Air Masses and Fronts"] },
+                    "Hurricane Formation": { lessons: ["Hurricane Formation"] },
+                    "Hurricane Data Analysis": { lessons: ["Hurricane Data Analysis"] },
+                    "Climate Change and Hurricanes": { lessons: ["Climate Change and Hurricanes"] },
+                    "Blizzard Formation": { lessons: ["Blizzard Formation"] },
+                    "Blizzard Data Analysis": { lessons: ["Blizzard Data Analysis"] },
+                    "Infrastructure Vulnerability": { lessons: ["Infrastructure Vulnerability"] },
+                    "Designing for Resilience": { lessons: ["Designing for Resilience"] },
+                    "Final Performance Task: Infrastructure Proposal": { lessons: ["Final Performance Task"] }
                 }
             },
             "Unit 5: Solutions for a Sustainable Future": {
                 topics: {
-                    "Burning Fossil Fuels": { lessons: ["Fossil Fuels and Energy", "Air Pollution", "Water Pollution", "Acid Rain", "The Ozone Layer", "Renewable Energy", "Nuclear Energy", "Energy Efficiency", "Policy Solutions", "Individual Action"] },
+                    "Fossil Fuels and Energy": { lessons: ["Fossil Fuels and Energy"] },
+                    "Pollution and Environmental Effects": { lessons: ["Air Pollution", "Water Pollution", "Acid Rain", "The Ozone Layer"] },
+                    "Renewable and Alternative Energy": { lessons: ["Renewable Energy", "Nuclear Energy", "Energy Efficiency", "Policy Solutions", "Individual Action"] },
                     "Land Use & Biodiversity": { lessons: ["Deforestation", "Urbanization", "Agriculture", "Biodiversity", "Habitat Destruction", "Conservation"] },
-                    "Mining": { lessons: ["Mineral Resources", "Mining Techniques", "Environmental Impacts of Mining", "Social Impacts of Mining", "Sustainable Mining Practices", "Recycling Minerals", "Conflict Minerals"] },
-                    "Unit Closing": { lessons: ["Stakeholder Meeting Simulation", "Sustainability Plan", "Final Presentation"] }
+                    "Mining and Resources": { lessons: ["Mineral Resources", "Mining Techniques", "Environmental Impacts of Mining", "Social Impacts of Mining", "Sustainable Mining Practices", "Recycling Minerals", "Conflict Minerals"] },
+                    "Unit Closing: Sustainability Project": { lessons: ["Stakeholder Meeting Simulation", "Sustainability Plan", "Final Presentation"] }
                 }
             },
             "Unit 6: Probability of Life Elsewhere": {
                 topics: {
-                    "Stability of the Solar System": { lessons: ["Gravity and Orbits", "The Goldilocks Zone", "Earth's Magnetic Field", "The Role of Jupiter", "The Moon's Influence", "Long-Term Stability", "Exoplanets"] },
+                    "Solar System Stability": { lessons: ["Gravity and Orbits", "The Goldilocks Zone", "Earth's Magnetic Field", "The Role of Jupiter", "The Moon's Influence", "Long-Term Stability", "Exoplanets"] },
                     "Coevolution of Earth and Life": { lessons: ["Early Earth", "Origin of Life", "Photosynthesis and Oxygen", "Mass Extinctions", "Humans and the Biosphere"] },
                     "Origin of the Universe": { lessons: ["The Big Bang", "Evidence for the Big Bang", "Stellar Evolution", "Formation of Elements", "The Drake Equation"] },
-                    "Asteroid Orbits": { lessons: ["Asteroids and Comets", "Impact Events", "Near-Earth Objects", "Planetary Defense", "The Search for Extraterrestrial Intelligence (SETI)"] },
-                    "Unit Closing": { lessons: ["Final Performance Task"] }
+                    "Asteroids and Planetary Defense": { lessons: ["Asteroids and Comets", "Impact Events", "Near-Earth Objects", "Planetary Defense", "The Search for Extraterrestrial Intelligence (SETI)"] },
+                    "Final Performance Task: Astrobiology Report": { lessons: ["Final Performance Task"] }
                 }
             }
         }
@@ -564,7 +593,27 @@ export const curriculumData: {
       units: {}
     },
     Health: {
-        units: {}
+        units: {
+            "Communication & Healthy Relationships": {
+                topics: {
+                    "Understanding Communication": { lessons: ["To understand the foundational elements of effective listening and appropriate responses in health contexts."] },
+                    "Verbal & Non-Verbal Communication": { lessons: ["To master expressing oneself clearly and respectfully, both through words and body language."] },
+                    "Expressing Needs & Feelings": { lessons: ["To learn constructive methods for sharing personal emotions and desires without causing harm."] },
+                    "Impact of Interpersonal Communication": { lessons: ["To critically examine the dynamic interplay between communication patterns and relationship health."] },
+                    "Overcoming Communication Barriers": { lessons: ["To equip students with tools to navigate and resolve obstacles to effective communication in health-related contexts."] },
+                    "Respectful Communication & Empathy": { lessons: ["To foster an environment of mutual respect and understanding through communication."] },
+                    "Effective Refusal Skills": { lessons: ["To confidently and respectfully say 'no' to unhealthy or unsafe pressures."] },
+                    "Conflict Prevention & Management": { lessons: ["To learn proactive and reactive approaches to navigate disagreements constructively."] },
+                    "Collaboration for Health Issues": { lessons: ["To work effectively in groups to achieve shared health-related goals."] },
+                    "Family as the Basic Unit of Society": { lessons: ["To appreciate the diversity of family structures and their fundamental role in society."] },
+                    "Family Roles, Responsibilities & Needs": { lessons: ["To identify the reciprocal nature of support within families and the importance of meeting individual needs."] },
+                    "Privacy & Respect in Relationships": { lessons: ["To develop an understanding of boundaries and ethical considerations in personal information sharing."] },
+                    "Culture & Relationships": { lessons: ["To recognize the diverse influences on interpersonal dynamics and self-identity."] },
+                    "Growth, Appearance & Interests": { lessons: ["To embrace personal evolution and the acceptance of oneself and others through various life stages."] },
+                    "Uniqueness & Respect for All": { lessons: ["To foster an inclusive environment where every individual's inherent worth is recognized and celebrated."] }
+                }
+            }
+        }
     },
     Math: {
       units: {
@@ -1462,5 +1511,3 @@ export const curriculumData: {
     }
   },
 };
-
-    
