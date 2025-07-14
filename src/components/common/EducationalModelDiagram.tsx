@@ -1,5 +1,4 @@
-import { BookOpenText, TestTube, Sigma, History } from 'lucide-react';
-import { Logo } from '@/components/common/Logo';
+import { BookOpenText, TestTube, Sigma, History, FileText, BookCopy, FolderSync } from 'lucide-react';
 import Link from 'next/link';
 
 const Node = ({ icon, label, position, delay }: { icon: React.ReactNode, label: string, position: string, delay: string }) => (
@@ -11,16 +10,23 @@ const Node = ({ icon, label, position, delay }: { icon: React.ReactNode, label: 
       <div className="flex items-center justify-center w-16 h-16 rounded-full bg-card shadow-lg border border-border/50 backdrop-blur-sm transition-all duration-300 group-hover:scale-110 group-hover:shadow-primary/20">
         {icon}
       </div>
-      <span className="mt-2 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary">{label}</span>
+      <span className="mt-2 text-xs font-medium text-muted-foreground transition-colors group-hover:text-primary text-center">{label}</span>
     </Link>
   );
 
 export default function EducationalModelDiagram() {
     const nodes = [
-        { icon: <BookOpenText className="w-8 h-8 text-chart-2" />, label: 'ELA', position: 'top-0 left-1/4 -translate-x-1/2', delay: '0.2s' },
-        { icon: <TestTube className="w-8 h-8 text-chart-3" />, label: 'Science', position: 'top-1/3 -right-4', delay: '0.4s' },
-        { icon: <Sigma className="w-8 h-8 text-chart-4" />, label: 'Math', position: 'bottom-0 right-1/4', delay: '0.6s' },
-        { icon: <History className="w-8 h-8 text-chart-5" />, label: 'History', position: 'bottom-1/4 -left-4', delay: '0.8s' },
+        // Subjects
+        { icon: <TestTube className="w-8 h-8 text-chart-3" />, label: 'Science', position: 'top-[15%] left-0', delay: '0.2s' },
+        { icon: <Sigma className="w-8 h-8 text-chart-4" />, label: 'Math', position: 'top-0 left-[50%] -translate-x-1/2', delay: '0.3s' },
+        { icon: <History className="w-8 h-8 text-chart-5" />, label: 'History', position: 'top-[15%] right-0', delay: '0.4s' },
+        { icon: <BookOpenText className="w-8 h-8 text-chart-2" />, label: 'ELA', position: 'left-0 top-1/2 -translate-y-1/2', delay: '0.5s' },
+        
+        // Tools
+        { icon: <FileText className="w-8 h-8 text-primary" />, label: 'Lesson Plans', position: 'right-0 top-1/2 -translate-y-1/2', delay: '0.6s' },
+        { icon: <BookCopy className="w-8 h-8 text-primary" />, label: 'Test Generator', position: 'bottom-[15%] left-0', delay: '0.7s' },
+        { icon: <FolderSync className="w-8 h-8 text-primary" />, label: 'Curriculum Audit', position: 'bottom-0 left-[50%] -translate-x-1/2', delay: '0.8s' },
+        { icon: <TestTube className="w-8 h-8 text-primary" />, label: 'Lab Maker', position: 'bottom-[15%] right-0', delay: '0.9s' },
     ];
   
     return (
@@ -28,16 +34,18 @@ export default function EducationalModelDiagram() {
         {/* Connection Lines SVG */}
         <svg className="absolute w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Lines from center to each node */}
-            <line x1="50" y1="50" x2="30" y2="5" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
-            <line x1="50" y1="50" x2="98" y2="40" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
-            <line x1="50" y1="50" x2="70" y2="98" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
-            <line x1="50" y1="50" x2="2" y2="80" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="10" y2="25" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="50" y2="5" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="90" y2="25" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="5" y2="50" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="95" y2="50" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="10" y2="85" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="50" y2="95" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
+            <line x1="50" y1="50" x2="90" y2="85" stroke="hsl(var(--border))" strokeWidth="0.5" strokeDasharray="2 2" />
         </svg>
 
         {/* Central Node */}
-        <div 
-          className="relative z-10 flex flex-col items-center justify-center w-40 h-40 rounded-full bg-background"
-        >
+        <div className="relative z-10 flex flex-col items-center justify-center w-48 h-48 rounded-full bg-background">
             <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow"/>
             <div className="absolute inset-2 rounded-full bg-background shadow-inner"/>
             <div className="relative flex flex-col items-center justify-center text-center">
@@ -85,9 +93,10 @@ export default function EducationalModelDiagram() {
                         <div className="absolute inset-2 w-20 h-20 border-2 border-accent/30 rounded-full energy-ring-2"></div>
                     </div>
                  </div>
-                 <span className="font-headline text-lg font-bold gradient-text">
+                 <span className="font-headline text-2xl font-bold gradient-text mt-2">
                     EduAiGen
                  </span>
+                 <span className="text-xs font-medium text-muted-foreground">Your AI Teaching Partner</span>
             </div>
         </div>
   
