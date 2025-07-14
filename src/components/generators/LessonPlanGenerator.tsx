@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -53,12 +52,13 @@ export default function LessonPlanGenerator() {
   const [selectedSubject, setSelectedSubject] = useState<string>(subjectFromUrl);
   const [selectedUnit, setSelectedUnit] = useState<string>('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
-  const [lessonTitle, setLessonTitle] = useState('');
+  const [selectedLesson, setSelectedLesson] = useState<string>('');
   const [customPrompt, setCustomPrompt] = useState('');
 
   // Curriculum structure states
   const [units, setUnits] = useState<string[]>([]);
   const [topics, setTopics] = useState<string[]>([]);
+  const [lessons, setLessons] = useState<string[]>([]);
 
   // Pre-fill subject from URL search params
   useEffect(() => {
@@ -72,6 +72,7 @@ export default function LessonPlanGenerator() {
       setUnits(subjectContent ? Object.keys(subjectContent.units) : []);
       setSelectedUnit('');
       setSelectedTopic('');
+      setSelectedLesson('');
     } else {
       setUnits([]);
     }
@@ -80,23 +81,34 @@ export default function LessonPlanGenerator() {
   useEffect(() => {
     if (selectedSubject && selectedUnit) {
       const unitContent =
-        curriculumData.content[selectedSubject]?.units[
-          selectedUnit
-        ];
-      setTopics(unitContent ? unitContent.topics : []);
+        curriculumData.content[selectedSubject]?.units[selectedUnit];
+      setTopics(unitContent ? Object.keys(unitContent.topics) : []);
       setSelectedTopic('');
+      setSelectedLesson('');
     } else {
       setTopics([]);
     }
   }, [selectedSubject, selectedUnit]);
 
+   useEffect(() => {
+    if (selectedSubject && selectedUnit && selectedTopic) {
+      const topicContent =
+        curriculumData.content[selectedSubject]?.units[selectedUnit]?.topics[selectedTopic];
+      setLessons(topicContent ? topicContent.lessons : []);
+      setSelectedLesson('');
+    } else {
+      setLessons([]);
+    }
+  }, [selectedSubject, selectedUnit, selectedTopic]);
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSubject || !lessonTitle) {
+    if (!selectedSubject || !selectedUnit || !selectedTopic || !selectedLesson) {
       toast({
         title: 'Missing Information',
         description:
-          'Please select a subject and provide a lesson title.',
+          'Please select a subject, unit, topic, and lesson.',
         variant: 'destructive',
       });
       return;
@@ -109,7 +121,7 @@ export default function LessonPlanGenerator() {
       gradeLevel: '9', // Defaulting grade, can be removed if not needed by AI
       unit: selectedUnit,
       topic: selectedTopic,
-      lessonTitle: lessonTitle,
+      lessonTitle: selectedLesson,
       customPrompt,
       language: 'en',
     };
@@ -134,7 +146,7 @@ export default function LessonPlanGenerator() {
     setSelectedSubject(subjectFromUrl);
     setSelectedUnit('');
     setSelectedTopic('');
-    setLessonTitle('');
+    setSelectedLesson('');
     setCustomPrompt('');
     setGeneratedContent(null);
   };
@@ -203,58 +215,70 @@ export default function LessonPlanGenerator() {
                 </Select>
             </div>
             <div>
-                <Label>Unit (Optional)</Label>
+                <Label>Unit</Label>
                 <Select
-                value={selectedUnit}
-                onValueChange={setSelectedUnit}
-                disabled={units.length === 0}
+                    value={selectedUnit}
+                    onValueChange={setSelectedUnit}
+                    disabled={units.length === 0}
+                    required
                 >
-                <SelectTrigger>
-                    <SelectValue placeholder="Select Unit" />
-                </SelectTrigger>
-                <SelectContent>
-                    {units.map((unit) => (
-                    <SelectItem key={unit} value={unit}>
-                        {unit}
-                    </SelectItem>
-                    ))}
-                </SelectContent>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Unit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {units.map((unit) => (
+                        <SelectItem key={unit} value={unit}>
+                            {unit}
+                        </SelectItem>
+                        ))}
+                    </SelectContent>
                 </Select>
             </div>
              <div>
-                <Label>Topic (Optional)</Label>
+                <Label>Topic</Label>
                 <Select
-                value={selectedTopic}
-                onValueChange={setSelectedTopic}
-                disabled={topics.length === 0}
+                    value={selectedTopic}
+                    onValueChange={setSelectedTopic}
+                    disabled={topics.length === 0}
+                    required
                 >
-                <SelectTrigger>
-                    <SelectValue placeholder="Select Topic" />
-                </SelectTrigger>
-                <SelectContent>
-                    {topics.map((topic) => (
-                    <SelectItem key={topic} value={topic}>
-                        {topic}
-                    </SelectItem>
-                    ))}
-                </SelectContent>
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Topic" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {topics.map((topic) => (
+                        <SelectItem key={topic} value={topic}>
+                            {topic}
+                        </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+             <div>
+                <Label>Lesson</Label>
+                <Select
+                    value={selectedLesson}
+                    onValueChange={setSelectedLesson}
+                    disabled={lessons.length === 0}
+                    required
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select Lesson" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {lessons.map((lesson) => (
+                        <SelectItem key={lesson} value={lesson}>
+                            {lesson}
+                        </SelectItem>
+                        ))}
+                    </SelectContent>
                 </Select>
             </div>
         </div>
         
         <div className="space-y-4">
             <div>
-                <Label htmlFor="lesson-title">Lesson</Label>
-                <Input
-                id="lesson-title"
-                value={lessonTitle}
-                onChange={(e) => setLessonTitle(e.target.value)}
-                placeholder="e.g., Introduction to Photosynthesis"
-                required
-                />
-            </div>
-            <div>
-                <Label htmlFor="extra-info">Extra Info</Label>
+                <Label htmlFor="extra-info">Extra Info (Optional)</Label>
                 <Textarea
                 id="extra-info"
                 value={customPrompt}
