@@ -15,7 +15,7 @@ const renderSimpleMarkdown = (content: string) => {
     return (
         <div className="document-view">
              <Markdown components={{
-                table: ({node, ...props}) => <div className="overflow-x-auto my-4"><table {...props} /></div>,
+                table: ({node, ...props}) => <div className="overflow-x-auto my-4"><table className="w-full" {...props} /></div>,
                 h1: ({node, ...props}) => <h1 {...props} />,
                 h2: ({node, ...props}) => <h2 {...props} />,
                 h3: ({node, ...props}) => <h3 {...props} />,
@@ -26,7 +26,11 @@ const renderSimpleMarkdown = (content: string) => {
                 p: ({node, ...props}) => <p {...props} />,
                 strong: ({node, ...props}) => <strong {...props} />,
                 blockquote: ({node, ...props}) => <blockquote {...props} />,
-                svg: ({ node, ...props }) => <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: node?.properties?.src as string }} />,
+                svg: ({ node, ...props }) => {
+                    const svgString = node?.properties?.src as string;
+                    if (!svgString || typeof svgString !== 'string') return null;
+                    return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: svgString }} />
+                },
             }}>
                 {content}
             </Markdown>
@@ -37,8 +41,7 @@ const renderSimpleMarkdown = (content: string) => {
 
 const renderLessonPlan = (lessonPlan: any) => (
   <div className="document-view">
-    <h1>{lessonPlan.lessonOverview.lesson}</h1>
-
+    {/* Title is now handled by CollapsibleSection, so we don't render h1 here */}
     <section className="mb-6">
       <h2>I. LESSON OVERVIEW</h2>
       <p><strong>Unit:</strong> {lessonPlan.lessonOverview.unit}</p>
@@ -212,7 +215,6 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
 
     return (
          <div className="document-view">
-            <h1>Teacher Coaching Guide</h1>
             {sections.map(sec => (
                 <section key={sec.title} className="mb-8">
                     <h2>{sec.title}</h2>
@@ -243,7 +245,6 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
 const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
     return (
         <div className="document-view">
-            <h1>Slideshow Outline</h1>
             {outline.slides.map((slide, index) => (
                 <section key={index} className="mb-6 border-b pb-4">
                     <h3>Slide {index + 1}: {slide.title}</h3>
@@ -261,7 +262,6 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
 const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     return (
       <div className="document-view">
-        <h1>NGSS Question Cluster</h1>
         <section className="mb-6">
           <h2>Phenomenon</h2>
           <p className="italic">{cluster.phenomenon}</p>
@@ -353,6 +353,19 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
 
     if (typeof content === 'string') {
         return renderSimpleMarkdown(content);
+    }
+
+    if (typeof content === 'object' && content !== null) {
+        // Fallback for any other object type (like a simple reading material object)
+        if ('articleContent' in content) {
+            return renderSimpleMarkdown(content.articleContent)
+        }
+        if ('worksheetContent' in content) {
+            return renderSimpleMarkdown(content.worksheetContent)
+        }
+         if ('scaffoldedContent' in content) {
+            return renderSimpleMarkdown(content.scaffoldedContent)
+        }
     }
 
     return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;

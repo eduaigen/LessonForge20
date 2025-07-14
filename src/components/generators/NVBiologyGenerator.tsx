@@ -162,7 +162,7 @@ const GeneratorContent = () => {
             setGeneratedSections(prev => [...prev, {
                 id: `worksheet-${Date.now()}`,
                 title: title,
-                content: result.worksheetContent,
+                content: result, // Pass the whole object
                 type: 'worksheet',
             }]);
         } else if (toolName === 'Reading Material') {
@@ -175,7 +175,7 @@ const GeneratorContent = () => {
             setGeneratedSections(prev => [...prev, {
                 id: `reading-${Date.now()}`,
                 title: result.title,
-                content: result.articleContent,
+                content: result, // Pass the whole object
                 type: 'reading-material',
             }]);
         } else if (toolName === 'Teacher Coach') {
@@ -195,16 +195,16 @@ const GeneratorContent = () => {
                 type: 'slideshow-outline',
             }]);
         } else if (toolName === 'Scaffold Tool') {
-            const originalWorksheet = generatedSections.find(s => s.type === 'worksheet');
-            if (!originalWorksheet) {
+            const originalWorksheetSection = generatedSections.find(s => s.type === 'worksheet');
+            if (!originalWorksheetSection || !originalWorksheetSection.content.worksheetContent) {
                 toast({ title: "Worksheet Required", description: "Please generate a worksheet before using the scaffold tool.", variant: "destructive" });
                 return;
             }
-            result = await scaffoldWorksheet({ worksheetContent: originalWorksheet.content });
+            result = await scaffoldWorksheet({ worksheetContent: originalWorksheetSection.content.worksheetContent });
              setGeneratedSections(prev => [...prev, {
                 id: `scaffold-${Date.now()}`,
                 title: title,
-                content: result.scaffoldedContent,
+                content: result, // Pass the whole object
                 type: 'scaffolded-worksheet',
             }]);
         } else if (toolName === 'Question Cluster') {
@@ -240,7 +240,7 @@ const GeneratorContent = () => {
   }
   
   return (
-    <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8">
+    <div className="relative grid grid-cols-1 lg:grid-cols-1 gap-8">
       <div className="flex-grow">
         <Card className="w-full shadow-lg">
             <CardHeader>
@@ -376,7 +376,7 @@ const GeneratorContent = () => {
         )}
 
         {lessonPlan && !isLoading && (
-           <CollapsibleSection title="Generated Lesson Plan">
+           <CollapsibleSection title={lessonPlan.lessonOverview.lesson}>
                 <StyledContentDisplay content={lessonPlan} />
             </CollapsibleSection>
         )}
@@ -386,7 +386,7 @@ const GeneratorContent = () => {
                  <StyledContentDisplay content={section.content} />
                  {section.type === 'reading-material' && !section.subContent && (
                     <div className="p-4 border-t">
-                        <Button onClick={() => handleGenerateQuestions(section.id, section.content)} disabled={section.isSubContentLoading}>
+                        <Button onClick={() => handleGenerateQuestions(section.id, section.content.articleContent)} disabled={section.isSubContentLoading}>
                            {section.isSubContentLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                            Generate Comprehension Questions
                         </Button>
