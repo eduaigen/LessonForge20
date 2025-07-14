@@ -21,10 +21,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  generateLessonPlan,
-  type GenerateLessonPlanInput,
-} from '@/ai/flows/generate-lesson-plan';
+import { generateLessonPlan } from '@/ai/flows/generate-lesson-plan';
+import type { GenerateLessonPlanInput } from '@/ai/schemas/lesson-plan-schemas';
 import { curriculumData } from '@/lib/curriculum-data';
 import AiToolLayout from './AiToolLayout';
 import {
