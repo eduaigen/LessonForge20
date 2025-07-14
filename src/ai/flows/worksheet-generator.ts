@@ -4,13 +4,12 @@
  * @fileOverview An AI flow for generating a student-facing worksheet from a lesson plan.
  */
 import { ai } from '@/ai/genkit';
-import { jsonStringify } from 'genkit';
-import { z } from 'genkit';
+import { z } from 'zod';
 import { WorksheetGeneratorInputSchema, WorksheetGeneratorOutputSchema, type WorksheetGeneratorInput, type WorksheetGeneratorOutput } from '../schemas/worksheet-generator-schemas';
 
 const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
-  input: { schema: z.object({ input: WorksheetGeneratorInputSchema }) },
+  input: { schema: z.object({ worksheetDataJson: z.string() }) },
   output: { schema: WorksheetGeneratorOutputSchema },
   prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive worksheet that a student can use in the classroom.
 
@@ -27,15 +26,10 @@ const prompt = ai.definePrompt({
 
 **Lesson Plan Data:**
 \`\`\`json
-{{{jsonStringify input}}}
+{{{worksheetDataJson}}}
 \`\`\`
 
 Generate the complete worksheet content in Markdown format based on these instructions. Ensure every student-facing element from the lesson plan is present and correctly placed.`,
-  
-  // Register the custom helper
-  helpers: {
-    jsonStringify,
-  },
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
@@ -45,8 +39,10 @@ const worksheetGeneratorFlow = ai.defineFlow(
     outputSchema: WorksheetGeneratorOutputSchema,
   },
   async (input) => {
-    // Pass the input object wrapped in another object to match the prompt's input schema
-    const { output } = await prompt({ input });
+    // Convert the lesson plan object to a JSON string before passing to the prompt
+    const worksheetDataJson = JSON.stringify(input, null, 2);
+
+    const { output } = await prompt({ worksheetDataJson });
     if (!output) {
       throw new Error('The AI failed to generate the worksheet. Please try again.');
     }
