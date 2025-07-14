@@ -122,12 +122,6 @@ const renderLessonPlan = (lessonPlan: any) => (
                 </table>
             </div>
         )}
-        {lessonPlan.guidedPractice.graph && (
-           <>
-              <h4>Embedded Graph</h4>
-              <div dangerouslySetInnerHTML={{ __html: lessonPlan.guidedPractice.graph }} className="my-4 flex justify-center" />
-           </>
-        )}
         {lessonPlan.guidedPractice.activityDescription && <p>{lessonPlan.guidedPractice.activityDescription}</p>}
       </div>
       

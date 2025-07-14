@@ -41,8 +41,7 @@ const guidedPracticeSchema = lessonSectionSchema.extend({
     headers: z.array(z.string()),
     rows: z.array(z.array(z.string())),
   }).optional().describe("A complete and structured data table."),
-  graph: z.string().optional().describe("A fully rendered, labeled SVG line graph. Not a text description."),
-  activityDescription: z.string().optional().describe("Description of the activity if not a data table or graph."),
+  activityDescription: z.string().optional().describe("Description of the activity if not a data table."),
 });
 
 const cfuSchema = lessonSectionSchema.extend({

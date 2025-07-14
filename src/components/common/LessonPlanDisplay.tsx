@@ -125,12 +125,6 @@ export default function LessonPlanDisplay({ lessonPlan }: LessonPlanDisplayProps
           <ActionList title="Teacher Actions" items={guidedPractice.teacherActions} />
           <ActionList title="Expected Student Outputs" items={guidedPractice.expectedStudentOutputs} />
           {guidedPractice.dataTable && <DataTable title={guidedPractice.dataTable.title} table={guidedPractice.dataTable} />}
-          {guidedPractice.graph && (
-             <>
-                <h4>Embedded Graph</h4>
-                <div dangerouslySetInnerHTML={{ __html: guidedPractice.graph }} className="my-4 flex justify-center" />
-             </>
-          )}
           {guidedPractice.activityDescription && <p>{guidedPractice.activityDescription}</p>}
         </SubSection>
 
