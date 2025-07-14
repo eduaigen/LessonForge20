@@ -41,7 +41,7 @@ Use justified format with exact section labels, bold formatting, and 1-line spac
     - Questions: Multiple choice, short response, constructed response, with placeholders for student answers.
     - Diagrams: Fully rendered labeled scientific diagrams as SVG code, not text-only descriptions.
     - Graphs & Charts: Clear, labeled visuals with axes, titles, and legends as SVG code.
-    - Data Tables: Complete and structured with real or simulated values using pipe-and-dash format.
+    - Data Tables: Complete and structured with real or simulated values using pipe-and-dash Markdown format.
     - Models: Conceptual visuals or simplified schematics embedded directly as SVG code.
     
     **B. DO NOW (5–8 min)**
