@@ -197,7 +197,7 @@ export default function LessonPlanGenerator() {
 
     try {
       const result = await generateLessonPlan(input);
-      setGeneratedContent(result.lessonPlan);
+      setGeneratedContent(result);
     } catch (error) {
       console.error('Error generating lesson plan:', error);
       toast({

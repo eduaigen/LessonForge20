@@ -17,12 +17,12 @@ import {
   lessonPlanFormattingInstruction,
 } from '@/ai/schemas/lesson-plan-schemas';
 
-export async function generateLessonPlan(input: GenerateLessonPlanInput): Promise<GenerateLessonPlanOutput> {
+export async function generateLessonPlan(input: GenerateLessonPlanInput): Promise<string> {
   const result = await generateLessonPlanFlow(input);
   if (!result.lessonPlan) {
     throw new Error('The AI failed to generate a lesson plan. Please try again with a different or more detailed prompt.');
   }
-  return result;
+  return result.lessonPlan;
 }
 
 const prompt = ai.definePrompt({
