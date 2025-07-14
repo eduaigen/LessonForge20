@@ -24,8 +24,8 @@ export async function generateLessonPlan(input: GenerateLessonPlanInput): Promis
   const result = await generateLessonPlanFlow(input);
   if (!result) {
     // This could happen if the AI fails or returns an empty string.
-    // We will return a user-friendly error message instead of throwing an error.
-    return "The AI failed to generate a lesson plan. This may be due to a temporary issue. Please try again with a different or more detailed prompt.";
+    // We can throw an error to be handled by the calling UI component.
+    throw new Error('The AI failed to generate a lesson plan. Please try again with a different or more detailed prompt.');
   }
   return result;
 }
