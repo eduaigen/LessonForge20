@@ -33,10 +33,11 @@ The output language MUST be {{language}}.
 - **Subject:** {{subject}}
 {{#if unit}}- **Unit:** {{unit}}{{/if}}
 {{#if topic}}- **Topic:** {{topic}}{{/if}}
-- **Lesson Title:** {{lessonTitle}}
-- **Lesson Aim/Essential Question:** {{lessonAim}}
+- **Lesson Title/Focus:** {{lessonTitle}}
 {{#if standards}}- **Selected Standards:** {{#each standards}}{{this}}; {{/each}}{{else}}- **Selected Standards:** General curriculum alignment{{/if}}
 {{#if customPrompt}}- **Additional Instructions:** {{customPrompt}}{{/if}}
+
+From the "Lesson Title/Focus", you must infer and generate a teacher-facing aim and a student-facing "I can" statement.
 `,
 });
 

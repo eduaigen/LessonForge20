@@ -33,10 +33,9 @@ import {
   BookCopy,
   PlusCircle,
   RefreshCw,
-  SpellCheck,
-  Languages,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
+import { Label } from '../ui/label';
 
 export default function LessonPlanGenerator() {
   const searchParams = useSearchParams();
@@ -52,11 +51,10 @@ export default function LessonPlanGenerator() {
   }, [searchParams]);
 
   const [selectedSubject, setSelectedSubject] = useState<string>(subjectFromUrl);
-  const [selectedGrade, setSelectedGrade] = useState<string>('');
+  const [selectedGrade, setSelectedGrade] = useState<string>('9');
   const [selectedUnit, setSelectedUnit] = useState<string>('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [lessonTitle, setLessonTitle] = useState('');
-  const [lessonAim, setLessonAim] = useState('');
   const [customPrompt, setCustomPrompt] = useState('');
 
   // Curriculum structure states
@@ -95,11 +93,11 @@ export default function LessonPlanGenerator() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedSubject || !selectedGrade || !lessonTitle || !lessonAim) {
+    if (!selectedSubject || !selectedGrade || !lessonTitle) {
       toast({
         title: 'Missing Information',
         description:
-          'Please select a subject, grade, and provide a lesson title and aim.',
+          'Please select a subject, grade, and provide a lesson title.',
         variant: 'destructive',
       });
       return;
@@ -112,8 +110,7 @@ export default function LessonPlanGenerator() {
       gradeLevel: selectedGrade,
       unit: selectedUnit,
       topic: selectedTopic,
-      lessonTitle,
-      lessonAim,
+      lessonTitle: lessonTitle,
       customPrompt,
       language: 'en',
     };
@@ -136,11 +133,10 @@ export default function LessonPlanGenerator() {
 
   const handleReset = () => {
     setSelectedSubject(subjectFromUrl);
-    setSelectedGrade('');
+    setSelectedGrade('9');
     setSelectedUnit('');
     setSelectedTopic('');
     setLessonTitle('');
-    setLessonAim('');
     setCustomPrompt('');
     setGeneratedContent(null);
   };
@@ -196,72 +192,84 @@ export default function LessonPlanGenerator() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <Select
-                value={selectedSubject}
-                onValueChange={setSelectedSubject}
-                required
-                disabled={!!subjectFromUrl}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Subject" />
-                </SelectTrigger>
-                <SelectContent>
-                  {curriculumData.subjects.map((subject) => (
-                    <SelectItem key={subject} value={subject}>
-                      {subject}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select
-                value={selectedGrade}
-                onValueChange={setSelectedGrade}
-                required
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Grade" />
-                </SelectTrigger>
-                <SelectContent>
-                  {curriculumData.grades.map((grade) => (
-                    <SelectItem key={grade} value={grade.toString()}>
-                      {grade}th Grade
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <div>
+                    <Label>Subject</Label>
+                    <Select
+                        value={selectedSubject}
+                        onValueChange={setSelectedSubject}
+                        required
+                        disabled={!!subjectFromUrl}
+                    >
+                        <SelectTrigger>
+                        <SelectValue placeholder="Select Subject" />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {curriculumData.subjects.map((subject) => (
+                            <SelectItem key={subject} value={subject}>
+                            {subject}
+                            </SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div>
+                    <Label>Grade</Label>
+                    <Select
+                        value={selectedGrade}
+                        onValueChange={setSelectedGrade}
+                        required
+                    >
+                        <SelectTrigger>
+                        <SelectValue placeholder="Select Grade" />
+                        </SelectTrigger>
+                        <SelectContent>
+                        {curriculumData.grades.map((grade) => (
+                            <SelectItem key={grade} value={grade.toString()}>
+                            {grade}th Grade
+                            </SelectItem>
+                        ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
-            <Select
-              value={selectedUnit}
-              onValueChange={setSelectedUnit}
-              disabled={units.length === 0}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Unit (Optional)" />
-              </SelectTrigger>
-              <SelectContent>
-                {units.map((unit) => (
-                  <SelectItem key={unit} value={unit}>
-                    {unit}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedTopic}
-              onValueChange={setSelectedTopic}
-              disabled={topics.length === 0}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Topic (Optional)" />
-              </SelectTrigger>
-              <SelectContent>
-                {topics.map((topic) => (
-                  <SelectItem key={topic} value={topic}>
-                    {topic}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div>
+                <Label>Unit (Optional)</Label>
+                <Select
+                value={selectedUnit}
+                onValueChange={setSelectedUnit}
+                disabled={units.length === 0}
+                >
+                <SelectTrigger>
+                    <SelectValue placeholder="Select Unit" />
+                </SelectTrigger>
+                <SelectContent>
+                    {units.map((unit) => (
+                    <SelectItem key={unit} value={unit}>
+                        {unit}
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+            </div>
+             <div>
+                <Label>Topic (Optional)</Label>
+                <Select
+                value={selectedTopic}
+                onValueChange={setSelectedTopic}
+                disabled={topics.length === 0}
+                >
+                <SelectTrigger>
+                    <SelectValue placeholder="Select Topic" />
+                </SelectTrigger>
+                <SelectContent>
+                    {topics.map((topic) => (
+                    <SelectItem key={topic} value={topic}>
+                        {topic}
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+            </div>
           </CardContent>
         </Card>
 
@@ -269,27 +277,29 @@ export default function LessonPlanGenerator() {
           <CardHeader>
             <CardTitle>Lesson Details</CardTitle>
             <CardDescription>
-              Provide the core details for this specific lesson.
+              Provide the core details for this specific lesson. The AI will generate objectives from this.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Input
-              value={lessonTitle}
-              onChange={(e) => setLessonTitle(e.target.value)}
-              placeholder="Lesson Title"
-              required
-            />
-            <Textarea
-              value={lessonAim}
-              onChange={(e) => setLessonAim(e.target.value)}
-              placeholder="Lesson Aim / Essential Question"
-              required
-            />
-            <Textarea
-              value={customPrompt}
-              onChange={(e) => setCustomPrompt(e.target.value)}
-              placeholder="Additional Instructions (e.g., focus on group work, include a specific video)"
-            />
+            <div>
+                <Label htmlFor="lesson-title">Lesson</Label>
+                <Input
+                id="lesson-title"
+                value={lessonTitle}
+                onChange={(e) => setLessonTitle(e.target.value)}
+                placeholder="e.g., Introduction to Photosynthesis"
+                required
+                />
+            </div>
+            <div>
+                <Label htmlFor="extra-info">Extra Info</Label>
+                <Textarea
+                id="extra-info"
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder="e.g., Focus on group work, include a specific video, address common misconceptions about..."
+                />
+            </div>
           </CardContent>
         </Card>
 

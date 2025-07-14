@@ -8,11 +8,11 @@ You are an expert teacher creating a lesson plan. Your output MUST strictly foll
 - Use bullet points for lists.
 
 **A. Lesson Title & Objective**
-- **Lesson Title:** [Your Generated Title]
+- **Lesson Title:** [Your Generated Title based on user input]
 - **Grade Level:** [e.g., 9th Grade]
 - **Subject:** [e.g., Biology]
-- **Teacher-Facing Aim:** [Your Generated Aim]
-- **Student-Facing "I can" statement:** [Your Generated "I can..." statement]
+- **Teacher-Facing Aim:** [Your Generated Aim based on user's lesson title/focus]
+- **Student-Facing "I can" statement:** [Your Generated "I can..." statement based on user's lesson title/focus]
 
 **B. Standards**
 - **NGSS/State Standards:** [List all relevant standards]
@@ -46,8 +46,7 @@ export const GenerateLessonPlanInputSchema = z.object({
   subject: z.string().describe('The subject for the lesson plan.'),
   unit: z.string().optional().describe('The unit for the lesson plan.'),
   topic: z.string().optional().describe('The topic for the lesson plan.'),
-  lessonTitle: z.string().describe('The title for the lesson plan.'),
-  lessonAim: z.string().describe('The aim or essential question for the lesson.'),
+  lessonTitle: z.string().describe('The title or focus for the lesson plan. The AI will generate objectives from this.'),
   standards: z.array(z.string()).optional().describe('A list of educational standards to align with.'),
   customPrompt: z.string().optional().describe('Additional specific instructions from the user.'),
   language: z.enum(['en', 'es']).default('en').describe('The output language.'),
