@@ -37,41 +37,46 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 
 // Helper to dynamically load curriculum data
 const getCurriculumForSubject = async (subject: string) => {
-    switch (subject) {
-        case 'AP Biology':
-            return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
-        case 'NGSS Biology (OpenSciEd)':
-            return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
-        case 'NV Biology':
-            return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
-        case 'Chemistry':
-            return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
-        case 'Earth_Science':
-            return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
-        case 'Physics':
-            return (await import('@/lib/physics-curriculum')).physicsCurriculum;
-        case 'Health':
-            return (await import('@/lib/health-curriculum')).healthCurriculum;
-        case 'History':
-        case 'Global History I & II':
-        case 'US History & Government':
-        case 'Government & Economics':
-            return (await import('@/lib/history-curriculum')).historyCurriculum;
-        case 'Math':
-        case 'Illustrative Math Algebra 1':
-        case 'Illustrative Math Algebra 2':
-        case 'Illustrative Math Geometry':
-            return (await import('@/lib/math-curriculum')).mathCurriculum;
-        case 'ELA 9th Grade':
-            return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
-        case 'ELA 10th Grade':
-            return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
-        case 'ELA 11th Grade':
-            return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
-        case 'ELA 12th Grade':
-            return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
-        default:
-            return null;
+    try {
+        switch (subject) {
+            case 'AP Biology':
+                return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
+            case 'NGSS Biology (OpenSciEd)':
+                return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
+            case 'NV Biology':
+                return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+            case 'Chemistry':
+                return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
+            case 'Earth_Science':
+                return (await import('@/lib/earth-science-curriculum')).earthScienceCurriculum;
+            case 'Physics':
+                return (await import('@/lib/physics-curriculum')).physicsCurriculum;
+            case 'Health':
+                return (await import('@/lib/health-curriculum')).healthCurriculum;
+            case 'History':
+            case 'Global History I & II':
+            case 'US History & Government':
+            case 'Government & Economics':
+                return (await import('@/lib/history-curriculum')).historyCurriculum;
+            case 'Math':
+            case 'Illustrative Math Algebra 1':
+            case 'Illustrative Math Algebra 2':
+            case 'Illustrative Math Geometry':
+                return (await import('@/lib/math-curriculum')).mathCurriculum;
+            case 'ELA 9th Grade':
+                return (await import('@/lib/ela9-curriculum')).ela9Curriculum;
+            case 'ELA 10th Grade':
+                return (await import('@/lib/ela10-curriculum')).ela10Curriculum;
+            case 'ELA 11th Grade':
+                return (await import('@/lib/ela11-curriculum')).ela11Curriculum;
+            case 'ELA 12th Grade':
+                return (await import('@/lib/ela12-curriculum')).ela12Curriculum;
+            default:
+                return null;
+        }
+    } catch (e) {
+        console.error(`Failed to load curriculum for ${subject}:`, e);
+        return null;
     }
 };
 
@@ -101,8 +106,7 @@ export default function TestGeneratorPage() {
 
   // State for generated content
   const [studentVersion, setStudentVersion] = useState<TestQuestion[]>([]);
-  const [answerKey, setAnswerKey] = useState<TestQuestion[]>([]);
-
+  
   // State for editing a question
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<TestQuestion | null>(null);
@@ -113,9 +117,12 @@ export default function TestGeneratorPage() {
 
   const availableSubjects = useMemo(() => {
     const subjectModules = { ...modules };
-    delete subjectModules.tools; 
+    delete subjectModules.tools;
 
-    if (isAdmin) return Object.values(subjectModules).flat().map(m => m.name);
+    if (isAdmin) {
+      const allSubjects = Object.values(subjectModules).flat().map(m => m.name);
+      return [...new Set(allSubjects)];
+    }
     
     const testGeneratorSub = subscriptions.includes('price_1Pg12lAk4y2zY5d6pQrStUvW');
     if (!testGeneratorSub) return [];
@@ -140,14 +147,14 @@ export default function TestGeneratorPage() {
   const [numEssay, setNumEssay] = useState<number | undefined>();
 
   // Curriculum structure states
-  const [units, setUnits] = useState<string[]>([]);
-  const [topics, setTopics] = useState<string[]>([]);
   const [currentCurriculum, setCurrentCurriculum] = useState<any>(null);
   
   const handleUnitChange = (unit: string) => {
     setSelectedUnits(prev => 
       prev.includes(unit) ? prev.filter(u => u !== unit) : [...prev, unit]
     );
+    // When units change, reset topics
+    setSelectedTopics([]);
   };
 
   const handleTopicChange = (topic: string) => {
@@ -156,72 +163,57 @@ export default function TestGeneratorPage() {
     );
   };
 
-  const updateDropdowns = useCallback(() => {
-    if (currentCurriculum) {
-      setUnits(Object.keys(currentCurriculum.units));
-      if (selectedUnits.length === 1) {
-          const unitContent = currentCurriculum.units[selectedUnits[0]];
-          setTopics(unitContent ? Object.keys(unitContent.topics) : []);
-      } else {
-          setTopics([]);
-          setSelectedTopics([]);
-      }
-    } else {
-      setUnits([]);
-      setTopics([]);
-      setSelectedUnits([]);
-      setSelectedTopics([]);
-    }
-  }, [currentCurriculum, selectedUnits]);
-
   useEffect(() => {
     const loadCurriculum = async () => {
-        if (selectedSubject) {
-            setIsLoading(true);
-            const data = await getCurriculumForSubject(selectedSubject);
-            setCurrentCurriculum(data);
-            setIsLoading(false);
-        } else {
-            setCurrentCurriculum(null);
-        }
+        setIsLoading(true);
+        const data = await getCurriculumForSubject(selectedSubject);
+        setCurrentCurriculum(data);
+        setIsLoading(false);
     };
-    loadCurriculum();
+    if (selectedSubject) {
+        loadCurriculum();
+    } else {
+        setCurrentCurriculum(null);
+    }
   }, [selectedSubject]);
 
-  useEffect(() => {
-    updateDropdowns();
-  }, [selectedUnits, currentCurriculum, updateDropdowns]);
+  const units = useMemo(() => {
+      return currentCurriculum ? Object.keys(currentCurriculum.units) : [];
+  }, [currentCurriculum]);
+
+  const topics = useMemo(() => {
+      if (currentCurriculum && selectedUnits.length === 1) {
+          const unitContent = currentCurriculum.units[selectedUnits[0]];
+          return unitContent ? Object.keys(unitContent.topics) : [];
+      }
+      return [];
+  }, [currentCurriculum, selectedUnits]);
 
 
-  const parseTestContent = (content: string): { student: TestQuestion[], answer: TestQuestion[] } => {
+  const parseTestContent = (content: string): { student: TestQuestion[] } => {
     const studentMarker = 'STUDENT VERSION START ---';
     const answerMarker = 'ANSWER KEY START ---';
 
     const studentPart = content.substring(content.indexOf(studentMarker) + studentMarker.length, content.indexOf(answerMarker)).trim();
     const answerPart = content.substring(content.indexOf(answerMarker) + answerMarker.length).trim();
     
-    const parseSection = (sectionText: string): TestQuestion[] => {
+    const parseSection = (sectionText: string): string[] => {
         if (!sectionText) return [];
         // Regex to split by question number (e.g., "1.", "2. ", "**3.**")
         const questions = sectionText.split(/\n(?=\d+\.\s|\*\*\d+\.\*\*\s)/).filter(q => q.trim() !== '');
-        return questions.map((q, index) => ({
-            id: index + 1,
-            question: q.trim(),
-            answer: '' // Placeholder, will be filled for answer key
-        }));
+        return questions.map(q => q.trim());
     };
     
-    const studentQuestions = parseSection(studentPart);
-    const answerKeyAnswers = parseSection(answerPart);
+    const studentQuestionsText = parseSection(studentPart);
+    const answerKeyAnswersText = parseSection(answerPart);
 
-    // Map answers to questions
-    studentQuestions.forEach((sq, i) => {
-        if(answerKeyAnswers[i]) {
-            sq.answer = answerKeyAnswers[i].question; // The "question" in the answer key is the answer content
-        }
-    });
+    const studentQuestions = studentQuestionsText.map((question, index) => ({
+      id: index + 1,
+      question: question,
+      answer: answerKeyAnswersText[index] || 'Answer not provided.'
+    }));
 
-    return { student: studentQuestions, answer: answerKeyAnswers };
+    return { student: studentQuestions };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -245,8 +237,7 @@ export default function TestGeneratorPage() {
 
     setIsLoading(true);
     setStudentVersion([]);
-    setAnswerKey([]);
-
+    
     const input: GenerateTestInput = {
       subject: selectedSubject,
       unit: selectedUnits.join(', '),
@@ -260,9 +251,8 @@ export default function TestGeneratorPage() {
 
     try {
       const result = await generateTest(input);
-      const { student, answer } = parseTestContent(result.test);
+      const { student } = parseTestContent(result.test);
       setStudentVersion(student);
-      setAnswerKey(answer);
     } catch (error) {
       console.error('Error generating test:', error);
       toast({
@@ -285,7 +275,7 @@ export default function TestGeneratorPage() {
     setNumConstructedResponse(undefined);
     setNumEssay(undefined);
     setStudentVersion([]);
-    setAnswerKey([]);
+    setCurrentCurriculum(null);
   };
 
   const handleDeleteQuestion = (id: number) => {
@@ -381,7 +371,7 @@ export default function TestGeneratorPage() {
         </Button>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col bg-muted/30 p-4">
-        {isLoading && !currentCurriculum ? (
+        {isLoading ? (
           <GeneratingAnimation />
         ) : studentVersion.length > 0 ? (
           <ScrollArea className="flex-1 rounded-md bg-background shadow-inner">
@@ -404,7 +394,7 @@ export default function TestGeneratorPage() {
                 </div>
               ))}
             </div>
-             <div id="printable-answer-key" className="document-view p-4 space-y-4 mt-4">
+             <div id="printable-answer-key" className="document-view p-4 space-y-4 mt-4" style={{ display: 'none' }}>
                 <h3 className="font-bold text-lg">ANSWER KEY</h3>
                 {studentVersion.map((q) => (
                   q.answer && <div key={q.id}><StyledContentDisplay content={q.answer} /></div>
@@ -514,7 +504,7 @@ export default function TestGeneratorPage() {
                                 </label>
                             </div>
                         )) : (
-                            <p className="text-sm text-muted-foreground">Please select a subject to see available units.</p>
+                            <p className="text-sm text-muted-foreground">{selectedSubject ? 'Loading units...' : 'Please select a subject to see available units.'}</p>
                         )}
                     </div>
                 </ScrollArea>
@@ -626,3 +616,5 @@ export default function TestGeneratorPage() {
     </>
   );
 }
+
+    
