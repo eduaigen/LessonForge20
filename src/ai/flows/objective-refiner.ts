@@ -10,10 +10,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const RefineObjectiveInputSchema = z.object({
-  objective: z.string().describe('The learning objective to be refined.'),
-  subject: z.string().describe('The subject area of the objective (e.g., Science, ELA).'),
-});
+const RefineObjectiveInputSchema = z.string().describe('The learning objective to be refined.');
 export type RefineObjectiveInput = z.infer<typeof RefineObjectiveInputSchema>;
 
 const RefineObjectiveOutputSchema = z.object({
@@ -39,8 +36,8 @@ const prompt = ai.definePrompt({
   output: {schema: RefineObjectiveOutputSchema},
   prompt: `You are an expert instructional coach specializing in curriculum design. Your task is to refine a learning objective to be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).
 
-Given the following learning objective for the subject '{{{subject}}}':
-"{{{objective}}}"
+Given the following learning objective:
+"{{{input}}}"
 
 Rewrite it into a SMART objective. For each component of the SMART framework, provide a clear statement. Also provide a brief suggestion explaining the improvements made.
 
@@ -58,13 +55,11 @@ const refineObjectiveFlow = ai.defineFlow(
     outputSchema: RefineObjectiveOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt({
-        ...input,
-        originalObjective: input.objective,
-    });
+    const {output} = await prompt(input);
     if (!output) {
       throw new Error('The AI failed to refine the objective. Please try again.');
     }
-    return output;
+    // Manually add the original objective to the output as the prompt can't access it directly with a simple string input.
+    return { ...output, originalObjective: input };
   }
 );

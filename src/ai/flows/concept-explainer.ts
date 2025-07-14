@@ -10,11 +10,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const ExplainConceptInputSchema = z.object({
-  concept: z.string().describe('The concept to be explained.'),
-  subject: z.string().describe('The subject area of the concept (e.g., Biology, History).'),
-  gradeLevel: z.string().describe('The target grade level for the explanation (e.g., 9th Grade).'),
-});
+const ExplainConceptInputSchema = z.string().describe('The concept or question to be explained.');
 export type ExplainConceptInput = z.infer<typeof ExplainConceptInputSchema>;
 
 const ExplainConceptOutputSchema = z.object({
@@ -32,15 +28,13 @@ const prompt = ai.definePrompt({
   name: 'explainConceptPrompt',
   input: {schema: ExplainConceptInputSchema},
   output: {schema: ExplainConceptOutputSchema},
-  prompt: `You are an expert educator and curriculum developer. Your task is to explain a concept in a way that is clear, engaging, and appropriate for a specific grade level.
+  prompt: `You are an expert educator and curriculum developer. Your task is to explain a concept in a way that is clear, engaging, and appropriate for a general high school audience.
 
-Given the following information:
-- Concept: {{{concept}}}
-- Subject: {{{subject}}}
-- Grade Level: {{{gradeLevel}}}
+Given the following concept or question:
+"{{{input}}}"
 
 Generate the following:
-1.  **Explanation**: A clear, concise, and grade-appropriate explanation of the concept.
+1.  **Explanation**: A clear, concise, and grade-appropriate explanation of the concept. Assume a 10th-grade level unless the query implies a different one.
 2.  **Analogy**: A simple, relatable analogy or metaphor that makes the concept easier to understand.
 3.  **Key Points**: A list of 3-5 bullet points that summarize the most important aspects of the concept.`,
 });

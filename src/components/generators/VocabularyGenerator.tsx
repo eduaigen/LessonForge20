@@ -8,19 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, BookOpenText, Target, Users, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { vocabularyDeepDive, type VocabularyDeepDiveInput, type VocabularyDeepDiveOutput } from '@/ai/flows/vocabulary-deep-dive';
-import { curriculumData } from '@/lib/curriculum-data';
+import { vocabularyDeepDive, type VocabularyDeepDiveOutput } from '@/ai/flows/vocabulary-deep-dive';
+import GeneratingAnimation from '@/components/common/GeneratingAnimation';
 
 const formSchema = z.object({
   term: z.string().min(2, { message: 'Term must be at least 2 characters.' }),
-  subject: z.string().min(1, { message: 'Please select a subject.' }),
-  gradeLevel: z.string().min(1, { message: 'Please select a grade level.' }),
 });
-
-const gradeLevels = Array.from({ length: 7 }, (_, i) => `${i + 6}th Grade`);
 
 export default function VocabularyGenerator() {
   const { toast } = useToast();
@@ -29,14 +24,14 @@ export default function VocabularyGenerator() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { term: '', subject: '', gradeLevel: '' },
+    defaultValues: { term: '' },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setOutput(null);
     try {
-      const result = await vocabularyDeepDive(values as VocabularyDeepDiveInput);
+      const result = await vocabularyDeepDive(values.term);
       setOutput(result);
     } catch (error) {
       console.error('Vocabulary deep dive failed:', error);
@@ -93,48 +88,6 @@ export default function VocabularyGenerator() {
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="subject"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger><SelectValue placeholder="Select a subject" /></SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {curriculumData.subjects.map((subject) => (
-                          <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="gradeLevel"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Grade Level</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger><SelectValue placeholder="Select a grade level" /></SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {gradeLevels.map((grade) => (
-                          <SelectItem key={grade} value={grade}>{grade}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
             <Button type="submit" disabled={isLoading} className="w-full">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? 'Generating...' : 'Generate Deep Dive'}
@@ -143,14 +96,13 @@ export default function VocabularyGenerator() {
         </Form>
 
         {isLoading && (
-            <div className="mt-8 text-center text-muted-foreground">
-                <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary mb-4" />
-                <p>Diving deep into the vocabulary...</p>
+            <div className="mt-8">
+              <GeneratingAnimation />
             </div>
         )}
 
         {output && (
-          <div className="mt-8 space-y-6 animate-fade-in">
+          <div className="mt-8 space-y-6">
             <h2 className="text-3xl font-headline text-center">
               Deep Dive: <span className="text-primary">{output.term}</span>
             </h2>

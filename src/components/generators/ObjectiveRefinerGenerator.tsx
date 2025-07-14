@@ -8,15 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Target, CheckCircle, Lightbulb } from 'lucide-react';
+import { Loader2, Target, Lightbulb } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { refineObjective, type RefineObjectiveInput, type RefineObjectiveOutput } from '@/ai/flows/objective-refiner';
-import { curriculumData } from '@/lib/curriculum-data';
+import { refineObjective, type RefineObjectiveOutput } from '@/ai/flows/objective-refiner';
+import GeneratingAnimation from '@/components/common/GeneratingAnimation';
 
 const formSchema = z.object({
   objective: z.string().min(10, { message: 'Objective must be at least 10 characters.' }),
-  subject: z.string().min(1, { message: 'Please select a subject.' }),
 });
 
 export default function ObjectiveRefinerGenerator() {
@@ -26,14 +24,14 @@ export default function ObjectiveRefinerGenerator() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { objective: '', subject: '' },
+    defaultValues: { objective: '' },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setOutput(null);
     try {
-      const result = await refineObjective(values as RefineObjectiveInput);
+      const result = await refineObjective(values.objective);
       setOutput(result);
     } catch (error) {
       console.error('Objective refinement failed:', error);
@@ -76,26 +74,6 @@ export default function ObjectiveRefinerGenerator() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="subject"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Subject</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger><SelectValue placeholder="Select a subject" /></SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {curriculumData.subjects.map((subject) => (
-                        <SelectItem key={subject} value={subject}>{subject}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <Button type="submit" disabled={isLoading} className="w-full">
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {isLoading ? 'Refining...' : 'Refine Objective'}
@@ -104,14 +82,13 @@ export default function ObjectiveRefinerGenerator() {
         </Form>
 
         {isLoading && (
-            <div className="mt-8 text-center text-muted-foreground">
-                <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary mb-4" />
-                <p>Making your objective SMARTer...</p>
+            <div className="mt-8">
+                <GeneratingAnimation />
             </div>
         )}
 
         {output && (
-          <div className="mt-8 space-y-6 animate-fade-in">
+          <div className="mt-8 space-y-6">
             <Card className="bg-muted/30">
                 <CardHeader>
                     <CardTitle className="text-lg">Original Objective</CardTitle>

@@ -10,11 +10,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const VocabularyDeepDiveInputSchema = z.object({
-  term: z.string().describe('The vocabulary term to be explained.'),
-  subject: z.string().describe('The subject where this term is used (e.g., Biology, US History).'),
-  gradeLevel: z.string().describe('The target grade level for the explanation (e.g., 10th Grade).'),
-});
+const VocabularyDeepDiveInputSchema = z.string().describe('The vocabulary term to be explained. The user might provide context like subject or grade level.');
 export type VocabularyDeepDiveInput = z.infer<typeof VocabularyDeepDiveInputSchema>;
 
 const VocabularyDeepDiveOutputSchema = z.object({
@@ -34,18 +30,17 @@ const prompt = ai.definePrompt({
   name: 'vocabularyDeepDivePrompt',
   input: {schema: VocabularyDeepDiveInputSchema},
   output: {schema: VocabularyDeepDiveOutputSchema},
-  prompt: `You are an expert educator creating teaching materials. Your task is to provide a comprehensive "deep dive" for a single vocabulary term, tailored for a specific subject and grade level.
+  prompt: `You are an expert educator creating teaching materials. Your task is to provide a comprehensive "deep dive" for a single vocabulary term. The user may provide context like a subject or grade level. If not, assume a general high school level.
 
-Given the following information:
-- Term: {{{term}}}
-- Subject: {{{subject}}}
-- Grade Level: {{{gradeLevel}}}
+Given the following term/query:
+"{{{input}}}"
 
 Generate the following content:
-1.  **Definition**: A clear, student-friendly definition appropriate for the grade level.
-2.  **In-Context Example**: A sentence or short paragraph that uses the term correctly in a way that reveals its meaning.
-3.  **Common Misconceptions**: A brief explanation of how students often misunderstand this term or concept.
-4.  **Real-World Connection**: A relatable example of how this term applies to students' lives or the world around them.`,
+1.  **Term**: Identify the core vocabulary term from the user's input.
+2.  **Definition**: A clear, student-friendly definition appropriate for a high school level.
+3.  **In-Context Example**: A sentence or short paragraph that uses the term correctly in a way that reveals its meaning.
+4.  **Common Misconceptions**: A brief explanation of how students often misunderstand this term or concept.
+5.  **Real-World Connection**: A relatable example of how this term applies to students' lives or the world around them.`,
 });
 
 const vocabularyDeepDiveFlow = ai.defineFlow(
