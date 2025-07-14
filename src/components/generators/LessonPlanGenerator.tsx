@@ -43,10 +43,10 @@ const getCurriculumForSubject = async (subject: string) => {
     switch (subject) {
         case 'AP Biology':
             return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
-        case 'NGSS Biology (OpenSciEd)':
-            return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
         case 'NV Biology':
             return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+        case 'NGSS Biology (OpenSciEd)':
+            return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
         case 'Chemistry':
             return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
         case 'Earth_Science':
@@ -56,13 +56,19 @@ const getCurriculumForSubject = async (subject: string) => {
         case 'Health':
             return (await import('@/lib/health-curriculum')).healthCurriculum;
         case 'Global History I & II':
+             return (await import('@/lib/history-curriculum')).historyCurriculum;
         case 'US History & Government':
+             return (await import('@/lib/history-curriculum')).historyCurriculum;
         case 'Government & Economics':
+             return (await import('@/lib/history-curriculum')).historyCurriculum;
         case 'History':
             return (await import('@/lib/history-curriculum')).historyCurriculum;
         case 'Illustrative Math Algebra 1':
+             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'Illustrative Math Algebra 2':
+             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'Illustrative Math Geometry':
+             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'Math':
             return (await import('@/lib/math-curriculum')).mathCurriculum;
         case 'ELA 9th Grade':

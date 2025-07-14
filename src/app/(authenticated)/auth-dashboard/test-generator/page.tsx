@@ -41,10 +41,10 @@ const getCurriculumForSubject = async (subject: string) => {
         switch (subject) {
             case 'AP Biology':
                 return (await import('@/lib/ap-biology-curriculum')).apBiologyCurriculum;
-            case 'NGSS Biology (OpenSciEd)':
-                return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
             case 'NV Biology':
                 return (await import('@/lib/nv-biology-curriculum')).nvBiologyCurriculum;
+            case 'NGSS Biology (OpenSciEd)':
+                return (await import('@/lib/ngss-biology-curriculum')).ngssBiologyCurriculum;
             case 'Chemistry':
                 return (await import('@/lib/chemistry-curriculum')).chemistryCurriculum;
             case 'Earth_Science':
@@ -54,13 +54,19 @@ const getCurriculumForSubject = async (subject: string) => {
             case 'Health':
                 return (await import('@/lib/health-curriculum')).healthCurriculum;
             case 'Global History I & II':
+                return (await import('@/lib/history-curriculum')).historyCurriculum;
             case 'US History & Government':
+                return (await import('@/lib/history-curriculum')).historyCurriculum;
             case 'Government & Economics':
+                return (await import('@/lib/history-curriculum')).historyCurriculum;
             case 'History':
                 return (await import('@/lib/history-curriculum')).historyCurriculum;
             case 'Illustrative Math Algebra 1':
+                return (await import('@/lib/math-curriculum')).mathCurriculum;
             case 'Illustrative Math Algebra 2':
+                return (await import('@/lib/math-curriculum')).mathCurriculum;
             case 'Illustrative Math Geometry':
+                return (await import('@/lib/math-curriculum')).mathCurriculum;
             case 'Math':
                 return (await import('@/lib/math-curriculum')).mathCurriculum;
             case 'ELA 9th Grade':
@@ -82,10 +88,10 @@ const getCurriculumForSubject = async (subject: string) => {
 
 const mapPriceIdToSubject = (): { [key: string]: string } => {
     const mapping: { [key: string]: string } = {};
-    const subjectModules = { ...modules };
+    const subjectModules: any = { ...modules };
     delete subjectModules.tools; 
 
-    Object.values(subjectModules).flat().forEach(module => {
+    Object.values(subjectModules).flat().forEach((module: any) => {
         mapping[module.id] = module.name;
     });
     return mapping;
@@ -116,11 +122,11 @@ export default function TestGeneratorPage() {
   const priceIdToSubject = useMemo(mapPriceIdToSubject, []);
 
   const availableSubjects = useMemo(() => {
-    const subjectModules = { ...modules };
+    const subjectModules: any = { ...modules };
     delete subjectModules.tools;
 
     if (isAdmin) {
-      const allSubjects = Object.values(subjectModules).flat().map(m => m.name);
+      const allSubjects = Object.values(subjectModules).flat().map((m: any) => m.name);
       return [...new Set(allSubjects)];
     }
     
