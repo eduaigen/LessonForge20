@@ -251,6 +251,14 @@ body {
   box-shadow: 0 0 50px hsla(var(--primary) / 0.3);
 }
 
+.animate-draw-line {
+    animation: draw-line 1s ease-out forwards;
+}
+  
+.animate-node-pulse {
+    animation: node-pulse 2s ease-in-out infinite;
+}
+
 /* Hover effects */
 .logo-container:hover .glow-bg {
   opacity: 0.6;

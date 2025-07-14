@@ -9,6 +9,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import StyledContentDisplay from '@/components/common/StyledContentDisplay';
+import GeneratingAnimation from '@/components/common/GeneratingAnimation';
 
 type AiToolContainerProps = {
   title: string;
@@ -46,13 +47,7 @@ export default function AiToolContainer({
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-4 w-[80%]" />
-                <Skeleton className="h-4 w-[90%]" />
-                <Skeleton className="h-4 w-[75%]" />
-                <Skeleton className="h-4 w-[85%]" />
-                <Skeleton className="h-4 w-[80%]" />
-              </div>
+              <GeneratingAnimation />
             ) : (
                 result && (
                   <Accordion type="single" collapsible defaultValue="item-1" className="w-full">

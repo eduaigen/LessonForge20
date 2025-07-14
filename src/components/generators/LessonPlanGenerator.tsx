@@ -37,6 +37,7 @@ import {
 import { Label } from '../ui/label';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import StyledContentDisplay from '../common/StyledContentDisplay';
+import GeneratingAnimation from '../common/GeneratingAnimation';
 
 // Helper function to dynamically import ELA curriculum
 const getElaCurriculum = async (gradeTitle: string) => {
@@ -223,13 +224,7 @@ export default function LessonPlanGenerator() {
       </CardHeader>
       <CardContent className="flex-1 flex flex-col bg-muted/30 p-4">
         {isLoading ? (
-          <div className="space-y-4 p-4 bg-background rounded-md">
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-4 w-1/2" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-5/6" />
-          </div>
+          <GeneratingAnimation />
         ) : generatedContent ? (
            <ScrollArea className="flex-1">
             <div id="printable-content" className="document-view">
