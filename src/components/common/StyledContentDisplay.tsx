@@ -11,6 +11,11 @@ const renderContentItem = (item: string, index: number): React.ReactNode => {
   const trimmedItem = item.trim();
   if (!trimmedItem) return null;
 
+  // SVG rendering has top priority
+  if (trimmedItem.startsWith('<svg') && trimmedItem.endsWith('</svg>')) {
+    return <div key={index} dangerouslySetInnerHTML={{ __html: trimmedItem }} className="my-4" />;
+  }
+
   // LaTeX rendering
   const latexParts = trimmedItem.split(/(\$[^$]+\$|\\\(.+?\\\)|\\\[.+?\\\]|\$\$[^$]+\$\$)/g);
   if (latexParts.length > 1 && latexParts.some(p => p.startsWith('$') || p.startsWith('\\'))) {
@@ -35,11 +40,6 @@ const renderContentItem = (item: string, index: number): React.ReactNode => {
     );
   }
 
-  // SVG rendering
-  if (trimmedItem.startsWith('<svg') && trimmedItem.endsWith('</svg>')) {
-    return <div key={index} dangerouslySetInnerHTML={{ __html: trimmedItem }} className="my-4" />;
-  }
-  
   // Table rendering
   if (trimmedItem.includes('|')) {
      return <Markdown key={index} className="prose-sm dark:prose-invert max-w-none">{trimmedItem}</Markdown>;
