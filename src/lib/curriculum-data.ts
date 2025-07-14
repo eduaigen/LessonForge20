@@ -272,7 +272,7 @@ export const curriculumData: {
         units: {
             "Unit 1: Discovering New Worlds": {
                 topics: {
-                    "Engage & Explore": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Naked-Eye Observations", "Lesson 3: Tools for Observation"] },
+                    "Engage & Explore": { lessons: ["Lesson 1: Anchor Phenomenon - How do we know what’s out there in space?", "Lesson 2: Naked-Eye Observations", "Lesson 3: Tools for Observation"] },
                     "Earth and the Moon": { lessons: ["Lesson 4: Earth's Rotation", "Lesson 5: Moon Phases", "Lesson 6: Eclipses"] },
                     "Modeling the Sun": { lessons: ["Lesson 7: Sun's Apparent Path", "Lesson 8: Seasonal Changes", "Lesson 9: Solar Energy"] },
                     "Interpreting Data About Distant Objects": { lessons: ["Lesson 10: Light from Stars", "Lesson 11: The H-R Diagram", "Lesson 12: Galaxies"] },
@@ -281,7 +281,7 @@ export const curriculumData: {
             },
             "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
                 topics: {
-                    "Engage & Launch": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Earth's Layers", "Lesson 3: Plate Tectonics"] },
+                    "Engage & Launch": { lessons: ["Lesson 1: Anchor Phenomenon - Natural Hazard Risk", "Lesson 2: Earth's Layers", "Lesson 3: Plate Tectonics"] },
                     "Tectonic Movement and Plate Boundaries": { lessons: ["Lesson 4: Plate Boundaries", "Lesson 5: Earthquakes", "Lesson 6: Volcanoes"] },
                     "Natural Hazard Data": { lessons: ["Lesson 7: Mapping Hazards", "Lesson 8: Tsunami Risk", "Lesson 9: Social Vulnerability"] },
                     "Earthquake Engineering": { lessons: ["Lesson 10: Engineering for Earthquakes", "Lesson 11: Community Resilience"] },
@@ -290,7 +290,7 @@ export const curriculumData: {
             },
             "Unit 3: Climate Change Throughout Human History": {
                 topics: {
-                    "Engage and Ice Core Data": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Ice Cores", "Lesson 3: Analyzing Ice Core Data"] },
+                    "Engage and Ice Core Data": { lessons: ["Lesson 1: Anchor Phenomenon - Past & Future Climate", "Lesson 2: Ice Cores", "Lesson 3: Analyzing Ice Core Data"] },
                     "Global Warming and Carbon Emissions": { lessons: ["Lesson 4: The Greenhouse Effect", "Lesson 5: The Carbon Cycle", "Lesson 6: Human Impact on Climate"] },
                     "Sea Level and Ecosystem Effects": { lessons: ["Lesson 7: Sea Level Rise", "Lesson 8: Ecosystem Impacts"] },
                     "Geoengineering and Mitigation": { lessons: ["Lesson 9: Mitigation Strategies", "Lesson 10: Geoengineering"] },
@@ -299,7 +299,7 @@ export const curriculumData: {
             },
             "Unit 4: More Hurricanes and Blizzards in NYC?": {
                 topics: {
-                    "Extreme Weather Patterns": { lessons: ["Lesson 1: Anchor Phenomenon", "Lesson 2: Weather vs. Climate", "Lesson 3: Air Masses and Fronts"] },
+                    "Extreme Weather Patterns": { lessons: ["Lesson 1: Anchor Phenomenon - Extreme Weather", "Lesson 2: Weather vs. Climate", "Lesson 3: Air Masses and Fronts"] },
                     "Hurricane Frequency": { lessons: ["Lesson 4: Hurricane Formation", "Lesson 5: Hurricane Data Analysis", "Lesson 6: Climate Change and Hurricanes"] },
                     "Blizzard Analysis": { lessons: ["Lesson 7: Blizzard Formation", "Lesson 8: Blizzard Data Analysis"] },
                     "Infrastructure Resilience": { lessons: ["Lesson 9: Infrastructure Vulnerability", "Lesson 10: Designing for Resilience"] },
@@ -327,30 +327,167 @@ export const curriculumData: {
     },
     Chemistry: {
       units: {
-        'Atomic Structure': {
+        "Unit 1: Why are oysters dying, and how can we use chemistry to protect them?": {
           topics: {
-            'Protons, Neutrons, Electrons': { lessons: ['Atomic Number and Mass', 'Subatomic Particles'] },
-            'Isotopes': { lessons: ['Defining Isotopes', 'Calculating Average Atomic Mass'] },
-            'Electron Configurations': { lessons: ['Aufbau Principle', 'Orbital Diagrams'] },
-          },
+            "What large and small-scale processes make water more or less acidic?": {
+              lessons: [
+                "Lesson 1: What is happening to oysters?",
+                "Lesson 2: How can we break down the problem so we can solve it?",
+                "Lesson 3: Can carbon dioxide make the ocean more acidic?",
+                "Lesson 4: What is it about a substance that determines whether it produces more or fewer H+ or OH- ions when it is added to water?",
+                "Lesson 5: How does carbon dioxide move between the atmosphere and ocean systems to cause the water to become more acidic?",
+                "Lesson 6: How can acidic water become less acidic again?",
+                "Lesson 7: How can we use what we have learned to help protect oysters?"
+              ]
+            },
+            "What mathematical models can help us determine the scale of the reactions needed to save oysters?": {
+              lessons: [
+                "Lesson 8: How can we figure out how much of a substance we need to neutralize acid?",
+                "Lesson 9: How much NaOH would we need to add to make ocean water safe for oysters?",
+                "Lesson 10: How does ocean acidification hurt oysters?",
+                "Lesson 11: How can we help oysters build shells quickly?"
+              ]
+            },
+            "How can engineering design help us determine the best process to save oysters?": {
+              lessons: [
+                "Lesson 12: What criteria and constraints do we need to consider when designing solutions to help protect oysters?",
+                "Lesson 13: How can we apply our science ideas to develop a solution to help protect oysters?",
+                "Lesson 14: How well do our different design solutions address our criteria and constraints?",
+                "Lesson 15: How can we apply our learning to other situations?"
+              ]
+            }
+          }
         },
-        'Chemical Bonding & Stoichiometry': {
+        "Unit 2: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?": {
           topics: {
-            'Ionic Bonds': { lessons: ['Cations and Anions', 'Properties of Ionic Compounds'] },
-            'Covalent Bonds': { lessons: ['Lewis Structures', 'Polarity'] },
-            'The Mole': { lessons: ['Avogadro\'s Number', 'Molar Mass'] },
-            'Balancing Equations': { lessons: ['Law of Conservation of Mass', 'Stoichiometric Ratios'] },
-          },
+            "Why and how is the sea level rising?": {
+              lessons: [
+                "Lesson 1: How are sea levels rising and forcing people to move?",
+                "Lesson 2: What can the past help us figure out about what is causing sea level rise in the present?",
+                "Lesson 3: How does carbon dioxide contribute to climate change?",
+                "Lesson 4: What would happen if the Earth's ice melted?"
+              ]
+            },
+            "What solutions could help slow polar ice melt?": {
+              lessons: [
+                "Lesson 5: How can we best slow or stop the land ice melt?",
+                "Lesson 6: Why would some engineers want to sprinkle glass microbeads on the Arctic?",
+                "Lesson 7: How do feedback loops affect Earth's systems?"
+              ]
+            },
+            "How well would the berm solution work in the context of Earth systems?": {
+              lessons: [
+                "Lesson 8: What is going on where the ice meets the water?",
+                "Lesson 9: Why does warm salty water sink to melt a glacier?",
+                "Lesson 10: How can we measure the energy transfer a berm prevents?",
+                "Lesson 11: How does heat affect the amount of ice melt?",
+                "Lesson 12: How can we slow the flow of energy on Earth to protect vulnerable coastal communities?",
+                "Lesson 13: How can we model what will happen to Earth's climate if humans make changes?"
+              ]
+            }
+          }
         },
-        'Organic Chemistry': {
+        "Unit 3: What causes lightning and why are some places safer than others when it strikes?": {
           topics: {
-            'Alkanes': { lessons: ['Naming Alkanes', 'Properties of Alkanes'] },
-            'Alkenes': { lessons: ['Naming Alkenes', 'Addition Reactions'] },
-            'Alkynes': { lessons: ['Naming Alkynes', 'Properties of Alkynes'] },
-            'Functional Groups': { lessons: ['Alcohols, Ethers, Aldehydes', 'Ketones, Carboxylic Acids'] },
-          },
+            "What is lightning?": {
+              lessons: [
+                "Lesson 1: When and where does lightning occur and what are its impacts?",
+                "Lesson 2: What parts of the (smaller-scale) system might be causing the (smaller-scale) lightning?",
+                "Lesson 3: What is the spark in the water dropper system and what else is happening in the system before it appears?",
+                "Lesson 4: What happens when we produce static electricity?",
+                "Lesson 5: What is happening at a particle level to produce static effects?"
+              ]
+            },
+            "What causes a lightning strike?": {
+              lessons: [
+                "Lesson 6: What causes static in a lightning system?",
+                "Lesson 7: How are electrostatic forces between objects affected by the amount of charge and the distance between them?",
+                "Lesson 8: How can something that is neutral have an attractive or repulsive interaction with another object without any contact?",
+                "Lesson 9: How can we revise our models to explain what we have figured out about the lightning system?"
+              ]
+            },
+            "How and why does a lightning strike transfer so much energy?": {
+              lessons: [
+                "Lesson 10: Where does the energy come from for lightning to strike across miles of air?",
+                "Lesson 11: Why do the electrons build up in the cloud and then jump to the ground suddenly?"
+              ]
+            },
+            "What makes some places safer than others when lightning strikes?": {
+              lessons: [
+                "Lesson 12: Why are some structures safer than others (and safer than being outside)?",
+                "Lesson 13: Why are you supposed to get away from water when there is lightning nearby?",
+                "Lesson 14: Why are some places safer than others when lightning strikes?"
+              ]
+            }
+          }
         },
-      },
+        "Unit 4: How can chemistry help us evaluate fuels and transportation options to benefit the Earth and our communities?": {
+          topics: {
+            "How do carbon-based fuels release energy?": {
+              lessons: [
+                "Lesson 1: What different fuels have we used, and do we currently use, for transportation?",
+                "Lesson 2: What is happening to the fuels inside the engine to make the vehicle move?",
+                "Lesson 3: How can diesel engines be working so differently from gasoline engines?",
+                "Lesson 4: Why do we need to put energy into the system to start the reaction?",
+                "Lesson 5: How and why is energy released when we burn carbon-based fuels?",
+                "Lesson 6: How does the amount of energy we put into the reaction system compare to the energy we get out?",
+                "Lesson 7: How can fuels release different amounts of energy when they all have bonds breaking and forming?",
+                "Lesson 8: How does our understanding of carbon-based fuels inform our decision-making?"
+              ]
+            },
+            "How do fuels that are not carbon based release energy?": {
+              lessons: [
+                "Lesson 9: Where is the energy coming from (and what are some trade-offs) when we use batteries to power vehicles?",
+                "Lesson 10: How can we use hydrogen as a fuel and what are the impacts?",
+                "Lesson 11: Where is the energy coming from when we use uranium as a fuel?",
+                "Lesson 12: How can our knowledge of fuel trade-offs support our evaluation of future rocket fuels?"
+              ]
+            },
+            "How can we use what we have learned to improve our transportation system?": {
+              lessons: [
+                "Lesson 13: Why do we use some fuels rather than others?",
+                "Lesson 14: How do we decide on the best transportation options for our future?",
+                "Lesson 15: How can we make transportation decisions to benefit our communities and Earth?"
+              ]
+            }
+          }
+        },
+        "Unit 5: How can we find, make, and recycle the substances we need to live on and beyond Earth?": {
+          topics: {
+            "How can we find water and other substances we need to survive on other objects in space?": {
+              lessons: [
+                "Lesson 1: What substances would we need and how would we get them to live and work beyond Earth?",
+                "Lesson 2: How does water support life and chemical reactions?",
+                "Lesson 3: How can we find evidence of the water we need on the surfaces of other objects in space?",
+                "Lesson 4: How and why do water and other liquids interact with materials to make surface features?",
+                "Lesson 5: How can we tell what is in the atmosphere (and just below the surface) of objects in space?"
+              ]
+            },
+            "Why do we need certain types of atoms to create the substances we need?": {
+              lessons: [
+                "Lesson 6: What patterns are there between the types of atoms and the number of bonds they form in the resources we need?",
+                "Lesson 7: Why is there a difference between the number of electrons an element has and the number of bonds an element forms?",
+                "Lesson 8: Could another substance serve as a substitute for water for some of the processes we need to use it for in space?",
+                "Lesson 9: How can the ideas we developed be applied to making a possible substitute for another substance?"
+              ]
+            },
+            "How can we make the substances we need to survive off of Earth using the existing matter in the solar system?": {
+              lessons: [
+                "Lesson 10: Why do we need water in so many reactions?",
+                "Lesson 11: How can we grow food in space?",
+                "Lesson 12: Which location(s) in the solar system has the elements we need and what relative amount is required to make any substance?"
+              ]
+            },
+            "How can we be more sustainable in what we use and produce?": {
+              lessons: [
+                "Lesson 13: Why can we recycle some of the substances we need and not others?",
+                "Lesson 14: What are some more sustainable approaches we are developing to help us make the things we need off of Earth and on it?",
+                "Lesson 15: What is the full impact of going to space?"
+              ]
+            }
+          }
+        }
+      }
     },
     Physics: {
       units: {
@@ -1358,7 +1495,7 @@ export const curriculumData: {
     },
     Math: {
       units: {
-        "Algebra 1 - Unit 1: One-Variable Statistics": {
+        "Unit 1: One-Variable Statistics": {
           topics: {
             "Section A: Getting to Know You": {
               lessons: [
@@ -1398,7 +1535,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 2: Linear Equations and Systems": {
+        "Unit 2: Linear Equations and Systems": {
           topics: {
             "Section A: Writing and Modeling with Equations": {
               lessons: [
@@ -1437,7 +1574,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 3: Two-Variable Statistics": {
+        "Unit 3: Two-Variable Statistics": {
           topics: {
             "Section A: Two-Way Tables": {
               lessons: [
@@ -1467,7 +1604,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 4: Linear Inequalities and Systems": {
+        "Unit 4: Linear Inequalities and Systems": {
           topics: {
             "Section A: Linear Inequalities in One Variable": {
               lessons: [
@@ -1492,7 +1629,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 5: Functions": {
+        "Unit 5: Functions": {
           topics: {
             "Section A: Functions and Their Representations": {
               lessons: [
@@ -1534,7 +1671,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 6: Introduction to Exponential Functions": {
+        "Unit 6: Introduction to Exponential Functions": {
           topics: {
             "Section A: Looking at Growth": {
               lessons: [
@@ -1583,7 +1720,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 7: Introduction to Quadratic Functions": {
+        "Unit 7: Introduction to Quadratic Functions": {
           topics: {
             "Section A: A Different Kind of Change": {
               lessons: [
@@ -1620,7 +1757,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 1 - Unit 8: Quadratic Equations": {
+        "Unit 8: Quadratic Equations": {
           topics: {
             "Section A: Finding Unknown Inputs": {
               lessons: [
@@ -1672,7 +1809,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 1: Sequences and Functions": {
+        "Unit 1: Sequences and Functions": {
           topics: {
             "Section A: Sequences": {
               lessons: [
@@ -1699,7 +1836,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 2: Polynomial Functions": {
+        "Unit 2: Polynomial Functions": {
           topics: {
             "Section A: What Is a Polynomial?": {
               lessons: [
@@ -1734,7 +1871,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 3: Rational Functions and Equations": {
+        "Unit 3: Rational Functions and Equations": {
           topics: {
             "Section A: Rational Functions": {
               lessons: [
@@ -1761,7 +1898,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 4: Complex Numbers and Rational Exponents": {
+        "Unit 4: Complex Numbers and Rational Exponents": {
           topics: {
             "Section A: Exponent Properties": {
               lessons: [
@@ -1805,7 +1942,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 5: Exponential Functions and Equations": {
+        "Unit 5: Exponential Functions and Equations": {
           topics: {
             "Section A: Growing and Shrinking": {
               lessons: [
@@ -1847,7 +1984,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 6: Transformations of Functions": {
+        "Unit 6: Transformations of Functions": {
           topics: {
             "Section A: Translations, Reflections, and Symmetry": {
               lessons: [
@@ -1882,7 +2019,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 7: Trigonometric Functions": {
+        "Unit 7: Trigonometric Functions": {
           topics: {
             "Section A: The Unit Circle": {
               lessons: [
@@ -1922,7 +2059,7 @@ export const curriculumData: {
             }
           }
         },
-        "Algebra 2 - Unit 8: Statistical Inferences": {
+        "Unit 8: Statistical Inferences": {
           topics: {
             "Section A: Study Types": {
               lessons: [
@@ -1961,7 +2098,7 @@ export const curriculumData: {
             }
           }
         },
-        "Geometry - Unit 1: Constructions and Rigid Transformations": {
+        "Unit 1: Constructions and Rigid Transformations": {
             topics: {
                 "Section A: Constructions": {
                     lessons: [
@@ -2007,7 +2144,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 2: Congruence": {
+        "Unit 2: Congruence": {
             topics: {
                 "Section A: Congruent Figures": {
                     lessons: [
@@ -2042,7 +2179,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 3: Similarity": {
+        "Unit 3: Similarity": {
             topics: {
                 "Section A: Properties of Dilations": {
                     lessons: [
@@ -2079,7 +2216,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 4: Right Triangle Trigonometry": {
+        "Unit 4: Right Triangle Trigonometry": {
             topics: {
                 "Section A: Angles and Steepness": {
                     lessons: [
@@ -2107,7 +2244,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 5: Solid Geometry": {
+        "Unit 5: Solid Geometry": {
             topics: {
                 "Section A: Cross-Sections, Scaling, and Area": {
                     lessons: [
@@ -2149,7 +2286,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 6: Coordinate Geometry": {
+        "Unit 6: Coordinate Geometry": {
             topics: {
                 "Section A: Transformations in the Plane": {
                     lessons: [
@@ -2187,7 +2324,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 7: Circles": {
+        "Unit 7: Circles": {
             topics: {
                 "Section A: Lines, Angles, and Circles": {
                     lessons: [
@@ -2221,7 +2358,7 @@ export const curriculumData: {
                 }
             }
         },
-        "Geometry - Unit 8: Conditional Probability": {
+        "Unit 8: Conditional Probability": {
             topics: {
                 "Section A: Up to Chance": {
                     lessons: [
@@ -2252,3 +2389,5 @@ export const curriculumData: {
     }
   },
 };
+
+    
