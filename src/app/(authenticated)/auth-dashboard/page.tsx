@@ -173,12 +173,20 @@ const tools = {
     ],
     social: [
        {
-        title: 'Global History I & II',
-        description: 'From ancient civilizations to present.',
+        title: 'Global History I (Grade 9)',
+        description: 'From ancient civilizations to the post-classical world.',
         icon: <History className="w-8 h-8" />,
-        href: '/auth-dashboard/lesson-plan-generator?subject=Global%20History%20I%20&%20II',
+        href: '/auth-dashboard/lesson-plan-generator?subject=Global%20History%20I%20(Grade%209)',
         isPremium: true,
         priceId: 'price_1Pg12DAk4y2zY5d6tUvWxYz0',
+      },
+      {
+        title: 'Global History II (Grade 10)',
+        description: 'From the Age of Revolutions to contemporary issues.',
+        icon: <History className="w-8 h-8" />,
+        href: '/auth-dashboard/lesson-plan-generator?subject=Global%20History%20II%20(Grade%2010)',
+        isPremium: true,
+        priceId: 'price_1PgA9zAk4y2zY5d6q7r8sTuV',
       },
        {
         title: 'US History & Government',

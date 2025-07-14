@@ -23,7 +23,8 @@ export const modules = {
     { id: 'price_1Pg124Ak4y2zY5d6lMnOpQrS', name: 'ELA 12th Grade', description: 'College-level reading and writing.', icon: 'library' },
   ],
   social: [
-    { id: 'price_1Pg12DAk4y2zY5d6tUvWxYz0', name: 'Global History I & II', description: 'From ancient civilizations to present.', icon: 'history' },
+    { id: 'price_1Pg12DAk4y2zY5d6tUvWxYz0', name: 'Global History I (Grade 9)', description: 'From ancient civilizations to the post-classical world.', icon: 'history' },
+    { id: 'price_1PgA9zAk4y2zY5d6q7r8sTuV', name: 'Global History II (Grade 10)', description: 'From the Age of Revolutions to contemporary issues.', icon: 'history' },
     { id: 'price_1Pg12NAk4y2zY5d6a1bCdeFg', name: 'US History & Government', description: 'American history & constitutional principles.', icon: 'history' },
     { id: 'price_1Pg12ZAk4y2zY5d6hIjKlMnO', name: 'Government & Economics', description: 'Study of government and economic principles.', icon: 'history' },
   ],
