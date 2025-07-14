@@ -13,3 +13,4 @@ import '@/ai/flows/curriculum-audit.ts';
 import '@/ai/flows/send-contact-email.ts';
 import '@/ai/schemas/lesson-plan-schemas.ts';
 import '@/ai/schemas/contact-form-schemas.ts';
+import '@/ai/schemas/teacher-tool-schemas.ts';

@@ -5,35 +5,18 @@
  * @fileOverview AI agent that generates various teaching materials based on a provided lesson plan.
  *
  * - generateTeacherTool - A function that routes to the correct tool generator.
- * - GenerateTeacherToolInput - The input type for the generateTeacherTool function.
- * - GenerateTeacherToolOutput - The return type for the generateTeacherTool function.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-import { aiContentGenerationRules } from '../schemas/formatting-rules';
 import { convert } from 'html-to-text';
-
-// Define the types of tools available
-const toolTypes = [
-    'worksheet', 'article', 'graph_chart_data', 'diagram_flowchart',
-    'slideshow_outline', 'pedagogical_coach', 'ell_swd_support',
-    'enrichment_activity', 'math_problem_visualizer'
-] as const;
-export const toolTypeSchema = z.enum(toolTypes);
-export type ToolType = z.infer<typeof toolTypeSchema>;
-
-const GenerateTeacherToolInputSchema = z.object({
-  lessonPlan: z.string().describe('The full content of the lesson plan to be used as the source material.'),
-  toolType: toolTypeSchema.describe('The specific type of tool to generate.'),
-});
-export type GenerateTeacherToolInput = z.infer<typeof GenerateTeacherToolInputSchema>;
-
-const GenerateTeacherToolOutputSchema = z.object({
-  content: z.string().describe('The generated content for the specified tool.'),
-});
-export type GenerateTeacherToolOutput = z.infer<typeof GenerateTeacherToolOutputSchema>;
-
+import { 
+    GenerateTeacherToolInputSchema, 
+    type GenerateTeacherToolInput, 
+    GenerateTeacherToolOutputSchema, 
+    type GenerateTeacherToolOutput,
+    type ToolType
+} from '@/ai/schemas/teacher-tool-schemas';
+import { aiContentGenerationRules } from '../schemas/formatting-rules';
 
 // This is the main exported function that the UI will call.
 export async function generateTeacherTool(input: GenerateTeacherToolInput): Promise<GenerateTeacherToolOutput> {

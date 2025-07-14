@@ -25,7 +25,8 @@ import {
   Download,
   Loader2,
 } from 'lucide-react';
-import { generateTeacherTool, type ToolType } from '@/ai/flows/generate-teacher-tool';
+import { generateTeacherTool } from '@/ai/flows/generate-teacher-tool';
+import type { ToolType } from '@/ai/schemas/teacher-tool-schemas';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useToast } from '@/hooks/use-toast';
 
