@@ -49,23 +49,23 @@ Based on this context, generate a complete and detailed lesson plan that is read
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Present reading and diagram, model concepts).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students take annotated notes).
 - **Embedded Reading Passage**: A 100–250 word, grade-appropriate reading passage on the topic.
-- **Embedded Diagram**: A fully rendered, labeled SVG scientific diagram related to the reading. Do not describe it; create the SVG code.
+- **Embedded Diagram**: A fully rendered, labeled SVG scientific diagram related to the reading. Ensure all labels are clear and arrows correctly point to relevant parts. Do not describe it; create the SVG code.
 - **Concept-Check Questions**: 2-3 questions based on the reading and diagram.
 
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Organize students into groups, provide graphic organizer).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students collaboratively complete the graphic organizer).
-- **Embedded Data Table/Graph/Model**: A complete and structured data table with headers and rows for students to analyze or complete.
+- **Embedded Data Table/Graph/Model**: A complete and structured data table with a title, clear headers, and logically organized data. For graphs, ensure axes are labeled and a legend is included if necessary.
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Launch a quick poll).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students respond to CFU items).
-- **CFU Questions**: 2 multiple-choice questions and 1 short-response question. For multiple-choice questions, provide the options as a simple array of strings without letters like "a)", "b)".
+- **CFU Questions**: 2 multiple-choice questions and 1 short-response question. For multiple-choice questions, provide the options as a simple array of strings without letters like "a)", "b)". Ensure surrounding text is not cluttered.
 
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Clarify expectations with a rubric).
 - **Expected Student Outputs**: Bulleted list of student actions (e.g., Students construct a written explanation using CER).
-- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted.
+- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. Ensure any embedded charts or graphs are clearly labeled.
 
 **G. CLOSURE / EXIT TICKET**
 - **Teacher Actions**: Bulleted list of teacher actions (e.g., Prompt students to summarize the main point).
