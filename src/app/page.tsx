@@ -111,8 +111,8 @@ export default function Home() {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % dynamicContent.length);
         setIsFading(false);
-      }, 500); // Corresponds to the animation duration
-    }, 5000);
+      }, 1000); // Corresponds to the animation duration
+    }, 20000); // 20 seconds between changes
 
     return () => clearInterval(interval);
   }, [dynamicContent.length]);
@@ -135,7 +135,7 @@ export default function Home() {
           <div className="container mx-auto max-w-7xl px-4 text-center">
             <h1
               className={cn(
-                'font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl transition-opacity duration-500',
+                'font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl transition-opacity duration-1000',
                 isFading ? 'opacity-0' : 'opacity-100'
               )}
             >
@@ -143,7 +143,7 @@ export default function Home() {
             </h1>
             <p
               className={cn(
-                'mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl transition-opacity duration-500',
+                'mx-auto mt-6 max-w-3xl text-lg text-muted-foreground md:text-xl transition-opacity duration-1000',
                 isFading ? 'opacity-0' : 'opacity-100'
               )}
             >
