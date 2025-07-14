@@ -39,12 +39,6 @@ const extractContentAsString = (children: React.ReactNode): string => {
     
     // For objects (like lesson plans, worksheets), stringify them to preserve structure.
     if (typeof contentProp === 'object' && contentProp !== null) {
-        // Special handling for content that might be nested
-        if (contentProp.worksheetContent) return contentProp.worksheetContent;
-        if (contentProp.scaffoldedContent) return contentProp.scaffoldedContent;
-        if (contentProp.articleContent) return contentProp.articleContent;
-        
-        // Default to stringifying the whole object for translation context
         return JSON.stringify(contentProp, null, 2);
     }
 
@@ -54,7 +48,7 @@ const extractContentAsString = (children: React.ReactNode): string => {
 export default function CollapsibleSection({ title, children }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const [isTranslating, setIsTranslating] = useState(false);
-    const [translatedContent, setTranslatedContent] = useState<string | null>(null);
+    const [translatedContent, setTranslatedContent] = useState<any | null>(null);
     const [translatedLanguage, setTranslatedLanguage] = useState<string | null>(null);
     const [selectedLanguage, setSelectedLanguage] = useState('Spanish');
     const contentRef = useRef<HTMLDivElement>(null);
@@ -81,12 +75,13 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
                     })
                     .join('\n');
                 printWindow.document.write(styles);
-                printWindow.document.write('</head><body><div class="p-4">');
+                printWindow.document.write('<body class="p-4">');
                 printWindow.document.write(printableContent.innerHTML);
-                printWindow.document.write('</div></body></html>');
+                printWindow.document.write('</body></html>');
                 printWindow.document.close();
                 setTimeout(() => {
                     printWindow.print();
+                    printWindow.close();
                 }, 250); 
             }
         }
@@ -120,9 +115,8 @@ export default function CollapsibleSection({ title, children }: CollapsibleSecti
             }
 
             const result = await translateContent({ content: contentToTranslate, targetLanguage: selectedLanguage });
-            // The AI returns a string, which might be a JSON string. We parse it.
-            const parsedContent = JSON.parse(result.translatedContent);
-            setTranslatedContent(parsedContent);
+            const parsedResult = JSON.parse(result.translatedContent);
+            setTranslatedContent(parsedResult);
             setTranslatedLanguage(selectedLanguage);
 
         } catch (error) {

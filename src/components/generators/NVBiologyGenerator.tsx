@@ -45,8 +45,6 @@ type GeneratedContent = {
   title: string;
   content: any;
   type: ToolName | 'Lesson Plan' | 'Reading Material';
-  subContent?: any;
-  isSubContentLoading?: boolean;
 };
 
 const SubscriptionPrompt = () => (
@@ -202,18 +200,6 @@ const GeneratorContent = () => {
     }
   };
 
-  const handleGenerateQuestions = async (sectionId: string, articleContent: string) => {
-    setGeneratedSections(prev => prev.map(s => s.id === sectionId ? { ...s, isSubContentLoading: true } : s));
-    try {
-        const result = await generateComprehensionQuestions({ articleContent });
-        setGeneratedSections(prev => prev.map(s => s.id === sectionId ? { ...s, subContent: result.questions, isSubContentLoading: false } : s));
-    } catch (error) {
-        console.error("Question generation failed:", error);
-        toast({ title: "Question Generation Failed", variant: "destructive" });
-        setGeneratedSections(prev => prev.map(s => s.id === sectionId ? { ...s, isSubContentLoading: false } : s));
-    }
-  }
-  
   return (
     <div className="relative grid grid-cols-1 lg:grid-cols-1 gap-8">
       <div className="flex-grow">
@@ -353,23 +339,6 @@ const GeneratorContent = () => {
         {generatedSections.map(section => (
             <CollapsibleSection key={section.id} title={section.title}>
                  <StyledContentDisplay content={section.content} />
-                 {section.type === 'Reading Material' && !section.subContent && (
-                    <div className="p-4 border-t">
-                        <Button onClick={() => handleGenerateQuestions(section.id, section.content.articleContent)} disabled={section.isSubContentLoading}>
-                           {section.isSubContentLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                           Generate Comprehension Questions
-                        </Button>
-                    </div>
-                 )}
-                 {section.isSubContentLoading && <GeneratingAnimation />}
-                 {section.subContent && (
-                    <div className="p-4 border-t">
-                        <h4 className="font-bold text-lg mb-2">Comprehension Questions</h4>
-                        <ul className="list-decimal pl-5 space-y-2">
-                           {(section.subContent as string[]).map((q: string, i: number) => <li key={i}>{q}</li>)}
-                        </ul>
-                    </div>
-                 )}
             </CollapsibleSection>
         ))}
 
