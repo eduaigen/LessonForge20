@@ -38,7 +38,7 @@ const ToolButton = ({ icon, label, onClick, disabled = false }: { icon: React.Re
 export default function AIToolsPanel({ lessonPlan }: AIToolsPanelProps) {
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
-  const [worksheet, setWorksheet] = useState<WorksheetGeneratorOutput | null>(null);
+  const [generatedContent, setGeneratedContent] = useState<any | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [activeTool, setActiveTool] = useState<string | null>(null);
 
@@ -53,13 +53,13 @@ export default function AIToolsPanel({ lessonPlan }: AIToolsPanelProps) {
     }
     
     setActiveTool('Worksheet');
+    setGeneratedContent(null);
     setIsSheetOpen(true);
     setIsGenerating(true);
-    setWorksheet(null);
 
     try {
-      const result = await generateWorksheet(lessonPlan);
-      setWorksheet(result);
+      const result: WorksheetGeneratorOutput = await generateWorksheet(lessonPlan);
+      setGeneratedContent(result.worksheetContent);
     } catch (error) {
       console.error("Worksheet generation failed:", error);
       toast({
@@ -102,8 +102,8 @@ export default function AIToolsPanel({ lessonPlan }: AIToolsPanelProps) {
             </CardHeader>
             <CardContent>
                 {isGenerating && <GeneratingAnimation />}
-                {worksheet && (
-                    <StyledContentDisplay content={worksheet.worksheetContent} />
+                {generatedContent && !isGenerating && (
+                    <StyledContentDisplay content={generatedContent} />
                 )}
             </CardContent>
         </SheetContent>
