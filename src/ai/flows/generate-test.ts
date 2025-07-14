@@ -82,7 +82,7 @@ ${aiContentGenerationRules}
 
 
 **Generation Task:**
-Generate a test based on the following user request. The final design must meet the required format for the specified subject. The questions MUST be derived from the curriculum context provided in the Unit(s) and Topic(s).
+Generate a test based on the following user request. The final design must meet the required format for the specified subject. The questions MUST be derived from the curriculum context provided in the Unit(s) and Topic(s). All generated content, especially for science subjects, must be factually accurate, realistic, and based on proven scientific principles.
 
 -   **Subject:** {{{subject}}}
 -   **Unit(s):** {{{unit}}}
