@@ -46,7 +46,12 @@ export default function LessonPlanGenerator() {
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
 
   // Form State
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const subjectFromUrl = useMemo(() => {
+    const subject = searchParams.get('subject');
+    return subject && curriculumData.subjects.includes(subject) ? subject : '';
+  }, [searchParams]);
+
+  const [selectedSubject, setSelectedSubject] = useState<string>(subjectFromUrl);
   const [selectedGrade, setSelectedGrade] = useState<string>('');
   const [selectedUnit, setSelectedUnit] = useState<string>('');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
@@ -60,11 +65,8 @@ export default function LessonPlanGenerator() {
 
   // Pre-fill subject from URL search params
   useEffect(() => {
-    const subjectFromUrl = searchParams.get('subject');
-    if (subjectFromUrl && curriculumData.subjects.includes(subjectFromUrl)) {
-      setSelectedSubject(subjectFromUrl);
-    }
-  }, [searchParams]);
+    setSelectedSubject(subjectFromUrl);
+  }, [subjectFromUrl]);
 
   // Reset and update dropdowns based on selections
   useEffect(() => {
@@ -133,12 +135,7 @@ export default function LessonPlanGenerator() {
   };
 
   const handleReset = () => {
-    const subjectFromUrl = searchParams.get('subject');
-    if (subjectFromUrl && curriculumData.subjects.includes(subjectFromUrl)) {
-        setSelectedSubject(subjectFromUrl);
-    } else {
-        setSelectedSubject('');
-    }
+    setSelectedSubject(subjectFromUrl);
     setSelectedGrade('');
     setSelectedUnit('');
     setSelectedTopic('');
@@ -203,6 +200,7 @@ export default function LessonPlanGenerator() {
                 value={selectedSubject}
                 onValueChange={setSelectedSubject}
                 required
+                disabled={!!subjectFromUrl}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Subject" />
