@@ -8,6 +8,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {z} from 'genkit/zod';
 import {
   GenerateLessonPlanInputSchema,
   type GenerateLessonPlanInput,
@@ -17,13 +18,17 @@ import {
 } from '@/ai/schemas/lesson-plan-schemas';
 
 export async function generateLessonPlan(input: GenerateLessonPlanInput): Promise<GenerateLessonPlanOutput> {
-  return generateLessonPlanFlow(input);
+  const result = await generateLessonPlanFlow(input);
+  if (!result.lessonPlan) {
+    throw new Error('The AI failed to generate a lesson plan. Please try again with a different or more detailed prompt.');
+  }
+  return result;
 }
 
 const prompt = ai.definePrompt({
   name: 'generateLessonPlanPrompt',
   input: {schema: GenerateLessonPlanInputSchema},
-  output: {schema: GenerateLessonPlanOutputSchema},
+  output: {schema: z.object({ lessonPlan: z.string().nullable() }) },
   prompt: `
 You are an expert teacher creating a lesson plan. 
 ${lessonPlanFormattingInstruction}
@@ -50,6 +55,6 @@ const generateLessonPlanFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    return output!;
+    return { lessonPlan: output?.lessonPlan ?? "" };
   }
 );

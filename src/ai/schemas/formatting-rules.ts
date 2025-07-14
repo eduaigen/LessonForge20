@@ -46,4 +46,4 @@ The goal is to produce content that is structured, clear, and ready for renderin
     A. Explicit Action Steps: In teacher-facing sections of a lesson plan, avoid vague instructions. Instead of "Review the diagram," you must write "Display the diagram of the cell cycle and ask: 'What is happening in the G1 phase?'". If you mention a diagram, a specific question, or a data set, you must generate it within that section.
 
     B. Student Response Placeholders: In any student-facing material, whenever a written answer is expected, you MUST provide 3 to 5 full lines of underscores (__________________). For drawing or graphing tasks, you must use the specific text [Area for student drawing/graph].
-`
+`;
