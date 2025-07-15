@@ -76,7 +76,7 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                     </div>
                 `;
 
-                printWindow.document.write('<html><head><title>Print</title>');
+                printWindow.document.write('<html><head><title>EduAiGen Document</title>');
                 const styles = Array.from(document.styleSheets)
                     .map(styleSheet => {
                         try {
@@ -94,8 +94,25 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                     .join('\n');
 
                 printWindow.document.write(styles);
-                printWindow.document.write('<style>@media print { body { -webkit-print-color-adjust: exact; } .document-view h2, .document-view h3, .document-view h4 { color: #333 !important; } }</style>');
-                printWindow.document.write('<body style="padding: 2rem;">');
+                printWindow.document.write(`
+                  <style>
+                    @media print { 
+                      @page {
+                        margin-top: 0;
+                        margin-bottom: 0;
+                      }
+                      body { 
+                        -webkit-print-color-adjust: exact; 
+                        padding-top: 1rem;
+                        padding-bottom: 1rem;
+                      } 
+                      .document-view h2, .document-view h3, .document-view h4 { 
+                        color: #333 !important; 
+                      } 
+                    }
+                  </style>
+                `);
+                printWindow.document.write('</head><body style="padding: 2rem;">');
                 printWindow.document.write(headerHtml);
                 printWindow.document.write(printableContent.innerHTML);
                 printWindow.document.write(footerHtml);
