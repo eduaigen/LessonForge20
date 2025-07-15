@@ -11,6 +11,30 @@ import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schema
 
 // This component now intelligently decides how to render content.
 
+const renderTableFromObject = (tableData: { title: string, headers: string[], rows: string[][] }) => {
+    if (!tableData || !tableData.headers || !tableData.rows) return null;
+    return (
+        <div className="overflow-x-auto my-4">
+            <h4 className="font-semibold text-lg mb-2">{tableData.title}</h4>
+            <table className="w-full border-collapse">
+                <thead>
+                    <tr className="border-b">
+                        {tableData.headers.map((header, index) => <th key={index} className="p-2 text-left font-semibold text-foreground">{header}</th>)}
+                    </tr>
+                </thead>
+                <tbody>
+                    {tableData.rows.map((row, rowIndex) => (
+                        <tr key={rowIndex} className="border-b">
+                            {row.map((cell, cellIndex) => <td key={cellIndex} className="p-2 align-top">{cell}</td>)}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+
 const renderSimpleMarkdown = (content: string) => {
     return (
         <div className="document-view">
@@ -120,21 +144,7 @@ const renderLessonPlan = (lessonPlan: any) => (
         <ul className="list-disc pl-5">{lessonPlan.guidedPractice.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
         <h4>Expected Student Outputs</h4>
         <ul className="list-disc pl-5">{lessonPlan.guidedPractice.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        {lessonPlan.guidedPractice.dataTable && (
-            <div className="overflow-x-auto">
-                <h4>{lessonPlan.guidedPractice.dataTable.title}</h4>
-                <table className="w-full my-4">
-                <thead>
-                    <tr>{lessonPlan.guidedPractice.dataTable.headers.map((header: string, index: number) => <th key={index}>{header}</th>)}</tr>
-                </thead>
-                <tbody>
-                    {lessonPlan.guidedPractice.dataTable.rows.map((row: string[], rowIndex: number) => (
-                    <tr key={rowIndex}>{row.map((cell: string, cellIndex: number) => <td key={cellIndex}>{cell}</td>)}</tr>
-                    ))}
-                </tbody>
-                </table>
-            </div>
-        )}
+        {lessonPlan.guidedPractice.dataTable && renderTableFromObject(lessonPlan.guidedPractice.dataTable)}
         {lessonPlan.guidedPractice.activityDescription && <p>{lessonPlan.guidedPractice.activityDescription}</p>}
       </div>
       
@@ -167,21 +177,7 @@ const renderLessonPlan = (lessonPlan: any) => (
         <ul className="list-disc pl-5">{lessonPlan.independentPractice.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
         <h4>Embedded Task</h4>
         <p><strong>Prompt:</strong> {lessonPlan.independentPractice.taskPrompt}</p>
-        {lessonPlan.independentPractice.taskData && (
-             <div className="overflow-x-auto">
-                <h4>{lessonPlan.independentPractice.taskData.title}</h4>
-                <table className="w-full my-4">
-                <thead>
-                    <tr>{lessonPlan.independentPractice.taskData.headers.map((header: string, index: number) => <th key={index}>{header}</th>)}</tr>
-                </thead>
-                <tbody>
-                    {lessonPlan.independentPractice.taskData.rows.map((row: string[], rowIndex: number) => (
-                    <tr key={rowIndex}>{row.map((cell: string, cellIndex: number) => <td key={cellIndex}>{cell}</td>)}</tr>
-                    ))}
-                </tbody>
-                </table>
-            </div>
-        )}
+        {lessonPlan.independentPractice.taskData && renderTableFromObject(lessonPlan.independentPractice.taskData)}
       </div>
 
        <div className="mb-4">
@@ -402,15 +398,31 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     }
 
     if (typeof content === 'object' && content !== null) {
-        // Fallback for any other object type (like a simple reading material object)
+        // Fallback for any other object type (like a simple reading material object or worksheet)
+        let markdownContent = '';
         if ('articleContent' in content) {
-            return renderSimpleMarkdown(content.articleContent)
+            markdownContent = content.articleContent;
+        } else if ('worksheetContent' in content) {
+            markdownContent = content.worksheetContent;
+        } else if ('scaffoldedContent' in content) {
+            markdownContent = content.scaffoldedContent;
         }
-        if ('worksheetContent' in content) {
-            return renderSimpleMarkdown(content.worksheetContent)
-        }
-         if ('scaffoldedContent' in content) {
-            return renderSimpleMarkdown(content.scaffoldedContent)
+
+        if (markdownContent) {
+            // New logic to find and render JSON tables within the markdown
+            const parts = markdownContent.split(/(\{\s*"title":\s*".*?",\s*"headers":\s*\[.*?\]\s*,\s*"rows":\s*\[.*?\]\s*\})/s);
+            return (
+                <div className="document-view">
+                    {parts.map((part, index) => {
+                        try {
+                            const tableData = JSON.parse(part);
+                            return <div key={index}>{renderTableFromObject(tableData)}</div>;
+                        } catch (e) {
+                            return <Markdown key={index}>{part}</Markdown>;
+                        }
+                    })}
+                </div>
+            );
         }
     }
 

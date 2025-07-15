@@ -38,13 +38,7 @@ const prompt = ai.definePrompt({
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
         *   Clearly state the instructions for the guided practice activity, taken from the lesson plan.
-        *   **CRITICAL (TABLES): For any "Embedded Data Table", you MUST convert the JSON object into a proper Markdown table. Use the "headers" for the table header row and each item in "rows" as a table row. For example, a JSON table like \`{"title": "My Data", "headers": ["Header 1", "Header 2"], "rows": [["A", "B"], ["C", "D"]]}\` MUST be rendered as a Markdown table like this:
-            ### My Data
-            | Header 1 | Header 2 |
-            |----------|----------|
-            | A        | B        |
-            | C        | D        |
-            Do not use placeholders or simply paste the JSON.
+        *   **CRITICAL (TABLES): For any "Embedded Data Table" or "taskData" table, you MUST embed the full, original JSON object for that table directly into the worksheet content as a plain text block. Do not attempt to convert it to a Markdown table. The rendering component will handle it. Just paste the JSON object itself.**
 
     *   **E. CHECK FOR UNDERSTANDING (CFU):**
         *   Copy all "CFU Questions" (multiple choice and short response) from the lesson plan for the student to answer. Provide space for their responses.
@@ -52,7 +46,7 @@ const prompt = ai.definePrompt({
     *   **F. INDEPENDENT PRACTICE / PERFORMANCE TASK:**
         *   Copy the full "Embedded Task" prompt (e.g., the CER prompt) from the lesson plan.
         *   Provide clear instructions and ample space for the student to complete the assignment.
-        *   **CRITICAL: You MUST include any necessary "taskData," tables, or graphs from the lesson plan, following the same Markdown table rendering rule as in Guided Practice.**
+        *   **CRITICAL: You MUST include any necessary "taskData," tables, or graphs from the lesson plan, following the same JSON embedding rule as in Guided Practice.**
 
     *   **G. CLOSURE / EXIT TICKET:**
         *   Transfer the exact "Exit Ticket Question" from the lesson plan.
