@@ -162,7 +162,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="features" className="bg-muted/50 py-24 sm:py-32">
+        <section id="features" className="bg-secondary/20 py-24 sm:py-32">
           <div className="container mx-auto max-w-7xl px-4">
             <div className="mx-auto max-w-2xl text-center">
               <h2 className="font-headline text-3xl font-bold tracking-tight sm:text-4xl">
@@ -177,7 +177,7 @@ export default function Home() {
               {features.map((feature, i) => (
                 <Card
                   key={feature.title}
-                  className="animate-float-up rounded-xl border-transparent bg-card shadow-lg shadow-primary/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/10"
+                  className="animate-float-up rounded-xl border-border/50 bg-secondary/30 shadow-lg transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-primary/20"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <CardHeader>

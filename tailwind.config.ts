@@ -1,4 +1,5 @@
 import type {Config} from 'tailwindcss';
+const {fontFamily} = require('tailwindcss/defaultTheme');
 
 export default {
   darkMode: ['class'],
@@ -17,8 +18,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['"Space Grotesk"', 'sans-serif'],
+        body: ['var(--font-inter)', ...fontFamily.sans],
+        headline: ['var(--font-space-grotesk)', ...fontFamily.sans],
         code: ['monospace'],
       },
       colors: {
@@ -113,5 +114,5 @@ export default {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 } satisfies Config;

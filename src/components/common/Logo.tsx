@@ -7,12 +7,18 @@ export function Logo() {
           height="40"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="currentColor"
+          stroke="url(#logo-gradient)"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-primary brain-pulse drop-shadow-lg"
+          className="brain-pulse drop-shadow-lg"
         >
+          <defs>
+            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="hsl(var(--primary))" />
+              <stop offset="100%" stopColor="hsl(var(--accent))" />
+            </linearGradient>
+          </defs>
           <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
           <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
           <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
