@@ -15,6 +15,8 @@ import { Loader2 } from 'lucide-react';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import GeneratingAnimation from './GeneratingAnimation';
+
 
 // This component now intelligently decides how to render content.
 
@@ -219,11 +221,11 @@ const renderLessonPlan = (lessonPlan: any) => (
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
         <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
-            <div className="flex items-end space-x-2">
-                <label className="font-semibold">Name:</label>
-                <div className="flex-grow border-b border-foreground/50"></div>
+            <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
+                <label className="font-semibold whitespace-nowrap">Name:</label>
+                <div className="flex-grow border-b border-foreground/50 w-full"></div>
             </div>
-            <div className="flex items-end space-x-2">
+             <div className="flex items-end space-x-2">
                 <label className="font-semibold">Date:</label>
                 <div className="flex-grow border-b border-foreground/50"></div>
             </div>
@@ -578,7 +580,7 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     if (!content) return null;
     
     const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
-    const isCoachingObject = typeof content === 'object' && content !== null && 'pedagogicalRationale' in content.doNow;
+    const isCoachingObject = typeof content === 'object' && content !== null && content.doNow && 'pedagogicalRationale' in content.doNow;
     const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
     const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
     const isStudySheetObject = typeof content === 'object' && content !== null && 'keyConcepts' in content;
