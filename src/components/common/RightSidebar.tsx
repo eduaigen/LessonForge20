@@ -20,7 +20,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export type ToolName = 'Worksheet' | 'Reading Material' | 'Comprehension Qs' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Scaffold Tool' | 'Teacher Coach';
+export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Scaffold Tool' | 'Teacher Coach';
 
 const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Worksheet', icon: <ScrollText className="h-5 w-5" />, disabled: false },

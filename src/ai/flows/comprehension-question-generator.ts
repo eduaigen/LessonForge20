@@ -46,7 +46,7 @@ const comprehensionQuestionGeneratorFlow = ai.defineFlow(
 );
 
 export async function generateComprehensionQuestions(
-  input: CompreprehensionQuestionInput
+  input: ComprehensionQuestionInput
 ): Promise<ComprehensionQuestionOutput> {
   return await comprehensionQuestionGeneratorFlow(input);
 }

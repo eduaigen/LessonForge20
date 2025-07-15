@@ -17,7 +17,6 @@ import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
-import { generateComprehensionQuestions } from '@/ai/flows/comprehension-question-generator';
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
 import { scaffoldWorksheet } from '@/ai/flows/scaffold-worksheet';
