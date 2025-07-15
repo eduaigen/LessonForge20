@@ -4,16 +4,16 @@
 
 @layer base {
   :root {
-    --background: 202 100% 94%; /* #E1F5FE - Very Light Blue */
-    --foreground: 224 71.4% 4.1%; /* #09090b - Dark Gray for Text */
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%; /* Dark Gray for body text */
 
-    --card: 202 100% 94%;
+    --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
 
-    --popover: 202 100% 94%;
+    --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
 
-    --primary: 197 88% 52%; /* #29ABE2 - Vibrant Blue */
+    --primary: 227 40% 28%; /* Dark Navy Blue for headings and primary elements */
     --primary-foreground: 0 0% 98%;
 
     --secondary: 220 13% 91%;
@@ -22,15 +22,15 @@
     --muted: 220 13% 91%;
     --muted-foreground: 220 8.9% 43.1%;
 
-    --accent: 0 84% 60%; /* Warm Coral/Salmon as new accent */
-    --accent-foreground: 224 71.4% 4.1%;
+    --accent: 21 88% 61%; /* OpenSciEd Orange */
+    --accent-foreground: 0 0% 100%; /* White text for orange buttons */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 197 88% 52%;
+    --ring: 227 40% 28%; /* Dark Navy Blue for rings */
 
     --radius: 0.5rem;
   }
@@ -78,6 +78,9 @@
     @apply bg-gradient-to-r from-primary to-accent;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: hsl(var(--primary));
   }
 }
 
@@ -146,6 +149,6 @@
   }
 
   .document-view {
-    @apply prose prose-slate prose-headings:font-headline prose-headings:text-foreground prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground prose-a:text-primary hover:prose-a:text-primary/80 prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary prose-table:border-border prose-thead:border-b-border prose-th:text-foreground prose-tr:border-b-border prose-td:text-muted-foreground max-w-none;
+    @apply prose prose-slate prose-headings:font-headline prose-headings:text-primary prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground prose-a:text-accent hover:prose-a:text-accent/80 prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary prose-table:border-border prose-thead:border-b-border prose-th:text-foreground prose-tr:border-b-border prose-td:text-muted-foreground max-w-none;
   }
 }
