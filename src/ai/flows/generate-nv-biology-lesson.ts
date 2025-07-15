@@ -73,7 +73,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 - **Exit Ticket Question**: One exit ticket item (e.g., a final question, a matching task, or a vocabulary use prompt).
 
 **H. HOMEWORK ACTIVITY**
-- **Activity**: A short, relevant assignment to reinforce learning (e.g., label a diagram, answer a question based on a short reading).
+- **Activity**: A short, relevant assignment to reinforce learning. If the assignment requires a reading passage, data table, or diagram, **you must generate and embed that content here.** For example, "Read the short passage below about symbiotic relationships and answer the two questions that follow. [Generate a 150-word passage here]. 1. ... 2. ..."
 
 **III. DIFFERENTIATION & SUPPORT**
 - **Teacher Actions for Support**: **Elaborate on specific strategies.** e.g., "Provide a pre-highlighted version of the reading for select students. Offer a graphic organizer with pre-filled sentence starters for the CER task."
