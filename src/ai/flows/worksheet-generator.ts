@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive structured JSON worksheet that a student can use in the classroom.
 
 **CRITICAL RULES:**
-1.  **Strictly Scan the Lesson Plan:** Your ONLY source of information is the provided JSON lesson plan. Do not add, invent, or hallucinate any content, questions, or activities.
+1.  **Your ONLY source of information is the provided JSON lesson plan. Do not add, invent, or hallucinate any content, questions, or activities.**
 2.  **Student-Facing Transformation:** Convert all teacher-facing instructions into student-friendly directions.
 3.  **Follow the Structure Precisely:** Populate the JSON output schema by mapping the lesson plan sections (A–H) as described below.
 
