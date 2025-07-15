@@ -48,7 +48,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)**
 - **Teacher Actions**: Elaborate with highly effective strategies. e.g., "Model annotation strategies on the board, chunk the text and use a 'turn and talk' protocol to check for understanding..."
 - **Expected Student Outputs**: Elaborate on student actions. e.g., "Students annotate the text by underlining key ideas and circling unknown words. They will summarize each paragraph in the margin."
-- **Embedded Reading Passage**: A **300-500 word**, grade-appropriate reading passage on the topic. **Use Markdown bold (`**word**`) to emphasize key vocabulary and main ideas.**
+- **Embedded Reading Passage**: A **300-500 word**, grade-appropriate reading passage on the topic. **Use Markdown bold (\`**word**\`) to emphasize key vocabulary and main ideas.**
 - **Embedded Diagram**: A fully rendered, labeled, and valid SVG scientific diagram related to the reading. Ensure all labels are clear and arrows correctly point to relevant parts. Do not describe it; create the SVG code.
 - **Concept-Check Questions**: 2-3 questions based on the reading and diagram. **Each question must have a specified Depth of Knowledge (DOK) level (1, 2, or 3).** Ensure a mix of DOK levels.
 
