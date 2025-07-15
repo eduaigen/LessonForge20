@@ -21,18 +21,23 @@ const lessonOverviewSchema = z.object({
 });
 
 const lessonSectionSchema = z.object({
-  teacherActions: z.array(z.string()),
-  expectedStudentOutputs: z.array(z.string()),
+  teacherActions: z.array(z.string()).describe('Elaborated, highly effective teacher actions aligned to Danielson Framework.'),
+  expectedStudentOutputs: z.array(z.string()).describe('Elaborated student actions, focusing on higher-order thinking and collaboration.'),
 });
 
 const doNowSchema = lessonSectionSchema.extend({
   question: z.string(),
 });
 
+const leveledQuestionSchema = z.object({
+    question: z.string(),
+    dok: z.number().min(1).max(3).describe("The Depth of Knowledge level (1, 2, or 3) for the question."),
+});
+
 const miniLessonSchema = lessonSectionSchema.extend({
-  readingPassage: z.string().describe("100-250 words, grade-appropriate, aligned to topic"),
+  readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded."),
   diagram: z.string().optional().describe("A fully rendered, labeled SVG scientific diagram. Not a text description."),
-  conceptCheckQuestions: z.array(z.string()),
+  conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 
 const guidedPracticeSchema = lessonSectionSchema.extend({
@@ -47,10 +52,11 @@ const guidedPracticeSchema = lessonSectionSchema.extend({
 const cfuSchema = lessonSectionSchema.extend({
   multipleChoice: z.array(z.object({
     question: z.string(),
+    dok: z.number().min(1).max(3).describe("The Depth of Knowledge level (1, 2, or 3) for the question."),
     options: z.array(z.string()),
     answer: z.string(),
   })),
-  shortResponse: z.string(),
+  shortResponse: leveledQuestionSchema.describe("A short response question with a DOK level."),
 });
 
 const independentPracticeSchema = lessonSectionSchema.extend({
@@ -71,9 +77,10 @@ const homeworkSchema = z.object({
 });
 
 const differentiationSchema = z.object({
-  supportActions: z.array(z.string()),
-  supportOutputs: z.array(z.string()),
-  extensionActivity: z.string(),
+  supportActions: z.array(z.string()).describe('Elaborated, specific strategies for diverse learners.'),
+  supportOutputs: z.array(z.string()).describe('Elaborated, potential student outputs with scaffolds.'),
+  scaffoldedMaterials: z.string().describe('Ready-to-use scaffolds like sentence starters or simplified definitions.'),
+  extensionActivity: z.string().describe('A challenging prompt for students who master content early.'),
 });
 
 export const GenerateNVBiologyLessonOutputSchema = z.object({
