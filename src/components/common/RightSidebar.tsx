@@ -20,9 +20,10 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export type ToolName = 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach';
+export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach';
 
 const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
+  { name: 'Worksheet', icon: <FileText className="h-5 w-5" />, disabled: false },
   { name: 'Reading Material', icon: <BookOpen className="h-5 w-5" />, disabled: false },
   { name: 'Study Sheet', icon: <FileQuestion className="h-5 w-5" />, disabled: false },
   { name: 'Question Cluster', icon: <FileQuestion className="h-5 w-5" />, disabled: false },

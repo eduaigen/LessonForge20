@@ -20,6 +20,7 @@ import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
 import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
 import { generateStudySheet } from '@/ai/flows/study-sheet-generator';
+import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -150,7 +151,10 @@ const GeneratorContent = () => {
         let result: any;
         let contentType: GeneratedContent['type'] = toolName;
 
-        if (toolName === 'Reading Material') {
+        if (toolName === 'Worksheet') {
+            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType }]);
+        } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial({
                 topic: lessonPlan.lessonOverview.topic,
                 gradeLevel: '10th',
