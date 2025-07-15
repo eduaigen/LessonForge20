@@ -14,6 +14,8 @@ import { ScrollArea } from '../ui/scroll-area';
 import GeneratingAnimation from './GeneratingAnimation';
 import * as htmlToText from 'html-to-text';
 import type { GeneratedContent, ToolName } from '../generators/NVBiologyGenerator';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 type CollapsibleSectionProps = {
   title: string;
@@ -96,11 +98,10 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                 printWindow.document.write(styles);
                 printWindow.document.write(`
                   <style>
+                    @page {
+                      margin: 0;
+                    }
                     @media print { 
-                      @page {
-                        margin-top: 0;
-                        margin-bottom: 0;
-                      }
                       body { 
                         -webkit-print-color-adjust: exact; 
                         padding-top: 1rem;
@@ -126,22 +127,51 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
         }
     };
 
-    const handleDownload = () => {
-        if (contentRef.current) {
-            const textContent = htmlToText.convert(contentRef.current.innerHTML, {
-                wordwrap: 130
+    const handleDownload = async () => {
+        const input = contentRef.current;
+        if (input) {
+          toast({
+            title: 'Generating PDF...',
+            description: 'Please wait while we create your document.',
+          });
+          try {
+            const canvas = await html2canvas(input, {
+              scale: 2, // Higher scale for better quality
+              useCORS: true,
             });
-            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${title.replace(/ /g, '_')}.txt`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight;
+            const docWidth = pdfWidth - 20; // with margin
+            const docHeight = docWidth / ratio;
+            let heightLeft = docHeight;
+            let position = 10; // top margin
+    
+            pdf.addImage(imgData, 'PNG', 10, position, docWidth, docHeight);
+            heightLeft -= (pdfHeight - 20);
+    
+            while (heightLeft > 0) {
+              position = heightLeft - docHeight - 10; // next page top margin
+              pdf.addPage();
+              pdf.addImage(imgData, 'PNG', 10, position, docWidth, docHeight);
+              heightLeft -= (pdfHeight - 20);
+            }
+    
+            pdf.save(`${title.replace(/ /g, '_')}.pdf`);
+          } catch (error) {
+            console.error('Error generating PDF:', error);
+            toast({
+              title: 'PDF Generation Failed',
+              description: 'Could not generate the PDF file. Please try again.',
+              variant: 'destructive',
+            });
+          }
         }
-    };
+      };
 
     const handleTranslate = async () => {
         setIsTranslating(true);
@@ -192,7 +222,7 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>
                     </Button>
-                    <Button variant="outline" size="icon" onClick={handleDownload} title="Download as Text">
+                    <Button variant="outline" size="icon" onClick={handleDownload} title="Download as PDF">
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
                     </Button>
