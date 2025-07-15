@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect, createRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles, Wand2, Printer, Download } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -37,8 +37,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 
 const formSchema = z.object({
@@ -86,19 +84,9 @@ const GeneratorContent = () => {
   const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  const [isPackaging, setIsPackaging] = useState(false);
-
-  // Create a map of refs for each generated section
-  const sectionRefs = useMemo(() =>
-    generatedSections.reduce((acc, value) => {
-        acc[value.id] = createRef<HTMLDivElement>();
-        return acc;
-    }, {} as { [key: string]: React.RefObject<HTMLDivElement> }),
-  [generatedSections]);
-
 
   const lessonPlan = useMemo(() => {
-    const lessonPlanSection = generatedSections.find(sec => sec.type === 'Lesson Plan');
+    const lessonPlanSection = generatedSections.find(sec => 'lessonOverview' in sec.content);
     return lessonPlanSection ? (lessonPlanSection.content as GenerateNVBiologyLessonOutput) : null;
   }, [generatedSections]);
 
@@ -146,105 +134,6 @@ const GeneratorContent = () => {
         setIsHighlightingTools(true);
     }
   }
-
-  const handlePrintAll = () => {
-    const allContent = generatedSections.map(section => {
-        const ref = sectionRefs[section.id];
-        if (ref && ref.current) {
-            return `
-                <div style="page-break-before: always; margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 2rem;">
-                    <h2 style="font-family: sans-serif; font-size: 1.5rem; color: #333; padding-bottom: 1rem; border-bottom: 1px solid #ccc;">${section.title}</h2>
-                    ${ref.current.innerHTML}
-                </div>
-            `;
-        }
-        return '';
-    }).join('');
-
-    if (!allContent) return;
-
-    const printWindow = window.open('', '', 'height=800,width=1000');
-    if (printWindow) {
-        const headerHtml = `...`; // Same as in CollapsibleSection
-        const footerHtml = `...`; // Same as in CollapsibleSection
-        // ... (rest of the print logic, but using `allContent`)
-
-        printWindow.document.write('<html><head><title>EduAiGen Lesson Packet</title>');
-        const styles = Array.from(document.styleSheets)
-            .map(styleSheet => {
-                try {
-                    if (styleSheet.href) return `<link rel="stylesheet" href="${styleSheet.href}">`;
-                    return `<style>${Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('')}</style>`;
-                } catch (e) {
-                    if (styleSheet.href) return `<link rel="stylesheet" href="${styleSheet.href}">`;
-                    return '';
-                }
-            }).join('\n');
-        printWindow.document.write(styles);
-        printWindow.document.write(`...`); // same styles as before
-        printWindow.document.write('<body style="padding: 2rem;">');
-        printWindow.document.write(allContent);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        setTimeout(() => {
-            printWindow.print();
-            printWindow.close();
-        }, 250);
-    }
-  };
-
-  const handleDownloadAll = async () => {
-      setIsPackaging(true);
-      toast({ title: 'Packaging PDF...', description: 'Please wait, this may take a moment.' });
-      
-      const combinedContainer = document.createElement('div');
-      document.body.appendChild(combinedContainer);
-
-      generatedSections.forEach(section => {
-          const ref = sectionRefs[section.id];
-          if (ref && ref.current) {
-              const sectionContainer = document.createElement('div');
-              sectionContainer.innerHTML = `
-                  <div style="page-break-before: always; margin-top: 2rem; border-top: 1px solid #ddd; padding: 2rem;">
-                      <h2 style="font-family: sans-serif; font-size: 1.5rem; color: #333; padding-bottom: 1rem; border-bottom: 1px solid #ccc;">${section.title}</h2>
-                      ${ref.current.innerHTML}
-                  </div>`;
-              combinedContainer.appendChild(sectionContainer);
-          }
-      });
-      
-      try {
-          const canvas = await html2canvas(combinedContainer, { scale: 2, useCORS: true });
-          const imgData = canvas.toDataURL('image/png');
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          const pdfWidth = pdf.internal.pageSize.getWidth();
-          const imgWidth = canvas.width;
-          const imgHeight = canvas.height;
-          const ratio = imgWidth / imgHeight;
-          const docHeight = pdfWidth / ratio;
-          let heightLeft = imgHeight;
-          let position = 0;
-
-          pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, docHeight);
-          heightLeft -= pdf.internal.pageSize.getHeight() * (imgWidth / pdfWidth);
-
-          while (heightLeft > 0) {
-              position = -heightLeft * (pdfWidth / imgWidth);
-              pdf.addPage();
-              pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, docHeight);
-              heightLeft -= pdf.internal.pageSize.getHeight() * (imgWidth / pdfWidth);
-          }
-          pdf.save(`${lessonPlan?.lessonOverview.lesson.replace(/ /g, '_')}_Packet.pdf`);
-
-      } catch (error) {
-          console.error("Error generating combined PDF:", error);
-          toast({ title: 'PDF Generation Failed', description: 'Could not generate the combined PDF.', variant: 'destructive' });
-      } finally {
-          document.body.removeChild(combinedContainer);
-          setIsPackaging(false);
-      }
-  };
-
 
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
@@ -334,19 +223,19 @@ const GeneratorContent = () => {
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+                Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+                <div className="text-sm text-muted-foreground pt-4 text-left">
+                  <p className="font-semibold text-foreground">Here are the available tools:</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-2">
+                      <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
+                      <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
+                      <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                      <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
+                      <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
+                      <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
+                  </ul>
+              </div>
             </AlertDialogDescription>
-            <div className="text-sm text-muted-foreground pt-4 text-left">
-                <p>Here are the available tools:</p>
-                <ul className="list-disc pl-5 mt-2 space-y-2">
-                    <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
-                    <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
-                    <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                    <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
-                    <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
-                    <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
-                </ul>
-            </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => handleDialogClose(false)}>
@@ -360,34 +249,14 @@ const GeneratorContent = () => {
         <div className="flex-grow">
           <Card className="w-full shadow-lg">
               <CardHeader>
-                  <div className="flex flex-row items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                              <Leaf className="h-6 w-6" />
-                          </div>
-                          <div>
-                              <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
-                              <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
-                          </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button 
-                            variant="outline" 
-                            onClick={handlePrintAll} 
-                            disabled={generatedSections.length === 0 || isPackaging}
-                        >
-                            <Printer className="mr-2 h-4 w-4" />
-                            Print All
-                        </Button>
-                        <Button 
-                            variant="outline" 
-                            onClick={handleDownloadAll} 
-                            disabled={generatedSections.length === 0 || isPackaging}
-                        >
-                           {isPackaging ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Download className="mr-2 h-4 w-4" />}
-                            Download All
-                        </Button>
-                      </div>
+                  <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Leaf className="h-6 w-6" />
+                  </div>
+                  <div>
+                      <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
+                      <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
+                  </div>
                   </div>
               </CardHeader>
               <Form {...form}>
@@ -512,8 +381,8 @@ const GeneratorContent = () => {
           )}
 
           {generatedSections.map(section => (
-            <CollapsibleSection key={section.id} ref={sectionRefs[section.id]} title={section.title} contentItem={section}>
-                <StyledContentDisplay content={section.content} type={section.type} />
+            <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
+                <StyledContentDisplay content={section.content} />
             </CollapsibleSection>
           ))}
 

@@ -18,13 +18,9 @@ type CollapsibleSectionProps = {
   contentItem: GeneratedContent; 
 };
 
-const CollapsibleSection = React.forwardRef<HTMLDivElement, CollapsibleSectionProps>(
-    ({ title, children, contentItem }, ref) => {
+export default function CollapsibleSection({ title, children, contentItem }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const contentRef = useRef<HTMLDivElement>(null);
-
-    // This exposes the inner contentRef to the parent component through the forwarded ref.
-    React.useImperativeHandle(ref, () => contentRef.current as HTMLDivElement);
 
     const handlePrint = () => {
         const printableContent = contentRef.current;
@@ -172,8 +168,4 @@ const CollapsibleSection = React.forwardRef<HTMLDivElement, CollapsibleSectionPr
       </Accordion>
     </Card>
   );
-});
-
-CollapsibleSection.displayName = 'CollapsibleSection';
-
-export default CollapsibleSection;
+}
