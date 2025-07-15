@@ -164,7 +164,7 @@ const GeneratorContent = () => {
                 dokLevel: '1-2'
             });
         } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach(lessonPlan);
+            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
         } else if (toolName === 'Scaffold Tool') {

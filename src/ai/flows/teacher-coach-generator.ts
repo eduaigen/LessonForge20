@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow for generating pedagogical coaching advice for a lesson plan.
@@ -42,8 +43,7 @@ const teacherCoachGeneratorFlow = ai.defineFlow(
     timeout: 120000, // 2 minutes
   },
   async (input) => {
-    const lessonPlanJson = JSON.stringify(input, null, 2);
-    const { output } = await prompt({ lessonPlanJson });
+    const { output } = await prompt(input);
     if (!output) {
       throw new Error('The AI failed to generate coaching advice. Please try again.');
     }

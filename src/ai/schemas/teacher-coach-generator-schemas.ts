@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
 
@@ -22,5 +23,5 @@ export const TeacherCoachGeneratorOutputSchema = z.object({
   homework: coachingAdviceSchema.describe('Coaching advice for the Homework section.'),
 });
 
-export type TeacherCoachGeneratorInput = z.infer<typeof GenerateNVBiologyLessonOutputSchema>;
+export type TeacherCoachGeneratorInput = z.infer<typeof TeacherCoachGeneratorInputSchema>;
 export type TeacherCoachGeneratorOutput = z.infer<typeof TeacherCoachGeneratorOutputSchema>;
