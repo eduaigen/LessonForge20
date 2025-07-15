@@ -461,18 +461,26 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
             </div>
             <div>
               <h3>Short Response</h3>
-              <ol className="list-decimal pl-5 space-y-4">
-                <li>{cluster.questions.shortResponse1}</li>
-                <li>{cluster.questions.shortResponse2}</li>
+              <ol className="list-decimal pl-5 space-y-6">
+                <li>
+                    <p>{cluster.questions.shortResponse1}</p>
+                    <div className="my-2 h-20 border-b border-dashed"></div>
+                </li>
+                <li>
+                    <p>{cluster.questions.shortResponse2}</p>
+                    <div className="my-2 h-20 border-b border-dashed"></div>
+                </li>
               </ol>
             </div>
             <div>
               <h3>Modeling</h3>
               <p>{cluster.questions.modeling}</p>
+              <div className="my-2 h-32 border-b border-dashed"></div>
             </div>
             <div>
               <h3>Prediction</h3>
               <p>{cluster.questions.prediction}</p>
+              <div className="my-2 h-32 border-b border-dashed"></div>
             </div>
           </div>
         </section>
