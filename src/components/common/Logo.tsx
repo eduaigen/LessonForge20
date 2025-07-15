@@ -16,7 +16,8 @@ export function Logo() {
           <defs>
             <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="hsl(var(--primary))" />
-              <stop offset="100%" stopColor="hsl(var(--accent))" />
+              <stop offset="50%" stopColor="hsl(var(--accent))" />
+              <stop offset="100%" stopColor="#22c55e" />
             </linearGradient>
           </defs>
           <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
