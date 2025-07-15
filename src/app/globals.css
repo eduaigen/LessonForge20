@@ -4,13 +4,13 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%; /* #0A0A0A - Almost Black */
+    --background: 240 5% 12%; /* #1C1D1F - Dark Charcoal */
     --foreground: 0 0% 98%; /* #FAFAFA - Almost White */
 
-    --card: 240 10% 3.9%;
+    --card: 240 5% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 240 5% 12%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 217 91% 60%; /* #3B82F6 - Vibrant Blue */
@@ -36,13 +36,13 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 240 5% 12%;
     --foreground: 0 0% 98%;
 
-    --card: 240 10% 3.9%;
+    --card: 240 5% 12%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 240 5% 12%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 217 91% 60%;
