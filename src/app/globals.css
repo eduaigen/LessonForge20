@@ -205,4 +205,15 @@
   .document-view {
     @apply prose prose-slate prose-headings:font-headline prose-headings:text-primary prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-muted-foreground prose-strong:text-foreground prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground prose-a:text-accent hover:prose-a:text-accent/80 prose-ul:text-muted-foreground prose-ol:text-muted-foreground prose-li:marker:text-primary prose-table:border-border prose-thead:border-b-border prose-th:text-foreground prose-tr:border-b-border prose-td:text-muted-foreground max-w-none;
   }
+
+  @keyframes message-fade-in-out {
+    0% { opacity: 0; transform: translateY(10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+  }
+
+  .animate-message-fade {
+    animation: message-fade-in-out 5s ease-in-out forwards;
+  }
 }
