@@ -25,40 +25,46 @@ import EducationalModelDiagram from '@/components/common/EducationalModelDiagram
 export default function Home() {
   const features = [
     {
-      icon: <FileText className="h-8 w-8 text-primary" />,
+      icon: <FileText className="h-8 w-8" />,
       title: 'Lesson Plan Generation',
       description:
         'Generate complete lesson plans with objectives aligned to NGSS, state, and culturally inclusive standards.',
+      color: 'text-primary',
     },
     {
-      icon: <PencilRuler className="h-8 w-8 text-primary" />,
+      icon: <PencilRuler className="h-8 w-8" />,
       title: 'Test Maker',
       description:
         'Automatically create comprehensive tests based on your selected units and topics, aligned with educational standards.',
+      color: 'text-accent',
     },
     {
-      icon: <TestTube className="h-8 w-8 text-primary" />,
+      icon: <TestTube className="h-8 w-8" />,
       title: 'Lab Generator',
       description:
         'For science subjects, instantly generate safe and effective lab experiments with procedures and safety guidelines.',
+      color: 'text-green-500',
     },
     {
-      icon: <Lightbulb className="h-8 w-8 text-primary" />,
+      icon: <Lightbulb className="h-8 w-8" />,
       title: 'Learning Objective Refiner',
       description:
         'Refine your learning objectives to be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).',
+      color: 'text-accent',
     },
     {
-      icon: <BrainCircuit className="h-8 w-8 text-primary" />,
+      icon: <BrainCircuit className="h-8 w-8" />,
       title: 'Concept Explainer',
       description:
         'Get clear, grade-appropriate explanations for any concept or question to help your students understand.',
+      color: 'text-green-500',
     },
     {
-      icon: <BookOpenText className="h-8 w-8 text-primary" />,
+      icon: <BookOpenText className="h-8 w-8" />,
       title: 'Vocab Deep Dive',
       description:
         'Explore vocabulary with definitions, examples, common misconceptions, and real-world connections.',
+      color: 'text-primary',
     },
   ];
 
@@ -181,7 +187,7 @@ export default function Home() {
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <CardHeader>
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <div className={cn("mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10", feature.color)}>
                       {feature.icon}
                     </div>
                     <CardTitle className="mt-4 text-xl">

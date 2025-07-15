@@ -17,10 +17,10 @@ const Node = ({ icon, label, position, delay }: { icon: React.ReactNode, label: 
 export default function EducationalModelDiagram() {
     const nodes = [
         // Subjects
-        { icon: <TestTube className="w-8 h-8 text-chart-3" />, label: 'Science', position: 'top-[15%] left-0', delay: '0.2s' },
-        { icon: <Sigma className="w-8 h-8 text-chart-4" />, label: 'Math', position: 'top-0 left-[50%] -translate-x-1/2', delay: '0.3s' },
-        { icon: <History className="w-8 h-8 text-chart-5" />, label: 'History', position: 'top-[15%] right-0', delay: '0.4s' },
-        { icon: <BookOpenText className="w-8 h-8 text-chart-2" />, label: 'ELA', position: 'left-0 top-1/2 -translate-y-1/2', delay: '0.5s' },
+        { icon: <TestTube className="w-8 h-8 text-green-500" />, label: 'Science', position: 'top-[15%] left-0', delay: '0.2s' },
+        { icon: <Sigma className="w-8 h-8 text-purple-500" />, label: 'Math', position: 'top-0 left-[50%] -translate-x-1/2', delay: '0.3s' },
+        { icon: <History className="w-8 h-8 text-yellow-500" />, label: 'History', position: 'top-[15%] right-0', delay: '0.4s' },
+        { icon: <BookOpenText className="w-8 h-8 text-accent" />, label: 'ELA', position: 'left-0 top-1/2 -translate-y-1/2', delay: '0.5s' },
         
         // Tools
         { icon: <FileText className="w-8 h-8 text-primary" />, label: 'Lesson Plans', position: 'right-0 top-1/2 -translate-y-1/2', delay: '0.6s' },
