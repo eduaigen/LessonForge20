@@ -19,9 +19,10 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert translator specializing in educational materials. Your task is to translate the user-facing text content within the provided JSON string into the specified target language.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Preserve JSON Structure:** You MUST preserve the exact JSON structure, including all keys, nested objects, and arrays.
+1.  **Preserve JSON Structure:** You MUST return a JSON object with the exact same structure as the input, provided as a valid JSON string. Do not add, remove, or alter any keys, nested objects, or arrays.
 2.  **Translate Only User-Facing Text:** Only translate the string values that represent human-readable content (e.g., descriptions, questions, passages). Do not translate keys or other structural elements.
 3.  **Preserve Formatting:** Within the string values you translate, you MUST preserve all original Markdown formatting, including lists, bolding (**text**), etc.
+4.  **Return Valid JSON String:** The final output in the 'translatedContent' field must be a valid JSON string that can be parsed.
 
 **Target Language:** {{{targetLanguage}}}
 

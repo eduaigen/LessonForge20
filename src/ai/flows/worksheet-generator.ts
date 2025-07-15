@@ -40,7 +40,7 @@ const prompt = ai.definePrompt({
     *   **T-Chart for Notes:** Set up a T-Chart structure for note-taking. You can use the \`miniLesson.notesTitle\` for this section. The chart should have two columns: "Key Ideas / Concepts" and "Notes / Details / Questions".
     *   **Sentence Starters:** If the \`miniLesson.expectedStudentOutputs\` provide examples of student annotations or summaries, use them to create a few helpful sentence starters for the notes section.
     *   **Embed Reading Passage:** If \`miniLesson.readingPassage\` exists, you MUST embed the full text of the passage exactly as it appears.
-    *   **Embed Diagram Description:** If \`miniLesson.diagram\` description exists, embed it under \`diagramDescription\`. Do NOT write placeholders like "(Diagram would be inserted here)".
+    *   **Embed Diagram Description:** If \`miniLesson.diagram\` description exists, embed it under \`diagramDescription\`. Do NOT write placeholders.
     *   **Embed Questions:** Copy all \`miniLesson.conceptCheckQuestions\`.
 
 5.  **Part D: Guided Practice:**
