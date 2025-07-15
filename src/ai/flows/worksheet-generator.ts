@@ -24,26 +24,26 @@ const prompt = ai.definePrompt({
 4.  **Populate the JSON Schema:**
     *   **Header:** For the header, create strings for 'Name', 'Class', and 'Date' fields that a student can fill in.
     *   **Aim & Vocabulary:**
-        *   Copy the "Aim / Essential Question" from the lesson plan.
-        *   Copy all "Key Vocabulary" terms and their definitions.
+        *   Copy the "Aim / Essential Question" from the lesson plan's 'lessonOverview.aim' field.
+        *   Copy all "Key Vocabulary" terms and their definitions from the 'lessonOverview.vocabulary' array.
     *   **DO NOW:**
-        *   Copy the student activity/question from the "Do Now" section.
+        *   Copy the student activity/question from the "doNow.question" field.
     *   **MINI-LESSON:**
-        *   **CRITICAL: You MUST embed the full text of any "Embedded Reading Passage" exactly as it appears in the lesson plan. Do not summarize it or refer to it.**
-        *   **CRITICAL: If the lesson plan contains a 'diagram' description, you MUST embed this description under the 'diagramDescription' field. Do NOT write "(Diagram would be inserted here)" or any other placeholder text.**
-        *   Copy all concept check questions.
+        *   **CRITICAL: You MUST embed the full text of any "Embedded Reading Passage" exactly as it appears in the 'miniLesson.readingPassage' field. Do not summarize it or refer to it.**
+        *   **CRITICAL: If the lesson plan contains a 'diagram' description in 'miniLesson.diagram', you MUST embed this description under the 'diagramDescription' field. Do NOT write "(Diagram would be inserted here)" or any other placeholder text.**
+        *   Copy all concept check questions from 'miniLesson.conceptCheckQuestions'.
     *   **GUIDED PRACTICE / GROUP ACTIVITY:**
-        *   Clearly state the instructions for the guided practice activity.
-        *   **CRITICAL: For any "Embedded Data Table" from the lesson plan, you MUST copy the entire JSON object for the data table into the 'dataTable' field. Do not alter it.**
+        *   Clearly state the instructions for the guided practice activity from the 'guidedPractice.teacherActions' array. Rephrase them for students.
+        *   **CRITICAL: For any "Embedded Data Table" from the lesson plan, you MUST copy the entire JSON object for the data table from the 'guidedPractice.dataTable' field into the 'dataTable' field. Do not alter it.**
     *   **CHECK FOR UNDERSTANDING (CFU):**
-        *   Copy all "CFU Questions" (multiple choice and short response) from the lesson plan.
+        *   Copy all "CFU Questions" (multiple choice and short response) from the 'checkFoUnderstanding.multipleChoice' and 'checkFoUnderstanding.shortResponse' fields.
     *   **INDEPENDENT PRACTICE / PERFORMANCE TASK:**
-        *   Copy the full "Embedded Task" prompt (e.g., the CER prompt).
-        *   **CRITICAL: If the task includes a data table, you MUST copy the entire JSON object for the data table into the 'taskData' field.**
+        *   Copy the full "Embedded Task" prompt (e.g., the CER prompt) from the 'independentPractice.taskPrompt' field.
+        *   **CRITICAL: If the task includes a data table, you MUST copy the entire JSON object for the data table from the 'independentPractice.taskData' field into the 'taskData' field.**
     *   **CLOSURE / EXIT TICKET:**
-        *   Transfer the exact "Exit Ticket Question".
+        *   Transfer the exact "Exit Ticket Question" from the 'closure.exitTicketQuestion' field.
     *   **HOMEWORK ACTIVITY:**
-        *   Include the full "Homework Activity" as described in the lesson plan.
+        *   Include the full "Homework Activity" as described in the 'homework.activity' field.
 
 Generate the complete worksheet as a JSON object based on these strict instructions. Ensure every student-facing element from the lesson plan is present. Failure to embed all required content or follow the JSON schema will result in an invalid response.
 `,
