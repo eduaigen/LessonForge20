@@ -32,9 +32,9 @@ const prompt = ai.definePrompt({
         *   Provide ample space for the student to write their answer.
 
     *   **C. MINI-LESSON:**
-        *   Based on the topic and the teacher/student actions from the lesson plan, design a simple note-taking strategy for the student (e.g., a two-column note frame).
+        *   **CRITICAL: You MUST use a Markdown T-chart (a two-column table) for the note-taking section.** The left column should be titled "Key Ideas / Concepts" and the right column should be "Notes / Details / Questions". Provide at least 5 empty rows in the T-chart to give students ample space to write.
         *   **CRITICAL: You MUST embed the full text of any "Embedded Reading Passage" exactly as it appears in the lesson plan. Do not summarize it or refer to it. Generate the full text.**
-        *   **CRITICAL: You MUST embed any "Embedded Diagram" or other visuals (like SVGs) from the lesson plan directly. The visual must be valid, fully rendered in the worksheet.**
+        *   **CRITICAL: If the lesson plan contains a 'diagram' description, you MUST embed this description under a heading like '### Diagram for Analysis'. Do NOT write "(Diagram would be inserted here)" or any other placeholder text.**
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
         *   Clearly state the instructions for the guided practice activity, taken from the lesson plan.
