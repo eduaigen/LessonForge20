@@ -8,6 +8,7 @@ import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-gen
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
 import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
 import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schemas';
+import type { WorksheetGeneratorOutput } from '@/ai/schemas/worksheet-generator-schemas';
 
 // This component now intelligently decides how to render content.
 
@@ -209,6 +210,129 @@ const renderLessonPlan = (lessonPlan: any) => (
   </div>
 );
 
+const renderWorksheet = (worksheet: WorksheetGeneratorOutput) => (
+    <div className="document-view">
+        <header className="mb-6 space-y-2">
+            <p>{worksheet.header.name}</p>
+            <p>{worksheet.header.class}</p>
+            <p>{worksheet.header.date}</p>
+        </header>
+
+        <section className="mb-6">
+            <h3>A. AIM & VOCABULARY</h3>
+            <p className="mt-2"><strong>Aim / Essential Question:</strong> {worksheet.aim.essentialQuestion}</p>
+            <p className="mt-2">{worksheet.aim.rewriteSpace}</p>
+            <div className="my-4 h-16 border-b border-dashed"></div>
+            
+            <h4 className="mt-4">{worksheet.vocabulary.title}</h4>
+            <ul className="list-disc pl-5 mt-2 space-y-2">
+                {worksheet.vocabulary.terms.map(v => <li key={v.term}><strong>{v.term}:</strong> {v.definition}</li>)}
+            </ul>
+        </section>
+
+        <section className="mb-6">
+            <h3>{worksheet.doNow.title}</h3>
+            <p>{worksheet.doNow.question}</p>
+            <div className="my-4 h-24 border-b border-dashed"></div>
+        </section>
+
+        <section className="mb-6">
+            <h3>{worksheet.miniLesson.title}</h3>
+            {worksheet.miniLesson.readingPassage && (
+                <>
+                    <h4>Reading Passage</h4>
+                    <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: worksheet.miniLesson.readingPassage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                </>
+            )}
+             {worksheet.miniLesson.diagramDescription && (
+                <>
+                    <h4>Diagram for Analysis</h4>
+                    <blockquote className="border-l-4 border-primary pl-4 italic">
+                        {worksheet.miniLesson.diagramDescription}
+                    </blockquote>
+                </>
+            )}
+             <h4>{worksheet.miniLesson.notesTitle}</h4>
+            <div className="overflow-x-auto my-4">
+                <table className="w-full border-collapse">
+                    <thead>
+                        <tr className="border-b">
+                            <th className="p-2 text-left font-semibold text-foreground w-1/2">Key Ideas / Concepts</th>
+                            <th className="p-2 text-left font-semibold text-foreground w-1/2">Notes / Details / Questions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {[...Array(5)].map((_, i) => (
+                            <tr key={i} className="border-b">
+                                <td className="p-2 h-16 align-top"></td>
+                                <td className="p-2 h-16 align-top"></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {worksheet.miniLesson.conceptCheckQuestions && worksheet.miniLesson.conceptCheckQuestions.length > 0 && (
+                <>
+                    <h4>Concept Check Questions</h4>
+                    <ol className="list-decimal pl-5 mt-2 space-y-4">
+                    {worksheet.miniLesson.conceptCheckQuestions.map((q, i) => (
+                        <li key={i}>
+                            {q.question}
+                            <div className="my-2 h-12 border-b border-dashed"></div>
+                        </li>
+                    ))}
+                    </ol>
+                </>
+            )}
+        </section>
+        
+        <section className="mb-6">
+            <h3>{worksheet.guidedPractice.title}</h3>
+            {worksheet.guidedPractice.instructions.map((inst, i) => <p key={i}>{inst}</p>)}
+            {worksheet.guidedPractice.dataTable && renderTableFromObject(worksheet.guidedPractice.dataTable)}
+            <div className="my-4 h-24 border-b border-dashed"></div>
+        </section>
+
+        <section className="mb-6">
+            <h3>{worksheet.checkFoUnderstanding.title}</h3>
+            <ol className="list-decimal pl-5 space-y-4">
+                {worksheet.checkFoUnderstanding.multipleChoice.map((mc, i) => (
+                    <li key={i}>
+                        <p>{mc.question}</p>
+                        <ul className="list-[lower-alpha] pl-6 mt-2">
+                           {mc.options.map(opt => <li key={opt}>{opt}</li>)}
+                        </ul>
+                    </li>
+                ))}
+                <li>
+                    <p>{worksheet.checkFoUnderstanding.shortResponse.question}</p>
+                    <div className="my-2 h-16 border-b border-dashed"></div>
+                </li>
+            </ol>
+        </section>
+
+        <section className="mb-6">
+            <h3>{worksheet.independentPractice.title}</h3>
+            <p>{worksheet.independentPractice.taskPrompt}</p>
+            {worksheet.independentPractice.taskData && renderTableFromObject(worksheet.independentPractice.taskData)}
+            <div className="my-4 h-32 border-b border-dashed"></div>
+        </section>
+
+        <section className="mb-6">
+            <h3>{worksheet.closure.title}</h3>
+            <p>{worksheet.closure.exitTicketQuestion}</p>
+            <div className="my-4 h-16 border-b border-dashed"></div>
+        </section>
+
+        <section>
+            <h3>{worksheet.homework.title}</h3>
+            <p>{worksheet.homework.activity}</p>
+        </section>
+    </div>
+);
+
+
 const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
     const sections = [
         { title: "B. DO NOW", advice: advice.doNow },
@@ -373,12 +497,16 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
     const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
     const isStudySheetObject = typeof content === 'object' && content !== null && 'keyConcepts' in content;
-
+    const isWorksheetObject = typeof content === 'object' && content !== null && 'header' in content && 'doNow' in content;
 
     if (isLessonPlanObject) {
       return renderLessonPlan(content);
     }
 
+    if (isWorksheetObject) {
+        return renderWorksheet(content);
+    }
+    
     if (isCoachingObject) {
         return renderCoachingAdvice(content);
     }
@@ -403,6 +531,7 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
         if ('articleContent' in content) {
             markdownContent = content.articleContent;
         } else if ('worksheetContent' in content) {
+             // This is the old path for backward compatibility, should be phased out
             markdownContent = content.worksheetContent;
         } else if ('scaffoldedContent' in content) {
             markdownContent = content.scaffoldedContent;
