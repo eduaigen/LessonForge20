@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2, History, ChevronLeft, ChevronRight, Printer, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -28,6 +28,7 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
+import { refineLessonSection } from '@/ai/flows/lesson-section-refiner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,7 +38,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -54,6 +62,13 @@ export type GeneratedContent = {
   content: any;
   type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
 };
+
+type LessonPackage = {
+    id: string;
+    lessonPlan: GeneratedContent;
+    supplementaryMaterials: GeneratedContent[];
+};
+
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -81,15 +96,17 @@ const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
-  const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
+  
+  const [history, setHistory] = useState<LessonPackage[]>([]);
+  const [activePackageId, setActivePackageId] = useState<string | null>(null);
+
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
 
-  const lessonPlan = useMemo(() => {
-    const lessonPlanSection = generatedSections.find(sec => sec.type === 'Lesson Plan');
-    return lessonPlanSection ? (lessonPlanSection.content as GenerateNVBiologyLessonOutput) : null;
-  }, [generatedSections]);
-
+  const [isRevisionDialogOpen, setIsRevisionDialogOpen] = useState(false);
+  const [aiRevisionPrompt, setAiRevisionPrompt] = useState('');
+  const [revisingSectionKey, setRevisingSectionKey] = useState<string | null>(null);
+  
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -99,6 +116,28 @@ const GeneratorContent = () => {
       additionalInfo: '',
     },
   });
+
+  // State for lesson plan editing
+  const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [editingSections, setEditingSections] = useState<string[]>([]);
+  const [sectionContent, setSectionContent] = useState<Record<string, any>>({});
+  const [originalSectionContent, setOriginalSectionContent] = useState<Record<string, any>>({});
+  
+  const activePackage = useMemo(() => {
+    return history.find(p => p.id === activePackageId);
+  }, [history, activePackageId]);
+
+  const lessonPlan = useMemo(() => {
+    return activePackage?.lessonPlan.content as GenerateNVBiologyLessonOutput | null;
+  }, [activePackage]);
+
+  // When activePackage changes, reset editing state
+  useEffect(() => {
+    setSelectedSections([]);
+    setEditingSections([]);
+    setSectionContent(lessonPlan ? { ...lessonPlan } : {});
+    setOriginalSectionContent(lessonPlan ? { ...lessonPlan } : {});
+  }, [activePackageId, lessonPlan]);
 
   const selectedUnit = form.watch('unit');
   const selectedTopic = form.watch('topic');
@@ -137,16 +176,24 @@ const GeneratorContent = () => {
 
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
-    setGeneratedSections([]);
     try {
       const result = await generateNVBiologyLesson(values);
-      setGeneratedSections([{
-        id: `lesson-plan-${Date.now()}`,
-        title: result.lessonOverview.lesson,
-        content: result,
-        type: 'Lesson Plan',
-      }]);
+      const newPackageId = `package-${Date.now()}`;
+      const newPackage: LessonPackage = {
+          id: newPackageId,
+          lessonPlan: {
+            id: `lesson-plan-${Date.now()}`,
+            title: result.lessonOverview.lesson,
+            content: result,
+            type: 'Lesson Plan',
+          },
+          supplementaryMaterials: [],
+      };
+
+      setHistory(prev => [...prev, newPackage]);
+      setActivePackageId(newPackageId);
       setIsToolsInfoDialogOpen(true);
+
     } catch (error) {
       console.error('Lesson generation failed:', error);
       toast({
@@ -160,18 +207,18 @@ const GeneratorContent = () => {
   }
 
   const handleToolClick = async (toolName: ToolName) => {
-    if (!lessonPlan) {
+    if (!lessonPlan || !activePackageId) {
         toast({
             title: "No Lesson Plan",
-            description: "Please generate a lesson plan first before using AI tools.",
+            description: "Please generate or select a lesson plan first before using AI tools.",
             variant: "destructive"
         });
         return;
     }
 
     const title = toolName;
-    if (generatedSections.some(sec => sec.title === title)) {
-        toast({ title: "Already Generated", description: `A ${title} has already been generated.` });
+    if (activePackage?.supplementaryMaterials.some(sec => sec.title === title)) {
+        toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
         return;
     }
 
@@ -180,29 +227,38 @@ const GeneratorContent = () => {
     try {
         let result: any;
         let contentType: GeneratedContent['type'] = toolName;
+        let newContent: GeneratedContent | null = null;
 
         if (toolName === 'Worksheet') {
             result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType }]);
+            newContent = { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType };
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial(lessonPlan);
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType }]);
-
+            newContent = { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType };
         } else if (toolName === 'Teacher Coach') {
             result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
+            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
+            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Question Cluster') {
             result = await generateQuestionCluster({
                 lessonTopic: lessonPlan.lessonOverview.topic,
                 lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
             });
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
+            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Study Sheet') {
             result = await generateStudySheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
+            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
+        }
+
+        if (newContent) {
+            setHistory(prev => prev.map(p => {
+                if (p.id === activePackageId) {
+                    return { ...p, supplementaryMaterials: [...p.supplementaryMaterials, newContent!] };
+                }
+                return p;
+            }));
         }
 
     } catch (error) {
@@ -212,6 +268,92 @@ const GeneratorContent = () => {
         setIsToolLoading(null);
     }
   };
+
+  // Lesson Plan Editing Handlers
+  const handleSectionSelect = (sectionKey: string, checked: boolean) => {
+    setSelectedSections(prev => 
+        checked ? [...prev, sectionKey] : prev.filter(key => key !== sectionKey)
+    );
+  };
+
+  const handleSectionEditToggle = (sectionKey: string) => {
+    setEditingSections(prev => {
+        if (prev.includes(sectionKey)) {
+            // If already editing, cancel changes
+            handleCancelSection(sectionKey);
+            return prev.filter(key => key !== sectionKey);
+        } else {
+            return [...prev, sectionKey];
+        }
+    });
+  };
+
+  const handleSectionContentChange = (sectionKey: string, newContent: any) => {
+    setSectionContent(prev => ({
+        ...prev,
+        [sectionKey]: newContent
+    }));
+  };
+
+  const handleSaveSection = (sectionKey: string) => {
+    setEditingSections(prev => prev.filter(key => key !== sectionKey));
+    setOriginalSectionContent(prev => ({...prev, [sectionKey]: sectionContent[sectionKey]}));
+    
+    // Update the lesson plan in history
+    setHistory(prevHistory => prevHistory.map(pkg => {
+        if (pkg.id === activePackageId) {
+            const updatedLessonPlanContent = { ...pkg.lessonPlan.content, [sectionKey]: sectionContent[sectionKey] };
+            return {
+                ...pkg,
+                lessonPlan: { ...pkg.lessonPlan, content: updatedLessonPlanContent }
+            };
+        }
+        return pkg;
+    }));
+
+    toast({ title: 'Section Saved', description: `Your changes to "${sectionKey}" have been saved.`});
+  };
+
+  const handleCancelSection = (sectionKey: string) => {
+    setEditingSections(prev => prev.filter(key => key !== sectionKey));
+    setSectionContent(prev => ({...prev, [sectionKey]: originalSectionContent[sectionKey]}));
+  };
+
+  const handleReviseClick = (sectionKey: string) => {
+    setRevisingSectionKey(sectionKey);
+    setIsRevisionDialogOpen(true);
+  };
+
+  const handleAiRevision = async () => {
+    if (!revisingSectionKey || !lessonPlan) return;
+    
+    setIsRevisionDialogOpen(false);
+    setIsToolLoading(`Revising ${revisingSectionKey}...`);
+
+    try {
+        const sectionToRevise = sectionContent[revisingSectionKey] || lessonPlan[revisingSectionKey as keyof typeof lessonPlan];
+        const result = await refineLessonSection({
+            sectionName: revisingSectionKey,
+            originalContent: JSON.stringify(sectionToRevise, null, 2),
+            instructions: aiRevisionPrompt,
+        });
+
+        const revisedContent = JSON.parse(result.revisedContent);
+        
+        handleSectionContentChange(revisingSectionKey, revisedContent);
+        handleSaveSection(revisingSectionKey);
+        toast({ title: 'Revision Complete', description: `The "${revisingSectionKey}" section has been updated by the AI.`});
+
+    } catch (error) {
+        console.error("AI revision failed:", error);
+        toast({ title: "Revision Failed", description: "The AI failed to revise the section. Please try again.", variant: "destructive" });
+    } finally {
+        setIsToolLoading(null);
+        setAiRevisionPrompt('');
+        setRevisingSectionKey(null);
+    }
+  };
+
 
   return (
     <>
@@ -245,156 +387,242 @@ const GeneratorContent = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <div className="relative grid grid-cols-1 lg:grid-cols-1 gap-8">
-        <div className="flex-grow">
-          <Card className="w-full shadow-lg">
-              <CardHeader>
-                  <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <Leaf className="h-6 w-6" />
-                  </div>
-                  <div>
-                      <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
-                      <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
-                  </div>
-                  </div>
-              </CardHeader>
-              <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
-                  <CardContent className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <FormField
-                          control={form.control}
-                          name="unit"
-                          render={({ field }) => (
-                              <FormItem>
-                              <FormLabel>Unit</FormLabel>
-                              <Select onValueChange={(value) => {
-                                  field.onChange(value);
-                                  form.setValue('topic', '');
-                                  form.setValue('lesson', '');
-                              }} defaultValue={field.value}>
-                                  <FormControl>
-                                  <SelectTrigger>
-                                      <SelectValue placeholder="Select a unit" />
-                                  </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                  {units.map((unit) => (
-                                      <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                                  ))}
-                                  </SelectContent>
-                              </Select>
-                              <FormMessage />
-                              </FormItem>
-                          )}
-                          />
-                          <FormField
-                          control={form.control}
-                          name="topic"
-                          render={({ field }) => (
-                              <FormItem>
-                              <FormLabel>Topic</FormLabel>
-                              <Select onValueChange={(value) => {
-                                  field.onChange(value);
-                                  form.setValue('lesson', '');
-                              }} value={field.value} disabled={!selectedUnit}>
-                                  <FormControl>
-                                  <SelectTrigger>
-                                      <SelectValue placeholder="Select a topic" />
-                                  </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                  {topics.map((topic) => (
-                                      <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                                  ))}
-                                  </SelectContent>
-                              </Select>
-                              <FormMessage />
-                              </FormItem>
-                          )}
-                          />
+      <Dialog open={isRevisionDialogOpen} onOpenChange={setIsRevisionDialogOpen}>
+        <DialogContent>
+            <DialogHeader>
+                <DialogTitle>Revise Section with AI</DialogTitle>
+                <DialogDescription>
+                    Enter your instructions for how the AI should revise the "{revisingSectionKey}" section.
+                </DialogDescription>
+            </DialogHeader>
+            <Textarea
+                placeholder="e.g., 'Make this section more engaging for 9th graders', 'Add more detail about...', 'Simplify the language'"
+                value={aiRevisionPrompt}
+                onChange={(e) => setAiRevisionPrompt(e.target.value)}
+                rows={4}
+            />
+            <DialogFooter>
+                <Button variant="ghost" onClick={() => setIsRevisionDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handleAiRevision} disabled={!aiRevisionPrompt}>Revise</Button>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="md:col-span-3">
+             <Card className="sticky top-24 shadow-lg">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <History className="h-5 w-5" />
+                        Generation History
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {history.length > 0 ? (
+                        <ScrollArea className="h-[60vh]">
+                            <div className="space-y-2">
+                                {history.map(pkg => (
+                                    <Button
+                                        key={pkg.id}
+                                        variant={activePackageId === pkg.id ? 'secondary' : 'ghost'}
+                                        className="w-full justify-start h-auto py-2 text-left"
+                                        onClick={() => setActivePackageId(pkg.id)}
+                                    >
+                                        <div className="flex flex-col">
+                                            <span className="font-semibold truncate">{pkg.lessonPlan.title}</span>
+                                            <span className="text-xs text-muted-foreground">
+                                                {pkg.supplementaryMaterials.length} supplementary material(s)
+                                            </span>
+                                        </div>
+                                    </Button>
+                                ))}
+                            </div>
+                        </ScrollArea>
+                    ) : (
+                        <p className="text-sm text-muted-foreground text-center py-8">
+                            Generate a lesson to start your history.
+                        </p>
+                    )}
+                </CardContent>
+             </Card>
+        </div>
+        <div className="md:col-span-9 relative">
+            <div className="flex-grow">
+              <Card className="w-full shadow-lg mb-8">
+                  <CardHeader>
+                      <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                          <Leaf className="h-6 w-6" />
                       </div>
+                      <div>
+                          <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
+                          <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
+                      </div>
+                      </div>
+                  </CardHeader>
+                  <Form {...form}>
+                      <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
+                      <CardContent className="space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              <FormField
+                              control={form.control}
+                              name="unit"
+                              render={({ field }) => (
+                                  <FormItem>
+                                  <FormLabel>Unit</FormLabel>
+                                  <Select onValueChange={(value) => {
+                                      field.onChange(value);
+                                      form.setValue('topic', '');
+                                      form.setValue('lesson', '');
+                                  }} defaultValue={field.value}>
+                                      <FormControl>
+                                      <SelectTrigger>
+                                          <SelectValue placeholder="Select a unit" />
+                                      </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                      {units.map((unit) => (
+                                          <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                                      ))}
+                                      </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                  </FormItem>
+                              )}
+                              />
+                              <FormField
+                              control={form.control}
+                              name="topic"
+                              render={({ field }) => (
+                                  <FormItem>
+                                  <FormLabel>Topic</FormLabel>
+                                  <Select onValueChange={(value) => {
+                                      field.onChange(value);
+                                      form.setValue('lesson', '');
+                                  }} value={field.value} disabled={!selectedUnit}>
+                                      <FormControl>
+                                      <SelectTrigger>
+                                          <SelectValue placeholder="Select a topic" />
+                                      </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                      {topics.map((topic) => (
+                                          <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                                      ))}
+                                      </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                  </FormItem>
+                              )}
+                              />
+                          </div>
 
-                      {lessons && lessons.length > 0 && (
+                          {lessons && lessons.length > 0 && (
+                              <FormField
+                                  control={form.control}
+                                  name="lesson"
+                                  render={({ field }) => (
+                                      <FormItem className="space-y-3">
+                                      <FormLabel>Lesson Objective</FormLabel>
+                                      <FormControl>
+                                          <ScrollArea className="h-72 w-full rounded-md border p-4">
+                                              <RadioGroup
+                                                  onValueChange={field.onChange}
+                                                  defaultValue={field.value}
+                                                  className="flex flex-col space-y-1"
+                                              >
+                                                  {lessons.map((lesson, index) => (
+                                                  <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
+                                                      <FormControl>
+                                                          <RadioGroupItem value={lesson.title} />
+                                                      </FormControl>
+                                                      <FormLabel className="font-normal w-full cursor-pointer">
+                                                          <p className="font-semibold">{lesson.title}</p>
+                                                          <p className="text-sm text-muted-foreground">{lesson.objective}</p>
+                                                      </FormLabel>
+                                                  </FormItem>
+                                                  ))}
+                                              </RadioGroup>
+                                          </ScrollArea>
+                                      </FormControl>
+                                      <FormMessage />
+                                      </FormItem>
+                                  )}
+                              />
+                          )}
+                          
                           <FormField
                               control={form.control}
-                              name="lesson"
+                              name="additionalInfo"
                               render={({ field }) => (
-                                  <FormItem className="space-y-3">
-                                  <FormLabel>Lesson Objective</FormLabel>
+                                  <FormItem>
+                                  <FormLabel>Additional Information (Optional)</FormLabel>
                                   <FormControl>
-                                      <ScrollArea className="h-72 w-full rounded-md border p-4">
-                                          <RadioGroup
-                                              onValueChange={field.onChange}
-                                              defaultValue={field.value}
-                                              className="flex flex-col space-y-1"
-                                          >
-                                              {lessons.map((lesson, index) => (
-                                              <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
-                                                  <FormControl>
-                                                      <RadioGroupItem value={lesson.title} />
-                                                  </FormControl>
-                                                  <FormLabel className="font-normal w-full cursor-pointer">
-                                                      <p className="font-semibold">{lesson.title}</p>
-                                                      <p className="text-sm text-muted-foreground">{lesson.objective}</p>
-                                                  </FormLabel>
-                                              </FormItem>
-                                              ))}
-                                          </RadioGroup>
-                                      </ScrollArea>
+                                      <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                   </FormItem>
                               )}
                           />
-                      )}
-                      
-                      <FormField
-                          control={form.control}
-                          name="additionalInfo"
-                          render={({ field }) => (
-                              <FormItem>
-                              <FormLabel>Additional Information (Optional)</FormLabel>
-                              <FormControl>
-                                  <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                              </FormItem>
-                          )}
-                      />
-                  </CardContent>
-                  <CardFooter>
-                      <Button type="submit" disabled={isLoading} className="w-full">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      {isLoading ? 'Generating Lesson...' : 'Generate Lesson'}
-                      </Button>
-                  </CardFooter>
-                  </form>
-              </Form>
-          </Card>
-          
-          {isLoading && (
-              <div className="mt-8">
-                  <GeneratingAnimation />
-              </div>
-          )}
+                      </CardContent>
+                      <CardFooter>
+                          <Button type="submit" disabled={isLoading} className="w-full">
+                          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                          {isLoading ? 'Generating Lesson...' : 'Generate New Lesson'}
+                          </Button>
+                      </CardFooter>
+                      </form>
+                  </Form>
+              </Card>
+              
+              {isLoading && !activePackage && (
+                  <div className="mt-8">
+                      <GeneratingAnimation />
+                  </div>
+              )}
 
-          {generatedSections.map(section => (
-            <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
-                <StyledContentDisplay content={section.content} type={section.type} />
-            </CollapsibleSection>
-          ))}
+              {activePackage ? (
+                <>
+                    <CollapsibleSection key={activePackage.lessonPlan.id} title={activePackage.lessonPlan.title} contentItem={activePackage.lessonPlan}>
+                        <StyledContentDisplay
+                            content={activePackage.lessonPlan.content}
+                            type={activePackage.lessonPlan.type}
+                            lessonPlanState={{
+                                selectedSections,
+                                editingSections,
+                                sectionContent,
+                                onSectionSelect: handleSectionSelect,
+                                onSectionEditToggle: handleSectionEditToggle,
+                                onSaveSection: handleSaveSection,
+                                onCancelSection: handleCancelSection,
+                                onReviseSection: handleReviseClick,
+                                onSectionContentChange: handleSectionContentChange,
+                            }}
+                        />
+                    </CollapsibleSection>
+                    {activePackage.supplementaryMaterials.map(section => (
+                        <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
+                            <StyledContentDisplay content={section.content} type={section.type} />
+                        </CollapsibleSection>
+                    ))}
+                </>
+              ) : !isLoading && history.length > 0 && (
+                <div className="text-center py-16">
+                    <h2 className="text-2xl font-bold font-headline mb-4">No Lesson Selected</h2>
+                    <p className="text-muted-foreground">Please select a lesson from the history panel to view its content.</p>
+                </div>
+              )}
+             
+              {isToolLoading && (
+                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+                      <GeneratingAnimation />
+                  </CollapsibleSection>
+              )}
 
-          {isToolLoading && (
-              <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
-                  <GeneratingAnimation />
-              </CollapsibleSection>
-          )}
+            </div>
 
+            {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} isHighlighting={isHighlightingTools} />}
         </div>
-
-        {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} isHighlighting={isHighlightingTools} />}
       </div>
     </>
   );

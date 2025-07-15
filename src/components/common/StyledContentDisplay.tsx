@@ -12,32 +12,13 @@ import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-s
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Button } from '../ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Wand2, Edit, Save, X, Checkbox } from 'lucide-react';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
-
-// This component now intelligently decides how to render content.
-
-const renderWorksheetHeader = () => (
-    <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
-        <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
-            <label className="font-semibold whitespace-nowrap">Name:</label>
-            <div className="flex-grow border-b border-foreground/50 w-full"></div>
-        </div>
-        <div className="flex items-end space-x-2">
-            <label className="font-semibold">Date:</label>
-            <div className="flex-grow border-b border-foreground/50"></div>
-        </div>
-        <div className="flex items-end space-x-2">
-            <label className="font-semibold">Period:</label>
-            <div className="flex-grow border-b border-foreground/50"></div>
-        </div>
-    </header>
-);
-
+import { Textarea } from '../ui/textarea';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: string[][] }) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -81,7 +62,6 @@ const renderSimpleMarkdown = (content: string) => {
                 svg: ({ node, ...props }) => {
                     const svgString = node?.properties?.src as string;
                     if (!svgString || typeof svgString !== 'string') {
-                      // Attempt to render raw SVG from children if not in src
                       const rawSvg = node?.children?.map(c => (c as any).value).join('');
                       if (rawSvg) {
                          return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: rawSvg }} />
@@ -97,122 +77,207 @@ const renderSimpleMarkdown = (content: string) => {
     );
 };
 
+// =================================================================
+// Lesson Plan Rendering Components with Editing
+// =================================================================
 
-const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
-    const renderSection = (title: string, content: any) => {
-        const renderContent = () => {
-            if (!content) return <p className="text-muted-foreground">Not provided.</p>;
-            if (typeof content === 'string') return <p>{content}</p>;
-            if (Array.isArray(content)) {
-                return (
-                    <ul className="list-disc pl-5">
-                        {content.map((item, index) => {
-                             if (typeof item === 'object' && item !== null) {
-                                // For vocabulary or objectives
-                                if (item.term && item.definition) {
-                                    return <li key={index}><strong>{item.term}:</strong> {item.definition}</li>
-                                }
-                                if (item.question && item.dok) { // for questions with DOK
-                                    return <li key={index}>{item.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {item.dok})</span></li>
-                                }
-                                 if(item.question && item.options) { // for multiple choice
-                                   return <li key={index}>
-                                      {item.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {item.dok})</span>
-                                      <ul className="list-[lower-alpha] pl-6">
-                                        {item.options.map((opt: string, j: number) => <li key={j}>{opt}</li>)}
-                                      </ul>
-                                      <p><em>Answer: {item.answer}</em></p>
-                                    </li>
-                                 }
-                             }
-                             return <li key={index}>{item}</li>
-                        })}
-                    </ul>
-                );
-            }
-             if (typeof content === 'object') {
-                if (content.dataTable) return renderTableFromObject(content.dataTable);
-                if (content.taskData) return renderTableFromObject(content.taskData);
-                if (content.question && content.dok) {
-                    return <p>{content.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {content.dok})</span></p>
-                }
-                return <pre>{JSON.stringify(content, null, 2)}</pre>;
-            }
-            return <p>Unsupported content type.</p>;
-        };
-        
+type LessonSectionProps = {
+  sectionKey: string;
+  title: string;
+  children: React.ReactNode;
+  isSelected: boolean;
+  isEditing: boolean;
+  onSelect: (sectionKey: string, checked: boolean) => void;
+  onEditToggle: (sectionKey: string) => void;
+  onSave: (sectionKey: string) => void;
+  onCancel: (sectionKey: string) => void;
+  onRevise: (sectionKey: string) => void;
+};
+
+const LessonSection = ({
+  sectionKey,
+  title,
+  children,
+  isSelected,
+  isEditing,
+  onSelect,
+  onEditToggle,
+  onSave,
+  onCancel,
+  onRevise,
+}: LessonSectionProps) => (
+  <section className="mb-6 p-4 border rounded-lg transition-all hover:shadow-md relative group">
+    <div className="absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+       <Checkbox
+            checked={isSelected}
+            onCheckedChange={(checked) => onSelect(sectionKey, !!checked)}
+            id={`select-${sectionKey}`}
+            aria-label={`Select ${title}`}
+        />
+        <Button variant="ghost" size="icon" onClick={() => onEditToggle(sectionKey)} disabled={!isSelected}>
+            <Edit className="h-4 w-4" />
+        </Button>
+        <Button variant="ghost" size="icon" onClick={() => onRevise(sectionKey)} disabled={!isSelected}>
+            <Wand2 className="h-4 w-4" />
+        </Button>
+    </div>
+    
+    <div className="flex justify-between items-start mb-2">
+      <h2 className="text-xl font-bold font-headline text-primary">{title}</h2>
+      {isEditing && (
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => onCancel(sectionKey)}><X className="h-4 w-4 mr-1" />Cancel</Button>
+          <Button size="sm" onClick={() => onSave(sectionKey)}><Save className="h-4 w-4 mr-1" />Save</Button>
+        </div>
+      )}
+    </div>
+    <div className="document-view">{children}</div>
+  </section>
+);
+
+
+type EditableFieldProps = {
+    isEditing: boolean;
+    value: any;
+    onContentChange: (fieldKey: string, newValue: string) => void;
+    fieldKey: string;
+    renderDisplay: () => React.ReactNode;
+};
+
+const EditableField: React.FC<EditableFieldProps> = ({ isEditing, value, onContentChange, fieldKey, renderDisplay }) => {
+    if (isEditing) {
+        const stringValue = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
         return (
-            <div className="mb-4">
-                <h4>{title}</h4>
-                {renderContent()}
-            </div>
+            <Textarea
+                value={stringValue}
+                onChange={(e) => onContentChange(fieldKey, e.target.value)}
+                className="w-full min-h-[100px] font-mono text-sm"
+            />
         );
-    };
+    }
+    return <>{renderDisplay()}</>;
+};
 
-    const renderLessonSection = (sectionTitle: string, section: any) => (
-        <section className="mb-6">
-            <h2>{sectionTitle}</h2>
-            {Object.entries(section).map(([key, value]) => {
-                // simple camelCase to Title Case conversion
-                const title = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-                
-                // Handle nested objects like data tables or question objects
-                if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                    if ((value as any).dataTable) {
-                         return renderSection('Data Table', { dataTable: (value as any).dataTable });
-                    }
-                    if ((value as any).taskData) {
-                         return renderSection('Task Data', { taskData: (value as any).taskData });
-                    }
-                    if ((value as any).multipleChoice || (value as any).shortResponse) {
-                        return (
-                            <div key={key}>
-                                {renderSection('Multiple Choice', (value as any).multipleChoice)}
-                                {renderSection('Short Response', (value as any).shortResponse)}
-                            </div>
-                        )
-                    }
-                }
-                
-                if (key === 'readingPassage') {
-                    return (
-                        <div key={key} className="mb-4">
-                             <h4>Embedded Reading Passage</h4>
-                            <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: String(value).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
-                        </div>
-                    );
-                }
-
-                if (key === 'diagram') {
-                     return (
-                        <div key={key} className="mb-4">
-                            <h4>Embedded Diagram Description</h4>
-                            <blockquote className="border-l-4 border-primary pl-4 italic">
-                                {String(value)}
-                            </blockquote>
-                        </div>
-                    );
-                }
-                
-                return <div key={key}>{renderSection(title, value)}</div>;
-            })}
-        </section>
-    );
-
+const LessonOverviewSection = ({ section, isEditing, onContentChange }: { section: any, isEditing: boolean, onContentChange: (field: string, value: any) => void }) => {
     return (
-        <div className="document-view">
-            {renderSection("I. Lesson Overview", lessonPlan.lessonOverview)}
-            {renderLessonSection("B. DO NOW (5–8 min)", lessonPlan.doNow)}
-            {renderLessonSection("C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)", lessonPlan.miniLesson)}
-            {renderLessonSection("D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)", lessonPlan.guidedPractice)}
-            {renderLessonSection("E. CHECK FOR UNDERSTANDING (CFU)", lessonPlan.checkFoUnderstanding)}
-            {renderLessonSection("F. INDEPENDENT PRACTICE / PERFORMANCE TASK", lessonPlan.independentPractice)}
-            {renderLessonSection("G. CLOSURE / EXIT TICKET", lessonPlan.closure)}
-            {renderLessonSection("H. HOMEWORK ACTIVITY", lessonPlan.homework)}
-            {renderLessonSection("III. DIFFERENTIATION & SUPPORT", lessonPlan.differentiation)}
+        <div className="space-y-4">
+            <EditableField isEditing={isEditing} value={section.lessonSummary} onContentChange={onContentChange} fieldKey="lessonSummary"
+                renderDisplay={() => <div><strong>Summary:</strong> <p>{section.lessonSummary}</p></div>} />
+            <EditableField isEditing={isEditing} value={section.aim} onContentChange={onContentChange} fieldKey="aim"
+                renderDisplay={() => <div><strong>Aim:</strong> <p>{section.aim}</p></div>} />
+             <EditableField isEditing={isEditing} value={section.essentialQuestion} onContentChange={onContentChange} fieldKey="essentialQuestion"
+                renderDisplay={() => <div><strong>Essential Question:</strong> <p>{section.essentialQuestion}</p></div>} />
+            <EditableField isEditing={isEditing} value={section.objectives} onContentChange={onContentChange} fieldKey="objectives"
+                renderDisplay={() => <div><strong>Objectives:</strong> <ul className="list-disc pl-5">{section.objectives.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>} />
+            <EditableField isEditing={isEditing} value={section.vocabulary} onContentChange={onContentChange} fieldKey="vocabulary"
+                renderDisplay={() => <div><strong>Vocabulary:</strong> <ul className="list-disc pl-5">{section.vocabulary.map((v: any, i: number) => <li key={i}><strong>{v.term}:</strong> {v.definition}</li>)}</ul></div>} />
+            <EditableField isEditing={isEditing} value={section.materials} onContentChange={onContentChange} fieldKey="materials"
+                renderDisplay={() => <div><strong>Materials:</strong> <ul className="list-disc pl-5">{section.materials.map((m: string, i: number) => <li key={i}>{m}</li>)}</ul></div>} />
         </div>
     );
 };
+
+const DoNowSection = ({ section, isEditing, onContentChange }: { section: any, isEditing: boolean, onContentChange: (field: string, value: any) => void }) => {
+    return (
+        <div className="space-y-4">
+            <EditableField isEditing={isEditing} value={section.question} onContentChange={onContentChange} fieldKey="question"
+                renderDisplay={() => <div><strong>Question:</strong> <p>{section.question}</p></div>} />
+             <EditableField isEditing={isEditing} value={section.teacherActions} onContentChange={onContentChange} fieldKey="teacherActions"
+                renderDisplay={() => <div><strong>Teacher Actions:</strong> <ul className="list-disc pl-5">{section.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>} />
+             <EditableField isEditing={isEditing} value={section.expectedStudentOutputs} onContentChange={onContentChange} fieldKey="expectedStudentOutputs"
+                renderDisplay={() => <div><strong>Expected Student Outputs:</strong> <ul className="list-disc pl-5">{section.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>} />
+        </div>
+    );
+};
+
+const MiniLessonSection = ({ section, isEditing, onContentChange }: { section: any, isEditing: boolean, onContentChange: (field: string, value: any) => void }) => {
+    return (
+        <div className="space-y-4">
+            <EditableField isEditing={isEditing} value={section.readingPassage} onContentChange={onContentChange} fieldKey="readingPassage"
+                renderDisplay={() => <div><h4>Reading Passage</h4><Markdown>{section.readingPassage}</Markdown></div>} />
+            <EditableField isEditing={isEditing} value={section.diagram} onContentChange={onContentChange} fieldKey="diagram"
+                renderDisplay={() => section.diagram ? <div><h4>Diagram Description</h4><blockquote className="border-l-4 border-primary pl-4 italic">{section.diagram}</blockquote></div> : null} />
+            <EditableField isEditing={isEditing} value={section.conceptCheckQuestions} onContentChange={onContentChange} fieldKey="conceptCheckQuestions"
+                renderDisplay={() => (
+                    <div>
+                        <h4>Concept Check Questions</h4>
+                        <ol className="list-decimal pl-5">
+                            {section.conceptCheckQuestions.map((q: any, i: number) => <li key={i}>{q.question} (DOK {q.dok})</li>)}
+                        </ol>
+                    </div>
+                )} />
+             <EditableField isEditing={isEditing} value={section.teacherActions} onContentChange={onContentChange} fieldKey="teacherActions"
+                renderDisplay={() => <div><strong>Teacher Actions:</strong> <ul className="list-disc pl-5">{section.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>} />
+             <EditableField isEditing={isEditing} value={section.expectedStudentOutputs} onContentChange={onContentChange} fieldKey="expectedStudentOutputs"
+                renderDisplay={() => <div><strong>Expected Student Outputs:</strong> <ul className="list-disc pl-5">{section.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>} />
+        </div>
+    );
+};
+
+
+const renderLessonPlan = (
+    lessonPlan: GenerateNVBiologyLessonOutput,
+    { selectedSections, editingSections, sectionContent, ...handlers }: any
+) => {
+    const { onSectionSelect, onSectionEditToggle, onSaveSection, onCancelSection, onReviseSection, onSectionContentChange } = handlers;
+
+    const sections = [
+        { key: 'lessonOverview', title: 'I. Lesson Overview', Component: LessonOverviewSection, data: lessonPlan.lessonOverview },
+        { key: 'doNow', title: 'B. DO NOW', Component: DoNowSection, data: lessonPlan.doNow },
+        { key: 'miniLesson', title: 'C. Mini-Lesson', Component: MiniLessonSection, data: lessonPlan.miniLesson },
+        // ... Add other sections similarly
+    ];
+
+    const handleContentChange = (sectionKey: string) => (fieldKey: string, newValue: string) => {
+        onSectionContentChange(sectionKey, { ...sectionContent[sectionKey], [fieldKey]: newValue });
+    };
+
+    return (
+        <div>
+            {sections.map(({ key, title, Component, data }) => (
+                <LessonSection
+                    key={key}
+                    sectionKey={key}
+                    title={title}
+                    isSelected={selectedSections.includes(key)}
+                    isEditing={editingSections.includes(key)}
+                    onSelect={onSectionSelect}
+                    onEditToggle={onSectionEditToggle}
+                    onSave={onSaveSection}
+                    onCancel={onCancelSection}
+                    onRevise={onReviseSection}
+                >
+                    <Component
+                        section={sectionContent[key] || data}
+                        isEditing={editingSections.includes(key)}
+                        onContentChange={handleContentChange(key)}
+                    />
+                </LessonSection>
+            ))}
+        </div>
+    );
+};
+
+// =================================================================
+// Worksheet Rendering
+// =================================================================
+
+const renderWorksheetHeader = () => (
+    <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
+        <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
+            <label className="font-semibold whitespace-nowrap">Name:</label>
+            <div className="flex-grow border-b border-foreground/50 w-full"></div>
+        </div>
+        <div className="flex items-end space-x-2">
+            <label className="font-semibold">Date:</label>
+            <div className="flex-grow border-b border-foreground/50"></div>
+        </div>
+        <div className="flex items-end space-x-2">
+            <label className="font-semibold">Period:</label>
+            <div className="flex-grow border-b border-foreground/50"></div>
+        </div>
+    </header>
+);
 
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
@@ -566,14 +631,15 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 type StyledContentDisplayProps = {
     content: any | null;
     type: GeneratedContent['type'];
+    lessonPlanState?: any;
 };
 
-export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type, lessonPlanState }: StyledContentDisplayProps) {
     if (!content) return null;
     
     switch (type) {
         case 'Lesson Plan':
-            return renderLessonPlan(content);
+            return renderLessonPlan(content, lessonPlanState);
         case 'Worksheet':
             return renderWorksheet(content);
         case 'Teacher Coach':
