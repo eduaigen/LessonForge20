@@ -1,49 +1,30 @@
 
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, Loader2 } from 'lucide-react';
+import { Printer, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import StyledContentDisplay from './StyledContentDisplay';
 import { ScrollArea } from '../ui/scroll-area';
-import GeneratingAnimation from './GeneratingAnimation';
-import * as htmlToText from 'html-to-text';
-import type { GeneratedContent, ToolName } from '../generators/NVBiologyGenerator';
+import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 type CollapsibleSectionProps = {
   title: string;
   children: React.ReactNode;
-  contentItem: GeneratedContent; // Pass the whole content item
-  onGenerateQuestions?: (articleContent: string) => void;
-  isGeneratingQuestions?: boolean;
+  contentItem: GeneratedContent; 
 };
 
-const extractContentAsString = (children: React.ReactNode): string => {
-    if (!React.isValidElement(children) || children.type !== StyledContentDisplay) {
-        return '';
-    }
-    const contentProp = (children.props as any).content;
-
-    if (typeof contentProp === 'string') {
-        return contentProp;
-    }
-    
-    // For objects (like lesson plans, worksheets), stringify them to preserve structure.
-    if (typeof contentProp === 'object' && contentProp !== null) {
-        return JSON.stringify(contentProp, null, 2);
-    }
-
-    return '';
-};
-
-export default function CollapsibleSection({ title, children, contentItem, onGenerateQuestions, isGeneratingQuestions }: CollapsibleSectionProps) {
+const CollapsibleSection = React.forwardRef<HTMLDivElement, CollapsibleSectionProps>(
+    ({ title, children, contentItem }, ref) => {
     const { toast } = useToast();
     const contentRef = useRef<HTMLDivElement>(null);
+
+    // This exposes the inner contentRef to the parent component through the forwarded ref.
+    React.useImperativeHandle(ref, () => contentRef.current as HTMLDivElement);
 
     const handlePrint = () => {
         const printableContent = contentRef.current;
@@ -85,6 +66,7 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                 printWindow.document.write(`
                   <style>
                     @page {
+                      size: auto;
                       margin: 0;
                     }
                     @media print { 
@@ -133,15 +115,15 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
             const imgHeight = canvas.height;
             const ratio = imgWidth / imgHeight;
             const docWidth = pdfWidth - 20; // with margin
-            const docHeight = docWidth / ratio;
-            let heightLeft = docHeight;
+            let docHeight = docWidth / ratio;
+            let heightLeft = imgHeight * (docWidth / imgWidth);
             let position = 10; // top margin
     
             pdf.addImage(imgData, 'PNG', 10, position, docWidth, docHeight);
             heightLeft -= (pdfHeight - 20);
     
             while (heightLeft > 0) {
-              position = heightLeft - docHeight - 10; // next page top margin
+              position = - (imgHeight * (docWidth / imgWidth) - heightLeft) + 10;
               pdf.addPage();
               pdf.addImage(imgData, 'PNG', 10, position, docWidth, docHeight);
               heightLeft -= (pdfHeight - 20);
@@ -182,9 +164,7 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
             <AccordionContent>
                 <CardContent className="p-0">
                     <ScrollArea className="max-h-[800px] overflow-y-auto">
-                        <div ref={contentRef}>
-                            <div className="p-4">{children}</div>
-                        </div>
+                        <div ref={contentRef} className="p-4">{children}</div>
                     </ScrollArea>
                 </CardContent>
             </AccordionContent>
@@ -192,4 +172,8 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
       </Accordion>
     </Card>
   );
-}
+});
+
+CollapsibleSection.displayName = 'CollapsibleSection';
+
+export default CollapsibleSection;
