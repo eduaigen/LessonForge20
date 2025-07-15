@@ -20,25 +20,22 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Scaffold Tool' | 'Teacher Coach';
+export type ToolName = 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach';
 
 const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
-  { name: 'Worksheet', icon: <ScrollText className="h-5 w-5" />, disabled: false },
   { name: 'Reading Material', icon: <BookOpen className="h-5 w-5" />, disabled: false },
   { name: 'Study Sheet', icon: <FileQuestion className="h-5 w-5" />, disabled: false },
   { name: 'Question Cluster', icon: <FileQuestion className="h-5 w-5" />, disabled: false },
   { name: 'Slideshow Outline', icon: <Presentation className="h-5 w-5" />, disabled: false },
-  { name: 'Scaffold Tool', icon: <Accessibility className="h-5 w-5" />, disabled: false },
   { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
 ];
 
 type RightSidebarProps = {
   onToolClick: (toolName: ToolName) => void;
   isGenerating: boolean;
-  isWorksheetGenerated: boolean;
 };
 
-export default function RightSidebar({ onToolClick, isGenerating, isWorksheetGenerated }: RightSidebarProps) {
+export default function RightSidebar({ onToolClick, isGenerating }: RightSidebarProps) {
   const { toast } = useToast();
 
   const handleToolClick = (tool: (typeof tools)[0]) => {
@@ -54,7 +51,6 @@ export default function RightSidebar({ onToolClick, isGenerating, isWorksheetGen
   
   const getIsDisabled = (tool: (typeof tools)[0]) => {
     if (isGenerating) return true;
-    if (tool.name === 'Scaffold Tool' && !isWorksheetGenerated) return true;
     return tool.disabled;
   }
 
@@ -78,7 +74,6 @@ export default function RightSidebar({ onToolClick, isGenerating, isWorksheetGen
               </TooltipTrigger>
               <TooltipContent side="left">
                 <p>{tool.name}</p>
-                 {tool.name === 'Scaffold Tool' && !isWorksheetGenerated && <p className="text-xs text-muted-foreground">(Requires Worksheet)</p>}
               </TooltipContent>
             </Tooltip>
           ))}

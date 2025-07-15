@@ -15,11 +15,9 @@ import { Loader2, Leaf, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
-import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
-import { scaffoldWorksheet } from '@/ai/flows/scaffold-worksheet';
 import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
 import { generateStudySheet } from '@/ai/flows/study-sheet-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
@@ -43,7 +41,7 @@ type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan' | 'Reading Material';
+  type: ToolName | 'Lesson Plan';
 };
 
 const SubscriptionPrompt = () => (
@@ -78,8 +76,6 @@ const GeneratorContent = () => {
     const lessonSection = generatedSections.find(s => s.type === 'Lesson Plan');
     return (lessonSection?.content as GenerateNVBiologyLessonOutput) || null;
   }, [generatedSections]);
-
-  const isWorksheetGenerated = useMemo(() => generatedSections.some(s => s.type === 'Worksheet'), [generatedSections]);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -143,7 +139,7 @@ const GeneratorContent = () => {
     }
 
     const title = toolName;
-    if (generatedSections.some(sec => sec.title === title) && toolName !== 'Scaffold Tool') {
+    if (generatedSections.some(sec => sec.title === title)) {
         toast({ title: "Already Generated", description: `A ${title} has already been generated.` });
         return;
     }
@@ -154,10 +150,7 @@ const GeneratorContent = () => {
         let result: any;
         let contentType: GeneratedContent['type'] = toolName;
 
-        if (toolName === 'Worksheet') {
-            result = await generateWorksheet(lessonPlan);
-            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
-        } else if (toolName === 'Reading Material') {
+        if (toolName === 'Reading Material') {
             result = await generateReadingMaterial({
                 topic: lessonPlan.lessonOverview.topic,
                 gradeLevel: '10th',
@@ -171,19 +164,6 @@ const GeneratorContent = () => {
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
             setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
-        } else if (toolName === 'Scaffold Tool') {
-            const originalWorksheetSection = generatedSections.find(s => s.type === 'Worksheet');
-            if (!originalWorksheetSection) {
-                toast({ title: "Worksheet Required", description: "Please generate a worksheet before using the scaffold tool.", variant: "destructive" });
-                setIsToolLoading(null);
-                return;
-            }
-            result = await scaffoldWorksheet({ worksheetJson: JSON.stringify(originalWorksheetSection.content) });
-             setGeneratedSections(prev => prev.map(sec => 
-                sec.type === 'Worksheet' 
-                    ? { ...sec, title: 'Scaffolded Worksheet', content: result }
-                    : sec
-            ));
         } else if (toolName === 'Question Cluster') {
             result = await generateQuestionCluster({
                 lessonTopic: lessonPlan.lessonOverview.topic,
@@ -353,7 +333,7 @@ const GeneratorContent = () => {
 
       </div>
 
-      {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} isWorksheetGenerated={isWorksheetGenerated} />}
+      {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} />}
     </div>
   );
 }
