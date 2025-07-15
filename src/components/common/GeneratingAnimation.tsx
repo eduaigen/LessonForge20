@@ -39,12 +39,12 @@ export default function GeneratingAnimation() {
         <h3 className="text-xl font-headline font-semibold text-primary animate-pulse">
           Generating Content, {user?.name || 'Educator'}...
         </h3>
-        <div className="h-6 mt-2 relative w-full overflow-hidden">
+        <div className="min-h-[2rem] mt-2 relative w-full overflow-hidden flex items-center justify-center">
            <div
             key={currentMessageIndex}
             className="absolute inset-0 flex items-center justify-center animate-message-fade"
             >
-                <p className="text-sm text-muted-foreground italic">
+                <p className="text-sm text-muted-foreground italic px-4">
                     "{messages[currentMessageIndex]}"
                 </p>
            </div>
