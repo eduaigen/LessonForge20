@@ -17,6 +17,7 @@ import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
+import { type ToolName } from './RightSidebar';
 
 // This component now intelligently decides how to render content.
 
@@ -564,66 +565,37 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 
 type StyledContentDisplayProps = {
     content: any | null;
+    type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
 };
 
-export default function StyledContentDisplay({ content }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
     
-    const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
-    const isCoachingObject = typeof content === 'object' && content !== null && content.doNow && 'pedagogicalRationale' in content.doNow;
-    const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
-    const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
-    const isStudySheetObject = typeof content === 'object' && content !== null && 'keyConcepts' in content;
-    const isWorksheetObject = typeof content === 'object' && content !== null && 'header' in content && 'doNow' in content;
-    const isReadingMaterialObject = typeof content === 'object' && content !== null && 'articleContent' in content && 'questionCluster' in content;
-
-    if (isLessonPlanObject) {
-      return renderLessonPlan(content);
+    switch (type) {
+        case 'Lesson Plan':
+            return renderLessonPlan(content);
+        case 'Worksheet':
+            return renderWorksheet(content);
+        case 'Teacher Coach':
+            return renderCoachingAdvice(content);
+        case 'Slideshow Outline':
+            return renderSlideshowOutline(content);
+        case 'Question Cluster':
+            return renderQuestionCluster(content);
+        case 'Study Sheet':
+            return renderStudySheet(content);
+        case 'Reading Material':
+            return <ReadingMaterialDisplay content={content} />;
+        default:
+             // Try to stringify if it's an unrecognized object, for debugging.
+            if (typeof content === 'object' && content !== null) {
+                try {
+                    const jsonString = JSON.stringify(content, null, 2);
+                    return <pre className="whitespace-pre-wrap text-xs bg-muted p-4 rounded-md"><code>{jsonString}</code></pre>
+                } catch (e) {
+                    // ignore
+                }
+            }
+            return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
     }
-
-    if (isWorksheetObject) {
-        return renderWorksheet(content);
-    }
-    
-    if (isCoachingObject) {
-        return renderCoachingAdvice(content);
-    }
-
-    if (isSlideshowObject) {
-        return renderSlideshowOutline(content);
-    }
-
-    if (isQuestionClusterObject) {
-        return renderQuestionCluster(content);
-    }
-
-     if (isStudySheetObject) {
-        return renderStudySheet(content);
-    }
-    
-    if (isReadingMaterialObject) {
-        return <ReadingMaterialDisplay content={content} />;
-    }
-
-    let markdownContent = '';
-    if (typeof content === 'string') {
-        markdownContent = content;
-    } 
-
-    if (markdownContent) {
-        return renderSimpleMarkdown(markdownContent);
-    }
-
-    // Try to stringify if it's an unrecognized object, for debugging.
-    if (typeof content === 'object' && content !== null) {
-        try {
-            const jsonString = JSON.stringify(content, null, 2);
-            return <pre className="whitespace-pre-wrap text-xs bg-muted p-4 rounded-md"><code>{jsonString}</code></pre>
-        } catch (e) {
-            // ignore
-        }
-    }
-
-
-    return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
 }

@@ -334,9 +334,9 @@ const GeneratorContent = () => {
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-                Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
             </AlertDialogDescription>
-            <div className="text-sm text-muted-foreground pt-2 text-left">
+            <div className="text-sm text-muted-foreground pt-4 text-left">
                 <p>Here are the available tools:</p>
                 <ul className="list-disc pl-5 mt-2 space-y-2">
                     <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
@@ -513,7 +513,7 @@ const GeneratorContent = () => {
 
           {generatedSections.map(section => (
             <CollapsibleSection key={section.id} ref={sectionRefs[section.id]} title={section.title} contentItem={section}>
-                <StyledContentDisplay content={section.content} />
+                <StyledContentDisplay content={section.content} type={section.type} />
             </CollapsibleSection>
           ))}
 
