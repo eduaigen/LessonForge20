@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   output: { schema: ScaffoldWorksheetOutputSchema },
   prompt: `You are an expert instructional designer specializing in creating accessible materials for English Language Learners (ELLs) and Students with Disabilities (SWDs).
 
-Your task is to take the following student worksheet, provided as a JSON object, and regenerate it with built-in scaffolds. Do not change the core activities, but enhance them to be more accessible.
+Your task is to take the following student worksheet, provided as a JSON string, and regenerate it as a structured JSON object with built-in scaffolds. Do not change the core activities, but enhance them to be more accessible.
 
 **Original Worksheet JSON:**
 ---
@@ -26,7 +26,7 @@ Your task is to take the following student worksheet, provided as a JSON object,
 ---
 
 **Scaffolding Instructions:**
-1.  **Preserve JSON Structure:** You MUST return a JSON object with the exact same structure as the input.
+1.  **Return Structured JSON:** You MUST return a structured JSON object that conforms to the output schema. Do not return a string.
 2.  **Simplify Language:** Review all string values (instructions, questions, etc.). Rephrase complex sentences into simpler, more direct language where possible without losing academic rigor.
 3.  **Add Sentence Starters:** For all open-ended questions, short responses, and reasoning prompts (like in a CER), provide sentence starters or frames in a logical place.
     *   Example: For a question like "Explain your reasoning," modify the field to include something like: "Explain your reasoning. You can start with: 'I think this because... The evidence that supports my idea is...'"
@@ -37,7 +37,7 @@ Your task is to take the following student worksheet, provided as a JSON object,
     *   Example: "[Visual Aid: A simple diagram showing the flow of energy from the sun to plants.]"
 7.  **Format for Clarity:** Use Markdown within the JSON string values (bolding, italics, lists) to make the worksheet easy to navigate.
 
-Generate the full, scaffolded version of the worksheet as a JSON object.`,
+Generate the full, scaffolded version of the worksheet as a structured JSON object.`,
 });
 
 const scaffoldWorksheetFlow = ai.defineFlow(
