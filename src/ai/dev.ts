@@ -12,6 +12,5 @@ export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
 export * from './flows/slideshow-outline-generator';
 export * from './flows/question-cluster-generator';
-export * from './flows/translate-content';
 export * from './flows/study-sheet-generator';
 export * from './flows/worksheet-generator';

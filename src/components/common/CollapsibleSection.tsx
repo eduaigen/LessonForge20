@@ -5,11 +5,9 @@ import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, Languages, Loader2 } from 'lucide-react';
+import { Printer, Download, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { translateContent } from '@/ai/flows/translate-content';
 import StyledContentDisplay from './StyledContentDisplay';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { ScrollArea } from '../ui/scroll-area';
 import GeneratingAnimation from './GeneratingAnimation';
 import * as htmlToText from 'html-to-text';
@@ -24,14 +22,6 @@ type CollapsibleSectionProps = {
   onGenerateQuestions?: (articleContent: string) => void;
   isGeneratingQuestions?: boolean;
 };
-
-const supportedLanguages = [
-    { value: 'Spanish', label: 'Spanish' },
-    { value: 'French', label: 'French' },
-    { value: 'Haitian Creole', label: 'Haitian Creole' },
-    { value: 'Bengali', label: 'Bengali' },
-    { value: 'Mandarin', label: 'Mandarin' },
-];
 
 const extractContentAsString = (children: React.ReactNode): string => {
     if (!React.isValidElement(children) || children.type !== StyledContentDisplay) {
@@ -53,10 +43,6 @@ const extractContentAsString = (children: React.ReactNode): string => {
 
 export default function CollapsibleSection({ title, children, contentItem, onGenerateQuestions, isGeneratingQuestions }: CollapsibleSectionProps) {
     const { toast } = useToast();
-    const [isTranslating, setIsTranslating] = useState(false);
-    const [translatedContent, setTranslatedContent] = useState<any | null>(null);
-    const [translatedLanguage, setTranslatedLanguage] = useState<string | null>(null);
-    const [selectedLanguage, setSelectedLanguage] = useState('Spanish');
     const contentRef = useRef<HTMLDivElement>(null);
 
     const handlePrint = () => {
@@ -173,41 +159,6 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
         }
       };
 
-    const handleTranslate = async () => {
-        setIsTranslating(true);
-        setTranslatedContent(null);
-        try {
-            const contentToTranslate = extractContentAsString(children);
-            
-            if (!contentToTranslate.trim()) {
-                throw new Error("Could not extract content for translation.");
-            }
-
-            const result = await translateContent({ content: contentToTranslate, targetLanguage: selectedLanguage });
-            const parsedResult = JSON.parse(result.translatedContent);
-            setTranslatedContent(parsedResult);
-            setTranslatedLanguage(selectedLanguage);
-
-        } catch (error) {
-            console.error("Translation failed:", error);
-            let description = 'An error occurred while translating the content. Please try again.';
-            if (error instanceof Error) {
-                if (error.message.includes("JSON")) {
-                    description = "The AI returned an invalid format for translation. Please try again.";
-                } else {
-                    description = error.message;
-                }
-            }
-            toast({
-                title: "Translation Failed",
-                description: description,
-                variant: "destructive",
-            });
-        } finally {
-            setIsTranslating(false);
-        }
-    };
-
 
   return (
     <Card className="mt-6 shadow-md">
@@ -226,22 +177,6 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
                     </Button>
-                    <div className="flex items-center gap-1">
-                        <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                            <SelectTrigger className="w-[150px]" title="Select Language">
-                                <SelectValue placeholder="Language" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {supportedLanguages.map(lang => (
-                                    <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <Button variant="outline" onClick={handleTranslate} disabled={isTranslating} title="Translate">
-                            {isTranslating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Languages className="h-4 w-4" />}
-                            <span className="sr-only">Translate</span>
-                        </Button>
-                    </div>
                 </div>
             </CardHeader>
             <AccordionContent>
@@ -249,13 +184,6 @@ export default function CollapsibleSection({ title, children, contentItem, onGen
                     <ScrollArea className="max-h-[800px] overflow-y-auto">
                         <div ref={contentRef}>
                             <div className="p-4">{children}</div>
-                            {isTranslating && <GeneratingAnimation />}
-                            {translatedContent && (
-                                <div className="p-4 border-t-2 border-primary/20">
-                                    <h3 className="text-lg font-bold font-headline mb-4 text-primary">{translatedLanguage} Translation</h3>
-                                    <StyledContentDisplay content={translatedContent} />
-                                </div>
-                            )}
                         </div>
                     </ScrollArea>
                 </CardContent>
