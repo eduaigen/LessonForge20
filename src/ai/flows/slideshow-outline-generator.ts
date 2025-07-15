@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   output: { schema: SlideshowOutlineOutputSchema },
   prompt: `You are an expert instructional designer who creates clear and engaging presentations for teachers. Your task is to convert the provided lesson plan JSON into a detailed, student-facing, slide-by-slide outline.
 
-**CRITICAL INSTRUCTION:** Your only source of information is the provided lesson plan JSON.
+**CRITICAL INSTRUCTION:** Your only source of information is the provided lesson plan JSON. Do not include any "teacherActions" or "sampleScript" content.
 
 **Lesson Plan Data:**
 \`\`\`json
@@ -27,17 +27,11 @@ const prompt = ai.definePrompt({
 
 **Instructions:**
 1.  **Analyze the Lesson Plan:** Read through each section of the lesson plan to extract all key student-facing information.
-2.  **EXCLUDE TEACHER ACTIONS:** Do not include any "teacherActions" or "sampleScript" content in the slides. The outline should be what a student would see on the screen.
-3.  **Create a Comprehensive Slide for Each Key Section:** Generate a logical sequence of slides that a teacher could use for their presentation. Follow the 5E model structure.
-4.  **Summarize and Embed Content:** For each slide, create a clear title and bullet points summarizing the key information, or student activities.
-5.  **Embed All Student-Facing Materials:** You MUST embed all relevant materials directly into the slide content. This includes:
-    *   The full text of the 'miniLesson.readingPassage'.
-    *   All 'conceptCheckQuestions' and 'checkFoUnderstanding' questions.
-    *   The full 'doNow.question', 'independentPractice.taskPrompt', and 'closure.exitTicketQuestion'.
-    *   Key vocabulary terms and definitions.
-6.  **FORMAT DATA TABLES AS MARKDOWN:** If the 'guidedPractice' or 'independentPractice' sections contain a 'dataTable' or 'taskData', you MUST reformat it into a proper Markdown table within the slide content. The table should have headers and rows that match the source data exactly.
-7.  **Extract Key Information:** Pull out essential elements like the Aim/Essential Question, objectives, and vocabulary to feature on their own dedicated slides near the beginning of the presentation.
-8.  **Be Thorough:** The goal is a comprehensive outline that a teacher can use directly. Do not omit details.
+2.  **Create a Comprehensive Slide for Each Key Section:** Generate a logical sequence of slides that a teacher could use for their presentation. Follow the 5E model structure.
+3.  **Summarize and Embed Content:** For each slide, create a clear title and bullet points summarizing the key information, student activities, and core concepts.
+4.  **Embed All Questions:** You MUST embed all student-facing questions directly into the slide content. This includes the 'doNow.question', all 'conceptCheckQuestions', all 'checkFoUnderstanding' questions, the 'independentPractice.taskPrompt', and the 'closure.exitTicketQuestion'.
+5.  **Handle Data Tables as Notes:** If the 'guidedPractice' or 'independentPractice' sections contain a 'dataTable' or 'taskData', DO NOT copy the table. Instead, insert a placeholder note like: "[Teacher Note: Insert data table from lesson plan here.]"
+6.  **Extract Key Information:** Pull out essential elements like the Aim/Essential Question, objectives, and vocabulary to feature on their own dedicated slides near the beginning of the presentation.
 
 **Example Slide Structure:**
 - Slide 1: Title Slide (Lesson Title from lessonOverview)
@@ -46,7 +40,7 @@ const prompt = ai.definePrompt({
 - Slide 4: Mini-Lesson: Reading Passage (Full text of the passage)
 - Slide 5: Mini-Lesson: Key Concepts & Diagram (Summary of concepts and diagram description)
 - Slide 6: Mini-Lesson: Concept Check Questions (All questions listed)
-- Slide 7: Guided Practice: Activity & Data (Instructions and the full data table content **formatted as a Markdown table**.)
+- Slide 7: Guided Practice: Activity & Data (Instructions and a note like "[Teacher Note: Insert data table from lesson plan here.]")
 - ...and so on for all sections of the lesson plan.
 
 Generate a complete and detailed slideshow outline based on these instructions.`,
