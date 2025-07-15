@@ -65,6 +65,37 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 210 40% 98%;
   }
+
+  html.high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 0 0% 13%;
+    --muted-foreground: 0 0% 80%;
+
+    --accent: 60 100% 50%; /* Bright Yellow */
+    --accent-foreground: 0 0% 0%;
+    
+    --border: 0 0% 100%;
+    --input: 0 0% 13%;
+    --ring: 60 100% 50%;
+  }
+
+  html.highlight-links a {
+    @apply bg-yellow-300 text-black px-1 rounded;
+  }
 }
 
 @layer base {

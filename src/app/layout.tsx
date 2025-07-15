@@ -8,6 +8,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { AppHeader } from '@/components/common/AppHeader';
 import { Footer } from '@/components/common/Footer';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import AccessibilityWidget from '@/components/common/AccessibilityWidget';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
+          <AccessibilityWidget />
           <Toaster />
         </AuthProvider>
       </body>
