@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -83,6 +83,7 @@ const GeneratorContent = () => {
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
+  const [isHighlightingTools, setIsHighlightingTools] = useState(false);
   
   const lessonPlan = useMemo(() => {
     const lessonSection = generatedSections.find(s => s.type === 'Lesson Plan');
@@ -116,6 +117,23 @@ const GeneratorContent = () => {
     const topicData = unitData.topics[selectedTopic as keyof typeof unitData.topics];
     return topicData ? topicData.lessons : [];
   }, [selectedUnit, selectedTopic]);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (isHighlightingTools) {
+      timeoutId = setTimeout(() => {
+        setIsHighlightingTools(false);
+      }, 10000); // Highlight for 10 seconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isHighlightingTools]);
+
+  const handleDialogClose = (open: boolean) => {
+    setIsToolsInfoDialogOpen(open);
+    if (!open) {
+        setIsHighlightingTools(true);
+    }
+  }
 
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
@@ -197,7 +215,7 @@ const GeneratorContent = () => {
 
   return (
     <>
-      <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={setIsToolsInfoDialogOpen}>
+      <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
@@ -207,18 +225,20 @@ const GeneratorContent = () => {
             <AlertDialogDescription>
               Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
             </AlertDialogDescription>
-            <div className="text-sm text-muted-foreground">
-              <ul className="list-disc pl-5 mt-4 space-y-2 text-left">
-                <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
-                <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
-                <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
-                <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
-                <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
-              </ul>
+             <div className="text-sm text-muted-foreground pt-4">
+              <div className="text-left">
+                <ul className="list-disc pl-5 space-y-2">
+                    <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
+                    <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
+                    <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                    <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
+                    <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
+                    <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
+                </ul>
+              </div>
             </div>
           </AlertDialogHeader>
-          <AlertDialogAction onClick={() => setIsToolsInfoDialogOpen(false)}>
+          <AlertDialogAction onClick={() => handleDialogClose(false)}>
             Got it, thanks!
           </AlertDialogAction>
         </AlertDialogContent>
@@ -373,7 +393,7 @@ const GeneratorContent = () => {
 
         </div>
 
-        {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} />}
+        {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} isHighlighting={isHighlightingTools} />}
       </div>
     </>
   );

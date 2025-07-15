@@ -216,4 +216,17 @@
   .animate-message-fade {
     animation: message-fade-in-out 5s ease-in-out forwards;
   }
+
+  @keyframes temporary-glow {
+    0%, 100% {
+        box-shadow: 0 0 15px 5px hsl(var(--accent) / 0.5);
+    }
+    50% {
+        box-shadow: 0 0 25px 10px hsl(var(--accent) / 0.7);
+    }
+  }
+
+  .animate-temporary-glow {
+    animation: temporary-glow 1.5s ease-in-out infinite;
+  }
 }

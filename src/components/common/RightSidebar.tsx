@@ -19,6 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach';
 
@@ -34,9 +35,10 @@ const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
 type RightSidebarProps = {
   onToolClick: (toolName: ToolName) => void;
   isGenerating: boolean;
+  isHighlighting: boolean;
 };
 
-export default function RightSidebar({ onToolClick, isGenerating }: RightSidebarProps) {
+export default function RightSidebar({ onToolClick, isGenerating, isHighlighting }: RightSidebarProps) {
   const { toast } = useToast();
 
   const handleToolClick = (tool: (typeof tools)[0]) => {
@@ -58,7 +60,10 @@ export default function RightSidebar({ onToolClick, isGenerating }: RightSidebar
   return (
     <aside className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
        <TooltipProvider>
-        <div className="flex flex-col gap-2 p-2 bg-background/80 backdrop-blur-sm border rounded-lg shadow-lg">
+        <div className={cn(
+            "flex flex-col gap-2 p-2 bg-background/80 backdrop-blur-sm border rounded-lg shadow-lg transition-all duration-300",
+            isHighlighting && "animate-temporary-glow"
+        )}>
           {tools.map((tool) => (
             <Tooltip key={tool.name} delayDuration={0}>
               <TooltipTrigger asChild>
