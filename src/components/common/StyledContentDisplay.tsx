@@ -433,11 +433,8 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
         </section>
         <section className="mb-6">
           <h2>Stimulus Material</h2>
-          <h4>Passage</h4>
-          <p>{cluster.stimulus.passage}</p>
           <div className="my-4">
-            <h4>Visual</h4>
-            {renderSimpleMarkdown(cluster.stimulus.visual)}
+             {renderTableFromObject(cluster.stimulus.visual)}
           </div>
         </section>
         <section className="mb-6">

@@ -31,7 +31,7 @@ const prompt = ai.definePrompt({
 3.  **Summarize and Embed Content:** For each slide, create a clear title and bullet points summarizing the key information, teacher actions, or student activities.
 4.  **Embed All Materials:** You MUST embed all relevant materials directly into the slide content. This includes:
     *   The full text of the 'miniLesson.readingPassage'.
-    *   A Markdown version of any 'guidedPractice.dataTable' or 'independentPractice.taskData'.
+    *   A Markdown version of any 'guidedPractice.dataTable' or 'independentPractice.taskData'. **This must be formatted as a valid Markdown table so it can be rendered as HTML.**
     *   All 'conceptCheckQuestions' and 'checkFoUnderstanding' questions.
     *   The full 'doNow.question', 'independentPractice.taskPrompt', and 'closure.exitTicketQuestion'.
     *   Key vocabulary terms and definitions.

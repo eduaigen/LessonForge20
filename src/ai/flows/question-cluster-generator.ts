@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow for generating NGSS-style question clusters.
@@ -25,10 +26,9 @@ Lesson Objective: {{{lessonObjective}}}
 ---
 
 **Instructions:**
-1.  **Develop a Phenomenon:** Create a compelling, real-world phenomenon related to the lesson topic. This should be a 1-2 sentence description.
+1.  **Develop a Phenomenon:** Create a compelling, real-world phenomenon related to the lesson topic. This should be an informative passage (150-200 words) that provides background information.
 2.  **Create Stimulus Material:**
-    *   **Passage:** Write an informative passage (150-200 words) that provides background information on the phenomenon.
-    *   **Visual:** Create a relevant data table that students will need to interpret. The data must be directly related to the phenomenon and passage. **The data table must be formatted as a Markdown table.**
+    *   **Visual Data Table:** Create a relevant data table that students will need to interpret. The data must be directly related to the phenomenon and passage. **You must format this as a structured JSON object with a 'title', 'headers' array, and 'rows' array of arrays.**
 3.  **Generate a 6-Question Cluster:** Based on the stimulus material, create exactly six questions that align with different cognitive tasks.
 
     *   **Multiple Choice Question 1:** A straightforward comprehension or identification question based on the stimulus. Provide 4 answer choices.
