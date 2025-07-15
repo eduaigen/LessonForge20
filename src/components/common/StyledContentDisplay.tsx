@@ -20,6 +20,24 @@ import GeneratingAnimation from './GeneratingAnimation';
 
 // This component now intelligently decides how to render content.
 
+const renderWorksheetHeader = () => (
+    <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
+        <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
+            <label className="font-semibold whitespace-nowrap">Name:</label>
+            <div className="flex-grow border-b border-foreground/50 w-full"></div>
+        </div>
+        <div className="flex items-end space-x-2">
+            <label className="font-semibold">Date:</label>
+            <div className="flex-grow border-b border-foreground/50"></div>
+        </div>
+        <div className="flex items-end space-x-2">
+            <label className="font-semibold">Period:</label>
+            <div className="flex-grow border-b border-foreground/50"></div>
+        </div>
+    </header>
+);
+
+
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: string[][] }) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
     return (
@@ -220,20 +238,7 @@ const renderLessonPlan = (lessonPlan: any) => (
 
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
-        <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
-            <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
-                <label className="font-semibold whitespace-nowrap">Name:</label>
-                <div className="flex-grow border-b border-foreground/50 w-full"></div>
-            </div>
-             <div className="flex items-end space-x-2">
-                <label className="font-semibold">Date:</label>
-                <div className="flex-grow border-b border-foreground/50"></div>
-            </div>
-             <div className="flex items-end space-x-2">
-                <label className="font-semibold">Period:</label>
-                <div className="flex-grow border-b border-foreground/50"></div>
-            </div>
-        </header>
+        {renderWorksheetHeader()}
 
         <p className="italic text-muted-foreground mb-6">{worksheet.introduction}</p>
 
@@ -427,6 +432,7 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
 const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     return (
       <div className="document-view">
+        {renderWorksheetHeader()}
         <section className="mb-6">
           <h2>Phenomenon</h2>
           <p className="italic">{cluster.phenomenon}</p>
@@ -544,6 +550,7 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 
     return (
         <div className="document-view">
+            {renderWorksheetHeader()}
             {renderSimpleMarkdown(content.articleContent)}
 
             <div className="my-6 text-center">
