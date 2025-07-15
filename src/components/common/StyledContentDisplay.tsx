@@ -127,7 +127,9 @@ const renderLessonPlan = (lessonPlan: any) => (
         {lessonPlan.miniLesson.diagram && (
            <>
               <h4>Embedded Diagram</h4>
-              <div dangerouslySetInnerHTML={{ __html: lessonPlan.miniLesson.diagram }} className="my-4 flex justify-center" />
+              <blockquote className="border-l-4 border-primary pl-4 italic">
+                {lessonPlan.miniLesson.diagram}
+              </blockquote>
            </>
         )}
         <h4>Concept-Check Questions</h4>
