@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -29,6 +29,15 @@ import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -73,6 +82,7 @@ const GeneratorContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
+  const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   
   const lessonPlan = useMemo(() => {
     const lessonSection = generatedSections.find(s => s.type === 'Lesson Plan');
@@ -118,6 +128,7 @@ const GeneratorContent = () => {
         content: result,
         type: 'Lesson Plan',
       }]);
+      setIsToolsInfoDialogOpen(true);
     } catch (error) {
       console.error('Lesson generation failed:', error);
       toast({
@@ -185,157 +196,184 @@ const GeneratorContent = () => {
   };
 
   return (
-    <div className="relative grid grid-cols-1 lg:grid-cols-1 gap-8">
-      <div className="flex-grow">
-        <Card className="w-full shadow-lg">
-            <CardHeader>
-                <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Leaf className="h-6 w-6" />
-                </div>
-                <div>
-                    <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
-                    <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
-                </div>
-                </div>
-            </CardHeader>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
-                <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                        control={form.control}
-                        name="unit"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Unit</FormLabel>
-                            <Select onValueChange={(value) => {
-                                field.onChange(value);
-                                form.setValue('topic', '');
-                                form.setValue('lesson', '');
-                            }} defaultValue={field.value}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select a unit" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                {units.map((unit) => (
-                                    <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                                ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                        control={form.control}
-                        name="topic"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Topic</FormLabel>
-                            <Select onValueChange={(value) => {
-                                field.onChange(value);
-                                form.setValue('lesson', '');
-                            }} value={field.value} disabled={!selectedUnit}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select a topic" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                {topics.map((topic) => (
-                                    <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                                ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                    </div>
+    <>
+      <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={setIsToolsInfoDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Wand2 className="h-6 w-6 text-primary" />
+              Lesson Plan Generated! What's Next?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+              <ul className="list-disc pl-5 mt-4 space-y-2 text-left">
+                <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
+                <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
+                <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
+                <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
+                <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
+              </ul>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogAction onClick={() => setIsToolsInfoDialogOpen(false)}>
+            Got it, thanks!
+          </AlertDialogAction>
+        </AlertDialogContent>
+      </AlertDialog>
 
-                    {lessons && lessons.length > 0 && (
-                        <FormField
-                            control={form.control}
-                            name="lesson"
-                            render={({ field }) => (
-                                <FormItem className="space-y-3">
-                                <FormLabel>Lesson Objective</FormLabel>
-                                <FormControl>
-                                    <ScrollArea className="h-72 w-full rounded-md border p-4">
-                                        <RadioGroup
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                            className="flex flex-col space-y-1"
-                                        >
-                                            {lessons.map((lesson, index) => (
-                                            <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
-                                                <FormControl>
-                                                    <RadioGroupItem value={lesson.title} />
-                                                </FormControl>
-                                                <FormLabel className="font-normal w-full cursor-pointer">
-                                                    <p className="font-semibold">{lesson.title}</p>
-                                                    <p className="text-sm text-muted-foreground">{lesson.objective}</p>
-                                                </FormLabel>
-                                            </FormItem>
-                                            ))}
-                                        </RadioGroup>
-                                    </ScrollArea>
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    )}
-                    
-                    <FormField
-                        control={form.control}
-                        name="additionalInfo"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Additional Information (Optional)</FormLabel>
-                            <FormControl>
-                                <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </CardContent>
-                <CardFooter>
-                    <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    {isLoading ? 'Generating Lesson...' : 'Generate Lesson'}
-                    </Button>
-                </CardFooter>
-                </form>
-            </Form>
-        </Card>
-        
-        {isLoading && (
-            <div className="mt-8">
-                <GeneratingAnimation />
-            </div>
-        )}
+      <div className="relative grid grid-cols-1 lg:grid-cols-1 gap-8">
+        <div className="flex-grow">
+          <Card className="w-full shadow-lg">
+              <CardHeader>
+                  <div className="flex items-center gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Leaf className="h-6 w-6" />
+                  </div>
+                  <div>
+                      <CardTitle className="text-2xl font-headline">NV Biology Lesson Generator</CardTitle>
+                      <CardDescription>Create 5E model lesson plans aligned with the New Visions Biology curriculum.</CardDescription>
+                  </div>
+                  </div>
+              </CardHeader>
+              <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
+                  <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                          control={form.control}
+                          name="unit"
+                          render={({ field }) => (
+                              <FormItem>
+                              <FormLabel>Unit</FormLabel>
+                              <Select onValueChange={(value) => {
+                                  field.onChange(value);
+                                  form.setValue('topic', '');
+                                  form.setValue('lesson', '');
+                              }} defaultValue={field.value}>
+                                  <FormControl>
+                                  <SelectTrigger>
+                                      <SelectValue placeholder="Select a unit" />
+                                  </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                  {units.map((unit) => (
+                                      <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                                  ))}
+                                  </SelectContent>
+                              </Select>
+                              <FormMessage />
+                              </FormItem>
+                          )}
+                          />
+                          <FormField
+                          control={form.control}
+                          name="topic"
+                          render={({ field }) => (
+                              <FormItem>
+                              <FormLabel>Topic</FormLabel>
+                              <Select onValueChange={(value) => {
+                                  field.onChange(value);
+                                  form.setValue('lesson', '');
+                              }} value={field.value} disabled={!selectedUnit}>
+                                  <FormControl>
+                                  <SelectTrigger>
+                                      <SelectValue placeholder="Select a topic" />
+                                  </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                  {topics.map((topic) => (
+                                      <SelectItem key={topic} value={topic}>{topic}</SelectItem>
+                                  ))}
+                                  </SelectContent>
+                              </Select>
+                              <FormMessage />
+                              </FormItem>
+                          )}
+                          />
+                      </div>
 
-        {generatedSections.map(section => (
-            <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
-                 <StyledContentDisplay content={section.content} />
-            </CollapsibleSection>
-        ))}
+                      {lessons && lessons.length > 0 && (
+                          <FormField
+                              control={form.control}
+                              name="lesson"
+                              render={({ field }) => (
+                                  <FormItem className="space-y-3">
+                                  <FormLabel>Lesson Objective</FormLabel>
+                                  <FormControl>
+                                      <ScrollArea className="h-72 w-full rounded-md border p-4">
+                                          <RadioGroup
+                                              onValueChange={field.onChange}
+                                              defaultValue={field.value}
+                                              className="flex flex-col space-y-1"
+                                          >
+                                              {lessons.map((lesson, index) => (
+                                              <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
+                                                  <FormControl>
+                                                      <RadioGroupItem value={lesson.title} />
+                                                  </FormControl>
+                                                  <FormLabel className="font-normal w-full cursor-pointer">
+                                                      <p className="font-semibold">{lesson.title}</p>
+                                                      <p className="text-sm text-muted-foreground">{lesson.objective}</p>
+                                                  </FormLabel>
+                                              </FormItem>
+                                              ))}
+                                          </RadioGroup>
+                                      </ScrollArea>
+                                  </FormControl>
+                                  <FormMessage />
+                                  </FormItem>
+                              )}
+                          />
+                      )}
+                      
+                      <FormField
+                          control={form.control}
+                          name="additionalInfo"
+                          render={({ field }) => (
+                              <FormItem>
+                              <FormLabel>Additional Information (Optional)</FormLabel>
+                              <FormControl>
+                                  <Textarea placeholder="e.g., 'Focus on English Language Learners', 'Include a hands-on activity', 'Make it relevant to urban students'" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                              </FormItem>
+                          )}
+                      />
+                  </CardContent>
+                  <CardFooter>
+                      <Button type="submit" disabled={isLoading} className="w-full">
+                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {isLoading ? 'Generating Lesson...' : 'Generate Lesson'}
+                      </Button>
+                  </CardFooter>
+                  </form>
+              </Form>
+          </Card>
+          
+          {isLoading && (
+              <div className="mt-8">
+                  <GeneratingAnimation />
+              </div>
+          )}
 
-        {isToolLoading && (
-             <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
-                 <GeneratingAnimation />
-            </CollapsibleSection>
-        )}
+          {generatedSections.map(section => (
+              <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
+                  <StyledContentDisplay content={section.content} />
+              </CollapsibleSection>
+          ))}
 
+          {isToolLoading && (
+              <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+                  <GeneratingAnimation />
+              </CollapsibleSection>
+          )}
+
+        </div>
+
+        {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} />}
       </div>
-
-      {lessonPlan && <RightSidebar onToolClick={handleToolClick} isGenerating={!!isToolLoading} />}
-    </div>
+    </>
   );
 }
 
