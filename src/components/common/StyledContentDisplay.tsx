@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Markdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
@@ -9,6 +9,12 @@ import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-gene
 import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
 import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schemas';
 import type { WorksheetGeneratorOutput } from '@/ai/schemas/worksheet-generator-schemas';
+import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
+import { Button } from '../ui/button';
+import { Loader2 } from 'lucide-react';
+import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
+import { useToast } from '@/hooks/use-toast';
+import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 
 // This component now intelligently decides how to render content.
 
@@ -498,6 +504,60 @@ const renderStudySheet = (studySheet: StudySheetOutput) => (
     </div>
 );
 
+const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
+    const { toast } = useToast();
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [questions, setQuestions] = useState<ComprehensionQuestionOutput | null>(null);
+
+    const handleGenerateQuestions = async () => {
+        setIsGenerating(true);
+        setQuestions(null);
+        try {
+            const result = await generateComprehensionQuestions({ articleContent: content.articleContent });
+            setQuestions(result);
+        } catch (error) {
+            console.error("Question generation failed:", error);
+            toast({
+                title: "Question Generation Failed",
+                description: "An error occurred while generating questions. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+    return (
+        <div className="document-view">
+            {renderSimpleMarkdown(content.articleContent)}
+
+            <div className="my-6 text-center">
+                <Button onClick={handleGenerateQuestions} disabled={isGenerating}>
+                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    {isGenerating ? 'Generating Questions...' : 'Generate Questions'}
+                </Button>
+            </div>
+
+            {isGenerating && <div className="text-center my-4">Generating...</div>}
+            
+            {questions && (
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Comprehension Questions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ol className="list-decimal pl-5 space-y-2">
+                            {questions.questions.map((q, i) => (
+                                <li key={i}>{q}</li>
+                            ))}
+                        </ol>
+                    </CardContent>
+                </Card>
+            )}
+        </div>
+    );
+};
+
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -512,6 +572,7 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
     const isStudySheetObject = typeof content === 'object' && content !== null && 'keyConcepts' in content;
     const isWorksheetObject = typeof content === 'object' && content !== null && 'header' in content && 'doNow' in content;
+    const isReadingMaterialObject = typeof content === 'object' && content !== null && 'articleContent' in content && 'questionCluster' in content;
 
     if (isLessonPlanObject) {
       return renderLessonPlan(content);
@@ -536,21 +597,15 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
      if (isStudySheetObject) {
         return renderStudySheet(content);
     }
+    
+    if (isReadingMaterialObject) {
+        return <ReadingMaterialDisplay content={content} />;
+    }
 
     let markdownContent = '';
     if (typeof content === 'string') {
         markdownContent = content;
-    } else if (typeof content === 'object' && content !== null) {
-        // Fallback for any other object type (like a simple reading material object or worksheet)
-        if ('articleContent' in content) {
-            markdownContent = content.articleContent;
-        } else if ('worksheetContent' in content) {
-             // This is the old path for backward compatibility, should be phased out
-            markdownContent = content.worksheetContent;
-        } else if ('scaffoldedContent' in content) {
-            markdownContent = content.scaffoldedContent;
-        }
-    }
+    } 
 
     if (markdownContent) {
         return renderSimpleMarkdown(markdownContent);

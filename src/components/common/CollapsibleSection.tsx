@@ -13,10 +13,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ScrollArea } from '../ui/scroll-area';
 import GeneratingAnimation from './GeneratingAnimation';
 import * as htmlToText from 'html-to-text';
+import type { GeneratedContent, ToolName } from '../generators/NVBiologyGenerator';
 
 type CollapsibleSectionProps = {
   title: string;
   children: React.ReactNode;
+  contentItem: GeneratedContent; // Pass the whole content item
+  onGenerateQuestions?: (articleContent: string) => void;
+  isGeneratingQuestions?: boolean;
 };
 
 const supportedLanguages = [
@@ -45,7 +49,7 @@ const extractContentAsString = (children: React.ReactNode): string => {
     return '';
 };
 
-export default function CollapsibleSection({ title, children }: CollapsibleSectionProps) {
+export default function CollapsibleSection({ title, children, contentItem, onGenerateQuestions, isGeneratingQuestions }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const [isTranslating, setIsTranslating] = useState(false);
     const [translatedContent, setTranslatedContent] = useState<any | null>(null);

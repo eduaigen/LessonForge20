@@ -28,6 +28,7 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
+import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -38,11 +39,11 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-type GeneratedContent = {
+export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan';
+  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
 };
 
 const SubscriptionPrompt = () => (
@@ -161,7 +162,10 @@ const GeneratorContent = () => {
                 length: 'standard',
                 dokLevel: '1-2'
             });
+            // Note: The new flow for reading material doesn't add it to sections directly
+            // Instead, the display component will handle it.
             setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType }]);
+
         } else if (toolName === 'Teacher Coach') {
             result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
             setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
@@ -324,13 +328,13 @@ const GeneratorContent = () => {
         )}
 
         {generatedSections.map(section => (
-            <CollapsibleSection key={section.id} title={section.title}>
+            <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
                  <StyledContentDisplay content={section.content} />
             </CollapsibleSection>
         ))}
 
         {isToolLoading && (
-             <CollapsibleSection title={`Generating ${isToolLoading}...`}>
+             <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
                  <GeneratingAnimation />
             </CollapsibleSection>
         )}
