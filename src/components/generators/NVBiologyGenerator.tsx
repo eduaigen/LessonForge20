@@ -205,20 +205,18 @@ const GeneratorContent = () => {
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              <div>
-                <p>Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.</p>
-                <div >
-                  <ul className="list-disc pl-5 mt-4 space-y-2 text-left">
-                    <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
-                    <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
-                    <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                    <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
-                    <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
-                    <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
-                  </ul>
-                </div>
-              </div>
+              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
             </AlertDialogDescription>
+            <div className="text-sm text-muted-foreground">
+              <ul className="list-disc pl-5 mt-4 space-y-2 text-left">
+                <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
+                <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
+                <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
+                <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
+                <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
+              </ul>
+            </div>
           </AlertDialogHeader>
           <AlertDialogAction onClick={() => setIsToolsInfoDialogOpen(false)}>
             Got it, thanks!
