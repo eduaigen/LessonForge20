@@ -156,14 +156,7 @@ const GeneratorContent = () => {
             result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
             setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType }]);
         } else if (toolName === 'Reading Material') {
-            result = await generateReadingMaterial({
-                topic: lessonPlan.lessonOverview.topic,
-                gradeLevel: '10th',
-                length: 'standard',
-                dokLevel: '1-2'
-            });
-            // Note: The new flow for reading material doesn't add it to sections directly
-            // Instead, the display component will handle it.
+            result = await generateReadingMaterial(lessonPlan);
             setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType }]);
 
         } else if (toolName === 'Teacher Coach') {

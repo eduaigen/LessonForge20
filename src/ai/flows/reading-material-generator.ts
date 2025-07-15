@@ -1,41 +1,44 @@
 
 'use server';
 /**
- * @fileOverview An AI flow for generating educational reading material with analysis questions.
+ * @fileOverview An AI flow for generating educational reading material from a lesson plan.
  */
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
 import {
   ReadingMaterialInputSchema,
   ReadingMaterialOutputSchema,
+  PromptInputSchema,
   type ReadingMaterialInput,
   type ReadingMaterialOutput,
 } from '../schemas/reading-material-generator-schemas';
 
 const prompt = ai.definePrompt({
   name: 'readingMaterialGeneratorPrompt',
-  input: { schema: ReadingMaterialInputSchema },
+  input: { schema: PromptInputSchema },
   output: { schema: ReadingMaterialOutputSchema },
-  prompt: `You are an expert curriculum writer and subject matter expert. Your task is to write a high-quality, engaging, and informative article for a high school audience, and then generate a corresponding set of analysis questions based on that article.
+  prompt: `You are an expert curriculum writer and subject matter expert. Your task is to transform the provided lesson plan JSON into a high-quality, engaging, and informative article for a high school audience.
 
-**Topic:** {{{topic}}}
-**Target Grade Level:** {{{gradeLevel}}} grade
-**Article Length:** {{{length}}} (Standard: ~600 words, Simplified: ~400 words, Expanded: ~900 words)
-**Depth of Knowledge (DOK) Level:** {{{dokLevel}}}
+**CRITICAL INSTRUCTIONS:**
+1.  **USE ONLY THE LESSON PLAN:** Your ONLY source of information is the provided JSON lesson plan. Do not invent new content, topics, or data.
+2.  **SYNTHESIZE, DON'T JUST COPY:** Weave information from different parts of the lesson into a coherent narrative.
+3.  **STUDENT-FACING TONE:** Write in a style that is engaging and accessible for high school students.
+
+**Lesson Plan Data:**
+---
+{{{lessonPlanJson}}}
+---
 
 **Instructions:**
 
 **Part 1: Generate the Article**
-1.  **Generate a Compelling Title:** Create a title that is engaging and relevant to the topic.
-2.  **Write the Article:**
-    *   The article should be between 500-800 words for 'standard' length. Adjust word count for 'simplified' or 'expanded'.
-    *   The language and complexity must be appropriate for the specified grade level and DOK level.
-    *   Structure the article with a clear introduction, body paragraphs with supporting details, and a conclusion.
-    *   Use headings or subheadings to organize the content if appropriate.
-    *   Explain complex concepts clearly and provide relevant examples.
-    *   Ensure the content is factually accurate and aligned with NGSS standards where applicable.
+1.  **Derive the Title:** Create a title that is directly based on the 'lessonOverview.lesson' or 'lessonOverview.topic' from the JSON.
+2.  **Write the Article (approx. 500-600 words):**
+    *   **Introduction:** Start by using the 'lessonOverview.lessonSummary' and 'doNow.question' to frame the topic and engage the reader.
+    *   **Body Paragraphs:** Synthesize the core content from the 'miniLesson.readingPassage'. Explain the concepts described in the 'miniLesson.diagram' in clear text. Incorporate the key terms from 'lessonOverview.vocabulary', explaining them in context. Use information from the 'guidedPractice' and 'independentPractice' sections to provide examples or applications of the concepts.
+    *   **Conclusion:** Summarize the main points and connect back to the 'lessonOverview.aim' or 'lessonOverview.essentialQuestion'.
+    *   **Accuracy:** Ensure all content is factually accurate according to the information provided in the lesson plan JSON.
 
-**Part 2: Generate the Question Cluster**
+**Part 2: Generate the Initial Question Cluster**
 Based *only* on the article you just wrote, generate a 4-question cluster that assesses a student's understanding.
 
 1.  **Multiple Choice Question 1:** A straightforward comprehension question based on the article. Provide 4 answer choices.
@@ -52,7 +55,8 @@ const readingMaterialGeneratorFlow = ai.defineFlow(
     outputSchema: ReadingMaterialOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const lessonPlanJson = JSON.stringify(input, null, 2);
+    const { output } = await prompt({ lessonPlanJson });
     if (!output) {
       throw new Error('The AI failed to generate the reading material. Please try again.');
     }
