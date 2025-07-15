@@ -223,20 +223,20 @@ const GeneratorContent = () => {
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-                Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+              <div>Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.</div>
+              <div className="text-sm text-muted-foreground pt-4 text-left">
+                <p className="font-semibold text-foreground">Here are the available tools:</p>
+                <ul className="list-disc pl-5 mt-2 space-y-2">
+                    <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
+                    <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
+                    <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                    <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
+                    <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
+                    <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
+                </ul>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <div className="text-sm text-muted-foreground pt-4 text-left">
-            <p className="font-semibold text-foreground">Here are the available tools:</p>
-            <ul className="list-disc pl-5 mt-2 space-y-2">
-                <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
-                <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
-                <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
-                <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
-                <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
-            </ul>
-          </div>
           <AlertDialogFooter>
             <AlertDialogAction onClick={() => handleDialogClose(false)}>
               Got it, thanks!
