@@ -156,6 +156,7 @@ const GeneratorContent = () => {
 
         if (toolName === 'Worksheet') {
             result = await generateWorksheet(lessonPlan);
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial({
                 topic: lessonPlan.lessonOverview.topic,
@@ -163,33 +164,36 @@ const GeneratorContent = () => {
                 length: 'standard',
                 dokLevel: '1-2'
             });
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType }]);
         } else if (toolName === 'Teacher Coach') {
             result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
         } else if (toolName === 'Scaffold Tool') {
             const originalWorksheetSection = generatedSections.find(s => s.type === 'Worksheet');
-            if (!originalWorksheetSection || !originalWorksheetSection.content.worksheetContent) {
+            if (!originalWorksheetSection) {
                 toast({ title: "Worksheet Required", description: "Please generate a worksheet before using the scaffold tool.", variant: "destructive" });
                 setIsToolLoading(null);
                 return;
             }
-            result = await scaffoldWorksheet({ worksheetContent: originalWorksheetSection.content.worksheetContent });
+            result = await scaffoldWorksheet({ worksheetJson: JSON.stringify(originalWorksheetSection.content) });
+             setGeneratedSections(prev => prev.map(sec => 
+                sec.type === 'Worksheet' 
+                    ? { ...sec, title: 'Scaffolded Worksheet', content: result }
+                    : sec
+            ));
         } else if (toolName === 'Question Cluster') {
             result = await generateQuestionCluster({
                 lessonTopic: lessonPlan.lessonOverview.topic,
                 lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
             });
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
         } else if (toolName === 'Study Sheet') {
             result = await generateStudySheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            setGeneratedSections(prev => [...prev, { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType }]);
         }
-
-        setGeneratedSections(prev => [...prev, {
-            id: `${toolName}-${Date.now()}`,
-            title: toolName === 'Reading Material' ? result.title : title,
-            content: result,
-            type: contentType,
-        }]);
 
     } catch (error) {
         console.error(`${toolName} generation failed:`, error);

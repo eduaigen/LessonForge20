@@ -17,25 +17,26 @@ const prompt = ai.definePrompt({
   output: { schema: ScaffoldWorksheetOutputSchema },
   prompt: `You are an expert instructional designer specializing in creating accessible materials for English Language Learners (ELLs) and Students with Disabilities (SWDs).
 
-Your task is to take the following student worksheet, provided in Markdown format, and regenerate it with built-in scaffolds. Do not change the core activities, but enhance them to be more accessible.
+Your task is to take the following student worksheet, provided as a JSON object, and regenerate it with built-in scaffolds. Do not change the core activities, but enhance them to be more accessible.
 
-**Original Worksheet Content:**
+**Original Worksheet JSON:**
 ---
-{{{worksheetContent}}}
+{{{worksheetJson}}}
 ---
 
 **Scaffolding Instructions:**
-1.  **Maintain Structure:** Keep the original sections (Header, Aim, Do Now, Mini-Lesson, etc.) in the same order.
-2.  **Simplify Language:** Review all instructions and questions. Rephrase complex sentences into simpler, more direct language where possible without losing academic rigor.
-3.  **Add Sentence Starters:** For all open-ended questions, short responses, and reasoning prompts (like in a CER), provide sentence starters or frames.
-    *   Example: For "Explain your reasoning," add: "I think this because... The evidence that supports my idea is..."
-4.  **Chunk Instructions:** Break down multi-step instructions into numbered or bulleted lists.
-5.  **Define Key Vocabulary:** For key vocabulary sections, add a column or line for a Spanish translation. For other sections, if a key term is used, add its definition or a simple synonym in parentheses.
-6.  **Add Visual Cue Placeholders:** Where a concept is particularly abstract or complex (e.g., cell diagrams, feedback loops), insert a placeholder to indicate where a teacher could add a visual aid.
+1.  **Preserve JSON Structure:** You MUST return a JSON object with the exact same structure as the input.
+2.  **Simplify Language:** Review all string values (instructions, questions, etc.). Rephrase complex sentences into simpler, more direct language where possible without losing academic rigor.
+3.  **Add Sentence Starters:** For all open-ended questions, short responses, and reasoning prompts (like in a CER), provide sentence starters or frames in a logical place.
+    *   Example: For a question like "Explain your reasoning," modify the field to include something like: "Explain your reasoning. You can start with: 'I think this because... The evidence that supports my idea is...'"
+4.  **Chunk Instructions:** Break down multi-step instructions into numbered or bulleted lists within their respective JSON string values.
+5.  **Define Key Vocabulary:** For key vocabulary sections, add a Spanish translation to the definition string.
+    *   Example: "Photosynthesis: The process plants use to make food (Spanish: Fotosíntesis)."
+6.  **Add Visual Cue Placeholders:** Where a concept is particularly abstract or complex (e.g., cell diagrams, feedback loops), insert a placeholder in a relevant string field to indicate where a teacher could add a visual aid.
     *   Example: "[Visual Aid: A simple diagram showing the flow of energy from the sun to plants.]"
-7.  **Format for Clarity:** Use bolding, italics, and lists to make the worksheet easy to navigate. Ensure there is clear space for student responses.
+7.  **Format for Clarity:** Use Markdown within the JSON string values (bolding, italics, lists) to make the worksheet easy to navigate.
 
-Generate the full, scaffolded version of the worksheet in Markdown format.`,
+Generate the full, scaffolded version of the worksheet as a JSON object.`,
 });
 
 const scaffoldWorksheetFlow = ai.defineFlow(
