@@ -123,7 +123,7 @@ const renderLessonPlan = (lessonPlan: any) => (
         <h4>Expected Student Outputs</h4>
         <ul className="list-disc pl-5">{lessonPlan.miniLesson.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
         <h4>Embedded Reading Passage</h4>
-        <p>{lessonPlan.miniLesson.readingPassage}</p>
+        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: lessonPlan.miniLesson.readingPassage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
         {lessonPlan.miniLesson.diagram && (
            <>
               <h4>Embedded Diagram</h4>
@@ -393,13 +393,11 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
         return renderStudySheet(content);
     }
 
+    let markdownContent = '';
     if (typeof content === 'string') {
-        return renderSimpleMarkdown(content);
-    }
-
-    if (typeof content === 'object' && content !== null) {
+        markdownContent = content;
+    } else if (typeof content === 'object' && content !== null) {
         // Fallback for any other object type (like a simple reading material object or worksheet)
-        let markdownContent = '';
         if ('articleContent' in content) {
             markdownContent = content.articleContent;
         } else if ('worksheetContent' in content) {
@@ -407,23 +405,10 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
         } else if ('scaffoldedContent' in content) {
             markdownContent = content.scaffoldedContent;
         }
+    }
 
-        if (markdownContent) {
-            // New logic to find and render JSON tables within the markdown
-            const parts = markdownContent.split(/(\{\s*"title":\s*".*?",\s*"headers":\s*\[.*?\]\s*,\s*"rows":\s*\[.*?\]\s*\})/s);
-            return (
-                <div className="document-view">
-                    {parts.map((part, index) => {
-                        try {
-                            const tableData = JSON.parse(part);
-                            return <div key={index}>{renderTableFromObject(tableData)}</div>;
-                        } catch (e) {
-                            return <Markdown key={index}>{part}</Markdown>;
-                        }
-                    })}
-                </div>
-            );
-        }
+    if (markdownContent) {
+        return renderSimpleMarkdown(markdownContent);
     }
 
     return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
