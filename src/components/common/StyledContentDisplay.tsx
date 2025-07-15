@@ -8,7 +8,7 @@ import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-gen
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
 import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
 import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schemas';
-import type { WorksheetGeneratorOutput } from '@/ai/schemas/worksheet-generator-schemas';
+import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import { Button } from '../ui/button';
 import { Loader2 } from 'lucide-react';
@@ -216,12 +216,25 @@ const renderLessonPlan = (lessonPlan: any) => (
   </div>
 );
 
-const renderWorksheet = (worksheet: WorksheetGeneratorOutput) => (
+const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
-        <header className="mb-6 space-y-2">
-            <p>{worksheet.header.name}</p>
-            <p>{worksheet.header.class}</p>
-            <p>{worksheet.header.date}</p>
+        <header className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 border-b pb-4">
+            <div className="flex items-end space-x-2">
+                <label className="font-semibold">Name:</label>
+                <div className="flex-grow border-b border-foreground/50"></div>
+            </div>
+            <div className="flex items-end space-x-2">
+                <label className="font-semibold">Class:</label>
+                <div className="flex-grow border-b border-foreground/50"></div>
+            </div>
+            <div className="flex items-end space-x-2">
+                <label className="font-semibold">Date:</label>
+                <div className="flex-grow border-b border-foreground/50"></div>
+            </div>
+             <div className="flex items-end space-x-2">
+                <label className="font-semibold">Period:</label>
+                <div className="flex-grow border-b border-foreground/50"></div>
+            </div>
         </header>
 
         <p className="italic text-muted-foreground mb-6">{worksheet.introduction}</p>
