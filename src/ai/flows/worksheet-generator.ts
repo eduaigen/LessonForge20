@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
 
     *   **D. GUIDED PRACTICE / GROUP ACTIVITY:**
         *   Clearly state the instructions for the guided practice activity, taken from the lesson plan.
-        *   **CRITICAL (TABLES): For any "Embedded Data Table" or "taskData" table, you MUST convert the JSON object into a properly formatted, clean Markdown table. Include the title of the table as a header. Ensure the table is readable and correctly structured.**
+        *   **CRITICAL: For any "Embedded Data Table" from the lesson plan, you MUST convert the JSON object into a properly formatted, clean Markdown table. Include the title of the table as a header. Ensure the table is readable and correctly structured.**
 
     *   **E. CHECK FOR UNDERSTANDING (CFU):**
         *   Copy all "CFU Questions" (multiple choice and short response) from the lesson plan for the student to answer. Provide space for their responses.
