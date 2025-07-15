@@ -15,7 +15,7 @@ export const QuestionClusterOutputSchema = z.object({
   phenomenon: z.string().describe('A brief, compelling, real-world phenomenon.'),
   stimulus: z.object({
     passage: z.string().describe('A short passage providing context on the phenomenon.'),
-    visual: z.string().describe('A data table or SVG diagram for interpretation.'),
+    visual: z.string().describe('A data table for interpretation. This must be a Markdown formatted table.'),
   }),
   questions: z.object({
     mcq1: multipleChoiceQuestionSchema,

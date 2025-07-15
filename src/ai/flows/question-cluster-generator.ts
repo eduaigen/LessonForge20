@@ -16,7 +16,7 @@ const prompt = ai.definePrompt({
   output: { schema: QuestionClusterOutputSchema },
   prompt: `You are an expert in science assessment design, specializing in creating three-dimensional, NGSS-aligned question clusters.
 
-Your task is to generate a 6-question cluster based on the provided lesson plan topic. The cluster must be anchored in a real-world phenomenon and include stimulus material (a short passage and a data table or simple diagram).
+Your task is to generate a 6-question cluster based on the provided lesson plan topic. The cluster must be anchored in a real-world phenomenon and include stimulus material (a short passage and a data table).
 
 **Lesson Plan Context:**
 ---
@@ -28,7 +28,7 @@ Lesson Objective: {{{lessonObjective}}}
 1.  **Develop a Phenomenon:** Create a compelling, real-world phenomenon related to the lesson topic. This should be a 1-2 sentence description.
 2.  **Create Stimulus Material:**
     *   **Passage:** Write a short, informative passage (100-150 words) that provides background information on the phenomenon.
-    *   **Visual:** Create a relevant data table or a simple, well-labeled SVG diagram that students will need to interpret. The data or diagram must be directly related to the phenomenon and passage.
+    *   **Visual:** Create a relevant data table that students will need to interpret. The data must be directly related to the phenomenon and passage. **Do not generate a diagram.**
 3.  **Generate a 6-Question Cluster:** Based on the stimulus material, create exactly six questions that align with different cognitive tasks.
 
     *   **Multiple Choice Question 1:** A straightforward comprehension or identification question based on the stimulus. Provide 4 answer choices.
