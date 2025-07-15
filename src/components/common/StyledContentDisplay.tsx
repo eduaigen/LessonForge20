@@ -17,6 +17,7 @@ import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
+import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 
 // This component now intelligently decides how to render content.
 
@@ -564,36 +565,33 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 
 type StyledContentDisplayProps = {
     content: any | null;
+    type: GeneratedContent['type'];
 };
 
-export default function StyledContentDisplay({ content }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
     
-    // Heuristic-based detection to render the correct component
-    if ('lessonOverview' in content) {
-        return renderLessonPlan(content);
-    } else if ('header' in content && 'doNow' in content) {
-        return renderWorksheet(content);
-    } else if ('lessonTitle' in content && 'doNow' in content && 'pedagogicalRationale' in content.doNow) {
-        return renderCoachingAdvice(content);
-    } else if ('slides' in content) {
-        return renderSlideshowOutline(content);
-    } else if ('phenomenon' in content && 'stimulus' in content) {
-        return renderQuestionCluster(content);
-    } else if ('vocabulary' in content && 'keyConcepts' in content) {
-        return renderStudySheet(content);
-    } else if ('articleContent' in content) {
-        return <ReadingMaterialDisplay content={content} />;
-    } else {
-        // Try to stringify if it's an unrecognized object, for debugging.
-        if (typeof content === 'object' && content !== null) {
+    switch (type) {
+        case 'Lesson Plan':
+            return renderLessonPlan(content);
+        case 'Worksheet':
+            return renderWorksheet(content);
+        case 'Teacher Coach':
+            return renderCoachingAdvice(content);
+        case 'Slideshow Outline':
+            return renderSlideshowOutline(content);
+        case 'Question Cluster':
+            return renderQuestionCluster(content);
+        case 'Study Sheet':
+            return renderStudySheet(content);
+        case 'Reading Material':
+            return <ReadingMaterialDisplay content={content} />;
+        default:
             try {
                 const jsonString = JSON.stringify(content, null, 2);
                 return <pre className="whitespace-pre-wrap text-xs bg-muted p-4 rounded-md"><code>{jsonString}</code></pre>
             } catch (e) {
-                // ignore
+                return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
             }
-        }
-        return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
     }
 }
