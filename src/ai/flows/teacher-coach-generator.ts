@@ -39,6 +39,7 @@ const teacherCoachGeneratorFlow = ai.defineFlow(
     name: 'teacherCoachGeneratorFlow',
     inputSchema: TeacherCoachGeneratorInputSchema,
     outputSchema: TeacherCoachGeneratorOutputSchema,
+    timeout: 120000, // 2 minutes
   },
   async (input) => {
     const lessonPlanJson = JSON.stringify(input, null, 2);

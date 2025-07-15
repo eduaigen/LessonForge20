@@ -68,6 +68,7 @@ const worksheetGeneratorFlow = ai.defineFlow(
     name: 'worksheetGeneratorFlow',
     inputSchema: WorksheetGeneratorInputSchema,
     outputSchema: WorksheetGeneratorOutputSchema,
+    timeout: 120000, // 2 minutes
   },
   async (input) => {
     // Convert the lesson plan object to a JSON string before passing to the prompt
