@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2, Bot } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -28,15 +28,18 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
-import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogContent,
   AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
+import { refineLessonSection } from '@/ai/flows/lesson-section-refiner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui/dialog';
 
 
 const formSchema = z.object({
@@ -84,11 +87,16 @@ const GeneratorContent = () => {
   const [generatedSections, setGeneratedSections] = useState<GeneratedContent[]>([]);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  
+  const [lessonPlanContent, setLessonPlanContent] = useState<GenerateNVBiologyLessonOutput | null>(null);
+
+  const [isRefineDialogOpen, setIsRefineDialogOpen] = useState(false);
+  const [refinePrompt, setRefinePrompt] = useState('');
+  const [sectionToRefine, setSectionToRefine] = useState<{name: string; content: any} | null>(null);
+  const [isRefining, setIsRefining] = useState(false);
+
   const lessonPlan = useMemo(() => {
-    const lessonSection = generatedSections.find(s => s.type === 'Lesson Plan');
-    return (lessonSection?.content as GenerateNVBiologyLessonOutput) || null;
-  }, [generatedSections]);
+    return lessonPlanContent;
+  }, [lessonPlanContent]);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -138,8 +146,10 @@ const GeneratorContent = () => {
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
     setGeneratedSections([]);
+    setLessonPlanContent(null);
     try {
       const result = await generateNVBiologyLesson(values);
+      setLessonPlanContent(result);
        setGeneratedSections(prev => [...prev, {
         id: `lesson-plan-${Date.now()}`,
         title: result.lessonOverview.lesson,
@@ -158,6 +168,67 @@ const GeneratorContent = () => {
       setIsLoading(false);
     }
   }
+
+  const handleUpdateLessonSection = (sectionKey: keyof GenerateNVBiologyLessonOutput, newContent: any) => {
+    if (!lessonPlanContent) return;
+    
+    const updatedLessonPlan = {
+      ...lessonPlanContent,
+      [sectionKey]: newContent,
+    };
+    
+    setLessonPlanContent(updatedLessonPlan);
+
+    setGeneratedSections(prevSections => {
+      return prevSections.map(sec => {
+        if (sec.type === 'Lesson Plan') {
+          return { ...sec, content: updatedLessonPlan };
+        }
+        return sec;
+      });
+    });
+  };
+
+  const handleOpenRefineDialog = (sectionName: string, sectionContent: any) => {
+    setSectionToRefine({ name: sectionName, content: sectionContent });
+    setIsRefineDialogOpen(true);
+  };
+
+  const handleRefineSubmit = async () => {
+    if (!sectionToRefine || !refinePrompt) return;
+
+    setIsRefining(true);
+    try {
+        const key = Object.keys(lessonPlanContent || {}).find(k => (lessonPlanContent as any)[k] === sectionToRefine.content);
+
+        if (!key) {
+             throw new Error("Could not find the section key to update.");
+        }
+
+        const result = await refineLessonSection({
+            sectionName: sectionToRefine.name,
+            sectionContent: JSON.stringify(sectionToRefine.content, null, 2),
+            userPrompt: refinePrompt,
+        });
+
+        handleUpdateLessonSection(key as keyof GenerateNVBiologyLessonOutput, result.revisedContent);
+        toast({ title: "Section Revised", description: "The AI has updated the lesson section." });
+        setIsRefineDialogOpen(false);
+        setRefinePrompt('');
+        setSectionToRefine(null);
+
+    } catch (error) {
+        console.error("AI refinement failed:", error);
+        toast({
+            title: "Refinement Failed",
+            description: "The AI could not revise the section. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setIsRefining(false);
+    }
+  };
+
 
   const handleToolClick = async (toolName: ToolName) => {
     if (!lessonPlan) {
@@ -222,11 +293,9 @@ const GeneratorContent = () => {
               <Wand2 className="h-6 w-6 text-primary" />
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
-            <AlertDialogDescription>
-              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
-            </AlertDialogDescription>
-             <div className="text-sm text-muted-foreground pt-4">
-              <div className="text-left">
+             <div className="text-sm text-muted-foreground pt-2 text-left">
+              <p>Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.</p>
+              <div className="text-sm text-muted-foreground pt-4">
                 <ul className="list-disc pl-5 space-y-2">
                     <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
                     <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
@@ -243,6 +312,32 @@ const GeneratorContent = () => {
           </AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
+
+       <Dialog open={isRefineDialogOpen} onOpenChange={setIsRefineDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><Bot /> Refine with AI</DialogTitle>
+            <DialogDescription>
+              Tell the AI how you want to change the "{sectionToRefine?.name}" section. Be specific for the best results.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Textarea
+              placeholder="e.g., 'Make the teacher actions more script-like for a first-year teacher.' or 'Add a multiple-choice question about...' or 'Rewrite the reading passage for an 8th-grade level.'"
+              value={refinePrompt}
+              onChange={(e) => setRefinePrompt(e.target.value)}
+              className="min-h-[120px]"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setIsRefineDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleRefineSubmit} disabled={isRefining || !refinePrompt}>
+              {isRefining ? <Loader2 className="animate-spin" /> : 'Revise Section'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
 
       <div className="relative grid grid-cols-1 lg:grid-cols-1 gap-8">
         <div className="flex-grow">
@@ -380,9 +475,19 @@ const GeneratorContent = () => {
           )}
 
           {generatedSections.map(section => (
-              <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
+            <div key={section.id}>
+              {section.type === 'Lesson Plan' && section.content ? (
+                <StyledContentDisplay
+                  content={section.content}
+                  onUpdateSection={handleUpdateLessonSection}
+                  onRefineSection={handleOpenRefineDialog}
+                />
+              ) : (
+                <CollapsibleSection title={section.title} contentItem={section}>
                   <StyledContentDisplay content={section.content} />
-              </CollapsibleSection>
+                </CollapsibleSection>
+              )}
+            </div>
           ))}
 
           {isToolLoading && (

@@ -10,13 +10,15 @@ import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-genera
 import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schemas';
 import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
+import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Button } from '../ui/button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Edit, Save, X, Bot } from 'lucide-react';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
-
+import { Checkbox } from '../ui/checkbox';
+import { Textarea } from '../ui/textarea';
 
 // This component now intelligently decides how to render content.
 
@@ -96,143 +98,286 @@ const renderSimpleMarkdown = (content: string) => {
     );
 };
 
+const SectionWrapper = ({
+  title,
+  subsections,
+  sectionKey,
+  content,
+  onUpdateSection,
+  onRefineSection
+}: {
+  title: string;
+  subsections: { title: string; field: string }[];
+  sectionKey: keyof GenerateNVBiologyLessonOutput;
+  content: any;
+  onUpdateSection: (key: keyof GenerateNVBiologyLessonOutput, newContent: any) => void;
+  onRefineSection: (sectionName: string, sectionContent: any) => void;
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState(content);
 
-const renderLessonPlan = (lessonPlan: any) => (
-  <div className="document-view">
-    {/* Title is now handled by CollapsibleSection, so we don't render h1 here */}
-    <section className="mb-6">
-      <h2>I. LESSON OVERVIEW</h2>
-      <p><strong>Unit:</strong> {lessonPlan.lessonOverview.unit}</p>
-      <p><strong>Topic:</strong> {lessonPlan.lessonOverview.topic}</p>
-      <p><strong>Lesson Summary:</strong> {lessonPlan.lessonOverview.lessonSummary}</p>
-      <p><strong>NGSS / NYSSLS Standards:</strong> {lessonPlan.lessonOverview.standards}</p>
-      
-      <h3>A. Aim / Essential Question</h3>
-      <p><strong>Aim:</strong> {lessonPlan.lessonOverview.aim}</p>
-      <p><strong>Essential Question:</strong> {lessonPlan.lessonOverview.essentialQuestion}</p>
+  const handleEditToggle = () => {
+    if (isEditing) {
+      // Cancel edit
+      setEditedContent(content);
+    }
+    setIsEditing(!isEditing);
+  };
 
-      <h3>Lesson Objectives</h3>
-      <ul className="list-disc pl-5">
-          {lessonPlan.lessonOverview.objectives.map((obj: string, i: number) => <li key={i}>{obj}</li>)}
-      </ul>
+  const handleSave = () => {
+    onUpdateSection(sectionKey, editedContent);
+    setIsEditing(false);
+  };
+  
+  const handleTextareaChange = (field: string, value: string) => {
+    let newContent = { ...editedContent };
+    const fieldParts = field.split('.');
+    
+    // This simple logic handles one level of nesting, e.g., 'dataTable.title'
+    if (fieldParts.length === 2) {
+      newContent = {
+        ...newContent,
+        [fieldParts[0]]: {
+          ...newContent[fieldParts[0]],
+          [fieldParts[1]]: value,
+        },
+      };
+    } else {
+      // For arrays of strings
+      if(Array.isArray(newContent[field])) {
+        // Assuming value is a newline-separated string
+        newContent[field] = value.split('\n');
+      } else {
+        newContent[field] = value;
+      }
+    }
+    setEditedContent(newContent);
+  };
 
-      <h3>Key Vocabulary</h3>
-      <ul className="list-disc pl-5">
-          {lessonPlan.lessonOverview.vocabulary.map((vocab: {term: string, definition: string}, i: number) => <li key={i}><strong>{vocab.term}:</strong> {vocab.definition}</li>)}
-      </ul>
+  return (
+    <section className="mb-6 p-4 border rounded-lg hover:shadow-md transition-shadow">
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="flex items-center gap-2">{title}</h2>
+        <div className="flex items-center gap-2">
+          {isEditing && (
+            <>
+              <Button variant="ghost" size="icon" onClick={handleSave}><Save className="h-4 w-4" /></Button>
+              <Button variant="ghost" size="icon" onClick={handleEditToggle}><X className="h-4 w-4" /></Button>
+            </>
+          )}
+          <Button variant="ghost" size="icon" onClick={handleEditToggle}>
+            <Edit className="h-4 w-4" />
+          </Button>
+           <Button variant="ghost" size="icon" onClick={() => onRefineSection(title, content)}>
+            <Bot className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      <div className="document-view">
+        {subsections.map(({ title: subTitle, field }) => {
+          const fieldParts = field.split('.');
+          const value = fieldParts.length === 2 
+            ? content[fieldParts[0]]?.[fieldParts[1]] 
+            : content[field];
+          
+          const editedValue = fieldParts.length === 2
+            ? editedContent[fieldParts[0]]?.[fieldParts[1]]
+            : editedContent[field];
 
-      <h3>Materials Needed</h3>
-      <ul className="list-disc pl-5">
-          {lessonPlan.lessonOverview.materials.map((mat: string, i: number) => <li key={i}>{mat}</li>)}
-      </ul>
+          const renderContent = () => {
+            if (isEditing) {
+               return (
+                <Textarea
+                  value={Array.isArray(editedValue) ? editedValue.join('\n') : editedValue || ''}
+                  onChange={(e) => handleTextareaChange(field, e.target.value)}
+                  className="mt-1 w-full"
+                  rows={Array.isArray(editedValue) ? editedValue.length + 1 : 3}
+                />
+              );
+            }
+            
+            if (Array.isArray(value)) {
+              return (
+                <ul className="list-disc pl-5">
+                  {value.map((item: any, i: number) => {
+                     if (typeof item === 'object' && item !== null) {
+                        // Handle vocabulary or objectives
+                        if (item.term && item.definition) {
+                            return <li key={i}><strong>{item.term}:</strong> {item.definition}</li>
+                        }
+                        if (item.question && item.dok) { // for questions with DOK
+                            return <li key={i}>{item.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {item.dok})</span></li>
+                        }
+                         if(item.question && item.options) { // for multiple choice
+                           return <li key={i}>
+                              {item.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {item.dok})</span>
+                              <ul className="list-[lower-alpha] pl-6">
+                                {item.options.map((opt: string, j: number) => <li key={j}>{opt}</li>)}
+                              </ul>
+                              <p><em>Answer: {item.answer}</em></p>
+                            </li>
+                         }
+                     }
+                     return <li key={i}>{item}</li>
+                  })}
+                </ul>
+              );
+            }
+
+            if (typeof value === 'object' && value !== null) {
+              if (value.dataTable) return renderTableFromObject(value.dataTable);
+              if (value.taskData) return renderTableFromObject(value.taskData);
+              if(value.question && value.dok) {
+                 return <p>{value.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {value.dok})</span></p>
+              }
+              return <pre>{JSON.stringify(value, null, 2)}</pre>;
+            }
+            
+            if (field.includes('readingPassage')) {
+                return <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: String(value).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+            }
+
+            return <p>{value}</p>;
+          };
+          
+          return (
+            <div key={field} className="mb-4">
+              <h4>{subTitle}</h4>
+              {renderContent()}
+            </div>
+          );
+        })}
+      </div>
     </section>
+  );
+};
 
-    <section className="mb-6">
-      <h2>II. LESSON SEQUENCE</h2>
-      
-      <div className="mb-4">
-        <h3>B. DO NOW (5–8 min)</h3>
-        <h4>Teacher Actions</h4>
-        <ul className="list-disc pl-5">
-          {lessonPlan.doNow.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}
-        </ul>
-        <h4>Expected Student Outputs</h4>
-        <ul className="list-disc pl-5">
-          {lessonPlan.doNow.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}
-        </ul>
-        <p><strong>Question:</strong> {lessonPlan.doNow.question}</p>
-      </div>
 
-      <div className="mb-4">
-        <h3>C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)</h3>
-        <h4>Teacher Actions</h4>
-        <ul className="list-disc pl-5">{lessonPlan.miniLesson.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Expected Student Outputs</h4>
-        <ul className="list-disc pl-5">{lessonPlan.miniLesson.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Embedded Reading Passage</h4>
-        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: lessonPlan.miniLesson.readingPassage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
-        {lessonPlan.miniLesson.diagram && (
-           <>
-              <h4>Embedded Diagram</h4>
-              <blockquote className="border-l-4 border-primary pl-4 italic">
-                {lessonPlan.miniLesson.diagram}
-              </blockquote>
-           </>
-        )}
-        <h4>Concept-Check Questions</h4>
-        <ol className="list-decimal pl-5">
-          {lessonPlan.miniLesson.conceptCheckQuestions.map((q: { question: string, dok: number }, i: number) => (
-             <li key={i}>{q.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {q.dok})</span></li>
-          ))}
-        </ol>
-      </div>
-
-      <div className="mb-4">
-        <h3>D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)</h3>
-        <h4>Teacher Actions</h4>
-        <ul className="list-disc pl-5">{lessonPlan.guidedPractice.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Expected Student Outputs</h4>
-        <ul className="list-disc pl-5">{lessonPlan.guidedPractice.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        {lessonPlan.guidedPractice.dataTable && renderTableFromObject(lessonPlan.guidedPractice.dataTable)}
-        {lessonPlan.guidedPractice.activityDescription && <p>{lessonPlan.guidedPractice.activityDescription}</p>}
-      </div>
-      
-      <div className="mb-4">
-        <h3>E. CHECK FOR UNDERSTANDING (CFU)</h3>
-        <h4>Teacher Actions</h4>
-        <ul className="list-disc pl-5">{lessonPlan.checkFoUnderstanding.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Expected Student Outputs</h4>
-        <ul className="list-disc pl-5">{lessonPlan.checkFoUnderstanding.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>CFU Questions</h4>
-        <ol className="list-decimal pl-5">
-          {lessonPlan.checkFoUnderstanding.multipleChoice.map((mc: { question: string, dok: number, options: string[], answer: string }, i: number) => (
-            <li key={i}>
-              {mc.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {mc.dok})</span>
-              <ul className="list-[lower-alpha] pl-6">
-                {mc.options.map((opt: string, j: number) => <li key={j}>{opt}</li>)}
-              </ul>
-              <p><em>Answer: {mc.answer}</em></p>
-            </li>
-          ))}
-          <li>{lessonPlan.checkFoUnderstanding.shortResponse.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {lessonPlan.checkFoUnderstanding.shortResponse.dok})</span></li>
-        </ol>
-      </div>
-
-       <div className="mb-4">
-        <h3>F. INDEPENDENT PRACTICE / PERFORMANCE TASK</h3>
-        <h4>Teacher Actions</h4>
-        <ul className="list-disc pl-5">{lessonPlan.independentPractice.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Expected Student Outputs</h4>
-        <ul className="list-disc pl-5">{lessonPlan.independentPractice.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Embedded Task</h4>
-        <p><strong>Prompt:</strong> {lessonPlan.independentPractice.taskPrompt}</p>
-        {lessonPlan.independentPractice.taskData && renderTableFromObject(lessonPlan.independentPractice.taskData)}
-      </div>
-
-       <div className="mb-4">
-        <h3>G. CLOSURE / EXIT TICKET</h3>
-        <h4>Teacher Actions</h4>
-        <ul className="list-disc pl-5">{lessonPlan.closure.teacherActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <h4>Expected Student Outputs</h4>
-        <ul className="list-disc pl-5">{lessonPlan.closure.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-        <p><strong>Exit Ticket Question:</strong> {lessonPlan.closure.exitTicketQuestion}</p>
-      </div>
-
-       <div className="mb-4">
-        <h3>H. HOMEWORK ACTIVITY</h3>
-        <p>{lessonPlan.homework.activity}</p>
-      </div>
-    </section>
-
-    <section className="mb-6">
-      <h2>III. DIFFERENTIATION & SUPPORT</h2>
-      <h4>Teacher Actions for Support</h4>
-      <ul className="list-disc pl-5">{lessonPlan.differentiation.supportActions.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-      <h4>Expected Student Outputs with Support</h4>
-      <ul className="list-disc pl-5">{lessonPlan.differentiation.supportOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
-      <h4>Extension Activity</h4>
-      <p>{lessonPlan.differentiation.extensionActivity}</p>
-    </section>
+const renderLessonPlan = (
+  lessonPlan: GenerateNVBiologyLessonOutput,
+  onUpdateSection: (key: keyof GenerateNVBiologyLessonOutput, newContent: any) => void,
+  onRefineSection: (sectionName: string, sectionContent: any) => void
+) => (
+  <div className="space-y-4">
+    <SectionWrapper
+      title="I. Lesson Overview"
+      sectionKey="lessonOverview"
+      content={lessonPlan.lessonOverview}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Unit", field: "unit" },
+        { title: "Topic", field: "topic" },
+        { title: "Lesson", field: "lesson" },
+        { title: "Lesson Summary", field: "lessonSummary" },
+        { title: "NGSS / NYSSLS Standards", field: "standards" },
+        { title: "Aim", field: "aim" },
+        { title: "Essential Question", field: "essentialQuestion" },
+        { title: "Lesson Objectives", field: "objectives" },
+        { title: "Key Vocabulary", field: "vocabulary" },
+        { title: "Materials Needed", field: "materials" },
+      ]}
+    />
+     <SectionWrapper
+      title="B. DO NOW (5–8 min)"
+      sectionKey="doNow"
+      content={lessonPlan.doNow}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions", field: "teacherActions" },
+        { title: "Expected Student Outputs", field: "expectedStudentOutputs" },
+        { title: "Question", field: "question" },
+      ]}
+    />
+     <SectionWrapper
+      title="C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)"
+      sectionKey="miniLesson"
+      content={lessonPlan.miniLesson}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions", field: "teacherActions" },
+        { title: "Expected Student Outputs", field: "expectedStudentOutputs" },
+        { title: "Embedded Reading Passage", field: "readingPassage" },
+        { title: "Embedded Diagram Description", field: "diagram" },
+        { title: "Concept-Check Questions", field: "conceptCheckQuestions" },
+      ]}
+    />
+     <SectionWrapper
+      title="D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)"
+      sectionKey="guidedPractice"
+      content={lessonPlan.guidedPractice}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions", field: "teacherActions" },
+        { title: "Expected Student Outputs", field: "expectedStudentOutputs" },
+        { title: "Data Table", field: "dataTable" },
+        { title: "Activity Description", field: "activityDescription" },
+      ]}
+    />
+    <SectionWrapper
+      title="E. CHECK FOR UNDERSTANDING (CFU)"
+      sectionKey="checkFoUnderstanding"
+      content={lessonPlan.checkFoUnderstanding}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions", field: "teacherActions" },
+        { title: "Expected Student Outputs", field: "expectedStudentOutputs" },
+        { title: "Multiple Choice Questions", field: "multipleChoice" },
+        { title: "Short Response Question", field: "shortResponse" },
+      ]}
+    />
+    <SectionWrapper
+      title="F. INDEPENDENT PRACTICE / PERFORMANCE TASK"
+      sectionKey="independentPractice"
+      content={lessonPlan.independentPractice}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions", field: "teacherActions" },
+        { title: "Expected Student Outputs", field: "expectedStudentOutputs" },
+        { title: "Task Prompt", field: "taskPrompt" },
+        { title: "Task Data", field: "taskData" },
+      ]}
+    />
+    <SectionWrapper
+      title="G. CLOSURE / EXIT TICKET"
+      sectionKey="closure"
+      content={lessonPlan.closure}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions", field: "teacherActions" },
+        { title: "Expected Student Outputs", field: "expectedStudentOutputs" },
+        { title: "Exit Ticket Question", field: "exitTicketQuestion" },
+      ]}
+    />
+    <SectionWrapper
+      title="H. HOMEWORK ACTIVITY"
+      sectionKey="homework"
+      content={lessonPlan.homework}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Activity", field: "activity" },
+      ]}
+    />
+    <SectionWrapper
+      title="III. DIFFERENTIATION & SUPPORT"
+      sectionKey="differentiation"
+      content={lessonPlan.differentiation}
+      onUpdateSection={onUpdateSection}
+      onRefineSection={onRefineSection}
+      subsections={[
+        { title: "Teacher Actions for Support", field: "supportActions" },
+        { title: "Expected Student Outputs with Support", field: "supportOutputs" },
+        { title: "Scaffolded Materials", field: "scaffoldedMaterials" },
+        { title: "Extension Activity", field: "extensionActivity" },
+      ]}
+    />
   </div>
 );
 
@@ -496,6 +641,7 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
 
 const renderStudySheet = (studySheet: StudySheetOutput) => (
     <div className="document-view">
+        {renderWorksheetHeader()}
         <section className="mb-6">
             <h2>Key Vocabulary</h2>
             <ul className="list-disc pl-5 space-y-2">
@@ -586,9 +732,11 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 
 type StyledContentDisplayProps = {
     content: any | null;
+    onUpdateSection?: (key: keyof GenerateNVBiologyLessonOutput, newContent: any) => void;
+    onRefineSection?: (sectionName: string, sectionContent: any) => void;
 };
 
-export default function StyledContentDisplay({ content }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, onUpdateSection, onRefineSection }: StyledContentDisplayProps) {
     if (!content) return null;
     
     const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
@@ -599,8 +747,8 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     const isWorksheetObject = typeof content === 'object' && content !== null && 'header' in content && 'doNow' in content;
     const isReadingMaterialObject = typeof content === 'object' && content !== null && 'articleContent' in content && 'questionCluster' in content;
 
-    if (isLessonPlanObject) {
-      return renderLessonPlan(content);
+    if (isLessonPlanObject && onUpdateSection && onRefineSection) {
+      return renderLessonPlan(content, onUpdateSection, onRefineSection);
     }
 
     if (isWorksheetObject) {
