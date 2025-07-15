@@ -218,6 +218,8 @@ const renderWorksheet = (worksheet: WorksheetGeneratorOutput) => (
             <p>{worksheet.header.date}</p>
         </header>
 
+        <p className="italic text-muted-foreground mb-6">{worksheet.introduction}</p>
+
         <section className="mb-6">
             <h3>A. AIM & VOCABULARY</h3>
             <p className="mt-2"><strong>Aim / Essential Question:</strong> {worksheet.aim.essentialQuestion}</p>
@@ -327,7 +329,19 @@ const renderWorksheet = (worksheet: WorksheetGeneratorOutput) => (
 
         <section>
             <h3>{worksheet.homework.title}</h3>
-            <p>{worksheet.homework.activity}</p>
+            <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: worksheet.homework.activity.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+            {worksheet.homework.extensionActivity && (
+                <div className="mt-4">
+                    <h4>Extension Activity</h4>
+                    <p>{worksheet.homework.extensionActivity}</p>
+                </div>
+            )}
+            {worksheet.homework.differentiation_support && (
+                 <div className="mt-4">
+                    <h4>Support Materials</h4>
+                    <p>{worksheet.homework.differentiation_support}</p>
+                </div>
+            )}
         </section>
     </div>
 );

@@ -15,37 +15,56 @@ const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
   input: { schema: WorksheetGeneratorInputSchema },
   output: { schema: WorksheetGeneratorOutputSchema },
-  prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive structured JSON worksheet that a student can use in the classroom. The worksheet must be a direct reflection of the lesson plan, not an interpretation or a new document.
+  prompt: `You are an expert instructional designer tasked with creating a student-facing worksheet from a teacher's lesson plan. Your goal is to transform the provided JSON lesson plan into a clear, well-structured, and comprehensive structured JSON worksheet that a student can use in the classroom.
 
-**Instructions:**
-1.  **Analyze the Lesson Plan:** Carefully read through every part of the provided JSON lesson plan object.
-2.  **Student-Facing Transformation:** Convert the teacher-facing plan into a document for students. Rephrase teacher instructions into student-friendly directions. For example, instead of "Teacher will ask students to answer the Do Now question," the worksheet should simply present the "Do Now" question for the student to answer. **Do not add new questions or activities.**
-3.  **Maintain Structure:** The worksheet's organization must mirror the lesson plan's structure. Populate the JSON output schema with data from each part of the lesson (Aim, Do Now, Mini-Lesson, etc.) in the same order.
-4.  **Populate the JSON Schema:**
-    *   **Header:** For the header, create strings for 'Name', 'Class', and 'Date' fields that a student can fill in.
-    *   **Aim & Vocabulary:**
-        *   Copy the "Aim / Essential Question" from the lesson plan's 'lessonOverview.aim' field.
-        *   Copy all "Key Vocabulary" terms and their definitions from the 'lessonOverview.vocabulary' array.
-    *   **DO NOW:**
-        *   Copy the student activity/question from the "doNow.question" field.
-    *   **MINI-LESSON:**
-        *   **CRITICAL: You MUST embed the full text of any "Embedded Reading Passage" exactly as it appears in the 'miniLesson.readingPassage' field. Do not summarize it or refer to it.**
-        *   **CRITICAL: If the lesson plan contains a 'diagram' description in 'miniLesson.diagram', you MUST embed this description under the 'diagramDescription' field. Do NOT write "(Diagram would be inserted here)" or any other placeholder text.**
-        *   Copy all concept check questions from 'miniLesson.conceptCheckQuestions'.
-    *   **GUIDED PRACTICE / GROUP ACTIVITY:**
-        *   Clearly state the instructions for the guided practice activity from the 'guidedPractice.teacherActions' array. Rephrase them for students.
-        *   **CRITICAL: For any "Embedded Data Table" from the lesson plan, you MUST copy the entire JSON object for the data table from the 'guidedPractice.dataTable' field into the 'dataTable' field. Do not alter it.**
-    *   **CHECK FOR UNDERSTANDING (CFU):**
-        *   Copy all "CFU Questions" (multiple choice and short response) from the 'checkFoUnderstanding.multipleChoice' and 'checkFoUnderstanding.shortResponse' fields.
-    *   **INDEPENDENT PRACTICE / PERFORMANCE TASK:**
-        *   Copy the full "Embedded Task" prompt (e.g., the CER prompt) from the 'independentPractice.taskPrompt' field.
-        *   **CRITICAL: If the task includes a data table, you MUST copy the entire JSON object for the data table from the 'independentPractice.taskData' field into the 'taskData' field.**
-    *   **CLOSURE / EXIT TICKET:**
-        *   Transfer the exact "Exit Ticket Question" from the 'closure.exitTicketQuestion' field.
-    *   **HOMEWORK ACTIVITY:**
-        *   Include the full "Homework Activity" as described in the 'homework.activity' field.
+**Critical Rules:**
+1.  **Strictly Scan the Lesson Plan:** Your ONLY source of information is the provided JSON lesson plan. Do not add, invent, or hallucinate any content, questions, or activities.
+2.  **Student-Facing Transformation:** Convert all teacher-facing instructions into student-friendly directions. For example, instead of "Teacher will ask students to...", the worksheet should simply present the question for the student to answer.
+3.  **Follow the Structure Precisely:** Populate the JSON output schema by mapping the lesson plan sections (A–I) as described below.
 
-Generate the complete worksheet as a JSON object based on these strict instructions. Ensure every student-facing element from the lesson plan is present. Failure to embed all required content or follow the JSON schema will result in an invalid response.
+---
+**Step-by-Step Generation Instructions:**
+
+1.  **Header and Introduction:**
+    *   For the \`header\`, create strings for 'Name', 'Class', and 'Date' fields that a student can fill in.
+    *   For the \`introduction\`, write a brief, 1-2 sentence summary for the student explaining what they will be learning and doing in this lesson.
+
+2.  **Part A: Aim & Vocabulary:**
+    *   Copy the \`lessonOverview.aim\` into \`aim.essentialQuestion\`.
+    *   Copy all vocabulary terms and definitions from \`lessonOverview.vocabulary\` into \`vocabulary.terms\`. Ensure they are complete sentences.
+
+3.  **Part B: Do Now:**
+    *   Copy the exact question from \`doNow.question\` into \`doNow.question\`.
+
+4.  **Part C: Mini-Lesson:**
+    *   **T-Chart for Notes:** Set up a T-Chart structure for note-taking. You can use the \`miniLesson.notesTitle\` for this section. The chart should have two columns: "Key Ideas / Concepts" and "Notes / Details / Questions".
+    *   **Sentence Starters:** If the \`miniLesson.expectedStudentOutputs\` provide examples of student annotations or summaries, use them to create a few helpful sentence starters for the notes section.
+    *   **Embed Reading Passage:** If \`miniLesson.readingPassage\` exists, you MUST embed the full text of the passage exactly as it appears.
+    *   **Embed Diagram Description:** If \`miniLesson.diagram\` description exists, embed it under \`diagramDescription\`. Do NOT write placeholders like "(Diagram would be inserted here)".
+    *   **Embed Questions:** Copy all \`miniLesson.conceptCheckQuestions\`.
+
+5.  **Part D: Guided Practice:**
+    *   Emulate the problems students will work on by rephrasing the instructions from \`guidedPractice.teacherActions\` for the student.
+    *   **CRITICAL:** If \`guidedPractice.dataTable\` exists, you MUST copy the entire JSON object for the data table into the \`dataTable\` field. Do not alter it.
+
+6.  **Part E: Check for Understanding (CFU):**
+    *   Strictly copy all questions from \`checkFoUnderstanding.multipleChoice\` and \`checkFoUnderstanding.shortResponse\`. Use student outputs for guidance if needed, but do not copy them.
+
+7.  **Part F: Independent Practice:**
+    *   Copy the exact task prompt from \`independentPractice.taskPrompt\`.
+    *   If \`independentPractice.taskData\` exists, copy the exact data table.
+
+8.  **Part G: Closure / Exit Ticket:**
+    *   Copy the exact question from \`closure.exitTicketQuestion\`.
+
+9.  **Part H: Homework Activity:**
+    *   Copy the full activity description from \`homework.activity\`.
+    *   **CRITICAL:** If the homework requires a reading passage, data, or diagram, it MUST be fully rendered in the \`activity\` field.
+    *   For the \`extensionActivity\` field, copy the extension activity from \`differentiation.extensionActivity\`.
+    *   For the \`differentiation_support\` field, copy the support strategies from \`differentiation.scaffoldedMaterials\`.
+
+---
+Generate the complete worksheet as a JSON object based on these strict instructions. Failure to embed all required content or follow the JSON schema will result in an invalid response.
 `,
 });
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { GenerateNVBiologyLessonOutputSchema, GenerateNVBiologyLessonInputSchema } from './nv-biology-lesson-schemas';
+import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
 
 export const WorksheetGeneratorInputSchema = GenerateNVBiologyLessonOutputSchema;
 
@@ -29,6 +29,7 @@ const dataTableSchema = z.object({
 
 export const WorksheetGeneratorOutputSchema = z.object({
     header: worksheetHeaderSchema,
+    introduction: z.string().describe('A brief, 1-2 sentence introduction for the student about the lesson.'),
     aim: z.object({
         essentialQuestion: z.string(),
         rewriteSpace: z.string().default('Rewrite the Aim in your own words:'),
@@ -70,6 +71,8 @@ export const WorksheetGeneratorOutputSchema = z.object({
     homework: z.object({
         title: z.string().default('H. HOMEWORK ACTIVITY'),
         activity: z.string(),
+        extensionActivity: z.string().optional().describe("The extension activity for advanced students."),
+        differentiation_support: z.string().optional().describe("Scaffolded materials or sentence starters for support."),
     }),
 });
 
