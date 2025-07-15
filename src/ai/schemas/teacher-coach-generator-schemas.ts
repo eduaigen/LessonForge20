@@ -7,13 +7,16 @@ export const TeacherCoachGeneratorInputSchema = z.object({
 });
 
 const coachingAdviceSchema = z.object({
-  pedagogicalRationale: z.string().describe("The 'why' behind this part of the lesson."),
-  sampleScript: z.string().describe("Concrete examples of what a teacher could say."),
+  pedagogicalRationale: z.string().describe("The 'why' behind this part of the lesson, grounded in educational theory."),
+  sampleScript: z.string().describe("Concrete examples of what a teacher could say, using research-based talk moves."),
   danielsonConnection: z.string().describe("Connection to a specific Danielson Framework component (e.g., '3b: Using Questioning and Discussion Techniques')."),
-  crseUdlCheck: z.string().describe("A note on how this section supports CRSE or UDL principles."),
+  crseUdlCheck: z.string().describe("An actionable note on how this section supports CRSE or UDL principles."),
 });
 
 export const TeacherCoachGeneratorOutputSchema = z.object({
+  lessonTitle: z.string().describe('The title of the lesson.'),
+  teacherName: z.string().describe('A placeholder for the teacher to write their name.'),
+  date: z.string().describe('A placeholder for the date.'),
   doNow: coachingAdviceSchema.describe('Coaching advice for the Do Now section.'),
   miniLesson: coachingAdviceSchema.describe('Coaching advice for the Mini-Lesson section.'),
   guidedPractice: coachingAdviceSchema.describe('Coaching advice for the Guided Practice section.'),

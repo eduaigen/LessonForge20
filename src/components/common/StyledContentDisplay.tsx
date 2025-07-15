@@ -218,13 +218,9 @@ const renderLessonPlan = (lessonPlan: any) => (
 
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
-        <header className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 border-b pb-4">
+        <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
             <div className="flex items-end space-x-2">
                 <label className="font-semibold">Name:</label>
-                <div className="flex-grow border-b border-foreground/50"></div>
-            </div>
-            <div className="flex items-end space-x-2">
-                <label className="font-semibold">Class:</label>
                 <div className="flex-grow border-b border-foreground/50"></div>
             </div>
             <div className="flex items-end space-x-2">
@@ -379,6 +375,11 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
 
     return (
          <div className="document-view">
+             <header className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 border-b pb-4">
+                <div><strong>Lesson Title:</strong> {advice.lessonTitle}</div>
+                <div><strong>Teacher:</strong> {advice.teacherName}</div>
+                <div><strong>Date:</strong> {advice.date}</div>
+            </header>
             {sections.map(sec => (
                 <section key={sec.title} className="mb-8">
                     <h2>{sec.title}</h2>
@@ -412,11 +413,9 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
             {outline.slides.map((slide, index) => (
                 <section key={index} className="mb-6 border-b pb-4">
                     <h3>Slide {index + 1}: {slide.title}</h3>
-                    <ul className="list-disc pl-5 space-y-2">
-                        {slide.content.map((point, pointIndex) => (
-                            <li key={pointIndex}>{point}</li>
-                        ))}
-                    </ul>
+                     <div className="prose prose-lg max-w-none">
+                        <Markdown>{slide.content.join('\n\n')}</Markdown>
+                    </div>
                 </section>
             ))}
         </div>
@@ -436,11 +435,7 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
           <p>{cluster.stimulus.passage}</p>
           <div className="my-4">
             <h4>Visual</h4>
-            {cluster.stimulus.visual.startsWith('<svg') ? (
-               <div className="flex justify-center" dangerouslySetInnerHTML={{ __html: cluster.stimulus.visual }} />
-            ) : (
-                renderSimpleMarkdown(cluster.stimulus.visual)
-            )}
+            {renderSimpleMarkdown(cluster.stimulus.visual)}
           </div>
         </section>
         <section className="mb-6">
@@ -551,7 +546,7 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
                 </Button>
             </div>
 
-            {isGenerating && <div className="text-center my-4">Generating...</div>}
+            {isGenerating && <GeneratingAnimation />}
             
             {questions && (
                 <Card className="mt-6">
@@ -559,9 +554,12 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
                         <CardTitle>Comprehension Questions</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <ol className="list-decimal pl-5 space-y-2">
+                        <ol className="list-decimal pl-5 space-y-4">
                             {questions.questions.map((q, i) => (
-                                <li key={i}>{q}</li>
+                                <li key={i}>
+                                    {q}
+                                    <div className="my-2 h-12 border-b border-dashed"></div>
+                                </li>
                             ))}
                         </ol>
                     </CardContent>
@@ -580,7 +578,7 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     if (!content) return null;
     
     const isLessonPlanObject = typeof content === 'object' && content !== null && 'lessonOverview' in content;
-    const isCoachingObject = typeof content === 'object' && content !== null && 'doNow' in content && 'pedagogicalRationale' in content.doNow;
+    const isCoachingObject = typeof content === 'object' && content !== null && 'pedagogicalRationale' in content.doNow;
     const isSlideshowObject = typeof content === 'object' && content !== null && 'slides' in content;
     const isQuestionClusterObject = typeof content === 'object' && content !== null && 'phenomenon' in content && 'questions' in content;
     const isStudySheetObject = typeof content === 'object' && content !== null && 'keyConcepts' in content;
@@ -623,6 +621,17 @@ export default function StyledContentDisplay({ content }: StyledContentDisplayPr
     if (markdownContent) {
         return renderSimpleMarkdown(markdownContent);
     }
+
+    // Try to stringify if it's an unrecognized object, for debugging.
+    if (typeof content === 'object' && content !== null) {
+        try {
+            const jsonString = JSON.stringify(content, null, 2);
+            return <pre className="whitespace-pre-wrap text-xs bg-muted p-4 rounded-md"><code>{jsonString}</code></pre>
+        } catch (e) {
+            // ignore
+        }
+    }
+
 
     return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
 }
