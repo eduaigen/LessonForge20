@@ -48,7 +48,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)**
 - **Teacher Actions**: Provide a verbatim script. e.g., "Today, we're going to explore... Open your handouts to page 2. I'm going to model how to annotate the first paragraph on the document camera. Watch how I circle key terms and underline the main idea. Now, you'll have 3 minutes to read and annotate the next paragraph. When you're done, turn and talk to your partner about what you found."
 - **Expected Student Outputs**: Provide an exemplar of student work. e.g., "Exemplar Annotated Paragraph: [Show a paragraph with specific annotations, underlined sentences, and a margin summary]."
-- **Embedded Reading Passage**: A **300-500 word**, grade-appropriate reading passage on the topic. **Use Markdown bold (\`**word**\`) to emphasize key vocabulary and main ideas.**
+- **Embedded Reading Passage**: A **300-500 word**, grade-appropriate reading passage on the topic. **Use Markdown bold (\`**word**\`) to emphasize key vocabulary.**
 - **Embedded Diagram**: A fully rendered, labeled, and valid SVG scientific diagram related to the reading. Ensure all labels are clear and arrows correctly point to relevant parts. Do not describe it; create the SVG code.
 - **Concept-Check Questions**: 2-3 questions based on the reading and diagram. **Each question must have a specified Depth of Knowledge (DOK) level (1, 2, or 3).** Ensure a mix of DOK levels.
 
