@@ -108,7 +108,9 @@ const renderLessonPlan = (lessonPlan: any) => (
         )}
         <h4>Concept-Check Questions</h4>
         <ol className="list-decimal pl-5">
-          {lessonPlan.miniLesson.conceptCheckQuestions.map((q: string, i: number) => <li key={i}>{q}</li>)}
+          {lessonPlan.miniLesson.conceptCheckQuestions.map((q: { question: string, dok: number }, i: number) => (
+             <li key={i}>{q.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {q.dok})</span></li>
+          ))}
         </ol>
       </div>
 
@@ -144,16 +146,16 @@ const renderLessonPlan = (lessonPlan: any) => (
         <ul className="list-disc pl-5">{lessonPlan.checkFoUnderstanding.expectedStudentOutputs.map((item: string, index: number) => <li key={index}>{item}</li>)}</ul>
         <h4>CFU Questions</h4>
         <ol className="list-decimal pl-5">
-          {lessonPlan.checkFoUnderstanding.multipleChoice.map((mc: { question: string, options: string[], answer: string }, i: number) => (
+          {lessonPlan.checkFoUnderstanding.multipleChoice.map((mc: { question: string, dok: number, options: string[], answer: string }, i: number) => (
             <li key={i}>
-              {mc.question}
+              {mc.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {mc.dok})</span>
               <ul className="list-[lower-alpha] pl-6">
                 {mc.options.map((opt: string, j: number) => <li key={j}>{opt}</li>)}
               </ul>
               <p><em>Answer: {mc.answer}</em></p>
             </li>
           ))}
-          <li>{lessonPlan.checkFoUnderstanding.shortResponse}</li>
+          <li>{lessonPlan.checkFoUnderstanding.shortResponse.question} <span className="text-xs font-semibold text-muted-foreground">(DOK {lessonPlan.checkFoUnderstanding.shortResponse.dok})</span></li>
         </ol>
       </div>
 
