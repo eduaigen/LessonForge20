@@ -21,8 +21,8 @@ const lessonOverviewSchema = z.object({
 });
 
 const lessonSectionSchema = z.object({
-  teacherActions: z.array(z.string()).describe('Elaborated, highly effective teacher actions aligned to Danielson Framework.'),
-  expectedStudentOutputs: z.array(z.string()).describe('Elaborated student actions, focusing on higher-order thinking and collaboration.'),
+  teacherActions: z.array(z.string()).describe('Verbatim script for teacher, including what to say and write on the board.'),
+  expectedStudentOutputs: z.array(z.string()).describe('A high-quality exemplar of the expected student work product for this section.'),
 });
 
 const doNowSchema = lessonSectionSchema.extend({

@@ -41,35 +41,35 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **II. LESSON SEQUENCE**
 
 **B. DO NOW (5–8 min)**
-- **Teacher Actions**: Elaborate with highly effective strategies. e.g., "Circulate to observe student responses, posing probing questions to extend thinking..."
-- **Expected Student Outputs**: Elaborate on student actions. e.g., "Students independently write a 2-3 sentence response, then turn and talk with a partner to compare initial ideas."
+- **Teacher Actions**: Provide a verbatim script for the teacher, including what they write on the board and say to students. e.g., "Good morning, class. On the board, you'll see our Do Now. Please take 5 minutes to respond in your notebooks: [Write Do Now question on board]. As you work, I will circulate to see your initial ideas."
+- **Expected Student Outputs**: Provide a high-quality exemplar of a student's written response to the Do Now question. e.g., "Exemplar Student Response: I think that..."
 - **Question**: 1 student-facing question prompt tied to the Aim.
 
 **C. MINI-LESSON / DIRECT INSTRUCTION (10–15 min)**
-- **Teacher Actions**: Elaborate with highly effective strategies. e.g., "Model annotation strategies on the board, chunk the text and use a 'turn and talk' protocol to check for understanding..."
-- **Expected Student Outputs**: Elaborate on student actions. e.g., "Students annotate the text by underlining key ideas and circling unknown words. They will summarize each paragraph in the margin."
+- **Teacher Actions**: Provide a verbatim script. e.g., "Today, we're going to explore... Open your handouts to page 2. I'm going to model how to annotate the first paragraph on the document camera. Watch how I circle key terms and underline the main idea. Now, you'll have 3 minutes to read and annotate the next paragraph. When you're done, turn and talk to your partner about what you found."
+- **Expected Student Outputs**: Provide an exemplar of student work. e.g., "Exemplar Annotated Paragraph: [Show a paragraph with specific annotations, underlined sentences, and a margin summary]."
 - **Embedded Reading Passage**: A **300-500 word**, grade-appropriate reading passage on the topic. **Use Markdown bold (\`**word**\`) to emphasize key vocabulary and main ideas.**
 - **Embedded Diagram**: A fully rendered, labeled, and valid SVG scientific diagram related to the reading. Ensure all labels are clear and arrows correctly point to relevant parts. Do not describe it; create the SVG code.
 - **Concept-Check Questions**: 2-3 questions based on the reading and diagram. **Each question must have a specified Depth of Knowledge (DOK) level (1, 2, or 3).** Ensure a mix of DOK levels.
 
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
-- **Teacher Actions**: Elaborate with highly effective strategies. e.g., "Group students heterogeneously based on prior data. Provide each group with a role card (facilitator, scribe, etc.). Monitor group discussions and interject with clarifying questions."
-- **Expected Student Outputs**: Elaborate on student actions. e.g., "In groups, students collaboratively analyze the provided data table, discuss patterns, and complete the graphic organizer. Each student contributes to the final product."
+- **Teacher Actions**: Provide a verbatim script for launching and managing the activity. e.g., "In your groups of four, you will analyze this data table. Your goal is to identify a pattern and explain what it means. Facilitators, make sure everyone's voice is heard. Scribes, you will record your group's findings on the graphic organizer. You have 15 minutes."
+- **Expected Student Outputs**: Provide an exemplar of a completed graphic organizer or the expected collaborative output. e.g., "Exemplar Group Response: Pattern Identified - As X increases, Y decreases. Possible Reason: This is because..."
 - **Embedded Data Table**: A complete and structured data table with a title, clear headers, and logically organized data, ready for students to analyze and graph themselves. **Do not generate a graph or chart; provide only the raw data in a table.**
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
-- **Teacher Actions**: Elaborate. e.g., "Use a quick poll to gather responses. Intentionally call on students who showed misconceptions during the group activity."
-- **Expected Student Outputs**: Elaborate. e.g., "Students respond to CFU items on a mini-whiteboard or using a digital polling tool."
+- **Teacher Actions**: Provide a script for administering the CFU. e.g., "Alright everyone, eyes on me. On your mini-whiteboards, please answer the following multiple-choice question. Show me your boards in 3, 2, 1."
+- **Expected Student Outputs**: Provide a correct, high-quality sample response for the short-answer question. e.g., "Exemplar Short Response: The process is affected because..."
 - **CFU Questions**: 2 multiple-choice questions and 1 short-response question. **Each question must have a specified DOK level (1, 2, or 3).** For multiple-choice questions, provide the options as a simple array of strings without letters like "a)", "b)". Ensure surrounding text is not cluttered.
 
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
-- **Teacher Actions**: Elaborate. e.g., "Review the CER rubric with students, highlighting the criteria for 'evidence' and 'reasoning'. Provide a model CER response from a previous lesson."
-- **Expected Student Outputs**: Elaborate. e.g., "Students independently construct a written explanation using the Claim, Evidence, Reasoning (CER) framework, citing specific data from the provided table."
+- **Teacher Actions**: Provide a script for setting up the task. e.g., "For our final task today, you will be writing a CER response to this prompt. Remember our rubric: a strong response includes a clear claim, specific evidence from the text, and reasoning that explains how the evidence supports the claim. You may use the sentence starters on the handout."
+- **Expected Student Outputs**: Provide a full, high-quality exemplar of a complete CER response. e.g., "Exemplar CER: Claim - ... Evidence - According to the data table, ... Reasoning - This evidence supports the claim because..."
 - **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. If data is needed, provide it in a structured data table, not a graph. Ensure any embedded charts or diagrams are clearly labeled and contain valid, renderable SVG code.
 
 **G. CLOSURE / EXIT TICKET**
-- **Teacher Actions**: Elaborate. e.g., "Prompt students to complete a '3-2-1' ticket: 3 things they learned, 2 questions they still have, 1 connection to their life."
-- **Expected Student Outputs**: Elaborate. e.g., "Students submit their exit ticket, which the teacher will use to inform the next day's lesson."
+- **Teacher Actions**: Provide a script for the closure. e.g., "Before you leave, please complete this Exit Ticket on the slip of paper I've handed out. This will help me know what we need to review tomorrow."
+- **Expected Student Outputs**: Provide an exemplar response for the exit ticket. e.g., "Exemplar Exit Ticket: One thing I learned today is... A question I still have is..."
 - **Exit Ticket Question**: One exit ticket item (e.g., a final question, a matching task, or a vocabulary use prompt).
 
 **H. HOMEWORK ACTIVITY**
