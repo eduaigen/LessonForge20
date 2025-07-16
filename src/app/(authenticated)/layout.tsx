@@ -10,6 +10,7 @@ import {
   Home,
   Lightbulb,
   DollarSign,
+  History,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -73,6 +74,18 @@ export default function AuthenticatedAppLayout({
               </TooltipTrigger>
               <TooltipContent side="right">Pricing</TooltipContent>
             </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/history"
+                  className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                >
+                  <History className="h-5 w-5" />
+                  <span className="sr-only">History</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right">History</TooltipContent>
+            </Tooltip>
           </TooltipProvider>
         </nav>
       </aside>
@@ -107,6 +120,13 @@ export default function AuthenticatedAppLayout({
                 >
                   <DollarSign className="h-5 w-5" />
                   Pricing
+                </Link>
+                <Link
+                  href="/history"
+                  className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                >
+                  <History className="h-5 w-5" />
+                  History
                 </Link>
               </nav>
             </SheetContent>

@@ -1,10 +1,12 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useMemo, useCallback } from 'react';
 import { modules } from '@/lib/modules-data';
+import type { GeneratedContent } from '@/components/generators/NVBiologyGenerator';
 
 const ADMIN_EMAIL = 'admin@eduaigen.org';
+const MAX_HISTORY_LENGTH = 20;
 
 interface User {
     name: string | null;
@@ -22,6 +24,8 @@ interface AuthContextType {
   hasELASubscription: boolean;
   hasSocialStudiesSubscription: boolean;
   hasELLSubscription: boolean;
+  generationHistory: GeneratedContent[][];
+  addToHistory: (newPackage: GeneratedContent[]) => void;
   login: (userInfo: { email: string; name?: string }) => void;
   logout: () => void;
   subscribe: (priceIds: string[]) => void;
@@ -34,21 +38,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [subscriptions, setSubscriptions] = useState<string[]>([]);
+  const [generationHistory, setGenerationHistory] = useState<GeneratedContent[][]>([]);
 
   useEffect(() => {
-    // Check sessionStorage to persist state across page reloads
-    const loggedInStatus = sessionStorage.getItem('isLoggedIn') === 'true';
-    const adminStatus = sessionStorage.getItem('isAdmin') === 'true';
-    const storedUser = sessionStorage.getItem('user');
-    const storedSubscriptions = sessionStorage.getItem('subscriptions');
-    
-    setIsLoggedIn(loggedInStatus);
-    setIsAdmin(adminStatus);
-    if (storedUser) {
-        setUser(JSON.parse(storedUser));
-    }
-    if (storedSubscriptions) {
-        setSubscriptions(JSON.parse(storedSubscriptions));
+    try {
+        const loggedInStatus = sessionStorage.getItem('isLoggedIn') === 'true';
+        const adminStatus = sessionStorage.getItem('isAdmin') === 'true';
+        const storedUser = sessionStorage.getItem('user');
+        const storedSubscriptions = sessionStorage.getItem('subscriptions');
+        const storedHistory = sessionStorage.getItem('generationHistory');
+        
+        setIsLoggedIn(loggedInStatus);
+        setIsAdmin(adminStatus);
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+        if (storedSubscriptions) {
+            setSubscriptions(JSON.parse(storedSubscriptions));
+        }
+        if (storedHistory) {
+            setGenerationHistory(JSON.parse(storedHistory));
+        }
+    } catch (error) {
+        console.error("Error reading from session storage:", error);
+        // Clear potentially corrupted storage
+        sessionStorage.clear();
     }
   }, []);
 
@@ -74,10 +88,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAdmin(false);
     setUser(null);
     setSubscriptions([]);
-    sessionStorage.removeItem('isLoggedIn');
-    sessionStorage.removeItem('isAdmin');
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('subscriptions');
+    setGenerationHistory([]);
+    sessionStorage.clear();
   };
 
   const subscribe = (priceIds: string[]) => {
@@ -85,6 +97,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setSubscriptions(priceIds);
     sessionStorage.setItem('subscriptions', JSON.stringify(priceIds));
   };
+  
+  const addToHistory = useCallback((newPackage: GeneratedContent[]) => {
+    setGenerationHistory(prevHistory => {
+        const updatedHistory = [newPackage, ...prevHistory];
+        if (updatedHistory.length > MAX_HISTORY_LENGTH) {
+            updatedHistory.pop();
+        }
+        sessionStorage.setItem('generationHistory', JSON.stringify(updatedHistory));
+        return updatedHistory;
+    });
+  }, []);
 
   const isSubscribed = isAdmin || subscriptions.length > 0;
 
@@ -124,7 +147,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [subscriptions, isSubscribed, isAdmin]);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription, login, logout, subscribe }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription, generationHistory, addToHistory, login, logout, subscribe }}>
       {children}
     </AuthContext.Provider>
   );

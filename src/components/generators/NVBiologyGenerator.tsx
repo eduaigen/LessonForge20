@@ -78,6 +78,7 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   
@@ -163,11 +164,14 @@ const GeneratorContent = () => {
         content: result,
         type: 'Lesson Plan',
       };
+      
+      const newPackage = [newLessonPlan];
+      setLessonPackage(newPackage);
+      addToHistory(newPackage);
 
-      setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
-       form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
-       setCurrentlySelectedLesson(null);
+      form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
+      setCurrentlySelectedLesson(null);
 
 
     } catch (error) {
@@ -233,7 +237,11 @@ const GeneratorContent = () => {
         }
 
         const newContent: GeneratedContent = { id: `${selectedTool}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
-        setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
+        setLessonPackage(prev => {
+             const newPackage = prev ? [...prev, newContent] : [newContent];
+             addToHistory(newPackage);
+             return newPackage;
+        });
 
     } catch (error) {
         console.error(`${selectedTool} generation failed:`, error);
