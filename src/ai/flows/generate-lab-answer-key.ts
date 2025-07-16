@@ -5,11 +5,7 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { GenerateLabActivityOutputSchema, LabAnswerKeyOutputSchema } from '../schemas/lab-activity-schemas';
-
-export const LabAnswerKeyInputSchema = z.object({
-  originalLab: GenerateLabActivityOutputSchema,
-});
+import { LabAnswerKeyInputSchema, LabAnswerKeyOutputSchema } from '../schemas/lab-activity-schemas';
 
 const prompt = ai.definePrompt({
   name: 'generateLabAnswerKeyPrompt',

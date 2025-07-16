@@ -58,6 +58,9 @@ export const LabStudentSheetOutputSchema = z.object({
 });
 
 // Schema for the Lab Answer Key
+export const LabAnswerKeyInputSchema = z.object({
+  originalLab: GenerateLabActivityOutputSchema,
+});
 export const LabAnswerKeyOutputSchema = z.object({
     title: z.string(),
     preLabAnswers: z.array(z.string()),
