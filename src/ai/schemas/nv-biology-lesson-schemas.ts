@@ -1,3 +1,4 @@
+
 import { z } from 'zod';
 
 export const GenerateNVBiologyLessonInputSchema = z.object({
@@ -41,14 +42,16 @@ const miniLessonSchema = lessonSectionSchema.extend({
 });
 
 export const dataTableSchema = z.object({
-  title: z.string().describe("Title for the data table."),
+  title: z.string(),
   headers: z.array(z.string()),
   rows: z.array(z.array(z.string())),
 });
 
 const guidedPracticeSchema = lessonSectionSchema.extend({
-  dataTable: dataTableSchema.nullable().describe("A complete and structured data table for analysis. Must be null if activityDescription is provided."),
-  activityDescription: z.string().nullable().describe("Description of a non-data-based activity (e.g., card sort). Must be null if dataTable is provided."),
+  activityContent: z.union([
+    dataTableSchema,
+    z.string().describe("Description of a non-data-based activity (e.g., card sort).")
+  ]),
 });
 
 

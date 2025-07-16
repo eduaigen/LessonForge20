@@ -130,13 +130,13 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
                 <div><strong>Materials Needed:</strong> <ul className="list-disc pl-5">{lessonOverview.materials.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
             </LessonSection>
 
-            <LessonSection title="B. Do Now (5–8 min)">
+            <LessonSection title="A. Do Now (5–8 min)">
                 <div><h4>Question</h4><p>{doNow.question}</p></div>
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{doNow.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{doNow.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
 
-            <LessonSection title="C. Mini-Lesson / Direct Instruction (10–15 min)">
+            <LessonSection title="B. Mini-Lesson / Direct Instruction (10–15 min)">
                 <div><h4>Reading Passage</h4><Markdown>{miniLesson.readingPassage}</Markdown></div>
                 {miniLesson.diagram && <div><h4>Diagram Description</h4><blockquote className="border-l-4 border-primary pl-4 italic">{miniLesson.diagram}</blockquote></div>}
                 <div><h4>Concept-Check Questions</h4>{renderLeveledQuestions(miniLesson.conceptCheckQuestions)}</div>
@@ -144,38 +144,40 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{miniLesson.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
 
-            <LessonSection title="D. Guided Practice / Group Activity (15–20 min)">
-                {guidedPractice.activityDescription && <div><h4>Activity Description</h4><p>{guidedPractice.activityDescription}</p></div>}
-                {renderTableFromObject(guidedPractice.dataTable)}
+            <LessonSection title="C. Guided Practice / Group Activity (15–20 min)">
+                {typeof guidedPractice.activityContent === 'string' 
+                 ? <div><h4>Activity Description</h4><p>{guidedPractice.activityContent}</p></div>
+                 : renderTableFromObject(guidedPractice.activityContent)
+                }
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{guidedPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{guidedPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
 
-             <LessonSection title="E. Check for Understanding (CFU)">
+             <LessonSection title="D. Check for Understanding (CFU)">
                 <h4>CFU Questions</h4>
                 {renderLeveledQuestions([...checkFoUnderstanding.multipleChoice, checkFoUnderstanding.shortResponse])}
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{checkFoUnderstanding.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{checkFoUnderstanding.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
 
-            <LessonSection title="F. Independent Practice / Performance Task">
+            <LessonSection title="E. Independent Practice / Performance Task">
                 <div><h4>Task Prompt</h4><p>{independentPractice.taskPrompt}</p></div>
                 {renderTableFromObject(independentPractice.taskData)}
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{independentPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{independentPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
 
-            <LessonSection title="G. Closure / Exit Ticket">
+            <LessonSection title="F. Closure / Exit Ticket">
                 <div><h4>Exit Ticket Question</h4><p>{closure.exitTicketQuestion}</p></div>
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{closure.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{closure.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
 
-            <LessonSection title="H. Homework Activity">
+            <LessonSection title="G. Homework Activity">
                 <div><h4>Activity</h4><Markdown>{homework.activity}</Markdown></div>
             </LessonSection>
 
-            <LessonSection title="III. Differentiation & Support">
+            <LessonSection title="H. Differentiation & Support">
                 <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{differentiation.supportActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs with Support</h4><ul className="list-disc pl-5">{differentiation.supportOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
                 <div><h4>Scaffolded Materials</h4><p>{differentiation.scaffoldedMaterials}</p></div>
