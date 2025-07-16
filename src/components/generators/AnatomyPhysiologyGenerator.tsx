@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Body, Sparkles, Wand2, Check } from 'lucide-react';
+import { Loader2, Stethoscope, Sparkles, Wand2, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { anatomyPhysiologyCurriculum } from '@/lib/anatomy-physiology-curriculum';
 import { generateAnatomyPhysiologyLesson, type GenerateAnatomyPhysiologyLessonOutput } from '@/ai/flows/generate-anatomy-physiology-lesson';
@@ -279,7 +279,7 @@ const GeneratorContent = () => {
                       <div className="flex items-center justify-between flex-wrap gap-4">
                         <div className="flex items-center gap-4">
                           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                              <Body className="h-6 w-6" />
+                              <Stethoscope className="h-6 w-6" />
                           </div>
                           <div>
                               <CardTitle className="text-2xl font-headline">Anatomy & Physiology Lesson Generator</CardTitle>

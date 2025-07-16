@@ -29,25 +29,20 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 const ToolCard = ({ title, description, icon, href }: { title: string, description: string, icon: React.ReactNode, href: string }) => {
-  const router = useRouter();
-
-  const handleCardClick = () => {
-    router.push(href);
-  };
-
   return (
-    <Card
-      onClick={handleCardClick}
-      className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200"
-    >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg font-medium">{title}</CardTitle>
-        <div className="text-primary">{icon}</div>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
+    <Link href={href} className="block h-full">
+      <Card
+        className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 h-full flex flex-col"
+      >
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-lg font-medium">{title}</CardTitle>
+          <div className="text-primary">{icon}</div>
+        </CardHeader>
+        <CardContent className="flex-grow">
+          <p className="text-sm text-muted-foreground">{description}</p>
+        </CardContent>
+      </Card>
+    </Link>
   );
 };
 
