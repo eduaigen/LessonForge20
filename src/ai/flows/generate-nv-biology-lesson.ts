@@ -136,7 +136,7 @@ const generateNVBiologyLessonFlow = ai.defineFlow(
         }
         
         currentOutput = output; // Store the incomplete output for the next attempt
-        console.log(`Attempt ${attempts} failed. Lesson plan was incomplete. Retrying...`, output);
+        console.log(`Attempt ${attempts} failed. Lesson plan was incomplete. Retrying...`);
     }
 
     throw new Error('The AI failed to generate a complete lesson plan after multiple attempts. Please try again.');

@@ -36,7 +36,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded."),
-  diagram: z.string().optional().describe("A detailed text description of a scientific diagram for the teacher to generate. Not the SVG code itself."),
+  diagram: z.string().describe("A detailed text description of a scientific diagram for the teacher to generate. Not the SVG code itself."),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 
@@ -47,8 +47,8 @@ export const dataTableSchema = z.object({
 });
 
 const guidedPracticeSchema = lessonSectionSchema.extend({
-  dataTable: dataTableSchema.nullable().describe("A complete and structured data table for analysis. Set to null if using activityDescription."),
-  activityDescription: z.string().nullable().describe("Description of a non-data-based activity (e.g., card sort). Set to null if using dataTable."),
+  dataTable: dataTableSchema.nullable().describe("A complete and structured data table for analysis. Must be null if activityDescription is provided."),
+  activityDescription: z.string().nullable().describe("Description of a non-data-based activity (e.g., card sort). Must be null if dataTable is provided."),
 });
 
 
@@ -64,7 +64,7 @@ const cfuSchema = lessonSectionSchema.extend({
 
 const independentPracticeSchema = lessonSectionSchema.extend({
   taskPrompt: z.string().describe("A full CER (Claim, Evidence, Reasoning) prompt or another analytical task."),
-  taskData: dataTableSchema.optional().describe("Any necessary data, graph, or model to be interpreted."),
+  taskData: dataTableSchema.nullable().describe("Any necessary data, graph, or model to be interpreted. Set to null if not applicable."),
 });
 
 const closureSchema = lessonSectionSchema.extend({
