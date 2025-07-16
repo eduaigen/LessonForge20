@@ -175,11 +175,19 @@ const GeneratorContent = () => {
       try {
         translatedJson = JSON.parse(response.translatedContent);
       } catch (e) {
-        const match = response.translatedContent.match(/\{[\s\S]*\}/);
-        if (match && match[0]) {
-          translatedJson = JSON.parse(match[0]);
+        // Fallback for when the AI returns a markdown block
+        const match = response.translatedContent.match(/```json\n([\s\S]*)\n```/);
+        if (match && match[1]) {
+          translatedJson = JSON.parse(match[1]);
         } else {
-          throw new Error("Failed to parse translated JSON content even after extraction.");
+            const firstBrace = response.translatedContent.indexOf('{');
+            const lastBrace = response.translatedContent.lastIndexOf('}');
+            if (firstBrace !== -1 && lastBrace !== -1) {
+              const jsonString = response.translatedContent.substring(firstBrace, lastBrace + 1);
+              translatedJson = JSON.parse(jsonString);
+            } else {
+               throw new Error("Failed to parse translated JSON content even after extraction.");
+            }
         }
       }
 
