@@ -58,56 +58,61 @@ const PremiumDashboardContent = () => {
         </p>
       </div>
 
-       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+       <div className="space-y-8">
           {hasScienceSubscription && (
-            <>
-             <ToolCard 
-                title="NV Biology Generator"
-                description="Create 5E model lesson plans for the New Visions Biology curriculum."
-                icon={<Leaf />}
-                href="/nv-biology-generator"
-             />
-              <ToolCard 
-                title="NV Earth Science Generator"
-                description="Create 5E model lesson plans for NV Earth & Space Science."
-                icon={<Orbit />}
-                href="/ngss-earth-science-generator"
-             />
-              <ToolCard
-                title="AP Biology Generator"
-                description="Create 5E model lesson plans for the AP Biology curriculum."
-                icon={<Dna />}
-                href="/ap-biology-generator"
-              />
-              <ToolCard
-                title="NGSS Chemistry Generator"
-                description="Create 5E model lesson plans for the NGSS Chemistry curriculum."
-                icon={<Atom />}
-                href="/ngss-chemistry-generator"
-              />
-               <ToolCard
-                title="NGSS Physics Generator"
-                description="Create 5E model lesson plans for the NGSS Physics curriculum."
-                icon={<Magnet />}
-                href="/ngss-physics-generator"
-              />
-               <ToolCard
-                title="Health Lesson Generator"
-                description="Create 5E model lesson plans for Health class."
-                icon={<HeartPulse />}
-                href="/health-generator"
-              />
-              <ToolCard
-                title="Anatomy & Physiology Generator"
-                description="Create detailed lesson plans for Anatomy & Physiology."
-                icon={<Stethoscope />}
-                href="/anatomy-physiology-generator"
-              />
-            </>
+            <section>
+              <h2 className="text-2xl font-bold font-headline mb-4">Science Modules</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                 <ToolCard 
+                    title="NV Biology Generator"
+                    description="Create 5E model lesson plans for the New Visions Biology curriculum."
+                    icon={<Leaf />}
+                    href="/nv-biology-generator"
+                 />
+                  <ToolCard 
+                    title="NV Earth Science Generator"
+                    description="Create 5E model lesson plans for NV Earth & Space Science."
+                    icon={<Orbit />}
+                    href="/ngss-earth-science-generator"
+                 />
+                  <ToolCard
+                    title="AP Biology Generator"
+                    description="Create 5E model lesson plans for the AP Biology curriculum."
+                    icon={<Dna />}
+                    href="/ap-biology-generator"
+                  />
+                  <ToolCard
+                    title="NGSS Chemistry Generator"
+                    description="Create 5E model lesson plans for the NGSS Chemistry curriculum."
+                    icon={<Atom />}
+                    href="/ngss-chemistry-generator"
+                  />
+                   <ToolCard
+                    title="NGSS Physics Generator"
+                    description="Create 5E model lesson plans for the NGSS Physics curriculum."
+                    icon={<Magnet />}
+                    href="/ngss-physics-generator"
+                  />
+                   <ToolCard
+                    title="Health Lesson Generator"
+                    description="Create 5E model lesson plans for Health class."
+                    icon={<HeartPulse />}
+                    href="/health-generator"
+                  />
+                  <ToolCard
+                    title="Anatomy & Physiology Generator"
+                    description="Create detailed lesson plans for Anatomy & Physiology."
+                    icon={<Stethoscope />}
+                    href="/anatomy-physiology-generator"
+                  />
+              </div>
+            </section>
           )}
 
           {hasMathSubscription && (
-             <>
+            <section>
+              <h2 className="text-2xl font-bold font-headline mb-4">Mathematics Modules</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <ToolCard
                     title="Algebra 1 Generator"
                     description="Create 5E model lesson plans for Illustrative Math Algebra 1."
@@ -126,7 +131,8 @@ const PremiumDashboardContent = () => {
                     icon={<Sigma />}
                     href="/geometry-generator"
                 />
-             </>
+              </div>
+            </section>
           )}
 
           {!hasScienceSubscription && !hasMathSubscription && (
