@@ -114,10 +114,10 @@ const PremiumDashboardContent = () => {
                 <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-muted-foreground">Assessment & Lab Generators</h3>
                      <ToolCard 
-                        title="Science Test Generator"
-                        description="Create multi-unit tests with specific DOK levels and question clusters."
+                        title="NV Biology Test Generator"
+                        description="Create custom tests for the New Visions Biology curriculum."
                         icon={<FlaskConical />}
-                        href="/science-test-generator"
+                        href="/nv-biology-test-generator"
                      />
                      <Card className="flex flex-col bg-muted/50">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -40,7 +40,7 @@ The root object should have "testTitle", "multipleChoiceQuestions", "shortAnswer
 
 3.  **"shortAnswerQuestions"** (Array of Objects): Generate a set of short-answer questions. Each object must have:
     - "question": (String) The full question text.
-    - "sampleAnswer": (String) A high-quality, complete sample answer.
+    - "sampleAnswer": (String) A high-quality, complete sample answer for the short answer question.
 
 4.  **"answerKey"** (Object): An object containing the answers.
     - "multipleChoice": (Array of Strings) List of correct answers for the MCQs in order.

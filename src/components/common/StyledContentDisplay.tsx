@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
+import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -569,10 +570,47 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
     );
 };
 
+const TestDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
+    <div className="document-view">
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+      </header>
+
+      {test.multipleChoiceQuestions.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Multiple Choice</h2>
+          <ol className="list-decimal pl-5 space-y-6">
+            {test.multipleChoiceQuestions.map((q, i) => (
+              <li key={i}>
+                <p>{q.question}</p>
+                <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                  {q.options.map(opt => <li key={opt}>{opt}</li>)}
+                </ul>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {test.shortAnswerQuestions.length > 0 && (
+        <section>
+          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Short Answer</h2>
+          <ol className="list-decimal pl-5 space-y-6">
+            {test.shortAnswerQuestions.map((q, i) => (
+              <li key={i}>
+                <p>{q.question}</p>
+                <div className="my-2 h-24 border-b border-dashed"></div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+    </div>
+  );
 
 type StyledContentDisplayProps = {
     content: any | null;
-    type: GeneratedContent['type'];
+    type: GeneratedContent['type'] | 'Test';
 };
 
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
@@ -593,6 +631,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             return renderStudySheet(content);
         case 'Reading Material':
             return <ReadingMaterialDisplay content={content} />;
+        case 'Test':
+            return <TestDisplay test={content} />
         default:
             try {
                 const jsonString = JSON.stringify(content, null, 2);

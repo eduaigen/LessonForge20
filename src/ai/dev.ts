@@ -34,4 +34,4 @@ export * from './flows/study-sheet-generator';
 export * from './flows/worksheet-generator';
 export * from './flows/lesson-section-refiner';
 export * from './flows/send-contact-email';
-export * from './flows/generate-science-test';
+export * from './flows/generate-nv-biology-test';
