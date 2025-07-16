@@ -25,23 +25,16 @@ const prompt = ai.definePrompt({
 - **Number of Question Clusters**: {{{clusterCount}}}
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Generate EXACTLY {{{clusterCount}}} Question Clusters:** Your final JSON output MUST have a 'clusters' array containing exactly {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number.
-2.  **Create a Test Title:** The title should reflect the selected units.
-3.  **For Each of the {{{clusterCount}}} Clusters:**
-    *   **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content. This passage is the primary stimulus for the questions in the cluster.
-    *   **Optional Data Table:** If relevant to the phenomenon, include a data table that students must analyze to answer some of the questions. The data should be realistic and aligned with the reading.
-    *   **Question Mix:** Generate a mix of Multiple Choice, Short Response, and one CER (Claim, Evidence, Reasoning) question.
-    *   **DOK Alignment:** Ensure all questions align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}).
-    *   **Multiple Choice Questions:** Generate exactly 3 MCQs. Each must have 4 answer choices and a correct answer.
-    *   **Short Response Questions:** Generate exactly 2 short response questions that require a brief explanation.
-    *   **CER Question:** Generate one Claim-Evidence-Reasoning question that requires students to make a claim, support it with evidence from the phenomenon passage and/or data table, and explain their reasoning.
-4.  **Create an Answer Key:** For each cluster, provide a detailed answer key.
-    *   For MCQs, list the correct answer.
-    *   For Short Response questions, provide a high-quality sample answer.
-    *   For the CER question, provide a sample claim, a list of potential evidence from the passage, and an exemplar reasoning statement.
-5.  **Curriculum Adherence:** All content, especially the phenomenon passages and questions, MUST be directly derived from and aligned with the provided curriculum content for the selected units. Do not introduce concepts not covered in the curriculum.
+Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
 
-Your response MUST follow the exact JSON structure defined in the output schema.
+**For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
+1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.
+2.  **Optional Data Table:** If relevant to the phenomenon, include a data table that students must analyze. The data should be realistic and aligned with the reading.
+3.  **Question Mix:** Generate a mix of Multiple Choice (3 questions), Short Response (2 questions), and one CER (Claim, Evidence, Reasoning) question.
+4.  **DOK Alignment:** Ensure all questions align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}).
+5.  **Answer Key:** Create a detailed answer key for every question in the cluster. For the enhanced version, this must include explanations for incorrect distractors on MCQs.
+
+Your final output MUST be a single JSON object that strictly follows the output schema. The root 'clusters' array must have a length of {{{clusterCount}}}.
 `,
 });
 
