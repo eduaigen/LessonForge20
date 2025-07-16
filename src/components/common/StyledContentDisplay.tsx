@@ -12,14 +12,9 @@ import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-genera
 import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
-import { Button } from '../ui/button';
-import { Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import GeneratingAnimation from './GeneratingAnimation';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
-import type { TestStudySheetOutput } from '@/ai/flows/generate-test-study-sheet';
-import type { TestGeneratedContent as ScienceTestGeneratedContent } from '../generators/NVBiologyTestGenerator';
+import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 
@@ -164,7 +159,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
     );
 };
 
-const renderWorksheetHeader = () => (
+const WorksheetHeader = () => (
     <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
         <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
             <label className="font-semibold whitespace-nowrap">Name:</label>
@@ -183,7 +178,7 @@ const renderWorksheetHeader = () => (
 
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
-        {renderWorksheetHeader()}
+        <WorksheetHeader />
 
         <p className="italic text-muted-foreground mb-6">{worksheet.introduction}</p>
 
@@ -380,7 +375,7 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
 const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     return (
       <div className="document-view">
-        {renderWorksheetHeader()}
+        <WorksheetHeader />
         <section className="mb-6">
           <h2>Phenomenon</h2>
           <p className="italic">{cluster.phenomenon}</p>
@@ -485,18 +480,19 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => (
 const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
     return (
         <div className="document-view">
-            {renderWorksheetHeader()}
+            <WorksheetHeader />
             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.articleContent}</Markdown>
         </div>
     );
 };
 
-const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 'Test' | 'Differentiated Version' | 'Enhanced Version' | 'Answer Key' }) => (
+const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: string }) => (
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
         {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
       </header>
+       <WorksheetHeader />
       
       {test.clusters?.map((cluster, clusterIndex) => (
         <section key={clusterIndex} className="mb-12 border-t pt-8">
@@ -544,7 +540,7 @@ const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
       </header>
-
+        <WorksheetHeader />
        {test.clusters?.map((cluster, clusterIndex) => (
         <section key={clusterIndex} className="mb-12 border-t pt-8">
           <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1} Answer Key</h2>
@@ -586,6 +582,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
             <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
             {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
         </header>
+         <WorksheetHeader />
         
         {/* Part I: Multiple Choice */}
         <section className="mb-12">
@@ -662,6 +659,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
         {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
       </header>
+      <WorksheetHeader />
   
       {/* Part I: Multiple Choice */}
       <section className="mb-12">
@@ -720,7 +718,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
 
 type StyledContentDisplayProps = {
     content: any | null;
-    type: ScienceTestGeneratedContent['type'] | 'Lesson Plan' | 'Worksheet' | 'Teacher Coach' | 'Slideshow Outline' | 'Question Cluster' | 'Reading Material' | 'Test';
+    type: string;
 };
 
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {

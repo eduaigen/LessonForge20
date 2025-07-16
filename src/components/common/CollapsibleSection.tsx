@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useRef, useState } from 'react';
@@ -9,8 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import StyledContentDisplay from './StyledContentDisplay';
+import StyledContentDisplay, { WorksheetHeader } from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
   title: string;
@@ -27,6 +27,18 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
         const headerHtml = `
             <div style="padding-bottom: 20px; border-bottom: 1px solid #ccc; margin-bottom: 20px; text-align: center;">
                 <h2 style="font-family: sans-serif; color: #333;">${title} - Created by EduAiGen</h2>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
+                    <tr>
+                        <td style="width: 60%; padding-bottom: 10px;"><strong>Name:</strong> ____________________________</td>
+                        <td style="width: 40%; padding-bottom: 10px;"><strong>Date:</strong> _________________</td>
+                    </tr>
+                     <tr>
+                        <td style="width: 60%; padding-bottom: 10px;"><strong>Class:</strong> _____________________________</td>
+                        <td style="width: 40%; padding-bottom: 10px;"><strong>Period:</strong> _________</td>
+                    </tr>
+                </table>
             </div>
         `;
         const footerHtml = `
@@ -132,8 +144,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     
         try {
             const pdf = new jsPDF('p', 'pt', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
     
             await pdf.html(getPrintableHTML(contentElement), {
                 callback: function (doc) {
@@ -142,8 +152,9 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                 },
                 x: 10,
                 y: 10,
-                width: pdfWidth - 20,
-                windowWidth: contentElement.scrollWidth,
+                html2canvas: {
+                    scale: 0.75
+                },
                 autoPaging: 'text',
             });
     
