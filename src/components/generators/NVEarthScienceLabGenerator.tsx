@@ -7,10 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, TestTube, Sparkles, Wand2, Check, X } from 'lucide-react';
+import { Loader2, TestTube, Sparkles, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { earthScienceCurriculum } from '@/lib/earth-science-curriculum';
 import { generateNVEarthScienceLab, type GenerateLabActivityOutput } from '@/ai/flows/generate-nv-earth-science-lab';
@@ -19,9 +19,10 @@ import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
 import CollapsibleSection from '../common/CollapsibleSection';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Checkbox } from '../ui/checkbox';
 
 const formSchema = z.object({
-  lesson: z.string().min(1, { message: 'Please select a lesson.' }),
+  lessons: z.array(z.string()).refine(value => value.length > 0, { message: 'Please select at least one lesson.' }),
   additionalInfo: z.string().optional(),
 });
 
@@ -60,44 +61,44 @@ const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
-  const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { lesson: '', additionalInfo: '' },
+    defaultValues: { lessons: [], additionalInfo: '' },
   });
 
   const units = useMemo(() => Object.keys(earthScienceCurriculum.units), []);
 
-  const handleClearSelection = () => {
-    setCurrentlySelectedLesson(null);
-    form.reset({ lesson: '', additionalInfo: form.getValues('additionalInfo') });
+  const handleTopicCheck = (topicLessons: { title: string }[], checked: boolean | 'indeterminate') => {
+    const currentSelection = form.getValues('lessons') || [];
+    const topicLessonTitles = topicLessons.map(l => l.title);
+    let newSelection;
+    if (checked) {
+        newSelection = [...new Set([...currentSelection, ...topicLessonTitles])];
+    } else {
+        newSelection = currentSelection.filter(l => !topicLessonTitles.includes(l));
+    }
+    form.setValue('lessons', newSelection, { shouldValidate: true });
   }
 
-  const handleLessonSelect = (lessonTitle: string) => {
-    if (currentlySelectedLesson === lessonTitle) {
-      handleClearSelection();
+  const handleUnitCheck = (unitTopics: { [key: string]: { lessons: {title: string}[] } }, checked: boolean | 'indeterminate') => {
+    const currentSelection = form.getValues('lessons') || [];
+    const allUnitLessons = Object.values(unitTopics).flatMap(t => t.lessons.map(l => l.title));
+    let newSelection;
+    if(checked) {
+        newSelection = [...new Set([...currentSelection, ...allUnitLessons])];
     } else {
-      setCurrentlySelectedLesson(lessonTitle);
-      form.setValue('lesson', lessonTitle);
-      setGeneratedContent(null);
+        newSelection = currentSelection.filter(l => !allUnitLessons.includes(l));
     }
-  };
+    form.setValue('lessons', newSelection, { shouldValidate: true });
+  }
 
   async function onSubmit(values: FormData) {
-    if (!currentlySelectedLesson) {
-      toast({
-        title: 'No Lesson Selected',
-        description: 'Please select a lesson to base the lab on.',
-        variant: 'destructive',
-      });
-      return;
-    }
     setIsLoading(true);
     setGeneratedContent(null);
 
     try {
-      const result = await generateNVEarthScienceLab(values);
+      const result = await generateNVEarthScienceLab({ lessons: values.lessons, additionalInfo: values.additionalInfo });
       const newLab: GeneratedContent = {
         id: `lab-${Date.now()}`,
         title: result.labTitle,
@@ -105,8 +106,6 @@ const GeneratorContent = () => {
         type: 'Lab Activity',
       };
       setGeneratedContent(newLab);
-      form.reset({ lesson: '', additionalInfo: values.additionalInfo });
-      setCurrentlySelectedLesson(null);
     } catch (error) {
       console.error('Lab generation failed:', error);
       toast({
@@ -137,43 +136,81 @@ const GeneratorContent = () => {
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <Accordion type="single" collapsible className="w-full">
-                        {units.map((unitKey) => {
-                            const unit = earthScienceCurriculum.units[unitKey];
-                            return (
-                            <AccordionItem value={unitKey} key={unitKey}>
-                                <AccordionTrigger>{unitKey}</AccordionTrigger>
-                                <AccordionContent>
-                                    <Accordion type="single" collapsible className="w-full pl-4">
-                                        {Object.keys(unit.topics).map(topicKey => {
-                                            const topic = unit.topics[topicKey];
-                                            return (
-                                                <AccordionItem value={topicKey} key={topicKey}>
-                                                    <AccordionTrigger>{topicKey}</AccordionTrigger>
-                                                    <AccordionContent>
-                                                      <div className="space-y-2 pl-4">
-                                                          {topic.lessons.map((lesson, index) => {
-                                                              const isSelected = currentlySelectedLesson === lesson.title;
-                                                              return (
-                                                                <div key={index} className="flex items-center justify-between">
-                                                                  <p className="flex-1 font-semibold">{lesson.title}</p>
-                                                                  <Button type="button" variant={isSelected ? "secondary" : "outline"} size="sm" onClick={() => handleLessonSelect(lesson.title)} disabled={isSelected && !!generatedContent}>
-                                                                    {isSelected ? <><Check className="h-4 w-4 mr-2" />Selected</> : 'Select'}
-                                                                  </Button>
-                                                                </div>
-                                                              );
-                                                          })}
-                                                      </div>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            )
-                                        })}
-                                    </Accordion>
-                                </AccordionContent>
-                            </AccordionItem>
-                            )
-                        })}
-                    </Accordion>
+                     <FormField
+                      control={form.control}
+                      name="lessons"
+                      render={() => (
+                        <FormItem>
+                             <div className="mb-4">
+                                <FormLabel className="text-base">Select Units, Topics, or Lessons</FormLabel>
+                                <p className="text-sm text-muted-foreground">Select one or more items to base your lab activity on.</p>
+                            </div>
+                            <Accordion type="multiple" className="w-full">
+                                {units.map((unitKey) => {
+                                    const unit = earthScienceCurriculum.units[unitKey];
+                                    const allUnitLessons = Object.values(unit.topics).flatMap(t => t.lessons.map(l => l.title));
+                                    const selectedLessonsInUnit = form.watch('lessons').filter(l => allUnitLessons.includes(l));
+                                    const isUnitIndeterminate = selectedLessonsInUnit.length > 0 && selectedLessonsInUnit.length < allUnitLessons.length;
+                                    const isUnitChecked = selectedLessonsInUnit.length === allUnitLessons.length;
+
+                                    return (
+                                    <AccordionItem value={unitKey} key={unitKey}>
+                                        <div className="flex items-center">
+                                            <Checkbox id={`unit-${unitKey}`} className="mr-2" onCheckedChange={(checked) => handleUnitCheck(unit.topics, checked)} checked={isUnitChecked} indeterminate={isUnitIndeterminate}/>
+                                            <AccordionTrigger className="flex-1">{unitKey}</AccordionTrigger>
+                                        </div>
+                                        <AccordionContent>
+                                            <Accordion type="multiple" className="w-full pl-4">
+                                                {Object.keys(unit.topics).map(topicKey => {
+                                                    const topic = unit.topics[topicKey];
+                                                    const selectedInTopic = form.watch('lessons').filter(l => topic.lessons.some(tl => tl.title === l));
+                                                    const isTopicIndeterminate = selectedInTopic.length > 0 && selectedInTopic.length < topic.lessons.length;
+                                                    const isTopicChecked = selectedInTopic.length === topic.lessons.length;
+                                                    return (
+                                                        <AccordionItem value={topicKey} key={topicKey}>
+                                                            <div className="flex items-center">
+                                                                <Checkbox id={`topic-${topicKey}`} className="mr-2" onCheckedChange={(checked) => handleTopicCheck(topic.lessons, checked)} checked={isTopicChecked} indeterminate={isTopicIndeterminate}/>
+                                                                <AccordionTrigger className="flex-1">{topicKey}</AccordionTrigger>
+                                                            </div>
+                                                            <AccordionContent>
+                                                            <div className="space-y-2 pl-4">
+                                                                {topic.lessons.map((lesson, index) => (
+                                                                    <FormField
+                                                                        key={index}
+                                                                        control={form.control}
+                                                                        name="lessons"
+                                                                        render={({ field }) => (
+                                                                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                                                                <FormControl>
+                                                                                    <Checkbox
+                                                                                        checked={field.value?.includes(lesson.title)}
+                                                                                        onCheckedChange={(checked) => {
+                                                                                            return checked
+                                                                                                ? field.onChange([...field.value, lesson.title])
+                                                                                                : field.onChange(field.value?.filter((value) => value !== lesson.title));
+                                                                                        }}
+                                                                                    />
+                                                                                </FormControl>
+                                                                                <FormLabel className="font-normal">{lesson.title}</FormLabel>
+                                                                            </FormItem>
+                                                                        )}
+                                                                    />
+                                                                ))}
+                                                            </div>
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    )
+                                                })}
+                                            </Accordion>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                    )
+                                })}
+                            </Accordion>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
                     <FormField control={form.control} name="additionalInfo" render={({ field }) => (
                         <FormItem>
                         <FormLabel>Additional Information (Optional)</FormLabel>
@@ -184,24 +221,13 @@ const GeneratorContent = () => {
                         </FormItem>
                     )} />
                   </CardContent>
+                  <CardFooter>
+                     <Button type="submit" disabled={isLoading} className="w-full">
+                        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                        {isLoading ? 'Generating Lab...' : 'Generate Lab'}
+                    </Button>
+                  </CardFooter>
               </Card>
-              {currentlySelectedLesson && (
-              <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-float-up">
-                  <div className="flex items-center gap-4 p-4 rounded-lg shadow-2xl bg-background border">
-                       <div className="flex-grow">
-                           <h4 className="font-semibold">Lab Topic Selected!</h4>
-                           <p className="text-sm text-muted-foreground truncate max-w-xs">{currentlySelectedLesson}</p>
-                       </div>
-                       <Button type="submit" size="lg" disabled={isLoading} className="bg-green-500 hover:bg-green-600 text-white">
-                           {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Wand2 className="mr-2 h-5 w-5" />}
-                           {isLoading ? 'Generating...' : 'Generate Lab'}
-                       </Button>
-                       <Button type="button" variant="ghost" size="icon" onClick={handleClearSelection} disabled={isLoading}>
-                           <X className="h-5 w-5"/>
-                       </Button>
-                  </div>
-              </div>
-              )}
             </form>
           </Form>
 
@@ -216,7 +242,7 @@ const GeneratorContent = () => {
           {!generatedContent && !isLoading && (
             <div className="text-center py-16">
                 <h2 className="text-2xl font-bold font-headline mb-4">Ready to Generate a Lab?</h2>
-                <p className="text-muted-foreground">Select a lesson topic to create your AI-powered lab activity.</p>
+                <p className="text-muted-foreground">Select one or more lessons to create your AI-powered lab activity.</p>
             </div>
           )}
       </div>

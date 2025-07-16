@@ -47,7 +47,7 @@ export type GenerateLabActivityOutput = z.infer<typeof GenerateLabActivityOutput
 
 // Input schema for all lab generators
 export const GenerateLabActivityInputSchema = z.object({
-  lesson: z.string().describe("The specific lesson title or topic the lab should be based on."),
+  lessons: z.array(z.string()).describe("An array of lesson titles or topics the lab should be based on."),
   additionalInfo: z.string().optional().describe('Any additional notes, requests, or context from the user.'),
 });
 export type GenerateLabActivityInput = z.infer<typeof GenerateLabActivityInputSchema>;

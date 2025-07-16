@@ -14,7 +14,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert instructional designer specializing in creating NGSS-aligned high school chemistry lab activities. Your task is to design an engaging, inquiry-based lab that fits within a strict 45-minute class period.
 
 **Lesson Context:**
-- **Topic**: {{{lesson}}}
+- **Topic(s)**: {{{lessons}}}
 - **Additional Info**: {{{additionalInfo}}}
 
 **CRITICAL INSTRUCTIONS:**
@@ -43,7 +43,7 @@ const generateNGSSChemistryLabFlow = ai.defineFlow(
     timeout: 120000, // 2 minutes
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt({ ...input, lessons: input.lessons.join(', ') });
     if (!output) {
       throw new Error('The AI failed to generate a lab activity. Please try again.');
     }
