@@ -85,3 +85,25 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "extensionActivity": (String) **Elaborate on a challenging prompt or activity.**
 ---
 **Final Instruction**: Review your entire response. Ensure every single section from A to H is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly.
+`,
+});
+
+const generateELA9LessonFlow = ai.defineFlow(
+  {
+    name: 'generateELA9LessonFlow',
+    inputSchema: GenerateELA9LessonInputSchema,
+    outputSchema: GenerateELA9LessonOutputSchema,
+    timeout: 120000, // 2 minutes
+  },
+  async (input) => {
+    const { output } = await prompt(input);
+    if (!output) {
+      throw new Error('The AI failed to generate a lesson plan. Please try again.');
+    }
+    return output;
+  }
+);
+
+export async function generateELA9Lesson(input: GenerateELA9LessonInput): Promise<GenerateELA9LessonOutput> {
+    return await generateELA9LessonFlow(input);
+}
