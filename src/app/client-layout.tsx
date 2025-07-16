@@ -14,9 +14,9 @@ export default function ClientLayout({
 }) {
   return (
     <AuthProvider>
-      <div className="flex min-h-screen flex-col">
+      <div className="relative flex min-h-screen w-full flex-col">
         <AppHeader />
-        <main className="flex-1 flex flex-col pt-16">{children}</main>
+        <div className="flex-1">{children}</div>
         <Footer />
       </div>
       <AccessibilityWidget />
