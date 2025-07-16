@@ -102,9 +102,48 @@ export const earthScienceCurriculum: {
                 }
             }
         },
-        "Climate Change Throughout Human History": {
+        "Unit 3: Climate Change Throughout Human History": {
             topics: {
-                "Investigating past and future climate": { lessons: ["Analyzing data from ice cores", "Interpreting climate evidence from ice core data", "Modeling the greenhouse effect", "Tracing the movement of carbon through Earth's systems", "Investigating the human contribution to climate change", "Analyzing data and predicting future sea level rise", "Investigating the effects of climate change on ecosystems", "Evaluating strategies to reduce carbon emissions", "Exploring controversial geoengineering solutions", "Communicating climate change findings to the public"] }
+                "Unit Opening": {
+                    lessons: [
+                        { title: "Lesson 1: Anchor Phenomenon - Launch", objective: "How do natural factors contribute to changes in Earth’s temperature? What are 97% of climate scientists seeing in the data that makes them so sure humans are the cause of climate change today?" },
+                        { title: "Lesson 2: Anchor Phenomenon - Telling the Story", objective: "How do natural factors contribute to changes in Earth’s temperature? What are 97% of climate scientists seeing in the data that makes them so sure humans are the cause of climate change today?" },
+                        { title: "Lesson 3: Anchor Phenomenon - Reviewing the Performance Task", objective: "How do we help our community understand the climate crisis and what they can do to contribute to equitable solutions?" },
+                        { title: "Lesson 4: Anchor Phenomenon - Surfacing Student Ideas", objective: "Students review the Performance Task." },
+                        { title: "Lesson 5: Anchor Phenomenon - Driving Question Board", objective: "What questions do we have? What data do we need to figure out the answers to these questions?" }
+                    ]
+                },
+                "Earth-Sun Dynamics 5E": {
+                    lessons: [
+                        { title: "Lesson 6: Earth-Sun Dynamics - Engage", objective: "How has the amount of radiation (sunlight) reaching Earth varied in the past?" },
+                        { title: "Lesson 7: Earth-Sun Dynamics - Explore", objective: "How does Earth’s position affect the amount of radiation reaching Earth’s surface?" },
+                        { title: "Lesson 8: Earth-Sun Dynamics - Explain 1", objective: "Did changes in Earth’s position cause the patterns of radiation reaching Earth’s surface and glacial-interglacial cycles?" },
+                        { title: "Lesson 9: Earth-Sun Dynamics - Explain 2", objective: "How strong is the causal relationship between Milankovitch Cycles and glacial-interglacial cycles?" },
+                        { title: "Lesson 10: Earth-Sun Dynamics - Elaborate", objective: "Has the amount of radiation emitted from the Sun changed over time? Has it been a factor contributing to climate change events in the past?" },
+                        { title: "Lesson 11: Earth-Sun Dynamics - Evaluate", objective: "What does what we have learned tell us about climate change today and in the future?" }
+                    ]
+                },
+                "Ice Caps & Oceans 5E": {
+                    lessons: [
+                        { title: "Lesson 12: Ice Caps & Oceans - Engage", objective: "What happens when ice sheets melt or freeze?" },
+                        { title: "Lesson 13: Ice Caps & Oceans - Explore 1", objective: "How do different surfaces interact with radiation from the Sun?" },
+                        { title: "Lesson 14: Ice Caps & Oceans - Explain 1", objective: "Why is the arctic warming at almost 4 times the rate as the rest of the planet?" },
+                        { title: "Lesson 15: Ice Caps & Oceans - Explore 2", objective: "What impact does melting or freezing ice have on ocean currents?" },
+                        { title: "Lesson 16: Ice Caps & Oceans - Explain 2", objective: "How do changing ocean currents impact Earth’s climate system?" },
+                        { title: "Lesson 17: Ice Caps & Oceans - Elaborate", objective: "Are there changes in other ocean currents that can affect climate?" },
+                        { title: "Lesson 18: Ice Caps & Oceans - Evaluate", objective: "What does what we have learned tell us about climate change today and in the future?" }
+                    ]
+                },
+                "Greenhouse Gasses 5E": {
+                    lessons: [
+                        { title: "Lesson 19: Greenhouse Gases - Engage", objective: "What were atmospheric carbon dioxide levels during past climate change events?" },
+                        { title: "Lesson 20: Greenhouse Gasses - Explore 1", objective: "What natural factors cause carbon dioxide from the atmosphere to increase and decrease?" },
+                        { title: "Lesson 21: Greenhouse Gasses - Explain 1", objective: "What was happening with greenhouse gases during and after the Younger Dryas?" },
+                        { title: "Lesson 22: Greenhouse Gasses - Explain 2", objective: "How did climate stability after the Holocene Optimum Warming impact human populations?" },
+                        { title: "Lesson 23: Greenhouse Gasses - Elaborate", objective: "What is the evidence and mechanistic account for human caused climate change today?" },
+                        { title: "Lesson 24: Greenhouse Gases - Evaluate", objective: "How do we know that carbon dioxide emitted into the atmosphere by humans is causing global temperature increases today?" }
+                    ]
+                }
             }
         },
         "More Hurricanes and Blizzards in NYC?": {
