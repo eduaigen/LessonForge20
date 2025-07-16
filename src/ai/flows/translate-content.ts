@@ -16,15 +16,13 @@ const prompt = ai.definePrompt({
   name: 'translateContentPrompt',
   input: { schema: TranslateContentInputSchema },
   output: { schema: TranslateContentOutputSchema },
-  prompt: `You are an expert translator specializing in educational materials. Your task is to translate the provided JSON object into the target language.
-
-**Target Language:** {{{targetLanguage}}}
+  prompt: `Translate the following JSON object into {{{targetLanguage}}}.
 
 **IMPORTANT INSTRUCTIONS:**
-1.  **Preserve Structure:** You MUST maintain the exact same JSON structure, including all keys, arrays, and nested objects.
-2.  **Translate ONLY String Values:** Translate only the string values within the JSON object. Do not translate keys or any non-string values (like numbers or booleans).
+1.  **Preserve JSON Structure:** You MUST maintain the exact same JSON structure, including all keys, arrays, and nested objects. Do not translate keys or any non-string values (like numbers or booleans).
+2.  **Translate ONLY String Values:** Translate only the string values within the JSON object.
 3.  **Maintain Formatting:** For strings that contain Markdown, preserve all Markdown syntax (e.g., \`**\`, \`*\`, \`#\`, lists). Translate only the text content.
-4.  **Natural Language:** Ensure the translation is accurate, natural, and appropriate for an educational context.
+4.  **Output ONLY JSON:** Your entire response must be ONLY the translated JSON object, starting with \`{\` and ending with \`}\`. Do not include any extra text, explanations, or markdown fences like \`\`\`json.
 
 **JSON to Translate:**
 ---

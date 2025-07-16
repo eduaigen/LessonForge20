@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles, Wand2, Printer, Languages } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -29,8 +29,6 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import { languages } from '@/lib/languages';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -183,23 +181,7 @@ const GeneratorContent = () => {
       try {
         translatedJson = JSON.parse(response.translatedContent);
       } catch (e) {
-        const match = response.translatedContent.match(/```json\n([\s\S]*?)\n```/);
-        if (match && match[1]) {
-          translatedJson = JSON.parse(match[1]);
-        } else {
-            const firstBrace = response.translatedContent.indexOf('{');
-            const lastBrace = response.translatedContent.lastIndexOf('}');
-            if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-                const jsonString = response.translatedContent.substring(firstBrace, lastBrace + 1);
-                try {
-                    translatedJson = JSON.parse(jsonString);
-                } catch (finalError) {
-                     throw new Error("Failed to parse translated JSON content even after aggressive extraction.");
-                }
-            } else {
-                throw new Error("Failed to parse translated JSON content.");
-            }
-        }
+        throw new Error("Failed to parse translated JSON content even after extraction.");
       }
 
       const newTranslatedContent: GeneratedContent = {
@@ -466,7 +448,7 @@ const GeneratorContent = () => {
                     title={item.title} 
                     contentItem={item}
                     onTranslate={handleTranslate}
-                    isTranslating={isToolLoading?.includes(item.title) || isToolLoading === 'Translating All'}
+                    isTranslating={isToolLoading?.includes(item.title)}
                 >
                     <StyledContentDisplay
                         content={item.content}
