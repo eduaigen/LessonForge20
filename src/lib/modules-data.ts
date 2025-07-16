@@ -17,12 +17,12 @@ export const modules: {
 } = {
   science: [
     { id: 'price_1Pg0yPAk4y2zY5d6o4qZ5aBc', name: 'NV Biology', description: 'NYS Living Environment curriculum.', icon: 'dna', type: 'course' },
-    { id: 'price_1Pg0yqAk4y2zY5d6n7s8tUvW', name: 'NGSS Biology (OpenSciEd)', description: 'Inquiry-based biology phenomena.', icon: 'leaf', type: 'course' },
-    { id: 'price_1Pg13AAk4y2zY5d6jKlMnOpQ', name: 'AP Biology', description: 'College-level, advanced placement biology.', icon: 'dna', type: 'course' },
-    { id: 'price_1Pg0zFAk4y2zY5d6xYz0a1bC', name: 'Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: 'atom', type: 'course' },
-    { id: 'price_1Pg0znAk4y2zY5d6pQrStVwX', name: 'Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: 'magnet', type: 'course' },
     { id: 'price_1Pg10AAk4y2zY5d6LMN9oPqR', name: 'NV Earth Science', description: 'NYS Physical Setting curriculum.', icon: 'orbit', type: 'course' },
+    { id: 'price_1Pg13AAk4y2zY5d6jKlMnOpQ', name: 'AP Biology', description: 'College-level, advanced placement biology.', icon: 'dna', type: 'course' },
+    { id: 'price_1Pg0zFAk4y2zY5d6xYz0a1bC', name: 'NGSS Chemistry (OpenSciEd)', description: 'Foundational chemical principles.', icon: 'atom', type: 'course' },
+    { id: 'price_1Pg0znAk4y2zY5d6pQrStVwX', name: 'NGSS Physics (OpenSciEd)', description: 'Core concepts like motion, forces, energy.', icon: 'magnet', type: 'course' },
     { id: 'price_1Pg10RAk4y2zY5d6IJK7lMnO', name: 'Health', description: 'Promoting well-being & healthy choices.', icon: 'heartPulse', type: 'course' },
+    { id: 'price_1PgAAVAk4y2zY5d6o4qZ5aBc', name: 'Anatomy & Physiology', description: 'Detailed plans for A&P courses.', icon: 'heartPulse', type: 'course' },
   ],
   math: [
     { id: 'price_1Pg10jAk4y2zY5d6DEF4gHjK', name: 'Illustrative Math Algebra 1', description: 'Linear equations, functions, data.', icon: 'sigma', type: 'course' },
