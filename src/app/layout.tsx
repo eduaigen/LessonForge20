@@ -26,7 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn('font-body antialiased bg-background', inter.variable, spaceGrotesk.variable)}>
+      <body
+        className={cn(
+          'font-body antialiased bg-background',
+          inter.variable,
+          spaceGrotesk.variable
+        )}
+      >
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

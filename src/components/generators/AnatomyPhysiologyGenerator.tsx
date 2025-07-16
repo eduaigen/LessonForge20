@@ -159,6 +159,7 @@ const GeneratorContent = () => {
       setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
       form.reset({ quarter: '', unit: '', week: '', lesson: '', additionalInfo: values.additionalInfo });
+      setCurrentlySelectedLesson(null);
 
     } catch (error) {
       console.error('Lesson generation failed:', error);
@@ -425,4 +426,5 @@ const GeneratorContent = () => {
 export default function AnatomyPhysiologyGenerator() {
     const { hasScienceSubscription } = useAuth();
 
-    return hasScienceSubscription ? <GeneratorContent /> : <
+    return hasScienceSubscription ? <GeneratorContent /> : <SubscriptionPrompt />;
+}

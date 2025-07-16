@@ -1,5 +1,5 @@
-
 import { z } from 'zod';
+import { dataTableSchema } from './nv-biology-lesson-schemas'; // Re-use from another schema
 
 export const GenerateHealthLessonInputSchema = z.object({
   unit: z.string().describe('The unit from the Health curriculum.'),
@@ -13,21 +13,21 @@ const lessonOverviewSchema = z.object({
   topic: z.string(),
   lesson: z.string(),
   lessonSummary: z.string(),
-  standards: z.string().describe("Health Education Standards"),
-  aim: z.string().describe("This should be the same as essentialQuestion."),
-  essentialQuestion: z.string(),
+  standards: z.string().describe("Relevant Health Education Standard and a short description."),
+  aim: z.string().describe("This should be a deep, inquiry-based question that frames the lesson."),
+  essentialQuestion: z.string().describe("This should be the same as the aim."),
   objectives: z.array(z.string()).describe("2-3 'SWBAT' objectives using Bloom’s verbs"),
   vocabulary: z.array(z.object({ term: z.string(), definition: z.string() })).describe("3-5 Tier 2 or 3 terms with definitions"),
-  materials: z.array(z.string()).describe("All handouts, devices, printed visuals"),
+  materials: z.array(z.string()).describe("List of all handouts, devices, printed visuals, etc."),
 });
 
 const lessonSectionSchema = z.object({
-  teacherActions: z.array(z.string()).describe('Verbatim script for teacher, including what to say and write on the board.'),
+  teacherActions: z.array(z.string()).describe('Verbatim script for the teacher, including what to say and what to write on the board.'),
   expectedStudentOutputs: z.array(z.string()).describe('A high-quality exemplar of the expected student work product for this section.'),
 });
 
 const doNowSchema = lessonSectionSchema.extend({
-  question: z.string(),
+  question: z.string().describe("A student-facing question prompt tied to the Aim."),
 });
 
 const leveledQuestionSchema = z.object({
@@ -36,24 +36,17 @@ const leveledQuestionSchema = z.object({
 });
 
 const miniLessonSchema = lessonSectionSchema.extend({
-  readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded."),
-  diagram: z.string().describe("A detailed text description of a scientific diagram for the teacher to generate. Not the SVG code itself."),
+  readingPassage: z.string().describe("A 300-500 word, grade-appropriate reading passage. Key terms should be bolded using Markdown."),
+  diagram: z.string().describe("A detailed text description of a diagram or visual for the teacher to generate. Not the SVG code itself."),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
-});
-
-export const dataTableSchema = z.object({
-  title: z.string(),
-  headers: z.array(z.string()),
-  rows: z.array(z.array(z.string())),
 });
 
 const guidedPracticeSchema = lessonSectionSchema.extend({
   activityContent: z.union([
     dataTableSchema,
-    z.string().describe("Description of a non-data-based activity (e.g., card sort).")
+    z.string().describe("Description of a non-data-based activity (e.g., role-play, scenario analysis).")
   ]),
 });
-
 
 const cfuSchema = lessonSectionSchema.extend({
   multipleChoice: z.array(z.object({
@@ -66,7 +59,7 @@ const cfuSchema = lessonSectionSchema.extend({
 });
 
 const independentPracticeSchema = lessonSectionSchema.extend({
-  taskPrompt: z.string().describe("A full CER (Claim, Evidence, Reasoning) prompt or another analytical task."),
+  taskPrompt: z.string().describe("A full CER (Claim, Evidence, Reasoning) prompt or another analytical/application-based task."),
   taskData: dataTableSchema.nullable().describe("Any necessary data, graph, or model to be interpreted. Set to null if not applicable."),
 });
 
@@ -81,8 +74,8 @@ const homeworkSchema = z.object({
 const differentiationSchema = z.object({
   supportActions: z.array(z.string()).describe('Elaborated, specific strategies for diverse learners.'),
   supportOutputs: z.array(z.string()).describe('Elaborated, potential student outputs with scaffolds.'),
-  scaffoldedMaterials: z.string().describe('Ready-to-use scaffolds like sentence starters or simplified definitions.'),
-  extensionActivity: z.string().describe('A challenging prompt for students who master content early.'),
+  scaffoldedMaterials: z.string().describe('Ready-to-use scaffolds like sentence starters, graphic organizers, or simplified definitions.'),
+  extensionActivity: z.string().describe('A challenging prompt or activity for students who master the content early.'),
 });
 
 export const GenerateHealthLessonOutputSchema = z.object({
@@ -96,7 +89,6 @@ export const GenerateHealthLessonOutputSchema = z.object({
   homework: homeworkSchema,
   differentiation: differentiationSchema,
 });
-
 
 export type GenerateHealthLessonInput = z.infer<typeof GenerateHealthLessonInputSchema>;
 export type GenerateHealthLessonOutput = z.infer<typeof GenerateHealthLessonOutputSchema>;
