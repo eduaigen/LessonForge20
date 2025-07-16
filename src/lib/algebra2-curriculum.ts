@@ -1,4 +1,3 @@
-
 type Lesson = {
     title: string;
     objective: string;

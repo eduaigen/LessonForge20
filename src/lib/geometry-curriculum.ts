@@ -1,4 +1,3 @@
-
 type Lesson = {
     title: string;
     objective: string;
@@ -36,7 +35,7 @@ export const geometryCurriculum: {
                     lessons: [
                         { title: "Predicting Rigid Motions", objective: "GEO-G.CO.6: Use geometric descriptions of rigid motions to transform figures and predict their effect." },
                         { title: "Definition of Congruence", objective: "GEO-G.CO.7: Use the definition of congruence in terms of rigid motions to show two triangles are congruent." },
-                        { title: "Triangle Congruence Criteria", objective: "GEO-G.CO.8: Explain how ASA, SAS, SSS, AAS, and HL follow from the definition of congruence." }
+                        { title: "Triangle Congruence Criteria", objective: "GEO-G.CO.8: Explain how ASA, SAS, SSS, AAS, and HL (Hypotenuse Leg) follow from the definition of congruence." }
                     ]
                 },
                 "Prove geometric theorems": {
