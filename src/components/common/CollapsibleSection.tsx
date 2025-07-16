@@ -1,11 +1,11 @@
 
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, FileDown, Languages, Loader2 } from 'lucide-react';
+import { Printer, Download, FileDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
@@ -119,53 +119,59 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     const handleDownloadPdf = async () => {
         const input = printableContentRef.current;
         if (input) {
-          toast({
+            toast({
             title: 'Generating PDF...',
             description: 'Please wait while we create your document.',
-          });
-          try {
-            const canvas = await html2canvas(input, {
-              scale: 2,
-              useCORS: true,
             });
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
-            const ratio = imgWidth / imgHeight;
-            let docHeight = pdfWidth / ratio;
-            
-            let position = 0;
-            let heightLeft = imgHeight;
-            const margin = 10;
+            try {
+                const canvas = await html2canvas(input, {
+                    scale: 2,
+                    useCORS: true,
+                    // Allow the canvas to grow to capture all content
+                    windowWidth: input.scrollWidth,
+                    windowHeight: input.scrollHeight,
+                });
 
-            pdf.addImage(imgData, 'PNG', margin, position + margin, pdfWidth - (2 * margin), docHeight);
-            heightLeft -= (pdf.internal.pageSize.getHeight() - (2 * margin)) * (imgWidth / (pdfWidth - (2* margin)));
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = canvas.width;
+                const imgHeight = canvas.height;
+                const ratio = imgWidth / imgHeight;
+                const canvasHeightInPdf = pdfWidth / ratio;
+                
+                let heightLeft = canvasHeightInPdf;
+                let position = 0;
 
-            while (heightLeft > 0) {
-              position -= pdf.internal.pageSize.getHeight() - (2 * margin);
-              pdf.addPage();
-              pdf.addImage(imgData, 'PNG', margin, position + margin, pdfWidth - (2 * margin), docHeight);
-              heightLeft -= (pdf.internal.pageSize.getHeight() - (2 * margin)) * (imgWidth / (pdfWidth - (2 * margin)));
+                // Add the first page
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, canvasHeightInPdf);
+                heightLeft -= pdfHeight;
+
+                // Add subsequent pages if content overflows
+                while (heightLeft > 0) {
+                    position = position - pdfHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, canvasHeightInPdf);
+                    heightLeft -= pdfHeight;
+                }
+        
+                pdf.save(`${title.replace(/ /g, '_')}.pdf`);
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                toast({
+                    title: 'PDF Generation Failed',
+                    description: 'Could not generate the PDF file. Please try again.',
+                    variant: 'destructive',
+                });
             }
-    
-            pdf.save(`${title.replace(/ /g, '_')}.pdf`);
-          } catch (error) {
-            console.error('Error generating PDF:', error);
-            toast({
-              title: 'PDF Generation Failed',
-              description: 'Could not generate the PDF file. Please try again.',
-              variant: 'destructive',
-            });
-          }
         }
-      };
+    };
       
   return (
     <Card className="mt-6 shadow-md">
       <div style={{ display: 'none' }}>
-        <div ref={printableContentRef} id={`printable-content-${contentItem.id}`} className="p-4">
+        <div ref={printableContentRef} id={`printable-content-${contentItem.id}`} className="p-4 bg-white text-black">
              <StyledContentDisplay content={contentItem.content} type={contentItem.type} />
         </div>
       </div>
