@@ -159,7 +159,7 @@ const GeneratorContent = () => {
 
       setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
-      form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
+       form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
 
     } catch (error) {
       console.error('Lesson generation failed:', error);
