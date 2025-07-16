@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { htmlToText } from 'html-to-text';
 import StyledContentDisplay from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
@@ -118,53 +118,39 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
 
     const handleDownloadPdf = async () => {
         const input = printableContentRef.current;
-        if (input) {
-            toast({
+        if (!input) return;
+
+        toast({
             title: 'Generating PDF...',
             description: 'Please wait while we create your document.',
+        });
+
+        try {
+            const pdf = new jsPDF('p', 'pt', 'a4');
+            const source = `
+                <div style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
+                    ${getPrintableHTML(input)}
+                </div>
+            `;
+            
+            await pdf.html(source, {
+                callback: function (doc) {
+                    doc.save(`${title.replace(/ /g, '_')}.pdf`);
+                },
+                x: 15,
+                y: 15,
+                width: 550,
+                windowWidth: input.scrollWidth,
+                autoPaging: 'text',
             });
-            try {
-                const canvas = await html2canvas(input, {
-                    scale: 2,
-                    useCORS: true,
-                    // Allow the canvas to grow to capture all content
-                    windowWidth: input.scrollWidth,
-                    windowHeight: input.scrollHeight,
-                });
 
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                const imgWidth = canvas.width;
-                const imgHeight = canvas.height;
-                const ratio = imgWidth / imgHeight;
-                const canvasHeightInPdf = pdfWidth / ratio;
-                
-                let heightLeft = canvasHeightInPdf;
-                let position = 0;
-
-                // Add the first page
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, canvasHeightInPdf);
-                heightLeft -= pdfHeight;
-
-                // Add subsequent pages if content overflows
-                while (heightLeft > 0) {
-                    position = position - pdfHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, canvasHeightInPdf);
-                    heightLeft -= pdfHeight;
-                }
-        
-                pdf.save(`${title.replace(/ /g, '_')}.pdf`);
-            } catch (error) {
-                console.error('Error generating PDF:', error);
-                toast({
-                    title: 'PDF Generation Failed',
-                    description: 'Could not generate the PDF file. Please try again.',
-                    variant: 'destructive',
-                });
-            }
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            toast({
+                title: 'PDF Generation Failed',
+                description: 'Could not generate the PDF file. Please try again.',
+                variant: 'destructive',
+            });
         }
     };
       
