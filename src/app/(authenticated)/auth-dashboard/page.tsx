@@ -47,7 +47,7 @@ const ToolCard = ({ title, description, icon, href }: { title: string, descripti
 };
 
 const PremiumDashboardContent = () => {
-  const { user, hasScienceSubscription } = useAuth();
+  const { user, hasScienceSubscription, hasMathSubscription } = useAuth();
   
   return (
     <div className="flex flex-col gap-8">
@@ -106,7 +106,30 @@ const PremiumDashboardContent = () => {
             </>
           )}
 
-          {!hasScienceSubscription && (
+          {hasMathSubscription && (
+             <>
+                <ToolCard
+                    title="Algebra 1 Generator"
+                    description="Create 5E model lesson plans for Illustrative Math Algebra 1."
+                    icon={<Sigma />}
+                    href="/algebra1-generator"
+                />
+                <ToolCard
+                    title="Algebra 2 Generator"
+                    description="Create 5E model lesson plans for Illustrative Math Algebra 2."
+                    icon={<Sigma />}
+                    href="/algebra2-generator"
+                />
+                <ToolCard
+                    title="Geometry Generator"
+                    description="Create 5E model lesson plans for Illustrative Math Geometry."
+                    icon={<Sigma />}
+                    href="/geometry-generator"
+                />
+             </>
+          )}
+
+          {!hasScienceSubscription && !hasMathSubscription && (
              <div className="text-center py-16 col-span-full">
                 <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
                 <p className="text-muted-foreground">You do not have any active subscriptions with available tools.</p>

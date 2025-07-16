@@ -18,6 +18,7 @@ interface AuthContextType {
   user: User | null;
   subscriptions: string[];
   hasScienceSubscription: boolean;
+  hasMathSubscription: boolean;
   login: (userInfo: { email: string; name?: string }) => void;
   logout: () => void;
   subscribe: (priceIds: string[]) => void;
@@ -91,8 +92,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return subscriptions.some(subId => scienceModuleIds.includes(subId));
   }, [subscriptions, isSubscribed, isAdmin]);
 
+  const hasMathSubscription = useMemo(() => {
+    if (isAdmin) return true;
+    if (!isSubscribed) return false;
+    const mathModuleIds = modules.math.map(m => m.id);
+    return subscriptions.some(subId => mathModuleIds.includes(subId));
+  }, [subscriptions, isSubscribed, isAdmin]);
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, login, logout, subscribe }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, login, logout, subscribe }}>
       {children}
     </AuthContext.Provider>
   );
