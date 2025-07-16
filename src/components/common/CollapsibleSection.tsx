@@ -1,16 +1,16 @@
 
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, FileDown, Languages } from 'lucide-react';
+import { Printer, Download, FileDown, Languages, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { htmlToText } from 'html-to-text';
 import StyledContentDisplay from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
@@ -22,6 +22,7 @@ type CollapsibleSectionProps = {
 export default function CollapsibleSection({ title, children, contentItem }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const printableContentRef = useRef<HTMLDivElement>(null);
+    const [isDownloading, setIsDownloading] = useState(false);
 
     const getPrintableHTML = (element: HTMLElement) => {
         const headerHtml = `
@@ -37,7 +38,13 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                 </p>
             </div>
         `;
-        return headerHtml + element.innerHTML + footerHtml;
+        return `<html><head><style>
+          body { font-family: 'Times New Roman', serif; }
+          table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+          th { font-weight: bold; }
+          h1,h2,h3,h4,h5,h6 { font-weight: bold; }
+          blockquote { border-left: 2px solid #ccc; padding-left: 10px; margin-left: 0; font-style: italic; }
+        </style></head><body>${headerHtml}${element.innerHTML}${footerHtml}</body></html>`;
     }
 
     const handlePrint = () => {
@@ -78,7 +85,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     }
                   </style>
                 `);
-                printWindow.document.write('</head><body>');
                 printWindow.document.write(getPrintableHTML(printableContent));
                 printWindow.document.write('</body></html>');
                 printWindow.document.close();
@@ -101,7 +107,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
 
         const htmlContent = getPrintableHTML(content);
 
-        const blob = new Blob(['<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + htmlContent + '</body></html>'], {
+        const blob = new Blob([htmlContent], {
             type: 'application/msword'
         });
 
@@ -115,109 +121,52 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
         URL.revokeObjectURL(url);
     };
 
-   const handleDownloadPdf = async () => {
-    const input = printableContentRef.current;
-    if (!input) {
-      toast({
-        title: "Error",
-        description: "Content to print not found.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({
-      title: "Generating PDF...",
-      description: "Please wait, this may take a moment.",
-    });
-
-    try {
-      // Temporarily expand the element to its full height to capture all content
-      input.style.height = 'auto';
-      input.style.maxHeight = 'none';
-      
-      const canvas = await html2canvas(input, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        scrollY: -window.scrollY,
-        windowWidth: document.documentElement.offsetWidth,
-        windowHeight: document.documentElement.offsetHeight,
-      });
-
-      // Restore original styles
-      input.style.height = '';
-      input.style.maxHeight = '';
-      
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'p',
-        unit: 'px',
-        format: 'a4',
-      });
-      
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      const canvasWidth = canvas.width;
-      const canvasHeight = canvas.height;
-      
-      const ratio = canvasWidth / pdfWidth;
-      const imgHeight = canvasHeight / ratio;
-      
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-      heightLeft -= pdfHeight;
-
-      while (heightLeft > 0) {
-        position = -heightLeft;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdfHeight;
+    const handleDownloadPdf = async () => {
+      const contentElement = printableContentRef.current;
+      if (!contentElement) {
+        toast({ title: 'Error', description: 'Content to print not found.', variant: 'destructive' });
+        return;
       }
-      
-      pdf.save(`${title.replace(/ /g, '_')}.pdf`);
-
-      toast({
-        title: "Success",
-        description: "PDF has been downloaded.",
-      });
-
-    } catch (error) {
-      console.error("PDF Generation Error:", error);
-      toast({
-        title: "PDF Generation Failed",
-        description: "An unexpected error occurred while creating the PDF. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-
-  const handleTranslateClick = () => {
-    // This function will be defined in the layout and attached to the window object.
-    if ((window as any).googleTranslateElementInit) {
-        // A bit of a hack to get the Google Translate widget to show up
-        const gtranslateElement = document.getElementById('google_translate_element');
-        if (gtranslateElement) {
-             const langSelector = gtranslateElement.querySelector('.goog-te-combo') as HTMLElement;
-             if (langSelector) {
-                langSelector.focus();
-             } else {
-                // If the combo box isn't there, we might need to re-init, but for now, just log
-                console.log("Google Translate combo box not found.");
-             }
-        }
-    } else {
+  
+      setIsDownloading(true);
+      toast({ title: 'Generating PDF...', description: 'Please wait, this may take a moment.' });
+  
+      try {
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const margin = 40;
+  
+        // Use a function from jspdf-html2canvas
+        // This is a more robust way to handle multi-page PDFs
+        // @ts-ignore
+        await pdf.html(contentElement, {
+          autoPaging: 'text',
+          x: margin,
+          y: margin,
+          width: pdfWidth - (margin * 2),
+          windowWidth: contentElement.scrollWidth,
+          margin: {
+              top: margin,
+              right: margin,
+              bottom: margin,
+              left: margin,
+          }
+        });
+  
+        pdf.save(`${title.replace(/ /g, '_')}.pdf`);
+        toast({ title: 'Success', description: 'PDF has been downloaded.' });
+  
+      } catch (error) {
+        console.error('PDF Generation Error:', error);
         toast({
-            title: "Translation Not Ready",
-            description: "Please wait a moment for the translation service to load.",
-            variant: "destructive"
-        })
-    }
-  }
+          title: 'PDF Generation Failed',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsDownloading(false);
+      }
+    };
       
   return (
     <Card className="mt-6 shadow-md">
@@ -233,16 +182,12 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     <h3 className="text-xl font-headline">{title}</h3>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 ml-4 flex-wrap">
-                    <Button variant="outline" size="icon" onClick={handleTranslateClick} title="Translate Content">
-                        <Languages className="h-4 w-4" />
-                        <span className="sr-only">Translate</span>
-                    </Button>
                     <Button variant="outline" size="icon" onClick={handlePrint} title="Print">
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>
                     </Button>
-                    <Button variant="outline" size="icon" onClick={handleDownloadPdf} title="Download as PDF">
-                        <Download className="h-4 w-4" />
+                    <Button variant="outline" size="icon" onClick={handleDownloadPdf} disabled={isDownloading} title="Download as PDF">
+                        {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
                         <span className="sr-only">Download as PDF</span>
                     </Button>
                     <Button variant="outline" size="icon" onClick={handleDownloadDoc} title="Download as .doc">
