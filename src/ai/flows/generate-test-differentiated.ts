@@ -4,16 +4,14 @@
  * @fileOverview An AI flow for generating a differentiated version of a science test.
  */
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-import { GenerateNVBiologyTestOutputSchema } from '../schemas/nv-biology-test-schemas';
+import { jsonStringify } from 'genkit/tools';
+import {
+  DifferentiatedTestInputSchema,
+  DifferentiatedTestOutputSchema,
+  type DifferentiatedTestInput,
+  type DifferentiatedTestOutput,
+} from '../schemas/differentiated-test-schemas';
 
-export const DifferentiatedTestInputSchema = z.object({
-  originalTest: GenerateNVBiologyTestOutputSchema.describe("The original test object to be differentiated."),
-});
-export type DifferentiatedTestInput = z.infer<typeof DifferentiatedTestInputSchema>;
-
-const DifferentiatedTestOutputSchema = GenerateNVBiologyTestOutputSchema;
-export type DifferentiatedTestOutput = z.infer<typeof DifferentiatedTestOutputSchema>;
 
 const prompt = ai.definePrompt({
   name: 'generateDifferentiatedTestPrompt',

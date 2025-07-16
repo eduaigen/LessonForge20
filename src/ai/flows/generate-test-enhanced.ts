@@ -4,16 +4,13 @@
  * @fileOverview An AI flow for generating an enhanced version of a science test for advanced learners.
  */
 import { ai } from '@/ai/genkit';
-import { z } from 'zod';
-import { GenerateNVBiologyTestOutputSchema } from '../schemas/nv-biology-test-schemas';
-
-export const EnhancedTestInputSchema = z.object({
-  originalTest: GenerateNVBiologyTestOutputSchema.describe("The original test object to be enhanced."),
-});
-export type EnhancedTestInput = z.infer<typeof EnhancedTestInputSchema>;
-
-const EnhancedTestOutputSchema = GenerateNVBiologyTestOutputSchema;
-export type EnhancedTestOutput = z.infer<typeof EnhancedTestOutputSchema>;
+import { jsonStringify } from 'genkit/tools';
+import {
+  EnhancedTestInputSchema,
+  EnhancedTestOutputSchema,
+  type EnhancedTestInput,
+  type EnhancedTestOutput,
+} from '../schemas/enhanced-test-schemas';
 
 const prompt = ai.definePrompt({
   name: 'generateEnhancedTestPrompt',
