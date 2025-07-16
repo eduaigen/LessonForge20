@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2, Languages, Sparkles } from 'lucide-react';
+import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2, Languages, Sparkles, Landmark } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { createCheckoutSession } from '@/actions/stripe';
@@ -32,6 +32,7 @@ const iconMap: { [key: string]: React.ReactNode } = {
     languages: <Languages />,
     bookCopy: <BookCopy />,
     testTube: <TestTube />,
+    landmark: <Landmark />,
 };
 
 const pricing = {
@@ -89,26 +90,27 @@ export default function PricingPage() {
     const premiumTools = selected.filter(m => m.type === 'premium_tool');
     
     let total = 0;
-
+    
+    // Calculate course costs
+    if (courses.length > 0) {
+        total += pricing.course.first;
+    }
+    if (courses.length > 1) {
+        total += pricing.course.second;
+    }
+    if (courses.length > 2) {
+        total += (courses.length - 2) * pricing.course.additional;
+    }
+    
+    // Calculate premium tool costs
     if (courses.length === 0 && premiumTools.length > 0) {
-        // Only premium tools selected
+        // Standalone premium tools
         total += pricing.premium_tool.standalone;
         if (premiumTools.length > 1) {
             total += (premiumTools.length - 1) * pricing.premium_tool.addon;
         }
-    } else {
-        // Courses are selected, possibly with tools
-        if (courses.length > 0) {
-            total += pricing.course.first;
-        }
-        if (courses.length > 1) {
-            total += pricing.course.second;
-        }
-        if (courses.length > 2) {
-            total += (courses.length - 2) * pricing.course.additional;
-        }
-
-        // Add price for any premium tools as add-ons
+    } else if (premiumTools.length > 0) {
+        // Premium tools as add-ons
         total += premiumTools.length * pricing.premium_tool.addon;
     }
     
