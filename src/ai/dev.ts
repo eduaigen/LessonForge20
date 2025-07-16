@@ -48,3 +48,6 @@ export * from './flows/generate-government-test';
 export * from './flows/generate-social-studies-differentiated-test';
 export * from './flows/generate-social-studies-enhanced-test';
 export * from './flows/generate-social-studies-study-sheet';
+export * from './flows/generate-algebra1-test';
+export * from './flows/generate-algebra2-test';
+export * from './flows/generate-geometry-test';

@@ -154,26 +154,50 @@ const PremiumDashboardContent = () => {
           {hasMathSubscription && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Mathematics Modules</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <ToolCard
-                    title="Algebra 1 Generator"
-                    description="Create 5E model lesson plans for Illustrative Math Algebra 1."
-                    icon={<Sigma />}
-                    href="/algebra1-generator"
-                />
-                <ToolCard
-                    title="Algebra 2 Generator"
-                    description="Create 5E model lesson plans for Illustrative Math Algebra 2."
-                    icon={<Sigma />}
-                    href="/algebra2-generator"
-                />
-                <ToolCard
-                    title="Geometry Generator"
-                    description="Create 5E model lesson plans for Illustrative Math Geometry."
-                    icon={<Sigma />}
-                    href="/geometry-generator"
-                />
-              </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                        <h3 className="text-lg font-semibold text-muted-foreground">Lesson Plan Generators</h3>
+                        <ToolCard
+                            title="Algebra 1 Generator"
+                            description="Create 5E model lesson plans for Illustrative Math Algebra 1."
+                            icon={<Sigma />}
+                            href="/algebra1-generator"
+                        />
+                        <ToolCard
+                            title="Algebra 2 Generator"
+                            description="Create 5E model lesson plans for Illustrative Math Algebra 2."
+                            icon={<Sigma />}
+                            href="/algebra2-generator"
+                        />
+                        <ToolCard
+                            title="Geometry Generator"
+                            description="Create 5E model lesson plans for Illustrative Math Geometry."
+                            icon={<Sigma />}
+                            href="/geometry-generator"
+                        />
+                    </div>
+                    <div className="space-y-6">
+                        <h3 className="text-lg font-semibold text-muted-foreground">Assessment Generators</h3>
+                         <ToolCard
+                            title="Algebra 1 Test Generator"
+                            description="Create Regents-style tests for Algebra 1."
+                            icon={<FlaskConical />}
+                            href="/algebra1-test-generator"
+                        />
+                        <ToolCard
+                            title="Algebra 2 Test Generator"
+                            description="Create Regents-style tests for Algebra 2."
+                            icon={<FlaskConical />}
+                            href="/algebra2-test-generator"
+                        />
+                        <ToolCard
+                            title="Geometry Test Generator"
+                            description="Create Regents-style tests for Geometry."
+                            icon={<FlaskConical />}
+                            href="/geometry-test-generator"
+                        />
+                    </div>
+                </div>
             </section>
           )}
 
