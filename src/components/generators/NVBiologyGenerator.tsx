@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Leaf, Sparkles, Wand2, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -24,7 +23,6 @@ import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
-import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import {
@@ -53,7 +51,6 @@ export type GeneratedContent = {
   content: any;
   type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
   sourceId?: string;
-  language?: string;
 };
 
 const SubscriptionPrompt = () => (
@@ -84,6 +81,8 @@ const GeneratorContent = () => {
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
+  const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
+
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
@@ -103,16 +102,7 @@ const GeneratorContent = () => {
   }, [lessonPackage]);
 
 
-  const selectedUnit = form.watch('unit');
-  const selectedTopic = form.watch('topic');
-  const selectedLesson = form.watch('lesson');
-
   const units = useMemo(() => Object.keys(nvBiologyCurriculum.units), []);
-  const topics = useMemo(() => {
-    if (!selectedUnit) return [];
-    const unitData = nvBiologyCurriculum.units[selectedUnit as keyof typeof nvBiologyCurriculum.units];
-    return unitData ? Object.keys(unitData.topics) : [];
-  }, [selectedUnit]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -131,7 +121,30 @@ const GeneratorContent = () => {
     }
   }
 
+  const handleLessonSelect = (unitKey: string, topicKey: string, lessonTitle: string) => {
+    if (currentlySelectedLesson === lessonTitle) {
+      // Deselect if clicking the same lesson again
+      setCurrentlySelectedLesson(null);
+      form.reset({ unit: '', topic: '', lesson: '', additionalInfo: form.getValues('additionalInfo') });
+    } else {
+      setCurrentlySelectedLesson(lessonTitle);
+      form.setValue('unit', unitKey);
+      form.setValue('topic', topicKey);
+      form.setValue('lesson', lessonTitle);
+      setLessonPackage(null); // Clear previous generations
+    }
+  };
+
+
   async function onLessonPlanSubmit(values: FormData) {
+     if (!currentlySelectedLesson) {
+      toast({
+        title: 'No Lesson Selected',
+        description: 'Please select a lesson from the list before generating.',
+        variant: 'destructive',
+      });
+      return;
+    }
     setIsLoading(true);
     setLessonPackage(null);
 
@@ -147,6 +160,8 @@ const GeneratorContent = () => {
 
       setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
+       form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
+
 
     } catch (error) {
       console.error('Lesson generation failed:', error);
@@ -293,7 +308,9 @@ const GeneratorContent = () => {
                                                         <AccordionTrigger>{topic.topic}</AccordionTrigger>
                                                         <AccordionContent>
                                                           <div className="space-y-2 pl-4">
-                                                              {topic.lessons.map((lesson, index) => (
+                                                              {topic.lessons.map((lesson, index) => {
+                                                                  const isSelected = currentlySelectedLesson === lesson.title;
+                                                                  return (
                                                                   <div key={index} className="flex items-center justify-between">
                                                                       <div className="flex-1">
                                                                           <p className="font-semibold">{lesson.title}</p>
@@ -301,18 +318,21 @@ const GeneratorContent = () => {
                                                                       </div>
                                                                       <Button 
                                                                         type="button"
-                                                                        variant={selectedLesson === lesson.title ? "secondary" : "outline"}
+                                                                        variant={isSelected ? "secondary" : "outline"}
                                                                         size="sm"
-                                                                        onClick={() => {
-                                                                            form.setValue('unit', unitKey);
-                                                                            form.setValue('topic', topicKey);
-                                                                            form.setValue('lesson', lesson.title);
-                                                                        }}
+                                                                        onClick={() => handleLessonSelect(unit.unit, topic.topic, lesson.title)}
+                                                                        disabled={isSelected && !!lessonPackage}
                                                                         >
-                                                                            {selectedLesson === lesson.title ? <Check className="h-4 w-4" /> : 'Select'}
+                                                                            {isSelected ? (
+                                                                                <>
+                                                                                    <Check className="h-4 w-4 mr-2" />
+                                                                                    Selected
+                                                                                </>
+                                                                            ) : 'Select'}
                                                                         </Button>
                                                                   </div>
-                                                              ))}
+                                                                  );
+                                                              })}
                                                           </div>
                                                         </AccordionContent>
                                                     </AccordionItem>
@@ -340,7 +360,7 @@ const GeneratorContent = () => {
                           />
                       </CardContent>
                       <CardFooter>
-                          <Button type="submit" disabled={isLoading} className="w-full">
+                          <Button type="submit" disabled={isLoading || !currentlySelectedLesson} className="w-full">
                           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           {isLoading ? 'Generating Lesson...' : 'Generate New Lesson'}
                           </Button>
@@ -375,7 +395,7 @@ const GeneratorContent = () => {
                 </div>
               )}
              
-              {isToolLoading && !isToolLoading.startsWith('Translating') && (
+              {isToolLoading && (
                   <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
                       <GeneratingAnimation />
                   </CollapsibleSection>
