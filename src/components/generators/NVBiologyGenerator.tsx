@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -97,8 +97,7 @@ const GeneratorContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   
-  const [history, setHistory] = useState<LessonPackage[]>([]);
-  const [activePackageId, setActivePackageId] = useState<string | null>(null);
+  const [lessonPackage, setLessonPackage] = useState<LessonPackage | null>(null);
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
@@ -123,21 +122,17 @@ const GeneratorContent = () => {
   const [sectionContent, setSectionContent] = useState<Record<string, any>>({});
   const [originalSectionContent, setOriginalSectionContent] = useState<Record<string, any>>({});
   
-  const activePackage = useMemo(() => {
-    return history.find(p => p.id === activePackageId);
-  }, [history, activePackageId]);
-
   const lessonPlan = useMemo(() => {
-    return activePackage?.lessonPlan.content as GenerateNVBiologyLessonOutput | null;
-  }, [activePackage]);
+    return lessonPackage?.lessonPlan.content as GenerateNVBiologyLessonOutput | null;
+  }, [lessonPackage]);
 
-  // When activePackage changes, reset editing state
+  // When lessonPackage changes, reset editing state
   useEffect(() => {
     setSelectedSections([]);
     setEditingSections([]);
     setSectionContent(lessonPlan ? { ...lessonPlan } : {});
     setOriginalSectionContent(lessonPlan ? { ...lessonPlan } : {});
-  }, [activePackageId, lessonPlan]);
+  }, [lessonPackage, lessonPlan]);
 
   const selectedUnit = form.watch('unit');
   const selectedTopic = form.watch('topic');
@@ -190,8 +185,7 @@ const GeneratorContent = () => {
           supplementaryMaterials: [],
       };
 
-      setHistory(prev => [...prev, newPackage]);
-      setActivePackageId(newPackageId);
+      setLessonPackage(newPackage);
       setIsToolsInfoDialogOpen(true);
 
     } catch (error) {
@@ -207,17 +201,17 @@ const GeneratorContent = () => {
   }
 
   const handleToolClick = async (toolName: ToolName) => {
-    if (!lessonPlan || !activePackageId) {
+    if (!lessonPlan || !lessonPackage) {
         toast({
             title: "No Lesson Plan",
-            description: "Please generate or select a lesson plan first before using AI tools.",
+            description: "Please generate a lesson plan first before using AI tools.",
             variant: "destructive"
         });
         return;
     }
 
     const title = toolName;
-    if (activePackage?.supplementaryMaterials.some(sec => sec.title === title)) {
+    if (lessonPackage.supplementaryMaterials.some(sec => sec.title === title)) {
         toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
         return;
     }
@@ -253,12 +247,13 @@ const GeneratorContent = () => {
         }
 
         if (newContent) {
-            setHistory(prev => prev.map(p => {
-                if (p.id === activePackageId) {
-                    return { ...p, supplementaryMaterials: [...p.supplementaryMaterials, newContent!] };
-                }
-                return p;
-            }));
+           setLessonPackage(prev => {
+                if (!prev) return null;
+                return {
+                    ...prev,
+                    supplementaryMaterials: [...prev.supplementaryMaterials, newContent!]
+                };
+           });
         }
 
     } catch (error) {
@@ -296,20 +291,19 @@ const GeneratorContent = () => {
   };
 
   const handleSaveSection = (sectionKey: string) => {
+    if (!lessonPackage) return;
     setEditingSections(prev => prev.filter(key => key !== sectionKey));
     setOriginalSectionContent(prev => ({...prev, [sectionKey]: sectionContent[sectionKey]}));
     
-    // Update the lesson plan in history
-    setHistory(prevHistory => prevHistory.map(pkg => {
-        if (pkg.id === activePackageId) {
-            const updatedLessonPlanContent = { ...pkg.lessonPlan.content, [sectionKey]: sectionContent[sectionKey] };
-            return {
-                ...pkg,
-                lessonPlan: { ...pkg.lessonPlan, content: updatedLessonPlanContent }
-            };
+    // Update the lesson plan in the main lesson package state
+    const updatedLessonPlanContent = { ...lessonPackage.lessonPlan.content, [sectionKey]: sectionContent[sectionKey] };
+    setLessonPackage({
+        ...lessonPackage,
+        lessonPlan: {
+            ...lessonPackage.lessonPlan,
+            content: updatedLessonPlanContent
         }
-        return pkg;
-    }));
+    });
 
     toast({ title: 'Section Saved', description: `Your changes to "${sectionKey}" have been saved.`});
   };
@@ -409,44 +403,7 @@ const GeneratorContent = () => {
       </Dialog>
       
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-        <div className="md:col-span-3">
-             <Card className="sticky top-24 shadow-lg">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <History className="h-5 w-5" />
-                        Generation History
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {history.length > 0 ? (
-                        <ScrollArea className="h-[60vh]">
-                            <div className="space-y-2">
-                                {history.map(pkg => (
-                                    <Button
-                                        key={pkg.id}
-                                        variant={activePackageId === pkg.id ? 'secondary' : 'ghost'}
-                                        className="w-full justify-start h-auto py-2 text-left"
-                                        onClick={() => setActivePackageId(pkg.id)}
-                                    >
-                                        <div className="flex flex-col">
-                                            <span className="font-semibold truncate">{pkg.lessonPlan.title}</span>
-                                            <span className="text-xs text-muted-foreground">
-                                                {pkg.supplementaryMaterials.length} supplementary material(s)
-                                            </span>
-                                        </div>
-                                    </Button>
-                                ))}
-                            </div>
-                        </ScrollArea>
-                    ) : (
-                        <p className="text-sm text-muted-foreground text-center py-8">
-                            Generate a lesson to start your history.
-                        </p>
-                    )}
-                </CardContent>
-             </Card>
-        </div>
-        <div className="md:col-span-9 relative">
+        <div className="md:col-span-12 relative">
             <div className="flex-grow">
               <Card className="w-full shadow-lg mb-8">
                   <CardHeader>
@@ -575,18 +532,18 @@ const GeneratorContent = () => {
                   </Form>
               </Card>
               
-              {isLoading && !activePackage && (
+              {isLoading && !lessonPackage && (
                   <div className="mt-8">
                       <GeneratingAnimation />
                   </div>
               )}
 
-              {activePackage ? (
+              {lessonPackage ? (
                 <>
-                    <CollapsibleSection key={activePackage.lessonPlan.id} title={activePackage.lessonPlan.title} contentItem={activePackage.lessonPlan}>
+                    <CollapsibleSection key={lessonPackage.lessonPlan.id} title={lessonPackage.lessonPlan.title} contentItem={lessonPackage.lessonPlan}>
                         <StyledContentDisplay
-                            content={activePackage.lessonPlan.content}
-                            type={activePackage.lessonPlan.type}
+                            content={lessonPackage.lessonPlan.content}
+                            type={lessonPackage.lessonPlan.type}
                             lessonPlanState={{
                                 selectedSections,
                                 editingSections,
@@ -600,16 +557,16 @@ const GeneratorContent = () => {
                             }}
                         />
                     </CollapsibleSection>
-                    {activePackage.supplementaryMaterials.map(section => (
+                    {lessonPackage.supplementaryMaterials.map(section => (
                         <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
                             <StyledContentDisplay content={section.content} type={section.type} />
                         </CollapsibleSection>
                     ))}
                 </>
-              ) : !isLoading && history.length > 0 && (
+              ) : !isLoading && (
                 <div className="text-center py-16">
-                    <h2 className="text-2xl font-bold font-headline mb-4">No Lesson Selected</h2>
-                    <p className="text-muted-foreground">Please select a lesson from the history panel to view its content.</p>
+                    <h2 className="text-2xl font-bold font-headline mb-4">Ready to Generate?</h2>
+                    <p className="text-muted-foreground">Select a unit, topic, and lesson to create your first AI-powered lesson plan.</p>
                 </div>
               )}
              
