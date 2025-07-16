@@ -7,10 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Library, Sparkles, Wand2, Check } from 'lucide-react';
+import { Loader2, Library, Sparkles, Wand2, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -138,10 +138,14 @@ const GeneratorContent = () => {
     if (!open) setIsHighlightingTools(true);
   }
 
+  const handleClearSelection = () => {
+    setCurrentlySelectedLesson(null);
+    form.reset({ unit: '', topic: '', lesson: '', additionalInfo: form.getValues('additionalInfo') });
+  }
+
   const handleLessonSelect = (unitKey: string, topicKey: string, lessonTitle: string) => {
     if (currentlySelectedLesson === lessonTitle) {
-      setCurrentlySelectedLesson(null);
-      form.reset({ unit: '', topic: '', lesson: '', additionalInfo: form.getValues('additionalInfo') });
+      handleClearSelection();
     } else {
       setCurrentlySelectedLesson(lessonTitle);
       form.setValue('unit', unitKey);
@@ -254,18 +258,18 @@ const GeneratorContent = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
-          <Card className="w-full shadow-lg mb-8">
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary"><Library className="h-6 w-6" /></div>
-                <div>
-                  <CardTitle className="text-2xl font-headline">ELA Curriculum Generator</CardTitle>
-                  <CardDescription>Create 5E model lesson plans for 9th-12th Grade English Language Arts.</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
+              <Card className="w-full shadow-lg mb-8">
+                <CardHeader>
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary"><Library className="h-6 w-6" /></div>
+                    <div>
+                      <CardTitle className="text-2xl font-headline">ELA Curriculum Generator</CardTitle>
+                      <CardDescription>Create 5E model lesson plans for 9th-12th Grade English Language Arts.</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
                 <CardContent className="space-y-6">
                   <Tabs value={selectedGrade} onValueChange={(value) => setSelectedGrade(value as Grade)}>
                     <TabsList className="grid w-full grid-cols-4">
@@ -328,14 +332,27 @@ const GeneratorContent = () => {
                     </FormItem>
                   )} />
                 </CardContent>
-                <CardFooter>
-                  <Button type="submit" disabled={isLoading || !currentlySelectedLesson} className="w-full">
-                    {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Lesson...</> : 'Generate New Lesson'}
-                  </Button>
-                </CardFooter>
-              </form>
-            </Form>
-          </Card>
+              </Card>
+
+              {currentlySelectedLesson && (
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-float-up">
+                    <div className="flex items-center gap-4 p-4 rounded-lg shadow-2xl bg-background border">
+                         <div className="flex-grow">
+                             <h4 className="font-semibold">Lesson Selected!</h4>
+                             <p className="text-sm text-muted-foreground truncate max-w-xs">{currentlySelectedLesson}</p>
+                         </div>
+                         <Button type="submit" size="lg" disabled={isLoading} className="bg-green-500 hover:bg-green-600 text-white">
+                             {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Wand2 className="mr-2 h-5 w-5" />}
+                             {isLoading ? 'Generating...' : 'Generate Lesson'}
+                         </Button>
+                         <Button type="button" variant="ghost" size="icon" onClick={handleClearSelection} disabled={isLoading}>
+                             <X className="h-5 w-5"/>
+                         </Button>
+                    </div>
+                </div>
+              )}
+            </form>
+          </Form>
 
           {isLoading && !lessonPackage && <div className="mt-8"><GeneratingAnimation /></div>}
           
