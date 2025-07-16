@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Sparkles, Wand2, Library, FlaskConical } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, FlaskConical } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ela9Curriculum, ela10Curriculum, ela11Curriculum, ela12Curriculum } from '@/lib/ela-curriculum-map';
 import { generateELATest } from '@/ai/flows/generate-ela-test';
@@ -24,11 +24,16 @@ import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { generateDifferentiatedELATest } from '@/ai/flows/generate-ela-differentiated-test';
 import { generateEnhancedELATest } from '@/ai/flows/generate-ela-enhanced-test';
 import { generateELAStudySheet } from '@/ai/flows/generate-ela-study-sheet';
+import { Slider } from '../ui/slider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: 'You have to select at least one lesson.',
   }),
+  passageCount: z.number().min(1).max(4),
+  sourceCount: z.number().min(2).max(5),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -81,14 +86,14 @@ const GeneratorContent = () => {
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { lessons: [] },
+    defaultValues: { lessons: [], passageCount: 3, sourceCount: 4 },
   });
 
   const currentCurriculum = curriculums[selectedGrade];
   const units = useMemo(() => Object.keys(currentCurriculum.units), [currentCurriculum]);
 
   useEffect(() => {
-    form.reset({ lessons: [] });
+    form.reset({ lessons: [], passageCount: 3, sourceCount: 4 });
   }, [selectedGrade, form]);
 
 
@@ -197,6 +202,14 @@ const GeneratorContent = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                 <Tabs value={selectedGrade} onValueChange={(value) => setSelectedGrade(value as Grade)} className="w-full">
+                    <TabsList className="grid w-full grid-cols-4">
+                        <TabsTrigger value="9">9th Grade</TabsTrigger>
+                        <TabsTrigger value="10">10th Grade</TabsTrigger>
+                        <TabsTrigger value="11">11th Grade</TabsTrigger>
+                        <TabsTrigger value="12">12th Grade</TabsTrigger>
+                    </TabsList>
+                 </Tabs>
                   <FormField
                     control={form.control}
                     name="lessons"
@@ -210,27 +223,32 @@ const GeneratorContent = () => {
                               <AccordionItem value={unitKey} key={unitKey}>
                                 <AccordionTrigger>{unit.unit}</AccordionTrigger>
                                 <AccordionContent>
-                                  {Object.keys(unit.topics).map(topicKey => (
-                                    <div key={topicKey} className="pt-2 pl-4">
-                                      <h4 className="font-semibold mb-2">{topicKey}</h4>
-                                      {unit.topics[topicKey].lessons.map((lesson) => (
-                                        <FormField key={lesson.title} control={form.control} name="lessons"
-                                          render={({ field }) => (
-                                            <FormItem className="flex flex-row items-center space-x-3 space-y-0 py-1">
-                                              <FormControl>
-                                                <Checkbox checked={field.value?.includes(lesson.title)}
-                                                  onCheckedChange={(checked) => {
-                                                    return checked ? field.onChange([...field.value, lesson.title]) : field.onChange(field.value?.filter((value) => value !== lesson.title));
-                                                  }}
-                                                />
-                                              </FormControl>
-                                              <FormLabel className="font-normal text-sm">{lesson.title}</FormLabel>
-                                            </FormItem>
-                                          )}
-                                        />
-                                      ))}
-                                    </div>
-                                  ))}
+                                  <div className="space-y-2 pl-4">
+                                    {Object.keys(unit.topics).map(topicKey => {
+                                      const topic = unit.topics[topicKey as keyof typeof unit.topics];
+                                      return (
+                                        <div key={topicKey} className="pt-2">
+                                          <h4 className="font-semibold mb-2">{topic.topic}</h4>
+                                          {topic.lessons.map((lesson, index) => (
+                                            <FormField key={`${unitKey}-${topicKey}-${index}`} control={form.control} name="lessons"
+                                              render={({ field }) => (
+                                                <FormItem className="flex flex-row items-center space-x-3 space-y-0 py-1">
+                                                  <FormControl>
+                                                    <Checkbox checked={field.value?.includes(lesson.title)}
+                                                      onCheckedChange={(checked) => {
+                                                        return checked ? field.onChange([...field.value, lesson.title]) : field.onChange(field.value?.filter((value) => value !== lesson.title));
+                                                      }}
+                                                    />
+                                                  </FormControl>
+                                                  <FormLabel className="font-normal text-sm">{lesson.title}</FormLabel>
+                                                </FormItem>
+                                              )}
+                                            />
+                                          ))}
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
                                 </AccordionContent>
                               </AccordionItem>
                             );
@@ -240,6 +258,10 @@ const GeneratorContent = () => {
                       </FormItem>
                     )}
                   />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                     <FormField control={form.control} name="passageCount" render={({ field }) => (<FormItem><FormLabel>Reading Passages: {field.value}</FormLabel><FormControl><Slider min={1} max={4} step={1} value={[field.value]} onValueChange={(v) => field.onChange(v[0])} /></FormControl></FormItem>)} />
+                     <FormField control={form.control} name="sourceCount" render={({ field }) => (<FormItem><FormLabel>Argument Essay Sources: {field.value}</FormLabel><FormControl><Slider min={2} max={5} step={1} value={[field.value]} onValueChange={(v) => field.onChange(v[0])} /></FormControl></FormItem>)} />
+                  </div>
                 </CardContent>
                 <CardFooter>
                   <Button type="submit" disabled={isLoading} className="w-full">

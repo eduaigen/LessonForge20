@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 export const GenerateELATestInputSchema = z.object({
   lessons: z.array(z.string()).describe('An array of curriculum lessons to base the test on.'),
+  passageCount: z.number().min(1).max(4).describe('The number of reading comprehension passages.'),
+  sourceCount: z.number().min(2).max(5).describe('The number of sources for the argument essay.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({
@@ -25,7 +27,7 @@ const textAnalysisResponseSchema = z.object({
 
 const argumentEssaySchema = z.object({
   prompt: z.string().describe("The prompt for the source-based argument essay."),
-  sources: z.array(passageSchema).describe("An array of 2-5 source texts."),
+  sources: z.array(passageSchema).describe("An array of text-based sources."),
   sampleEssay: z.string().describe("A full, high-quality sample essay that answers the prompt using the provided sources."),
 });
 
@@ -36,7 +38,7 @@ export const GenerateELATestOutputSchema = z.object({
     title: z.string().default("Part 1: Reading Comprehension"),
     passages: z.array(z.object({
         passage: passageSchema,
-        questions: z.array(multipleChoiceQuestionSchema).length(8), // 24 total / 3 passages
+        questions: z.array(multipleChoiceQuestionSchema).length(8),
     })),
   }),
   part2: z.object({

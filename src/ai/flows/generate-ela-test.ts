@@ -15,10 +15,12 @@ const prompt = ai.definePrompt({
   name: 'generateELATestPrompt',
   input: { schema: GenerateELATestInputSchema },
   output: { schema: GenerateELATestOutputSchema },
-  prompt: `You are an expert high school English teacher and assessment writer for the NYS ELA Regents exam. Your task is to generate a comprehensive, three-part test based on a provided list of lessons.
+  prompt: `You are an expert high school English teacher and assessment writer for the NYS ELA Regents exam. Your task is to generate a comprehensive, three-part test based on a provided list of lessons and specified question counts.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
+- **Number of Reading Passages**: {{{passageCount}}} (Generate 8 MCQs per passage)
+- **Number of Argument Essay Sources**: {{{sourceCount}}}
 
 **CRITICAL INSTRUCTIONS:**
 1.  All generated passages and questions must be complete and fully written out. No placeholders.
@@ -28,16 +30,14 @@ const prompt = ai.definePrompt({
 ---
 
 **Part 1: Reading Comprehension**
-- Generate EXACTLY THREE unique reading passages.
-- **Passage 1:** A literary text (e.g., an excerpt from a short story or novel).
-- **Passage 2:** A poem.
-- **Passage 3:** An informational text (e.g., an article, essay, or historical document).
-- For EACH of the three passages, generate EXACTLY EIGHT multiple-choice questions, for a total of 24 questions.
+- Generate EXACTLY {{{passageCount}}} unique reading passages.
+- **Passage Types:** Create a mix of literary text (e.g., short story excerpt), a poem, and informational text (e.g., article, essay).
+- For EACH passage, generate EXACTLY EIGHT multiple-choice questions, for a total of {{{passageCount}}} * 8 questions.
 - The questions should assess a range of skills: word meaning, literary devices, central idea, author's purpose, and inference.
 
 **Part 2: Writing from Sources - Argument Essay**
 - Generate a compelling and debatable prompt related to the themes in the provided lessons.
-- Generate THREE to FOUR diverse, text-based sources that provide different perspectives on the prompt. These can be short excerpts from articles, speeches, or infographics described in text.
+- Generate EXACTLY {{{sourceCount}}} diverse, text-based sources that provide different perspectives on the prompt. These can be short excerpts from articles, speeches, or infographics described in text.
 - Write a detailed, high-quality sample essay that develops a clear claim and supports it with evidence from at least three of the generated sources.
 
 **Part 3: Text Analysis Response**
