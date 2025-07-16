@@ -19,7 +19,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
 import type { TestStudySheetOutput } from '@/ai/flows/generate-test-study-sheet';
-import type { TestGeneratedContent } from '../generators/NVBiologyTestGenerator';
+import type { TestGeneratedContent as ScienceTestGeneratedContent } from '../generators/NVBiologyTestGenerator';
+import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -489,7 +490,7 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
     );
 };
 
-const TestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 'Test' | 'Differentiated Version' | 'Enhanced Version' | 'Answer Key' }) => (
+const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 'Test' | 'Differentiated Version' | 'Enhanced Version' | 'Answer Key' }) => (
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
@@ -536,7 +537,7 @@ const TestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 
     </div>
   );
 
-  const AnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
+  const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
@@ -577,13 +578,97 @@ const TestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 
     </div>
   );
 
+const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOutput }) => (
+    <div className="document-view">
+        <header className="text-center mb-8">
+            <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+        </header>
+        
+        {/* Part I: Multiple Choice */}
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partI.title}</h2>
+            <ol className="list-decimal pl-5 space-y-8">
+                {test.partI.questions.map((mc, index) => (
+                    <li key={index}>
+                        <div className="p-4 border border-dashed rounded-md mb-2">
+                          <Markdown>{mc.stimulus}</Markdown>
+                        </div>
+                        <p>{mc.question}</p>
+                        <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                            {mc.options.map(opt => <li key={opt}>{opt}</li>)}
+                        </ul>
+                    </li>
+                ))}
+            </ol>
+        </section>
+
+        {/* Part II: Constructed-Response Questions */}
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partII.title}</h2>
+            {test.partII.sets.map((crqSet, setIndex) => (
+                <div key={setIndex} className="mb-8 border-t pt-6">
+                    <h3 className="text-xl font-semibold mb-4">Constructed-Response Set {setIndex + 1}</h3>
+                    {crqSet.documents.map((doc, docIndex) => (
+                         <div key={docIndex} className="p-4 border rounded-md mb-4 bg-muted/30">
+                           <p className="font-semibold mb-2">Document {docIndex + 1}</p>
+                           <Markdown>{doc}</Markdown>
+                         </div>
+                    ))}
+                    <ol className="list-decimal pl-5 space-y-6">
+                        {crqSet.questions.map((q, qIndex) => (
+                            <li key={qIndex}>
+                                <p>{q.question}</p>
+                                <div className="my-2 h-24 border-b border-dashed"></div>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            ))}
+        </section>
+
+        {/* Part III: Document-Based Question (DBQ) */}
+        <section>
+             <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIII.title}</h2>
+             <div className="space-y-6">
+                <div>
+                    <h3 className="font-semibold">Historical Context:</h3>
+                    <p>{test.partIII.dbq.historicalContext}</p>
+                </div>
+                <div>
+                    <h3 className="font-semibold">Task:</h3>
+                    <p>{test.partIII.dbq.task}</p>
+                </div>
+                 <div>
+                    <h3 className="font-semibold">Documents:</h3>
+                    {test.partIII.dbq.documents.map((doc, docIndex) => (
+                         <div key={docIndex} className="p-4 border rounded-md mt-4 bg-muted/30">
+                           <p className="font-semibold mb-2">Document {docIndex + 1}</p>
+                           <Markdown>{doc}</Markdown>
+                         </div>
+                    ))}
+                 </div>
+                 <div className="my-4 h-64 border-b border-dashed"></div>
+             </div>
+        </section>
+    </div>
+);
+
+
 type StyledContentDisplayProps = {
     content: any | null;
-    type: TestGeneratedContent['type'] | 'Lesson Plan' | 'Worksheet' | 'Teacher Coach' | 'Slideshow Outline' | 'Question Cluster' | 'Reading Material';
+    type: ScienceTestGeneratedContent['type'] | 'Lesson Plan' | 'Worksheet' | 'Teacher Coach' | 'Slideshow Outline' | 'Question Cluster' | 'Reading Material' | 'Test';
 };
 
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
+    
+    // Check if it's a social studies test based on structure
+    const isSocialStudiesTest = content.partI && content.partII && content.partIII;
+    const isScienceTest = content.clusters;
+
+    if (type === 'Test' && isSocialStudiesTest) {
+        return <SocialStudiesTestDisplay test={content} />;
+    }
     
     switch (type) {
         case 'Lesson Plan':
@@ -602,9 +687,18 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Test':
         case 'Differentiated Version':
         case 'Enhanced Version':
-            return <TestDisplay test={content} type={type} />;
+            if (isScienceTest) {
+              return <ScienceTestDisplay test={content} type={type} />;
+            } else if (isSocialStudiesTest) {
+              return <SocialStudiesTestDisplay test={content} />;
+            }
+            return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
         case 'Answer Key':
-            return <AnswerKeyDisplay test={content} />;
+            if (isScienceTest) {
+              return <ScienceAnswerKeyDisplay test={content} />;
+            }
+            // Add Social Studies Answer Key Display when available
+            return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);
         default:
