@@ -72,8 +72,8 @@ const PremiumDashboardContent = () => {
                 href="/nv-biology-generator"
              />
               <ToolCard 
-                title="NGSS Earth & Space Science Generator"
-                description="Create 5E model lesson plans for NGSS Earth & Space Science."
+                title="NV Earth Science Lesson Generator"
+                description="Create 5E model lesson plans for NV Earth & Space Science."
                 icon={<Orbit />}
                 href="/ngss-earth-science-generator"
              />
