@@ -2,6 +2,7 @@
 'use server';
 /**
  * @fileOverview An AI flow for generating a test for the New Visions Biology curriculum.
+ * This test is structured into multiple question clusters, each anchored by a phenomenon.
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
@@ -16,40 +17,30 @@ const prompt = ai.definePrompt({
   name: 'generateNVBiologyTestPrompt',
   input: { schema: GenerateNVBiologyTestInputSchema },
   output: { schema: GenerateNVBiologyTestOutputSchema },
-  prompt: `You are an expert high school biology teacher and assessment writer. Your task is to generate a comprehensive test based on a specific topic from the New Visions for Public Schools Biology curriculum.
+  prompt: `You are an expert high school biology teacher and assessment writer for the New Visions for Public Schools Biology curriculum. Your task is to generate a comprehensive test based on specific curriculum units.
 
-The user has provided the following context:
-- **Unit**: {{{unit}}}
-- **Topic**: {{{topic}}}
-- **Number of Questions**: {{{questionCount}}}
-
-Based on this context, generate a test with a mix of question types. All questions must be directly relevant to the provided topic.
-
-Your response MUST follow this exact JSON structure:
-
-**JSON STRUCTURE:**
-
-The root object should have "testTitle", "multipleChoiceQuestions", "shortAnswerQuestions", and "answerKey".
-
-1.  **"testTitle"** (String): Create a clear title for the test (e.g., "Test: Gas Exchange and Cellular Respiration").
-
-2.  **"multipleChoiceQuestions"** (Array of Objects): Generate a set of multiple-choice questions. Each object must have:
-    - "question": (String) The full question text.
-    - "options": (Array of 4 Strings) The four answer choices.
-    - "answer": (String) The correct answer choice.
-
-3.  **"shortAnswerQuestions"** (Array of Objects): Generate a set of short-answer questions. Each object must have:
-    - "question": (String) The full question text.
-    - "sampleAnswer": (String) A high-quality, complete sample answer for the short answer question.
-
-4.  **"answerKey"** (Object): An object containing the answers.
-    - "multipleChoice": (Array of Strings) List of correct answers for the MCQs in order.
-    - "shortAnswer": (Array of Strings) List of the sample answers for the short-answer questions in order.
+**User Provided Context:**
+- **Units**: {{{units}}}
+- **Desired DOK Level**: {{{dokLevel}}}
+- **Number of Question Clusters**: {{{clusterCount}}}
 
 **Instructions:**
-- Generate half of the total 'questionCount' as multiple-choice and half as short-answer. For example, if 'questionCount' is 10, generate 5 MCQ and 5 short-answer questions.
-- Ensure all questions are appropriate for a high school biology level and directly assess understanding of the specified topic.
-- The answer key must be complete and accurate.
+1.  **Create a Test Title:** The title should reflect the selected units.
+2.  **Generate Question Clusters:** Create exactly {{{clusterCount}}} distinct question clusters.
+3.  **For Each Cluster:**
+    *   **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content. This passage is the stimulus for the questions in the cluster.
+    *   **Question Mix:** Generate a mix of Multiple Choice, Short Response, and one CER (Claim, Evidence, Reasoning) question.
+    *   **DOK Alignment:** Ensure all questions align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}).
+    *   **Multiple Choice Questions:** Generate 3 MCQs. Each must have 4 answer choices and a correct answer.
+    *   **Short Response Questions:** Generate 2 short response questions that require a brief explanation.
+    *   **CER Question:** Generate one Claim-Evidence-Reasoning question that requires students to make a claim, support it with evidence from the phenomenon passage, and explain their reasoning.
+4.  **Create an Answer Key:** For each cluster, provide a detailed answer key.
+    *   For MCQs, list the correct answer.
+    *   For Short Response questions, provide a high-quality sample answer.
+    *   For the CER question, provide a sample claim, a list of potential evidence from the passage, and an exemplar reasoning statement.
+5.  **Curriculum Adherence:** All content, especially the phenomenon passages and questions, MUST be directly derived from and aligned with the provided curriculum content for the selected units. Do not introduce concepts not covered in the curriculum.
+
+Your response MUST follow the exact JSON structure defined in the output schema.
 `,
 });
 
@@ -58,7 +49,7 @@ const generateNVBiologyTestFlow = ai.defineFlow(
     name: 'generateNVBiologyTestFlow',
     inputSchema: GenerateNVBiologyTestInputSchema,
     outputSchema: GenerateNVBiologyTestOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 240000, // 4 minutes
   },
   async (input) => {
     const { output } = await prompt(input);

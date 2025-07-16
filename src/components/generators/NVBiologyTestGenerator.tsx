@@ -1,54 +1,46 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
-import { Loader2, TestTube, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, TestTube, Sparkles, Wand2, FlaskConical, PencilRuler, BookOpen, BrainCircuit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
-import {
-  generateNVBiologyTest,
-  type GenerateNVBiologyTestOutput,
-} from '@/ai/flows/generate-nv-biology-test';
+import { generateNVBiologyTest, type GenerateNVBiologyTestOutput } from '@/ai/flows/generate-nv-biology-test';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import { useAuth } from '@/context/AuthContext';
 import CollapsibleSection from '../common/CollapsibleSection';
 import StyledContentDisplay from '../common/StyledContentDisplay';
+import RightSidebar, { type ToolName } from '../common/RightSidebar';
+import { Checkbox } from '@/components/ui/checkbox';
+import { generateDifferentiatedTest } from '@/ai/flows/generate-test-differentiated';
+import { generateEnhancedTest } from '@/ai/flows/generate-test-enhanced';
+import { generateTestStudySheet } from '@/ai/flows/generate-test-study-sheet';
 
 const formSchema = z.object({
-  unit: z.string().min(1, { message: 'Please select a unit.' }),
-  topic: z.string().min(1, { message: 'Please select a topic.' }),
-  questionCount: z.number().min(4).max(20),
+  units: z.array(z.string()).refine((value) => value.some((item) => item), {
+    message: 'You have to select at least one unit.',
+  }),
+  dokLevel: z.number().min(1).max(4),
+  clusterCount: z.number().min(1).max(5),
 });
 
 type FormData = z.infer<typeof formSchema>;
+
+export type TestGeneratedContent = {
+  id: string;
+  title: string;
+  content: any;
+  type: 'Test' | 'Answer Key' | 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version';
+  sourceId?: string;
+};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -75,31 +67,42 @@ const SubscriptionPrompt = () => (
 const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [generatedTest, setGeneratedTest] = useState<GenerateNVBiologyTestOutput | null>(null);
+  const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
+  const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      unit: '',
-      topic: '',
-      questionCount: 10,
+      units: [],
+      dokLevel: 2,
+      clusterCount: 3,
     },
   });
 
   const units = useMemo(() => Object.keys(nvBiologyCurriculum.units), []);
-  const selectedUnit = form.watch('unit');
-  const topics = useMemo(() => {
-    if (!selectedUnit) return [];
-    const unitData = nvBiologyCurriculum.units[selectedUnit as keyof typeof nvBiologyCurriculum.units];
-    return unitData ? Object.keys(unitData.topics) : [];
-  }, [selectedUnit]);
 
   async function onSubmit(values: FormData) {
     setIsLoading(true);
-    setGeneratedTest(null);
+    setTestPackage(null);
     try {
       const result = await generateNVBiologyTest(values);
-      setGeneratedTest(result);
+
+      const testContent: TestGeneratedContent = {
+        id: `test-${Date.now()}`,
+        title: result.testTitle,
+        content: result,
+        type: 'Test',
+      };
+      
+      const answerKeyContent: TestGeneratedContent = {
+          id: `answer-key-${Date.now()}`,
+          title: `Answer Key: ${result.testTitle}`,
+          content: result,
+          type: 'Answer Key',
+      }
+
+      setTestPackage([testContent, answerKeyContent]);
+      
     } catch (error) {
       console.error('Test generation failed:', error);
       toast({
@@ -111,170 +114,174 @@ const GeneratorContent = () => {
       setIsLoading(false);
     }
   }
+
+  const handleToolClick = async (toolName: 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version') => {
+    const originalTestContent = testPackage?.find(item => item.type === 'Test');
+    if (!originalTestContent) {
+        toast({ title: "No Test Found", description: "Please generate a test first.", variant: "destructive" });
+        return;
+    }
+
+    if (testPackage?.some(item => item.type === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
+        return;
+    }
+
+    setIsToolLoading(toolName);
+    try {
+        let result: any;
+        let newContent: TestGeneratedContent | null = null;
+
+        switch (toolName) {
+            case 'Study Sheet':
+                result = await generateTestStudySheet({ originalTest: originalTestContent.content });
+                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
+                break;
+            case 'Differentiated Version':
+                result = await generateDifferentiatedTest({ originalTest: originalTestContent.content });
+                newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
+                break;
+            case 'Enhanced Version':
+                result = await generateEnhancedTest({ originalTest: originalTestContent.content });
+                newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
+                break;
+        }
+
+        if (newContent) {
+            setTestPackage(prev => [...(prev || []), newContent!]);
+        }
+    } catch (error) {
+         console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
+    } finally {
+        setIsToolLoading(null);
+    }
+  };
   
-  const TestDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
-    <div className="document-view">
-      <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
-      </header>
-
-      {test.multipleChoiceQuestions.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Multiple Choice</h2>
-          <ol className="list-decimal pl-5 space-y-6">
-            {test.multipleChoiceQuestions.map((q, i) => (
-              <li key={i}>
-                <p>{q.question}</p>
-                <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                  {q.options.map(opt => <li key={opt}>{opt}</li>)}
-                </ul>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-      {test.shortAnswerQuestions.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Short Answer</h2>
-          <ol className="list-decimal pl-5 space-y-6">
-            {test.shortAnswerQuestions.map((q, i) => (
-              <li key={i}>
-                <p>{q.question}</p>
-                <div className="my-2 h-24 border-b border-dashed"></div>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-    </div>
-  );
-
-  const AnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
-    <div className="document-view">
-      <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold font-headline text-primary">Answer Key: {test.testTitle}</h1>
-      </header>
-       {test.multipleChoiceQuestions.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Multiple Choice Answers</h2>
-          <ol className="list-decimal pl-5 space-y-2">
-            {test.answerKey.multipleChoice.map((ans, i) => <li key={i}>{ans}</li>)}
-          </ol>
-        </section>
-      )}
-      {test.shortAnswerQuestions.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Short Answer Sample Responses</h2>
-          <ol className="list-decimal pl-5 space-y-4">
-             {test.answerKey.shortAnswer.map((ans, i) => (
-               <li key={i}>
-                 <p><strong>Question:</strong> {test.shortAnswerQuestions[i].question}</p>
-                 <p><strong>Sample Answer:</strong> {ans}</p>
-               </li>
-             ))}
-          </ol>
-        </section>
-      )}
-    </div>
-  );
+  const testGeneratorTools = [
+      { name: 'Study Sheet', icon: <BookOpen className="h-5 w-5" />, disabled: false, handler: () => handleToolClick('Study Sheet') },
+      { name: 'Differentiated Version', icon: <PencilRuler className="h-5 w-5" />, disabled: false, handler: () => handleToolClick('Differentiated Version') },
+      { name: 'Enhanced Version', icon: <BrainCircuit className="h-5 w-5" />, disabled: false, handler: () => handleToolClick('Enhanced Version') },
+  ];
 
   return (
     <>
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="md:col-span-12 relative">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card className="w-full shadow-lg mb-8">
             <CardHeader>
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <TestTube className="h-6 w-6" />
+                  <FlaskConical className="h-6 w-6" />
                 </div>
                 <div>
                   <CardTitle className="text-2xl font-headline">NV Biology Test Generator</CardTitle>
-                  <CardDescription>Create a custom test based on the New Visions Biology curriculum.</CardDescription>
+                  <CardDescription>Create a custom, cluster-based test aligned to the New Visions Biology curriculum.</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField
-                  control={form.control}
-                  name="unit"
-                  render={({ field }) => (
+               <FormField
+                control={form.control}
+                name="units"
+                render={() => (
                     <FormItem>
-                      <FormLabel>Select Unit</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a unit" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {units.map((unit) => <SelectItem key={unit} value={unit}>{unit}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
+                    <div className="mb-4">
+                        <FormLabel className="text-base">Select Units</FormLabel>
+                        <FormDescription>Choose one or more units to include in the test.</FormDescription>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {units.map((unit) => (
+                        <FormField
+                        key={unit}
+                        control={form.control}
+                        name="units"
+                        render={({ field }) => {
+                            return (
+                            <FormItem key={unit} className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                                <FormControl>
+                                <Checkbox
+                                    checked={field.value?.includes(unit)}
+                                    onCheckedChange={(checked) => {
+                                    return checked
+                                        ? field.onChange([...field.value, unit])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                            (value) => value !== unit
+                                            )
+                                        )
+                                    }}
+                                />
+                                </FormControl>
+                                <FormLabel className="font-normal">{unit}</FormLabel>
+                            </FormItem>
+                            )
+                        }}
+                        />
+                    ))}
+                    </div>
+                    <FormMessage />
                     </FormItem>
-                  )}
+                )}
                 />
-                <FormField
-                  control={form.control}
-                  name="topic"
-                  render={({ field }) => (
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                 <FormField
+                    control={form.control}
+                    name="clusterCount"
+                    render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Select Topic</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!selectedUnit}>
+                        <FormLabel>Number of Question Clusters: {field.value}</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a topic" />
-                          </SelectTrigger>
+                        <Slider min={1} max={5} step={1} value={[field.value]} onValueChange={(values) => field.onChange(values[0])} />
                         </FormControl>
-                        <SelectContent>
-                          {topics.map((topic) => <SelectItem key={topic} value={topic}>{topic}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
                     </FormItem>
-                  )}
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="dokLevel"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Depth of Knowledge (DOK) Level: {field.value}</FormLabel>
+                        <FormControl>
+                        <Slider min={1} max={4} step={1} value={[field.value]} onValueChange={(values) => field.onChange(values[0])}/>
+                        </FormControl>
+                    </FormItem>
+                    )}
                 />
               </div>
-              <FormField
-                control={form.control}
-                name="questionCount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Number of Questions: {field.value}</FormLabel>
-                    <FormControl>
-                      <Slider
-                        min={4} max={20} step={2}
-                        value={[field.value]}
-                        onValueChange={(values) => field.onChange(values[0])}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                {isLoading ? 'Generating...' : 'Generate Test'}
-              </Button>
             </CardContent>
+            <CardFooter>
+                 <Button type="submit" disabled={isLoading} className="w-full">
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                    {isLoading ? 'Generating Test...' : 'Generate Test'}
+                </Button>
+            </CardFooter>
           </Card>
         </form>
       </Form>
 
       {isLoading && <GeneratingAnimation />}
       
-      {generatedTest && (
-        <>
-           <CollapsibleSection title={generatedTest.testTitle} contentItem={{id: 'test', title: 'Test', content: generatedTest, type: 'Test'}}>
-              <TestDisplay test={generatedTest} />
-           </CollapsibleSection>
-           <CollapsibleSection title="Answer Key" contentItem={{id: 'answer-key', title: 'Answer Key', content: generatedTest, type: 'Test'}}>
-              <AnswerKeyDisplay test={generatedTest} />
-           </CollapsibleSection>
-        </>
+      {testPackage?.map(item => (
+        <CollapsibleSection key={item.id} title={item.title} contentItem={{...item, content: item.content as any}}>
+            <StyledContentDisplay content={item.content} type={item.type} />
+        </CollapsibleSection>
+      ))}
+
+      {isToolLoading && (
+        <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Test'}}>
+            <GeneratingAnimation />
+        </CollapsibleSection>
       )}
+
+      {testPackage && <RightSidebar onToolClick={(toolName) => handleToolClick(toolName as any)} isGenerating={!!isToolLoading} isHighlighting={false} />}
+
+    </div>
+    </div>
     </>
   );
 };

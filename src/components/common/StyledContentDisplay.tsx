@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, 'react';
 import Markdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -9,18 +9,17 @@ import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
 import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
-import type { StudySheetOutput } from '@/ai/schemas/study-sheet-generator-schemas';
 import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Button } from '../ui/button';
 import { Loader2 } from 'lucide-react';
-import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
-import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
+import type { TestStudySheetOutput } from '@/ai/flows/generate-test-study-sheet';
+import type { TestGeneratedContent } from '../generators/NVBiologyTestGenerator';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -44,18 +43,6 @@ const renderTableFromObject = (tableData: { title: string, headers: string[], ro
         </div>
     );
 };
-
-
-const renderSimpleMarkdown = (content: string) => {
-    return (
-        <div className="document-view">
-             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                {content}
-            </Markdown>
-        </div>
-    );
-};
-
 
 const renderLeveledQuestions = (questions: { question: string; dok: number; options?: string[]; answer?: string; }[]) => (
   <ol className="list-decimal pl-5 space-y-4">
@@ -166,11 +153,6 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
         </div>
     );
 };
-
-
-// =================================================================
-// Worksheet Rendering
-// =================================================================
 
 const renderWorksheetHeader = () => (
     <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
@@ -325,7 +307,6 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     </div>
 );
 
-
 const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
     const sections = [
         { title: "B. DO NOW", advice: advice.doNow },
@@ -451,12 +432,20 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     );
   };
 
-const renderStudySheet = (studySheet: StudySheetOutput) => (
+const renderStudySheet = (studySheet: TestStudySheetOutput) => (
     <div className="document-view">
         <header className="text-center mb-8">
-            <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.lessonTitle}</h1>
-            <p className="text-lg text-muted-foreground mt-2"><strong>Essential Question:</strong> {studySheet.essentialQuestion}</p>
+            <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
         </header>
+
+        <section className="mb-6">
+            <h2>Key Concepts</h2>
+            <ul className="list-disc pl-5 space-y-2">
+                {studySheet.keyConcepts.map((concept, index) => (
+                    <li key={index}>{concept}</li>
+                ))}
+            </ul>
+        </section>
 
         <section className="mb-6">
             <h2>Key Vocabulary</h2>
@@ -468,42 +457,13 @@ const renderStudySheet = (studySheet: StudySheetOutput) => (
                 ))}
             </ul>
         </section>
-
-        <section className="mb-6">
-            <h2>Core Concepts</h2>
-            <ul className="list-disc pl-5 space-y-2">
-                {studySheet.coreConcepts.map((concept, index) => (
-                    <li key={index}>{concept}</li>
-                ))}
-            </ul>
-        </section>
-
-        {studySheet.keyDiagram && (
-            <section className="mb-6">
-                <h2>Key Diagram / Model</h2>
-                <blockquote className="border-l-4 border-primary pl-4 italic">
-                    {studySheet.keyDiagram}
-                </blockquote>
-            </section>
-        )}
-
-        <section className="mb-6">
-            <h2>Key Activities & Data Summary</h2>
-            <ul className="list-disc pl-5 space-y-3">
-                {studySheet.activitiesAndData.map((activity, index) => (
-                    <li key={index}>
-                        <strong>{activity.activityTitle}:</strong> {activity.summary}
-                    </li>
-                ))}
-            </ul>
-        </section>
-
+        
         <section>
-            <h2>Practice Questions</h2>
+            <h2>Essential Questions</h2>
             <ol className="list-decimal pl-5 space-y-4">
-                {studySheet.practiceQuestions.map((q, index) => (
+                {studySheet.essentialQuestions.map((q, index) => (
                     <li key={index}>
-                        <p>{q.question} <em className="text-xs text-muted-foreground">({q.source})</em></p>
+                        <p>{q}</p>
                         <div className="my-2 h-12 border-b border-dashed"></div>
                     </li>
                 ))}
@@ -513,74 +473,31 @@ const renderStudySheet = (studySheet: StudySheetOutput) => (
 );
 
 const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
-    const { toast } = useToast();
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [questions, setQuestions] = useState<ComprehensionQuestionOutput | null>(null);
-
-    const handleGenerateQuestions = async () => {
-        setIsGenerating(true);
-        setQuestions(null);
-        try {
-            const result = await generateComprehensionQuestions({ articleContent: content.articleContent });
-            setQuestions(result);
-        } catch (error) {
-            console.error("Question generation failed:", error);
-            toast({
-                title: "Question Generation Failed",
-                description: "An error occurred while generating questions. Please try again.",
-                variant: "destructive",
-            });
-        } finally {
-            setIsGenerating(false);
-        }
-    };
-
     return (
         <div className="document-view">
             {renderWorksheetHeader()}
-            {renderSimpleMarkdown(content.articleContent)}
-
-            <div className="my-6 text-center">
-                <Button onClick={handleGenerateQuestions} disabled={isGenerating}>
-                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                    {isGenerating ? 'Generating Questions...' : 'Generate Questions'}
-                </Button>
-            </div>
-
-            {isGenerating && <GeneratingAnimation />}
-            
-            {questions && (
-                <Card className="mt-6">
-                    <CardHeader>
-                        <CardTitle>Comprehension Questions</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <ol className="list-decimal pl-5 space-y-4">
-                            {questions.questions.map((q, i) => (
-                                <li key={i}>
-                                    {q}
-                                    <div className="my-2 h-12 border-b border-dashed"></div>
-                                </li>
-                            ))}
-                        </ol>
-                    </CardContent>
-                </Card>
-            )}
+            <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.articleContent}</Markdown>
         </div>
     );
 };
 
-const TestDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
+const TestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 'Test' | 'Differentiated Version' | 'Enhanced Version' | 'Answer Key' }) => (
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
       </header>
-
-      {test.multipleChoiceQuestions.length > 0 && (
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Multiple Choice</h2>
+      
+      {test.clusters.map((cluster, clusterIndex) => (
+        <section key={clusterIndex} className="mb-12 border-t pt-8">
+          <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1}</h2>
+          <Card className="bg-muted/50 mb-6">
+            <CardHeader><CardTitle>Phenomenon</CardTitle></CardHeader>
+            <CardContent><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{cluster.phenomenon}</Markdown></CardContent>
+          </Card>
+          
+          <h3 className="text-xl font-semibold mb-4">Multiple Choice Questions</h3>
           <ol className="list-decimal pl-5 space-y-6">
-            {test.multipleChoiceQuestions.map((q, i) => (
+            {cluster.multipleChoiceQuestions.map((q, i) => (
               <li key={i}>
                 <p>{q.question}</p>
                 <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
@@ -589,28 +506,69 @@ const TestDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
               </li>
             ))}
           </ol>
-        </section>
-      )}
 
-      {test.shortAnswerQuestions.length > 0 && (
-        <section>
-          <h2 className="text-2xl font-bold font-headline text-primary mb-4">Short Answer</h2>
+          <h3 className="text-xl font-semibold mt-8 mb-4">Short Answer Questions</h3>
           <ol className="list-decimal pl-5 space-y-6">
-            {test.shortAnswerQuestions.map((q, i) => (
+            {cluster.shortAnswerQuestions.map((q, i) => (
               <li key={i}>
                 <p>{q.question}</p>
                 <div className="my-2 h-24 border-b border-dashed"></div>
               </li>
             ))}
           </ol>
+
+          <h3 className="text-xl font-semibold mt-8 mb-4">Claim-Evidence-Reasoning</h3>
+           <p>{cluster.cerQuestion.question}</p>
+           <div className="my-2 h-32 border-b border-dashed"></div>
         </section>
-      )}
+      ))}
+    </div>
+  );
+
+  const AnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
+    <div className="document-view">
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
+      </header>
+
+       {test.clusters.map((cluster, clusterIndex) => (
+        <section key={clusterIndex} className="mb-12 border-t pt-8">
+          <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1} Answer Key</h2>
+          
+          <h3 className="text-xl font-semibold mb-4">Multiple Choice Answers</h3>
+          <ol className="list-decimal pl-5 space-y-2">
+            {cluster.answerKey.multipleChoice.map((ans, i) => (
+              <li key={i}><strong>{ans.answer}</strong> {ans.explanation && <span className="text-sm text-muted-foreground">- {ans.explanation}</span>}</li>
+            ))}
+          </ol>
+
+          <h3 className="text-xl font-semibold mt-8 mb-4">Short Answer Sample Responses</h3>
+          <ol className="list-decimal pl-5 space-y-4">
+             {cluster.answerKey.shortAnswer.map((ans, i) => (
+               <li key={i}>
+                 <p><strong>Question:</strong> {ans.question}</p>
+                 <p><strong>Sample Answer:</strong> {ans.sampleAnswer}</p>
+               </li>
+             ))}
+          </ol>
+
+          <h3 className="text-xl font-semibold mt-8 mb-4">CER Sample Response</h3>
+          <div>
+              <p><strong>Claim:</strong> {cluster.answerKey.cer.sampleClaim}</p>
+              <p><strong>Evidence:</strong></p>
+              <ul className="list-disc pl-6">
+                {cluster.answerKey.cer.sampleEvidence.map((ev, i) => <li key={i}>{ev}</li>)}
+              </ul>
+              <p><strong>Reasoning:</strong> {cluster.answerKey.cer.sampleReasoning}</p>
+          </div>
+        </section>
+      ))}
     </div>
   );
 
 type StyledContentDisplayProps = {
     content: any | null;
-    type: GeneratedContent['type'] | 'Test';
+    type: TestGeneratedContent['type'] | 'Lesson Plan' | 'Worksheet' | 'Teacher Coach' | 'Slideshow Outline' | 'Question Cluster' | 'Reading Material';
 };
 
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
@@ -627,12 +585,16 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             return renderSlideshowOutline(content);
         case 'Question Cluster':
             return renderQuestionCluster(content);
-        case 'Study Sheet':
-            return renderStudySheet(content);
         case 'Reading Material':
             return <ReadingMaterialDisplay content={content} />;
         case 'Test':
-            return <TestDisplay test={content} />
+        case 'Differentiated Version':
+        case 'Enhanced Version':
+            return <TestDisplay test={content} type={type} />;
+        case 'Answer Key':
+            return <AnswerKeyDisplay test={content} />;
+        case 'Study Sheet':
+            return renderStudySheet(content);
         default:
             try {
                 const jsonString = JSON.stringify(content, null, 2);

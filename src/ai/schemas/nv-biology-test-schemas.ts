@@ -2,9 +2,9 @@
 import { z } from 'zod';
 
 export const GenerateNVBiologyTestInputSchema = z.object({
-  unit: z.string().describe('The unit from the NV Biology curriculum.'),
-  topic: z.string().describe('The topic within the selected unit.'),
-  questionCount: z.number().min(4).max(20).describe('The total number of questions for the test.'),
+  units: z.array(z.string()).describe('An array of curriculum units to base the test on.'),
+  dokLevel: z.number().min(1).max(4).describe('The desired Depth of Knowledge level for the questions.'),
+  clusterCount: z.number().min(1).max(5).describe('The number of question clusters to generate.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({
@@ -15,17 +15,41 @@ const multipleChoiceQuestionSchema = z.object({
 
 const shortAnswerQuestionSchema = z.object({
   question: z.string(),
-  sampleAnswer: z.string().describe('A detailed, correct sample answer for the short answer question.'),
+});
+
+const cerQuestionSchema = z.object({
+  question: z.string().describe("A Claim-Evidence-Reasoning prompt."),
+});
+
+const answerKeySchema = z.object({
+  multipleChoice: z.array(z.object({
+    question: z.string(),
+    answer: z.string(),
+    explanation: z.string().optional().describe("Explanation for why incorrect answers are wrong. Only for enhanced tests."),
+  })),
+  shortAnswer: z.array(z.object({
+    question: z.string(),
+    sampleAnswer: z.string(),
+  })),
+  cer: z.object({
+    question: z.string(),
+    sampleClaim: z.string(),
+    sampleEvidence: z.array(z.string()),
+    sampleReasoning: z.string(),
+  }),
+});
+
+const questionClusterSchema = z.object({
+  phenomenon: z.string().describe("A 300-500 word passage describing a real-world phenomenon."),
+  multipleChoiceQuestions: z.array(multipleChoiceQuestionSchema).length(3),
+  shortAnswerQuestions: z.array(shortAnswerQuestionSchema).length(2),
+  cerQuestion: cerQuestionSchema,
+  answerKey: answerKeySchema,
 });
 
 export const GenerateNVBiologyTestOutputSchema = z.object({
   testTitle: z.string(),
-  multipleChoiceQuestions: z.array(multipleChoiceQuestionSchema),
-  shortAnswerQuestions: z.array(shortAnswerQuestionSchema),
-  answerKey: z.object({
-    multipleChoice: z.array(z.string()),
-    shortAnswer: z.array(z.string()),
-  }),
+  clusters: z.array(questionClusterSchema),
 });
 
 export type GenerateNVBiologyTestInput = z.infer<typeof GenerateNVBiologyTestInputSchema>;

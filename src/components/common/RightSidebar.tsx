@@ -5,12 +5,11 @@ import { Button } from '@/components/ui/button';
 import {
   FileText,
   BookOpen,
-  HelpCircle,
   FileQuestion,
   Presentation,
-  Accessibility,
   Bot,
-  ScrollText,
+  PencilRuler,
+  BrainCircuit,
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -21,9 +20,9 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach';
+export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach' | 'Differentiated Version' | 'Enhanced Version';
 
-const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
+const lessonTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Worksheet', icon: <FileText className="h-5 w-5" />, disabled: false },
   { name: 'Reading Material', icon: <BookOpen className="h-5 w-5" />, disabled: false },
   { name: 'Study Sheet', icon: <FileQuestion className="h-5 w-5" />, disabled: false },
@@ -32,14 +31,23 @@ const tools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
 ];
 
+const testTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
+    { name: 'Study Sheet', icon: <BookOpen className="h-5 w-5" />, disabled: false },
+    { name: 'Differentiated Version', icon: <PencilRuler className="h-5 w-5" />, disabled: false },
+    { name: 'Enhanced Version', icon: <BrainCircuit className="h-5 w-5" />, disabled: false },
+];
+
+
 type RightSidebarProps = {
   onToolClick: (toolName: ToolName) => void;
   isGenerating: boolean;
   isHighlighting: boolean;
+  toolset?: 'lesson' | 'test';
 };
 
-export default function RightSidebar({ onToolClick, isGenerating, isHighlighting }: RightSidebarProps) {
+export default function RightSidebar({ onToolClick, isGenerating, isHighlighting, toolset = 'lesson' }: RightSidebarProps) {
   const { toast } = useToast();
+  const tools = toolset === 'lesson' ? lessonTools : testTools;
 
   const handleToolClick = (tool: (typeof tools)[0]) => {
     if (tool.disabled) {
