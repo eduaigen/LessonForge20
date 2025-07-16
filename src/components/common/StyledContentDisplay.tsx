@@ -21,6 +21,7 @@ import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-s
 import type { TestStudySheetOutput } from '@/ai/flows/generate-test-study-sheet';
 import type { TestGeneratedContent as ScienceTestGeneratedContent } from '../generators/NVBiologyTestGenerator';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
+import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -45,7 +46,7 @@ const renderTableFromObject = (tableData: { title: string, headers: string[], ro
     );
 };
 
-const renderLeveledQuestions = (questions: { question: string; dok: number; options?: string[]; answer?: string; }[]) => (
+const leveledQuestions = (questions: { question: string; dok: number; options?: string[]; answer?: string; }[]) => (
   <ol className="list-decimal pl-5 space-y-4">
     {questions.map((q, i) => (
       <li key={i}>
@@ -112,7 +113,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
                     <p className="italic text-muted-foreground">{miniLesson.diagram}</p>
                  </div>
                 }
-                <div><h4>Concept-Check Questions</h4>{renderLeveledQuestions(miniLesson.conceptCheckQuestions)}</div>
+                <div><h4>Concept-Check Questions</h4>{leveledQuestions(miniLesson.conceptCheckQuestions)}</div>
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{miniLesson.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{miniLesson.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
@@ -128,7 +129,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
 
              <LessonSection title="D. Check for Understanding (CFU)">
                 <h4>CFU Questions</h4>
-                {renderLeveledQuestions([...checkFoUnderstanding.multipleChoice, checkFoUnderstanding.shortResponse])}
+                {leveledQuestions([...checkFoUnderstanding.multipleChoice, checkFoUnderstanding.shortResponse])}
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{checkFoUnderstanding.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{checkFoUnderstanding.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
             </LessonSection>
@@ -496,7 +497,7 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
       </header>
       
-      {test.clusters.map((cluster, clusterIndex) => (
+      {test.clusters?.map((cluster, clusterIndex) => (
         <section key={clusterIndex} className="mb-12 border-t pt-8">
           <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1}</h2>
           <Card className="bg-muted/50 mb-6">
@@ -537,13 +538,13 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
     </div>
   );
 
-  const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
+const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }) => (
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
       </header>
 
-       {test.clusters.map((cluster, clusterIndex) => (
+       {test.clusters?.map((cluster, clusterIndex) => (
         <section key={clusterIndex} className="mb-12 border-t pt-8">
           <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1} Answer Key</h2>
           
@@ -653,6 +654,66 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
     </div>
 );
 
+const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
+    <div className="document-view">
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+      </header>
+  
+      {/* Part I: Multiple Choice */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partI.title}</h2>
+        <ol className="list-decimal pl-5 space-y-8">
+          {test.partI.questions.map((mc, index) => (
+            <li key={index}>
+              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
+              <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                {mc.options.map(opt => (
+                  <li key={opt}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </section>
+  
+      {/* Part II: 2-Credit Constructed Response */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partII.title}</h2>
+        <ol className="list-decimal pl-5 space-y-8">
+          {test.partII.questions.map((q, index) => (
+            <li key={index}>
+              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+              <div className="my-2 h-24 border-b border-dashed"></div>
+            </li>
+          ))}
+        </ol>
+      </section>
+  
+      {/* Part III: 4-Credit Constructed Response */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIII.title}</h2>
+        <ol className="list-decimal pl-5 space-y-8">
+          {test.partIII.questions.map((q, index) => (
+            <li key={index}>
+              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+              <div className="my-2 h-32 border-b border-dashed"></div>
+            </li>
+          ))}
+        </ol>
+      </section>
+  
+      {/* Part IV: 6-Credit Constructed Response */}
+      <section>
+        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIV.title}</h2>
+        <div>
+          <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{test.partIV.question.question}</Markdown>
+          <div className="my-2 h-48 border-b border-dashed"></div>
+        </div>
+      </section>
+    </div>
+  );
+  
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -662,14 +723,10 @@ type StyledContentDisplayProps = {
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
     
-    // Check if it's a social studies test based on structure
-    const isSocialStudiesTest = content.partI && content.partII && content.partIII;
+    const isSocialStudiesTest = content.partI && content.partII?.sets;
+    const isMathTest = content.partI && content.partII?.questions && content.partIV?.question;
     const isScienceTest = content.clusters;
 
-    if (type === 'Test' && isSocialStudiesTest) {
-        return <SocialStudiesTestDisplay test={content} />;
-    }
-    
     switch (type) {
         case 'Lesson Plan':
             return renderLessonPlan(content);
@@ -687,17 +744,13 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Test':
         case 'Differentiated Version':
         case 'Enhanced Version':
-            if (isScienceTest) {
-              return <ScienceTestDisplay test={content} type={type} />;
-            } else if (isSocialStudiesTest) {
-              return <SocialStudiesTestDisplay test={content} />;
-            }
+            if (isScienceTest) return <ScienceTestDisplay test={content} type={type} />;
+            if (isSocialStudiesTest) return <SocialStudiesTestDisplay test={content} />;
+            if (isMathTest) return <MathTestDisplay test={content} />;
             return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
         case 'Answer Key':
-            if (isScienceTest) {
-              return <ScienceAnswerKeyDisplay test={content} />;
-            }
-            // Add Social Studies Answer Key Display when available
+            if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
+            // Add Social Studies and Math Answer Key Display when available
             return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);
