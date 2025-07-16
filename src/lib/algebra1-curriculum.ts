@@ -1,3 +1,4 @@
+
 type Lesson = {
     title: string;
     objective: string;
@@ -17,112 +18,254 @@ export const algebra1Curriculum: {
     units: { [key: string]: Unit };
 } = {
     units: {
-        "Number and Quantity": {
-            unit: "Number and Quantity",
+        "Unit 1: One-Variable Statistics": {
+            unit: "Unit 1: One-Variable Statistics",
             topics: {
-                "The Real Number System": {
-                    topic: "The Real Number System",
+                "Getting to know you": {
+                    topic: "Getting to know you",
                     lessons: [
-                        { title: "Properties of Rational and Irrational Numbers", objective: "AI-N.RN.3: Use properties and operations to understand the different forms of rational and irrational numbers." }
+                        { title: "Lesson 1: Numbers in the News", objective: "I can find, interpret, and share interesting numerical information from a news article." },
+                        { title: "Lesson 2: Data Representations", objective: "I can describe the shape of a data set using the terms “symmetric,” “skewed,” “uniform,” and “bell-shaped.”" }
                     ]
                 },
-                "Quantities": {
-                    topic: "Quantities",
+                "Measuring center and variability": {
+                    topic: "Measuring center and variability",
                     lessons: [
-                        { title: "Reasoning with Quantities and Units", objective: "AI-N.Q.1 & AI-N.Q.3: Select and interpret quantities and units, and choose appropriate levels of accuracy." }
+                        { title: "Lesson 3: A Gallery of Data", objective: "I can describe the shape of a distribution and say whether the mean or median is a better measure of center for the data." },
+                        { title: "Lesson 4: The Shape of Distributions", objective: "I can use the shape of a distribution to compare the mean and median." },
+                        { title: "Lesson 5: Calculating Measures of Center and Variability", objective: "I can find the mean, median, and interquartile range of a data set." }
+                    ]
+                },
+                "Distribution shapes": {
+                    topic: "Distribution shapes",
+                    lessons: [
+                        { title: "Lesson 6: Mystery Computations", objective: "I know what a standard deviation is and can use technology to find it." },
+                        { title: "Lesson 7: Calculating Standard Deviation", objective: "I can describe what standard deviation measures and what a larger or smaller standard deviation means." },
+                        { title: "Lesson 8: Investigating variability", objective: "I can compare the standard deviation and interquartile range to determine the best measure of variability for a data set." }
+                    ]
+                },
+                "Data, shape, and outliers": {
+                    topic: "Data, shape, and outliers",
+                    lessons: [
+                        { title: "Lesson 9: The Normal Distribution", objective: "I can use the mean and standard deviation to describe a data set that is approximately bell-shaped." },
+                        { title: "Lesson 10: How Normal is it?", objective: "I can decide if a data set is approximately normal and use the mean and standard deviation to estimate percentages." },
+                        { title: "Lesson 11: Comparing and Contrasting Data Distributions", objective: "I can compare and contrast two data sets." },
+                        { title: "Lesson 12: Outliers", objective: "I can find values that are outliers in a data set and explain why they are outliers." }
                     ]
                 }
             }
         },
-        "Algebra": {
-            unit: "Algebra",
+        "Unit 2: Linear Equations, Inequalities, and Systems": {
+            unit: "Unit 2: Linear Equations, Inequalities, and Systems",
             topics: {
-                "Seeing Structure in Expressions": {
-                    topic: "Seeing Structure in Expressions",
+                "Linear equations in one variable": {
+                    topic: "Linear equations in one variable",
                     lessons: [
-                        { title: "Interpreting Expressions", objective: "AI-A.SSE.1: Interpret expressions that represent a quantity in terms of its context." },
-                        { title: "Rewriting Expressions", objective: "AI-A.SSE.2: Recognize and use the structure of an expression to identify ways to rewrite it." },
-                        { title: "Writing Expressions in Equivalent Forms", objective: "AI-A.SSE.3: Choose and produce an equivalent form of an expression to reveal and explain properties." }
+                        { title: "Lesson 1: Planning a Pizza Party", objective: "I can write and interpret an expression that represents a situation." },
+                        { title: "Lesson 2: Writing and Solving Equations", objective: "I can write and solve an equation to answer a question." },
+                        { title: "Lesson 3: Solving and Working Backwards", objective: "I can solve an equation by doing the same thing to each side." },
+                        { title: "Lesson 4: Equations and Their Solutions", objective: "I can tell what the solution to an equation is." }
                     ]
                 },
-                "Arithmetic with Polynomials and Rational Expressions": {
-                    topic: "Arithmetic with Polynomials and Rational Expressions",
+                "Linear inequalities in one variable": {
+                    topic: "Linear inequalities in one variable",
                     lessons: [
-                        { title: "Operations on Polynomials", objective: "AI-A.APR.1: Add, subtract, and multiply polynomials." },
-                        { title: "Zeros and Factors of Polynomials", objective: "AI-A.APR.3: Identify zeros of polynomial functions when suitable factorizations are available." }
+                        { title: "Lesson 5: Writing and Solving Inequalities", objective: "I can write and solve an inequality to answer a question." },
+                        { title: "Lesson 6: Graphing Inequalities", objective: "I can graph the solutions to an inequality on a number line." }
                     ]
                 },
-                "Creating Equations": {
-                    topic: "Creating Equations",
+                "Two-variable linear equations": {
+                    topic: "Two-variable linear equations",
                     lessons: [
-                        { title: "Creating Equations and Inequalities in One Variable", objective: "AI-A.CED.1: Create equations and inequalities in one variable to represent a real-world context." },
-                        { title: "Creating Equations in Two Variables", objective: "AI-A.CED.2: Create equations and linear inequalities in two variables to represent a real-world context." },
-                        { title: "Representing Constraints", objective: "AI-A.CED.3: Represent constraints by equations or inequalities, and by systems of equations and/or inequalities." },
-                        { title: "Rearranging Formulas", objective: "AI-A.CED.4: Rewrite formulas to highlight a quantity of interest." }
+                        { title: "Lesson 7: Equations of Lines", objective: "I can write and graph equations of lines." },
+                        { title: "Lesson 8: Slope", objective: "I can find the slope of a line and interpret it in a context." },
+                        { title: "Lesson 9: Slopes of Parallel and Perpendicular Lines", objective: "I can write equations of parallel and perpendicular lines." },
+                        { title: "Lesson 10: Writing Equations of Lines", objective: "I can write an equation of a line from a description." }
                     ]
                 },
-                "Reasoning with Equations and Inequalities": {
-                    topic: "Reasoning with Equations and Inequalities",
+                "Linear inequalities in two variables": {
+                    topic: "Linear inequalities in two variables",
                     lessons: [
-                        { title: "Understanding Solving Equations", objective: "AI-A.REI.1a: Explain each step when solving a linear or quadratic equation." },
-                        { title: "Solving Linear Equations and Inequalities", objective: "AI-A.REI.3: Solve linear equations and inequalities in one variable." },
-                        { title: "Solving Quadratic Equations", objective: "AI-A.REI.4: Solve quadratic equations in one variable." },
-                        { title: "Solving Systems of Linear Equations", objective: "AI-A.REI.6a: Solve systems of linear equations in two variables algebraically and graphically." },
-                        { title: "Solving Systems of Linear and Quadratic Equations", objective: "AI-A.REI.7a: Solve a system consisting of a linear equation and a quadratic equation in two variables." },
-                        { title: "Graphical Solutions of Equations", objective: "AI-A.REI.10 & AI-A.REI.11: Understand the graph of an equation and find approximate solutions by graphing." },
-                        { title: "Graphical Solutions of Inequalities", objective: "AI-A.REI.12: Graph the solutions to a linear inequality and systems of linear inequalities." }
+                        { title: "Lesson 11: Graphing Linear Inequalities in Two Variables", objective: "I can graph a linear inequality in two variables." }
+                    ]
+                },
+                "Systems of linear equations in two variables": {
+                    topic: "Systems of linear equations in two variables",
+                    lessons: [
+                        { title: "Lesson 12: Systems of Equations", objective: "I can explain what a system of equations is and what the solution to a system of equations is." },
+                        { title: "Lesson 13: Solving Systems of Equations", objective: "I can solve a system of equations by graphing." },
+                        { title: "Lesson 14: Solving Systems by Substitution", objective: "I can solve a system of equations by substitution." },
+                        { title: "Lesson 15: Solving Systems by Elimination", objective: "I can solve a system of equations by elimination." }
+                    ]
+                },
+                "Systems of linear inequalities in two variables": {
+                    topic: "Systems of linear inequalities in two variables",
+                    lessons: [
+                        { title: "Lesson 16: Graphing Systems of Linear Inequalities", objective: "I can graph the solution set to a system of linear inequalities." }
                     ]
                 }
             }
         },
-        "Functions": {
-            unit: "Functions",
+        "Unit 3: Two-Variable Statistics": {
+            unit: "Unit 3: Two-Variable Statistics",
             topics: {
-                "Interpreting Functions": {
-                    topic: "Interpreting Functions",
+                "Two-way tables": {
+                    topic: "Two-way tables",
                     lessons: [
-                        { title: "Understanding Functions and Notation", objective: "AI-F.IF.1 & AI-F.IF.2: Understand the concept of a function and use function notation." },
-                        { title: "Sequences as Functions", objective: "AI-F.IF.3: Recognize that a sequence is a function whose domain is a subset of the integers." },
-                        { title: "Interpreting Key Features of Graphs", objective: "AI-F.IF.4: Interpret key features of graphs and tables in terms of the quantities." },
-                        { title: "Domain of a Function", objective: "AI-F.IF.5: Determine the domain of a function from its graph and context." },
-                        { title: "Average Rate of Change", objective: "AI-F.IF.6: Calculate and interpret the average rate of change of a function." },
-                        { title: "Graphing Functions", objective: "AI-F.IF.7: Graph functions and show key features." },
-                        { title: "Equivalent Forms of Functions", objective: "AI-F.IF.8: Write a function in different but equivalent forms." },
-                        { title: "Comparing Functions", objective: "AI-F.IF.9: Compare properties of two functions each represented in a different way." }
+                        { title: "Lesson 1: Two-Way Tables", objective: "I can use a two-way table to analyze data." },
+                        { title: "Lesson 2: Relative Frequency Tables", objective: "I can use a relative frequency table to find conditional probabilities." }
                     ]
                 },
-                "Building Functions": {
-                    topic: "Building Functions",
+                "Scatter plots": {
+                    topic: "Scatter plots",
                     lessons: [
-                        { title: "Modeling with Functions", objective: "AI-F.BF.1: Write a function that describes a relationship between two quantities." },
-                        { title: "Transformations of Functions", objective: "AI-F.BF.3a: Identify the effect on the graph of replacing f(x) by f(x) + k, k f(x), and f(x + k)." }
+                        { title: "Lesson 3: Scatter Plots and Correlation", objective: "I can describe the relationship between two variables using a scatter plot and a correlation coefficient." },
+                        { title: "Lesson 4: Linear Models", objective: "I can use a linear model to make predictions." }
                     ]
                 },
-                "Linear, Quadratic, and Exponential Models": {
-                    topic: "Linear, Quadratic, and Exponential Models",
+                "Correlation and causation": {
+                    topic: "Correlation and causation",
                     lessons: [
-                        { title: "Distinguishing Function Types", objective: "AI-F.LE.1: Distinguish between situations that can be modeled with linear and exponential functions." },
-                        { title: "Constructing Linear and Exponential Functions", objective: "AI-F.LE.2: Construct a linear or exponential function symbolically given various contexts." },
-                        { title: "Comparing Growth Rates", objective: "AI-F.LE.3: Observe that a quantity increasing exponentially eventually exceeds a quantity increasing linearly or quadratically." },
-                        { title: "Interpreting Parameters", objective: "AI-F.LE.5: Interpret the parameters in a linear or exponential function in terms of a context." }
+                        { title: "Lesson 5: Correlation and Causation", objective: "I can tell the difference between correlation and causation." },
+                        { title: "Lesson 6: The Correlation Coefficient", objective: "I can use the correlation coefficient to describe the strength and direction of a linear relationship." }
                     ]
                 }
             }
         },
-        "Statistics and Probability": {
-            unit: "Statistics and Probability",
+        "Unit 4: Functions": {
+            unit: "Unit 4: Functions",
             topics: {
-                "Interpreting Categorical and Quantitative Data": {
-                    topic: "Interpreting Categorical and Quantitative Data",
+                "Functions and their representations": {
+                    topic: "Functions and their representations",
                     lessons: [
-                        { title: "Representing and Comparing Data Sets", objective: "AI-S.ID.1 & AI-S.ID.2: Represent data with plots and use statistics to compare two or more data sets." },
-                        { title: "Interpreting Data Shapes", objective: "AI-S.ID.3: Interpret differences in shape, center, and spread in the context of the data sets." },
-                        { title: "Analyzing Two-Way Frequency Tables", objective: "AI-S.ID.5: Summarize categorical data for two categories in two-way frequency tables." },
-                        { title: "Scatter Plots and Function Fitting", objective: "AI-S.ID.6: Represent bivariate data on a scatter plot and fit a function to the data." },
-                        { title: "Interpreting Linear Models", objective: "AI-S.ID.7, AI-S.ID.8, AI-S.ID.9: Interpret slope and intercept, calculate and interpret the correlation coefficient, and distinguish between correlation and causation." }
+                        { title: "Lesson 1: Describing and Graphing Situations", objective: "I can describe a situation using a graph." },
+                        { title: "Lesson 2: Function Notation", objective: "I can use function notation to write and evaluate functions." },
+                        { title: "Lesson 3: Interpreting and Using Function Notation", objective: "I can interpret and use function notation." }
+                    ]
+                },
+                "Domain and range": {
+                    topic: "Domain and range",
+                    lessons: [
+                        { title: "Lesson 4: Domain and Range", objective: "I can find the domain and range of a function." }
+                    ]
+                },
+                "Combining functions": {
+                    topic: "Combining functions",
+                    lessons: [
+                        { title: "Lesson 5: Combining Functions", objective: "I can combine functions using addition, subtraction, multiplication, and division." }
+                    ]
+                },
+                "Inverse functions": {
+                    topic: "Inverse functions",
+                    lessons: [
+                        { title: "Lesson 6: Inverse Functions", objective: "I can find the inverse of a function." }
+                    ]
+                }
+            }
+        },
+        "Unit 5: Introduction to Exponential Functions": {
+            unit: "Unit 5: Introduction to Exponential Functions",
+            topics: {
+                "Exponential growth and decay": {
+                    topic: "Exponential growth and decay",
+                    lessons: [
+                        { title: "Lesson 1: Growing and Shrinking", objective: "I can recognize and describe situations that involve exponential growth and decay." },
+                        { title: "Lesson 2: Exponential Functions", objective: "I can write and graph exponential functions." },
+                        { title: "Lesson 3: Percent Growth and Decay", objective: "I can write and graph exponential functions that represent percent growth and decay." }
+                    ]
+                },
+                "Comparing linear and exponential functions": {
+                    topic: "Comparing linear and exponential functions",
+                    lessons: [
+                        { title: "Lesson 4: Linear and Exponential Models", objective: "I can compare linear and exponential models and use them to make predictions." }
+                    ]
+                },
+                "Properties of exponents": {
+                    topic: "Properties of exponents",
+                    lessons: [
+                        { title: "Lesson 5: Properties of Exponents", objective: "I can use the properties of exponents to simplify expressions." },
+                        { title: "Lesson 6: Rational Exponents", objective: "I can use rational exponents to write and evaluate expressions." }
+                    ]
+                }
+            }
+        },
+        "Unit 6: Introduction to Quadratic Functions": {
+            unit: "Unit 6: Introduction to Quadratic Functions",
+            topics: {
+                "Quadratic functions": {
+                    topic: "Quadratic functions",
+                    lessons: [
+                        { title: "Lesson 1: A Different Kind of Change", objective: "I can recognize and describe situations that involve quadratic change." },
+                        { title: "Lesson 2: Quadratic Functions", objective: "I can write and graph quadratic functions." }
+                    ]
+                },
+                "Quadratic equations": {
+                    topic: "Quadratic equations",
+                    lessons: [
+                        { title: "Lesson 3: Solving Quadratic Equations by Graphing", objective: "I can solve a quadratic equation by graphing." },
+                        { title: "Lesson 4: Solving Quadratic Equations by Factoring", objective: "I can solve a quadratic equation by factoring." },
+                        { title: "Lesson 5: Solving Quadratic Equations by Completing the Square", objective: "I can solve a quadratic equation by completing the square." },
+                        { title: "Lesson 6: The Quadratic Formula", objective: "I can use the quadratic formula to solve a quadratic equation." }
+                    ]
+                },
+                "Quadratic inequalities": {
+                    topic: "Quadratic inequalities",
+                    lessons: [
+                        { title: "Lesson 7: Graphing Quadratic Inequalities", objective: "I can graph the solution set to a quadratic inequality." }
+                    ]
+                }
+            }
+        },
+        "Unit 7: Structures of Quadratic Expressions": {
+            unit: "Unit 7: Structures of Quadratic Expressions",
+            topics: {
+                "Factored form": {
+                    topic: "Factored form",
+                    lessons: [
+                        { title: "Lesson 1: Factoring Quadratic Expressions", objective: "I can factor a quadratic expression." },
+                        { title: "Lesson 2: Solving Quadratic Equations by Factoring", objective: "I can solve a quadratic equation by factoring." }
+                    ]
+                },
+                "Vertex form": {
+                    topic: "Vertex form",
+                    lessons: [
+                        { title: "Lesson 3: Completing the Square", objective: "I can complete the square to write a quadratic expression in vertex form." },
+                        { title: "Lesson 4: Solving Quadratic Equations by Completing the Square", objective: "I can solve a quadratic equation by completing the square." }
+                    ]
+                },
+                "Standard form": {
+                    topic: "Standard form",
+                    lessons: [
+                        { title: "Lesson 5: The Quadratic Formula", objective: "I can use the quadratic formula to solve a quadratic equation." }
+                    ]
+                }
+            }
+        },
+        "Unit 8: More Functions, More Features": {
+            unit: "Unit 8: More Functions, More Features",
+            topics: {
+                "Absolute value functions": {
+                    topic: "Absolute value functions",
+                    lessons: [
+                        { title: "Lesson 1: Absolute Value Functions", objective: "I can write and graph absolute value functions." },
+                        { title: "Lesson 2: Solving Absolute Value Equations", objective: "I can solve an absolute value equation." }
+                    ]
+                },
+                "Piecewise functions": {
+                    topic: "Piecewise functions",
+                    lessons: [
+                        { title: "Lesson 3: Piecewise Functions", objective: "I can write and graph piecewise functions." }
+                    ]
+                },
+                "Step functions": {
+                    topic: "Step functions",
+                    lessons: [
+                        { title: "Lesson 4: Step Functions", objective: "I can write and graph step functions." }
                     ]
                 }
             }
         }
     }
 };
+
+    
