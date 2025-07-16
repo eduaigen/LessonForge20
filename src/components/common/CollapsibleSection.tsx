@@ -5,12 +5,12 @@ import React, { useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, FileDown, Languages, Loader2 } from 'lucide-react';
+import { Printer, Download, FileDown, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
-import { htmlToText } from 'html-to-text';
+import html2canvas from 'html2canvas';
 import StyledContentDisplay from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
@@ -122,51 +122,61 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     };
 
     const handleDownloadPdf = async () => {
-      const contentElement = printableContentRef.current;
-      if (!contentElement) {
-        toast({ title: 'Error', description: 'Content to print not found.', variant: 'destructive' });
-        return;
-      }
-  
-      setIsDownloading(true);
-      toast({ title: 'Generating PDF...', description: 'Please wait, this may take a moment.' });
-  
-      try {
-        const pdf = new jsPDF('p', 'pt', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const margin = 40;
-  
-        // Use a function from jspdf-html2canvas
-        // This is a more robust way to handle multi-page PDFs
-        // @ts-ignore
-        await pdf.html(contentElement, {
-          autoPaging: 'text',
-          x: margin,
-          y: margin,
-          width: pdfWidth - (margin * 2),
-          windowWidth: contentElement.scrollWidth,
-          margin: {
-              top: margin,
-              right: margin,
-              bottom: margin,
-              left: margin,
-          }
-        });
-  
-        pdf.save(`${title.replace(/ /g, '_')}.pdf`);
-        toast({ title: 'Success', description: 'PDF has been downloaded.' });
-  
-      } catch (error) {
-        console.error('PDF Generation Error:', error);
-        toast({
-          title: 'PDF Generation Failed',
-          description: 'An unexpected error occurred. Please try again.',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsDownloading(false);
-      }
-    };
+        const contentElement = printableContentRef.current;
+        if (!contentElement) {
+          toast({ title: 'Error', description: 'Content to print not found.', variant: 'destructive' });
+          return;
+        }
+    
+        setIsDownloading(true);
+        toast({ title: 'Generating PDF...', description: 'Please wait, this may take a moment.' });
+    
+        try {
+            const canvas = await html2canvas(contentElement, {
+                scale: 2, // Higher scale for better quality
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#ffffff'
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'pt', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+
+            const ratio = imgWidth / pdfWidth;
+            const scaledHeight = imgHeight / ratio;
+
+            let heightLeft = scaledHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
+            heightLeft -= pdfHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - scaledHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
+                heightLeft -= pdfHeight;
+            }
+
+            pdf.save(`${title.replace(/ /g, '_')}.pdf`);
+            toast({ title: 'Success', description: 'PDF has been downloaded.' });
+    
+        } catch (error) {
+          console.error('PDF Generation Error:', error);
+          toast({
+            title: 'PDF Generation Failed',
+            description: 'An unexpected error occurred. Please try again.',
+            variant: 'destructive',
+          });
+        } finally {
+          setIsDownloading(false);
+        }
+      };
       
   return (
     <Card className="mt-6 shadow-md">

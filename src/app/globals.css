@@ -230,17 +230,3 @@
     animation: temporary-glow 1.5s ease-in-out infinite;
   }
 }
-
-/* Hide Google Translate original toolbar */
-.goog-te-banner-frame.skiptranslate {
-    display: none !important;
-} 
-body {
-    top: 0px !important; 
-}
-#google_translate_element {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
-}

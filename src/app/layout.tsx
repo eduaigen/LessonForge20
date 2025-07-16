@@ -9,7 +9,7 @@ import { AppHeader } from '@/components/common/AppHeader';
 import { Footer } from '@/components/common/Footer';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import AccessibilityWidget from '@/components/common/AccessibilityWidget';
-import GoogleTranslateWidget from '@/components/common/GoogleTranslateWidget';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -31,7 +31,7 @@ export default function RootLayout({
       <head />
       <body className={cn('font-body antialiased bg-background', inter.variable, spaceGrotesk.variable)}>
         <AuthProvider>
-          <GoogleTranslateWidget />
+          
           <div className="flex min-h-screen flex-col">
             <AppHeader />
             <main className="flex-1 flex flex-col">
