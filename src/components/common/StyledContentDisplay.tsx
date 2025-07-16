@@ -18,6 +18,7 @@ import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
+import type { GenerateLabActivityOutput } from '@/ai/schemas/lab-activity-schemas';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -843,6 +844,59 @@ const SocialStudiesAnswerKeyDisplay = ({ test }: { test: GenerateSocialStudiesTe
     </div>
 );
   
+const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
+    <div className="document-view">
+      <header className="text-center mb-8">
+        <h1 className="text-3xl font-bold font-headline text-primary">{lab.labTitle}</h1>
+        <p className="text-lg text-muted-foreground">{lab.subjectArea} | {lab.gradeLevel}</p>
+      </header>
+
+      <LessonSection title="Lab Overview">
+        <p><strong>Total Time:</strong> {lab.totalTimeRequired}</p>
+        <p><strong>Time Breakdown:</strong> Intro: {lab.timeBreakdown.intro}, Activity: {lab.timeBreakdown.activity}, Discussion: {lab.timeBreakdown.discussion}, Cleanup: {lab.timeBreakdown.cleanup}</p>
+        <div><strong>Learning Objectives:</strong> <ul className="list-disc pl-5">{lab.learningObjectives.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+        <p><strong>Introduction:</strong> {lab.introduction}</p>
+      </LessonSection>
+
+      <LessonSection title="NGSS Alignment">
+        <p><strong>Performance Expectation (PE):</strong> {lab.ngssAlignment.performanceExpectation}</p>
+        <p><strong>Science and Engineering Practice (SEP):</strong> {lab.ngssAlignment.scienceAndEngineeringPractice}</p>
+        <p><strong>Disciplinary Core Idea (DCI):</strong> {lab.ngssAlignment.disciplinaryCoreIdea}</p>
+        <p><strong>Crosscutting Concept (CCC):</strong> {lab.ngssAlignment.crosscuttingConcept}</p>
+      </LessonSection>
+
+      <LessonSection title="Pre-Lab Preparation">
+        <p>{lab.preLab}</p>
+      </LessonSection>
+
+      <LessonSection title="Materials and Safety">
+        <div><strong>Materials & Equipment:</strong> <ul className="list-disc pl-5">{lab.materialsAndEquipment.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
+        <div><strong className="text-destructive">Safety Precautions:</strong> <ul className="list-disc pl-5 text-destructive/80">{lab.safetyPrecautions.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
+      </LessonSection>
+
+      <LessonSection title="Procedure">
+        <ol className="list-decimal pl-5 space-y-2">{lab.procedure.map((step, i) => <li key={i}>{step}</li>)}</ol>
+      </LessonSection>
+
+      <LessonSection title="Data Collection & Analysis">
+        <p>{lab.dataCollectionAndAnalysis.description}</p>
+        {renderTableFromObject(lab.dataCollectionAndAnalysis.dataTable)}
+      </LessonSection>
+
+      <LessonSection title="Discussion & Wrap-up">
+        <div><strong>Discussion Questions:</strong> <ol className="list-decimal pl-5 space-y-2">{lab.discussionQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></div>
+        <p><strong>Assessment Suggestions:</strong> {lab.assessmentSuggestions}</p>
+      </LessonSection>
+
+       <LessonSection title="Extension Activities">
+          <p>{lab.extensionActivities}</p>
+      </LessonSection>
+
+      <LessonSection title="Teacher Notes">
+        <p>{lab.teacherNotes}</p>
+      </LessonSection>
+    </div>
+);
 
 type StyledContentDisplayProps = {
     content: any | null;
@@ -856,7 +910,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
     const isMathTest = content.partI && content.partII?.questions && content.partIV?.question;
     const isScienceTest = content.clusters;
     const isELATest = content.part1 && content.part2?.argumentEssay && content.part3?.textAnalysis;
-
+    const isLabActivity = content.labTitle && content.ngssAlignment;
 
     switch (type) {
         case 'Lesson Plan':
@@ -872,6 +926,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             return renderQuestionCluster(content);
         case 'Reading Material':
             return <ReadingMaterialDisplay content={content} />;
+        case 'Lab Activity':
+            return <LabActivityDisplay lab={content} />;
         case 'Test':
         case 'Differentiated Version':
         case 'Enhanced Version':
