@@ -589,11 +589,10 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 
 type StyledContentDisplayProps = {
     content: any | null;
-    type: GeneratedContent['type'];
-    lessonPlanState?: any;
+    type: GeneratedContent['type'] | GeneratedContent['originalType'];
 };
 
-export default function StyledContentDisplay({ content, type, lessonPlanState }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
     
     switch (type) {

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Sparkles, Wand2, Printer, Orbit, Check } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Printer, Orbit, Check, Languages } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { earthScienceCurriculum } from '@/lib/earth-science-curriculum';
 import { generateESSLesson, type GenerateESSLessonOutput } from '@/ai/flows/generate-ess-lesson';
@@ -20,6 +20,7 @@ import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator
 import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
 import { generateStudySheet } from '@/ai/flows/study-sheet-generator';
 import { generateWorksheet } from '@/ai/flows/worksheet-generator';
+import { translateContent } from '@/ai/flows/translate-content';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -27,6 +28,9 @@ import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
+import { languages } from '@/lib/languages';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -50,7 +54,10 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
+  type: ToolName | 'Lesson Plan' | 'Comprehension Questions' | 'Translated';
+  originalType?: ToolName | 'Lesson Plan';
+  sourceId?: string;
+  language?: string;
 };
 
 const SubscriptionPrompt = () => (
@@ -84,6 +91,8 @@ const GeneratorContent = () => {
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
+  const [isTranslateAllOpen, setIsTranslateAllOpen] = useState(false);
+  const [translateAllLanguage, setTranslateAllLanguage] = useState('');
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -204,6 +213,56 @@ const GeneratorContent = () => {
       setIsLoading(false);
     }
   }
+
+  const handleTranslate = async (contentItem: GeneratedContent, language: string) => {
+    setIsToolLoading(`Translating ${contentItem.title}`);
+    try {
+      const response = await translateContent({
+        jsonContent: JSON.stringify(contentItem.content),
+        targetLanguage: language,
+      });
+
+      const translatedJson = JSON.parse(response.translatedContent);
+
+      const newTranslatedContent: GeneratedContent = {
+        id: `translated-${contentItem.id}-${language}`,
+        title: `Translated to ${language}`,
+        content: translatedJson,
+        type: 'Translated',
+        originalType: contentItem.type as any, // We know it's not 'Translated'
+        sourceId: contentItem.id,
+        language: language,
+      };
+
+      setLessonPackage(prev => {
+        if (!prev) return [newTranslatedContent];
+        const sourceIndex = prev.findIndex(item => item.id === contentItem.id);
+        const newPackage = [...prev];
+        newPackage.splice(sourceIndex + 1, 0, newTranslatedContent);
+        return newPackage;
+      });
+
+    } catch (error) {
+      console.error('Translation failed:', error);
+      toast({ title: 'Translation Failed', description: `Could not translate "${contentItem.title}".`, variant: 'destructive' });
+    } finally {
+      setIsToolLoading(null);
+    }
+  };
+
+  const handleTranslateAll = async () => {
+    if (!lessonPackage || !translateAllLanguage) return;
+    setIsToolLoading('Translating All');
+    setIsTranslateAllOpen(false);
+
+    for (const item of lessonPackage) {
+        if (item.type !== 'Translated') {
+            await handleTranslate(item, translateAllLanguage);
+        }
+    }
+    
+    setIsToolLoading(null);
+  };
 
   const handleToolClick = async (toolName: ToolName) => {
     if (!lessonPlan || !lessonPackage) {
@@ -384,7 +443,44 @@ const GeneratorContent = () => {
               )}
               
               {lessonPackage && lessonPackage.length > 1 && (
-                <div className="flex justify-end mt-4">
+                <div className="flex justify-end mt-4 space-x-2">
+                   <Dialog open={isTranslateAllOpen} onOpenChange={setIsTranslateAllOpen}>
+                        <DialogTrigger asChild>
+                             <Button variant="outline" disabled={!!isToolLoading}>
+                                {isToolLoading === 'Translating All' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Languages className="mr-2 h-4 w-4" />}
+                                Translate All
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Translate All Documents</DialogTitle>
+                                <DialogDescription>
+                                    Select a language to translate all currently generated documents. This may take a few moments.
+                                </DialogDescription>
+                            </DialogHeader>
+                             <div className="py-4">
+                                <Select onValueChange={setTranslateAllLanguage} defaultValue={translateAllLanguage}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Choose a language..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {languages.map(lang => (
+                                            <SelectItem key={lang.code} value={lang.name}>
+                                                {lang.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <DialogFooter>
+                                 <Button variant="ghost" onClick={() => setIsTranslateAllOpen(false)}>Cancel</Button>
+                                <Button onClick={handleTranslateAll} disabled={!translateAllLanguage || !!isToolLoading}>
+                                     {isToolLoading === 'Translating All' ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                                    Translate All
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                   <Button onClick={handlePrintAll}>
                     <Printer className="mr-2 h-4 w-4" />
                     Print All
@@ -393,10 +489,16 @@ const GeneratorContent = () => {
               )}
 
               {lessonPackage?.map(item => (
-                <CollapsibleSection key={item.id} title={item.title} contentItem={item}>
-                    <StyledContentDisplay
+                <CollapsibleSection 
+                    key={item.id} 
+                    title={item.title} 
+                    contentItem={item}
+                    onTranslate={handleTranslate}
+                    isTranslating={isToolLoading?.includes(item.title) || isToolLoading === 'Translating All'}
+                >
+                     <StyledContentDisplay
                         content={item.content}
-                        type={item.type}
+                        type={item.type === 'Translated' ? item.originalType! : item.type}
                     />
                 </CollapsibleSection>
               ))}
@@ -408,8 +510,8 @@ const GeneratorContent = () => {
                 </div>
               )}
              
-              {isToolLoading && (
-                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+              {isToolLoading && !isToolLoading.startsWith('Translating') && (
+                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}} onTranslate={() => Promise.resolve()} isTranslating={false}>
                       <GeneratingAnimation />
                   </CollapsibleSection>
               )}
