@@ -30,11 +30,11 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Separator } from '@/components/ui/separator';
 
-const ToolCard = ({ title, description, icon, href }: { title: string, description: string, icon: React.ReactNode, href: string }) => {
+const ToolCard = ({ title, description, icon, href, className }: { title: string, description: string, icon: React.ReactNode, href: string, className?: string }) => {
   return (
-    <Link href={href} className="block h-full">
+    <Link href={href} className="block">
       <Card
-        className="cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 h-full flex flex-col"
+        className={`cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 flex flex-col ${className}`}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-lg font-medium">{title}</CardTitle>
@@ -72,42 +72,49 @@ const PremiumDashboardContent = () => {
                         description="Create 5E model lesson plans for the New Visions Biology curriculum."
                         icon={<Leaf />}
                         href="/nv-biology-generator"
+                        className="h-full"
                      />
                       <ToolCard 
                         title="NV Earth Science Generator"
                         description="Create 5E model lesson plans for NV Earth & Space Science."
                         icon={<Orbit />}
                         href="/ngss-earth-science-generator"
+                        className="h-full"
                      />
                       <ToolCard
                         title="AP Biology Generator"
                         description="Create 5E model lesson plans for the AP Biology curriculum."
                         icon={<Dna />}
                         href="/ap-biology-generator"
+                        className="h-full"
                       />
                       <ToolCard
                         title="NGSS Chemistry Generator"
                         description="Create 5E model lesson plans for the NGSS Chemistry curriculum."
                         icon={<Atom />}
                         href="/ngss-chemistry-generator"
+                        className="h-full"
                       />
                        <ToolCard
                         title="NGSS Physics Generator"
                         description="Create 5E model lesson plans for the NGSS Physics curriculum."
                         icon={<Magnet />}
                         href="/ngss-physics-generator"
+                        className="h-full"
                       />
                        <ToolCard
                         title="Health Lesson Generator"
                         description="Create 5E model lesson plans for Health class."
                         icon={<HeartPulse />}
                         href="/health-generator"
+                        className="h-full"
                       />
                       <ToolCard
                         title="Anatomy & Physiology Generator"
                         description="Create detailed lesson plans for Anatomy & Physiology."
                         icon={<Stethoscope />}
                         href="/anatomy-physiology-generator"
+                        className="h-full"
                       />
                 </div>
                 <div className="space-y-6">
@@ -118,7 +125,7 @@ const PremiumDashboardContent = () => {
                         icon={<TestTube />}
                         href="/nv-biology-test-generator"
                      />
-                     <Card className="h-full flex flex-col bg-muted/50">
+                     <Card className="flex flex-col bg-muted/50">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-lg font-medium text-muted-foreground">Lab Generator</CardTitle>
                             <TestTube className="text-muted-foreground/50"/>
@@ -141,18 +148,21 @@ const PremiumDashboardContent = () => {
                     description="Create 5E model lesson plans for Illustrative Math Algebra 1."
                     icon={<Sigma />}
                     href="/algebra1-generator"
+                    className="h-full"
                 />
                 <ToolCard
                     title="Algebra 2 Generator"
                     description="Create 5E model lesson plans for Illustrative Math Algebra 2."
                     icon={<Sigma />}
                     href="/algebra2-generator"
+                    className="h-full"
                 />
                 <ToolCard
                     title="Geometry Generator"
                     description="Create 5E model lesson plans for Illustrative Math Geometry."
                     icon={<Sigma />}
                     href="/geometry-generator"
+                    className="h-full"
                 />
               </div>
             </section>
@@ -167,6 +177,7 @@ const PremiumDashboardContent = () => {
                   description="Create lesson plans for 9th-12th Grade ELA."
                   icon={<Library />}
                   href="/ela-generator"
+                  className="h-full"
                 />
               </div>
             </section>
@@ -181,24 +192,28 @@ const PremiumDashboardContent = () => {
                     description="Create lesson plans for 9th Grade Global History."
                     icon={<History />}
                     href="/global-history-1-generator"
+                    className="h-full"
                  />
                   <ToolCard
                     title="Global History II"
                     description="Create lesson plans for 10th Grade Global History."
                     icon={<History />}
                     href="/global-history-2-generator"
+                    className="h-full"
                  />
                  <ToolCard
                     title="U.S. History"
                     description="Create lesson plans for United States History & Government."
                     icon={<History />}
                     href="/us-history-generator"
+                    className="h-full"
                  />
                  <ToolCard
                     title="Government & Economics"
                     description="Create lesson plans for Participation in Government & Economics."
                     icon={<Landmark />}
                     href="/government-generator"
+                    className="h-full"
                  />
                </div>
             </section>
@@ -213,6 +228,7 @@ const PremiumDashboardContent = () => {
                   description="Create scaffolded lesson plans for English Language Learners."
                   icon={<Languages />}
                   href="/ell-generator"
+                  className="h-full"
                 />
               </div>
             </section>
