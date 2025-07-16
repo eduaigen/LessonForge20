@@ -93,32 +93,13 @@ const generateESSLessonFlow = ai.defineFlow(
     timeout: 120000, // 2 minutes
   },
   async (input) => {
-    const { output, usage } = await prompt(input);
+    const { output } = await prompt(input);
 
     if (!output) {
       throw new Error('The AI failed to generate a lesson plan. Please try again.');
     }
     
-    // Sometimes the model returns the JSON wrapped in markdown ````json ... ````
-    // This is a workaround to extract the JSON from the markdown.
-    const jsonMatch = output.match(/```json\n([\s\S]*?)\n```/);
-    if (jsonMatch && jsonMatch[1]) {
-        try {
-            return JSON.parse(jsonMatch[1]);
-        } catch (e) {
-            console.error("Failed to parse extracted JSON:", e);
-            throw new Error('The AI returned malformed JSON inside a markdown block.');
-        }
-    }
-
-    // If no markdown block is found, try to parse the whole output
-    try {
-        return JSON.parse(output);
-    } catch(e) {
-        console.error("Failed to parse the entire output as JSON:", e);
-        console.log("Full AI output:", output);
-        throw new Error('The AI returned a response that was not valid JSON.');
-    }
+    return output;
   }
 );
 
