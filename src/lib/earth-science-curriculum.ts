@@ -146,20 +146,160 @@ export const earthScienceCurriculum: {
                 }
             }
         },
-        "More Hurricanes and Blizzards in NYC?": {
+        "Unit 4: More Hurricanes and Blizzards in NYC?": {
             topics: {
-                "Analyzing extreme weather events": { lessons: ["Distinguishing between weather and climate", "Modeling the interaction of air masses and fronts", "Investigating the conditions for hurricane formation", "Analyzing historical hurricane data", "Exploring the link between climate change and hurricane intensity", "Understanding the conditions that lead to blizzards", "Analyzing historical blizzard data", "Assessing the vulnerability of infrastructure to extreme weather", "Proposing designs to make infrastructure more resilient", "Developing a proposal to protect infrastructure"] }
+                "Unit Opening": {
+                    lessons: [
+                        { title: "Lesson 1: Unit Opening - Anchor Phenomenon", objective: "It felt like hurricanes and blizzards were really bad this past year. What does the data show? Will this continue?" },
+                        { title: "Lesson 2: Unit Opening - Introduce the Performance Task and Driving Question Board", objective: "Will there be more frequent and more intense severe storms in the future?" },
+                        { title: "Lesson 3: Unit Opening - Complete the Performance Task", objective: "Will there be more frequent and more intense severe storms in the future?" }
+                    ]
+                },
+                "Atmosphere and Weather Variables 3E (Optional)": {
+                    lessons: [
+                        { title: "Lesson 4: Atmosphere and Weather Variables 3E - Engage", objective: "What do students know about the atmosphere and its properties?" },
+                        { title: "Lesson 5: Atmosphere and Weather Variables 3E - Explore", objective: "Students use the Selected Properties of Earth’s Atmosphere ESRT and simulators to investigate properties of the atmosphere" },
+                        { title: "Lesson 6: Atmosphere and Weather Variables 3E - Explain", objective: "Students explain properties of the atmosphere" }
+                    ]
+                },
+                "Blizzards 5E": {
+                    lessons: [
+                        { title: "Lesson 7: Blizzards 5E - Engage", objective: "What do students know about wind, rain, and snow, and how they occur?" },
+                        { title: "Lesson 8: Blizzards 5E - Explore 1", objective: "Students investigate wind formation through a variety of models." },
+                        { title: "Lesson 9: Blizzards 5E - Explain 1", objective: "Students develop explanations for how wind from blizzards like Winter Storm Jonas occurs." },
+                        { title: "Lesson 10: Blizzards 5E - Explore 2", objective: "Students investigate precipitation formation through models." },
+                        { title: "Lesson 11: Blizzards 5E - Explain 2", objective: "Students develop explanations for how snow from blizzards like Winter Storm Jonas occurs." },
+                        { title: "Lesson 12: Blizzards 5E - Elaborate", objective: "Students analyze weather maps to identify weather systems and develop a model to explain their formation." },
+                        { title: "Lesson 13: Blizzards 5E - Evaluate", objective: "Students connect their learning to the Performance Task" }
+                    ]
+                },
+                "The Paths of Severe Storms 5E": {
+                    lessons: [
+                        { title: "Lesson 14: The Paths of Severe Storms 5E - Engage", objective: "What do students know about why we see patterns in the location blizzards and hurricanes form and in their trajectories?" },
+                        { title: "Lesson 15: The Paths of Severe Storms 5E - Explore 1", objective: "Students explore air surface temperature and intensity of solar insolation." },
+                        { title: "Lesson 16: The Paths of Severe Storms 5E - Explain 1", objective: "Students identify and explain where different air masses originate." },
+                        { title: "Lesson 17: The Paths of Severe Storms 5E - Explore 2", objective: "Students investigate global movement of air." },
+                        { title: "Lesson 18: The Paths of Severe Storms 5E - Explain 2", objective: "Students explain patterns of global wind and precipitation." },
+                        { title: "Lesson 19: The Paths of Severe Storms 5E - Elaborate", objective: "Students apply their learning about global winds to explain and make predictions about storm trajectory" },
+                        { title: "Lesson 20: The Paths of Severe Storms 5E - Evaluate", objective: "How does this connect to the Performance Task?" }
+                    ]
+                },
+                "Hurricanes 5E": {
+                    lessons: [
+                        { title: "Lesson 21: Hurricanes 5E - Engage", objective: "What do students know about hurricanes?" },
+                        { title: "Lesson 22: Hurricanes 5E - Explore", objective: "Students look for patterns in location and time of year of hurricane occurrence." },
+                        { title: "Lesson 23: Hurricanes 5E - Explain", objective: "Students explain patterns of hurricane location and seasons" },
+                        { title: "Lesson 24: Hurricanes 5E - Elaborate", objective: "Students use models to explain why hurricanes spin." },
+                        { title: "Lesson 25: Hurricanes 5E - Evaluate", objective: "Students connect their learning to the Performance Task" }
+                    ]
+                }
             }
         },
-        "Solutions for a Sustainable Future": {
+        "Unit 5: Solutions for a Sustainable Future": {
             topics: {
-                "Understanding our reliance on fossil fuels": { lessons: ["Investigating air and water pollution, acid rain, and the ozone layer", "Exploring renewable energy sources and energy efficiency", "Analyzing the impacts of deforestation, urbanization, and agriculture on biodiversity", "Investigating the environmental and social impacts of mining", "Developing a comprehensive sustainability plan for a community"] }
+                "Unit Opening": {
+                    lessons: [
+                        { title: "Lesson 1: Unit Opening - Anchor Phenomenon", objective: "How is human activity harming the health of humans and the natural environment? How is the health of humans and the natural environment intertwined? What solutions adequately address these problems and can be implemented in the real world?" },
+                        { title: "Lesson 2: Unit Opening - Performance Task", objective: "How is human activity harming the health of humans and the natural environment? How is the health of humans and the natural environment intertwined? What solutions adequately address these problems and can be implemented in the real world?" },
+                        { title: "Lesson 3: Unit Opening - Driving Question Board", objective: "What questions do we have? What data do we need to figure out the answers to these questions?" }
+                    ]
+                },
+                "Burning Fossil Fuels 5E": {
+                    lessons: [
+                        { title: "Lesson 4: Fossil Fuels 5E - Engage", objective: "How does burning fossil fuel contribute to environmental causes of death around the world?" },
+                        { title: "Lesson 5: Fossil Fuels 5E - Explore 1", objective: "Why does air pollution from fossil fuels cause more deaths in the United States than in France?" },
+                        { title: "Lesson 6: Fossil Fuels 5E - Explain 1", objective: "How can we apply solutions used in France to the United States in order to reduce deaths?" },
+                        { title: "Lesson 7: Fossil Fuels 5E - Explore 2", objective: "How does carbon mediate interactions between different global systems, and how do human activities modify those interactions?" },
+                        { title: "Lesson 8: Fossil Fuels 5E - Explain 2", objective: "How do the ways that burning fossil fuels impacts natural systems combine to impact human health?" },
+                        { title: "Lesson 9: Fossil Fuels 5E - Elaborate", objective: "How can we design and refine solutions to reduce the impacts of human activities on natural systems?" },
+                        { title: "Lesson 10: Fossil Fuels 5E - Evaluate", objective: "How can we reduce the number of deaths from pollution generated by burning fossil fuels?" }
+                    ]
+                },
+                "Land Use & Biodiversity 5E": {
+                    lessons: [
+                        { title: "Lesson 11: Land Use and Biodiversity 5E - Engage", objective: "How is the heat impacting the health of New Yorkers?" },
+                        { title: "Lesson 12: Land Use and Biodiversity 5E - Explore", objective: "How has the change in land use in New York City over the past 400 years contributed to the heat island effect?" },
+                        { title: "Lesson 13: Land Use and Biodiversity 5E - Explain 1", objective: "How does land use in New York City contribute to heat-related deaths?" },
+                        { title: "Lesson 14: Land Use and Biodiversity 5E - Explain 2", objective: "How can we intervene to increase the sustainability of cities?" },
+                        { title: "Lesson 15: Land Use and Biodiversity 5E - Elaborate", objective: "How are humans changing land in other areas in unsustainable ways with negative impacts to human and ecosystem health?" },
+                        { title: "Lesson 16: Land Use and Biodiversity 5E - Evaluate", objective: "How can green roofs contribute to sustainability, and how do these solutions combine to heat deaths globally?" }
+                    ]
+                },
+                "Mining 5E": {
+                    lessons: [
+                        { title: "Lesson 17: Mining 5E - Engage", objective: "Why are lung disease, heart disease, and cancer unequally distributed in the United States?" },
+                        { title: "Lesson 18: Mining 5E - Explore 1", objective: "How does coal mining contribute to loss of biodiversity?" },
+                        { title: "Lesson 19: Mining 5E - Explain 1", objective: "How does coal mining cause health impacts to nearby communities?" },
+                        { title: "Lesson 20: Mining 5E - Explore 2 (Optional)", objective: "Is mining done in NYS, and how do we know if we have found a valuable mineral?" },
+                        { title: "Lesson 21: Mining 5E - Explain 2 (Optional)", objective: "How does NYS balance costs and benefits to keep mining sustainable?" },
+                        { title: "Lesson 22: Mining 5E - Elaborate", objective: "How can we evaluate solutions to minimize environmental causes of death in mining and other communities?" },
+                        { title: "Lesson 23: Mining 5E - Evaluate", objective: "How can we argue in favor of solutions that minimize environmental causes of death in mining and other communities?" }
+                    ]
+                },
+                "Unit Closing": {
+                    lessons: [
+                        { title: "Lesson 24: Unit Closing - Anchor Phenomenon", objective: "Around the world, the health of humans and the natural environment is suffering negative consequences of human activity." },
+                        { title: "Lesson 25: Unit Closing - Driving Question Board", objective: "How is human activity harming the health of humans and the natural environment? How is the health of humans and the natural environment intertwined? What solutions adequately address these problems and can be implemented in the real world?" },
+                        { title: "Lesson 26: Unit Closing - Performance Task", objective: "How do the different solutions students’ evaluated contribute to reducing the overall impact of human activities on the environment and environmentally caused diseases?" }
+                    ]
+                }
             }
         },
-        "Probability of Life Elsewhere": {
+        "Unit 6: Probability of Life Elsewhere": {
             topics: {
-                "Investigating the factors that contribute to a stable solar system": { lessons: ["Exploring the interconnected history of Earth and life", "Understanding the Big Bang theory and the formation of elements", "Assessing the risk of impact events and exploring planetary defense", "Writing a report on the probability of life on an exoplanet"] }
+                "Unit Opening": {
+                    lessons: [
+                        { title: "Lesson 1: Unit Opening - Anchor Phenomenon", objective: "Does life exist somewhere outside of Earth? What about intelligent life?" },
+                        { title: "Lesson 2: Unit Opening - Performance Task", objective: "Students review the performance task and develop an initial model." },
+                        { title: "Lesson 3: Unit Opening - Driving Question Board", objective: "Students develop their own questions to investigate throughout the unit." }
+                    ]
+                },
+                "Stability of the Solar System 5E": {
+                    lessons: [
+                        { title: "Lesson 4: Stability of the Solar System 5E - Engage", objective: "How often have asteroids struck Earth? Can asteroid impacts explain why it took so long for intelligent life to evolve on Earth?" },
+                        { title: "Lesson 5: Stability of the Solar System 5E - Explore 1", objective: "What can the composition and age of rocks from objects in the solar system tell us about its past?" },
+                        { title: "Lesson 6: Stability of the Solar System 5E - Explain 1", objective: "What explains the tremendous difference in the number of craters on the Moon, Mars, and Earth?" },
+                        { title: "Lesson 7: Stability of the Solar System 5E - Explore 2", objective: "How do the properties of water affect the persistence of impact craters on Earth?" },
+                        { title: "Lesson 8: Stability of the Solar System 5E - Explain 2", objective: "What explains the tremendous difference in the number of craters on the Moon, Mars, and Earth?" },
+                        { title: "Lesson 9: Stability of the Solar System 5E - Elaborate", objective: "How has the Rock Cycle Impacted the Stability of Craters on Earth?" },
+                        { title: "Lesson 10: Stability of the Solar System 5E - Evaluate", objective: "How might asteroid collisions affect the probability of life evolving?" }
+                    ]
+                },
+                "Coevolution of Earth and Life 5E": {
+                    lessons: [
+                        { title: "Lesson 11: Coevolution of Earth and Life 5E - Engage", objective: "How has the pace of evolution changed over the past 4 billion years?" },
+                        { title: "Lesson 12: Coevolution of Earth and Life 5E - Explore", objective: "What can the fossil record tell us about the evolution of living things and Earth’s systems over the past 4 billion years?" },
+                        { title: "Lesson 13: Coevolution of Earth and Life 5E - Explain", objective: "How did Earth’s systems and living things coevolve?" },
+                        { title: "Lesson 14: Coevolution of Earth and Life 5E - Elaborate", objective: "How have extinction events affected the evolution of living things?" },
+                        { title: "Lesson 15: Coevolution of Earth and Life 5E - Evaluate", objective: "Why did it take so long for intelligent life to evolve on Earth?" }
+                    ]
+                },
+                "Origin of the Universe 5E": {
+                    lessons: [
+                        { title: "Lesson 16: Origin of the Universe - Engage", objective: "Where did everything in the universe come from? Has the universe always been the same?" },
+                        { title: "Lesson 17: Origin of the Universe - Explore", objective: "Investigating light from stars in other galaxies." },
+                        { title: "Lesson 18: Origin of the Universe - Explain", objective: "Explaining redshift and making inferences about the universe in the past" },
+                        { title: "Lesson 19: Origin of the Universe - Elaborate", objective: "Exploring additional evidence for the Big Bang theory and constructing an explanation for the origin of the universe." },
+                        { title: "Lesson 20: Origin of the Universe - Evaluate", objective: "Is it probable that there is life elsewhere in the universe?" }
+                    ]
+                },
+                "Asteroid Orbits 5E": {
+                    lessons: [
+                        { title: "Lesson 21: Asteroid Orbits 5E - Engage", objective: "What are the chances of another major asteroid hitting Earth?" },
+                        { title: "Lesson 22: Asteroid Orbits 5E - Explore", objective: "What patterns do different objects follow as they travel through space?" },
+                        { title: "Lesson 23: Asteroid Orbits 5E - Explain", objective: "How do we predict motions of asteroids and planets?" },
+                        { title: "Lesson 24: Asteroid Orbits 5E - Elaborate", objective: "How can we alter the path of an asteroid headed straight toward Earth?" },
+                        { title: "Lesson 25: Asteroid Orbits 5E - Evaluate", objective: "What can humans do to defend the planet from another asteroid mass extinction?" }
+                    ]
+                },
+                "Unit Closing": {
+                    lessons: [
+                        { title: "Lesson 26: Unit Closing", objective: "Students will now be able to apply all their learning to the unit to write their final argument about whether intelligent life exists elsewhere in the universe, then have an oral argument based on evidence with their classmates." }
+                    ]
+                }
             }
         }
     }
 };
+
+    
