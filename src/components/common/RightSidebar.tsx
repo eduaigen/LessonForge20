@@ -10,6 +10,8 @@ import {
   Bot,
   PencilRuler,
   BrainCircuit,
+  ClipboardCheck,
+  Key
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -20,7 +22,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach' | 'Differentiated Version' | 'Enhanced Version';
+export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach' | 'Differentiated Version' | 'Enhanced Version' | 'Student Answer Sheet' | 'Answer Key';
 
 const lessonTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Worksheet', icon: <FileText className="h-5 w-5" />, disabled: false },
@@ -37,17 +39,36 @@ const testTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] 
     { name: 'Enhanced Version', icon: <BrainCircuit className="h-5 w-5" />, disabled: false },
 ];
 
+const labTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
+  { name: 'Student Answer Sheet', icon: <ClipboardCheck className="h-5 w-5" />, disabled: false },
+  { name: 'Answer Key', icon: <Key className="h-5 w-5" />, disabled: false },
+  { name: 'Differentiated Version', icon: <PencilRuler className="h-5 w-5" />, disabled: false },
+  { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
+];
 
 type RightSidebarProps = {
   onToolClick: (toolName: ToolName) => void;
   isGenerating: boolean;
   isHighlighting: boolean;
-  toolset?: 'lesson' | 'test';
+  toolset?: 'lesson' | 'test' | 'lab';
 };
 
 export default function RightSidebar({ onToolClick, isGenerating, isHighlighting, toolset = 'lesson' }: RightSidebarProps) {
   const { toast } = useToast();
-  const tools = toolset === 'lesson' ? lessonTools : testTools;
+  
+  const getTools = () => {
+    switch (toolset) {
+      case 'lesson':
+        return lessonTools;
+      case 'test':
+        return testTools;
+      case 'lab':
+        return labTools;
+      default:
+        return lessonTools;
+    }
+  }
+  const tools = getTools();
 
   const handleToolClick = (tool: (typeof tools)[0]) => {
     if (tool.disabled) {

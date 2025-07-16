@@ -66,3 +66,7 @@ export * from './flows/generate-nv-biology-lab';
 export * from './flows/generate-ngss-chemistry-lab';
 export * from './flows/generate-ngss-physics-lab';
 export * from './flows/generate-nv-earth-science-lab';
+export * from './flows/generate-lab-answer-key';
+export * from './flows/generate-lab-student-sheet';
+export * from './flows/generate-differentiated-lab';
+export * from './flows/generate-lab-teacher-coach';
