@@ -3,7 +3,8 @@
 
 import React, { useState } from 'react';
 import Markdown from 'react-markdown';
-import { InlineMath, BlockMath } from 'react-katex';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
@@ -45,72 +46,9 @@ const renderTableFromObject = (tableData: { title: string, headers: string[], ro
 
 
 const renderSimpleMarkdown = (content: string) => {
-    const renderMath = (match: any, isBlock: boolean) => {
-        const math = match[1];
-        try {
-            if (isBlock) {
-                return <BlockMath math={math} />;
-            } else {
-                return <InlineMath math={math} />;
-            }
-        } catch (error) {
-            console.error("KaTeX rendering error:", error);
-            return <span>{isBlock ? `\\[${math}\\]` : `\\(${math}\\)`}</span>;
-        }
-    };
-    
     return (
         <div className="document-view">
-             <Markdown components={{
-                table: ({node, ...props}) => <div className="overflow-x-auto my-4"><table className="w-full" {...props} /></div>,
-                h1: ({node, ...props}) => <h1 {...props} />,
-                h2: ({node, ...props}) => <h2 {...props} />,
-                h3: ({node, ...props}) => <h3 {...props} />,
-                h4: ({node, ...props}) => <h4 {...props} />,
-                ul: ({node, ...props}) => <ul {...props} />,
-                ol: ({node, ...props}) => <ol {...props} />,
-                li: ({node, ...props}) => <li {...props} />,
-                p: ({ node, ...props }) => {
-                    const children = React.Children.toArray(props.children);
-                    const newChildren = children.map((child, index) => {
-                        if (typeof child === 'string') {
-                            const parts = child.split(/(\\\(.*?\)|\\\[.*?\\\])/g);
-                            return parts.map((part, i) => {
-                                const inlineMatch = part.match(/^\\\((.*)\\\)$/);
-                                if (inlineMatch) return <InlineMath key={i} math={inlineMatch[1]} />;
-
-                                const blockMatch = part.match(/^\\\[(.*)\\\]$/);
-                                if (blockMatch) return <BlockMath key={i} math={blockMatch[1]} />;
-                                
-                                return part;
-                            });
-                        }
-                        return child;
-                    });
-                    return <p {...props}>{newChildren}</p>;
-                },
-                strong: ({node, ...props}) => <strong {...props} />,
-                blockquote: ({node, ...props}) => <blockquote {...props} />,
-                svg: ({ node, ...props }) => {
-                    const svgString = node?.properties?.src as string;
-                    if (!svgString || typeof svgString !== 'string') {
-                      const rawSvg = node?.children?.map(c => (c as any).value).join('');
-                      if (rawSvg) {
-                         return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: rawSvg }} />
-                      }
-                      return null;
-                    }
-                    return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: svgString }} />
-                },
-                 span: ({ node, className, children, ...props }) => {
-                    if (className === 'math') {
-                        const content = (children as string[]).join('');
-                        const math = content.replace(/^\\\((.*)\\\)$/, '$1');
-                        return <InlineMath math={math} />;
-                    }
-                    return <span className={className} {...props}>{children}</span>;
-                }
-            }}>
+             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                 {content}
             </Markdown>
         </div>
@@ -178,7 +116,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
             </LessonSection>
 
             <LessonSection title="B. Mini-Lesson / Direct Instruction (10–15 min)">
-                <div><h4>Reading Passage</h4><Markdown>{miniLesson.readingPassage}</Markdown></div>
+                <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{miniLesson.readingPassage}</Markdown></div>
                 {miniLesson.diagram && <div><h4>Diagram Description</h4><blockquote className="border-l-4 border-primary pl-4 italic">{miniLesson.diagram}</blockquote></div>}
                 <div><h4>Concept-Check Questions</h4>{renderLeveledQuestions(miniLesson.conceptCheckQuestions)}</div>
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{miniLesson.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
@@ -215,7 +153,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
             </LessonSection>
 
             <LessonSection title="G. Homework Activity">
-                <div><h4>Activity</h4><Markdown>{homework.activity}</Markdown></div>
+                <div><h4>Activity</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{homework.activity}</Markdown></div>
             </LessonSection>
 
             <LessonSection title="H. Differentiation & Support">
@@ -279,7 +217,9 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             {worksheet.miniLesson.readingPassage && (
                 <>
                     <h4>Reading Passage</h4>
-                    <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: worksheet.miniLesson.readingPassage.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                    <div className="prose prose-lg max-w-none">
+                       <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{worksheet.miniLesson.readingPassage}</Markdown>
+                    </div>
                 </>
             )}
              {worksheet.miniLesson.diagramDescription && (
@@ -365,7 +305,9 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
 
         <section>
             <h3>{worksheet.homework.title}</h3>
-            <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: worksheet.homework.activity.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+            <div className="prose prose-lg max-w-none">
+                <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{worksheet.homework.activity}</Markdown>
+            </div>
             {worksheet.homework.extensionActivity && (
                 <div className="mt-4">
                     <h4>Extension Activity</h4>
@@ -435,7 +377,7 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
                 <section key={index} className="mb-6 border-b pb-4">
                     <h3>Slide {index + 1}: {slide.title}</h3>
                      <div className="prose prose-lg max-w-none">
-                        <Markdown>{slide.content.join('\n\n')}</Markdown>
+                        <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{slide.content.join('\n\n')}</Markdown>
                     </div>
                 </section>
             ))}
