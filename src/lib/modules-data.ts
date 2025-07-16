@@ -25,6 +25,9 @@ export const modules = {
     { id: 'price_1Pg12NAk4y2zY5d6a1bCdeFg', name: 'US History & Government', description: 'American history & constitutional principles.', icon: 'history' },
     { id: 'price_1Pg12ZAk4y2zY5d6hIjKlMnO', name: 'Government & Economics', description: 'Study of government and economic principles.', icon: 'history' },
   ],
+  ell: [
+    { id: 'price_1PgD4pAk4y2zY5d6mNopQrSt', name: 'ELL / ENL (Grades 9-12)', description: 'Scaffolded lessons for English Language Learners.', icon: 'languages' },
+  ],
   tools: [
       { id: 'price_1Pg12lAk4y2zY5d6pQrStUvW', name: 'Test Generator', description: 'Generate comprehensive tests for any subject.', icon: 'bookCopy' },
   ]

@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2 } from 'lucide-react';
+import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2, Languages } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { createCheckoutSession } from '@/actions/stripe';
@@ -28,6 +28,7 @@ const iconMap: { [key: string]: React.ReactNode } = {
     sigma: <Sigma />,
     library: <Library />,
     history: <History />,
+    languages: <Languages />,
     bookCopy: <BookCopy />,
     testTube: <TestTube />,
 };
@@ -112,6 +113,7 @@ export default function PricingPage() {
       { key: 'math', label: 'Mathematics', icon: <Sigma className="w-5 h-5 mr-2" /> },
       { key: 'ela', label: 'ELA', icon: <Library className="w-5 h-5 mr-2" /> },
       { key: 'social', label: 'Social Studies', icon: <History className="w-5 h-5 mr-2" /> },
+      { key: 'ell', label: 'ELL/ENL', icon: <Languages className="w-5 h-5 mr-2" /> },
       { key: 'tools', label: 'Premium Tools', icon: <FileText className="w-5 h-5 mr-2" /> }
   ];
 
@@ -130,7 +132,7 @@ export default function PricingPage() {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12">
             <div className="lg:col-span-2">
                 <Tabs value={selectedCategory} onValueChange={(value) => setSelectedCategory(value as ModuleCategory)} className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+                    <TabsList className="grid w-full grid-cols-3 sm:grid-cols-4 md:grid-cols-6">
                         {subjectTabs.map(tab => (
                             <TabsTrigger key={tab.key} value={tab.key} className="flex items-center text-xs sm:text-sm">
                                 {tab.icon}{tab.label}

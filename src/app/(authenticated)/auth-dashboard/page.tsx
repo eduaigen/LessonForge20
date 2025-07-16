@@ -20,6 +20,7 @@ import {
   Magnet,
   Sparkles,
   Stethoscope,
+  Languages,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -46,7 +47,7 @@ const ToolCard = ({ title, description, icon, href }: { title: string, descripti
 };
 
 const PremiumDashboardContent = () => {
-  const { user, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription } = useAuth();
+  const { user, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription } = useAuth();
   
   return (
     <div className="flex flex-col gap-8">
@@ -162,8 +163,22 @@ const PremiumDashboardContent = () => {
             </section>
           )}
 
+          {hasELLSubscription && (
+             <section>
+              <h2 className="text-2xl font-bold font-headline mb-4">ELL / ENL Modules</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <ToolCard
+                  title="ELL / ENL Lesson Generator"
+                  description="Create scaffolded lesson plans for English Language Learners."
+                  icon={<Languages />}
+                  href="/ell-generator"
+                />
+              </div>
+            </section>
+          )}
 
-          {!hasScienceSubscription && !hasMathSubscription && !hasELASubscription && !hasSocialStudiesSubscription && (
+
+          {!hasScienceSubscription && !hasMathSubscription && !hasELASubscription && !hasSocialStudiesSubscription && !hasELLSubscription && (
              <div className="text-center py-16 col-span-full">
                 <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
                 <p className="text-muted-foreground">You do not have any active subscriptions with available tools.</p>

@@ -24,6 +24,7 @@ export * from './flows/generate-global-history-1-lesson';
 export * from './flows/generate-global-history-2-lesson';
 export * from './flows/generate-us-history-lesson';
 export * from './flows/generate-government-lesson';
+export * from './flows/generate-ell-lesson';
 export * from './flows/reading-material-generator';
 export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
