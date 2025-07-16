@@ -78,7 +78,7 @@ const SubscriptionPrompt = () => (
                     <Sparkles className="h-8 w-8" />
                 </div>
                 <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
-                <CardDescription className="text-lg text-muted-foreground pt-2">
+                <CardDescription>
                     The NV Biology Generator requires a Science curriculum subscription. Subscribe now to create powerful, standards-aligned 5E lesson plans.
                 </CardDescription>
             </CardHeader>
@@ -158,6 +158,9 @@ const GeneratorContent = () => {
 
     try {
       const result = await generateNVBiologyLesson(values);
+      if (!result) {
+        throw new Error('Lesson plan generation returned no result.');
+      }
       const newPackageId = `package-${Date.now()}`;
       const newPackage: LessonPackage = {
           id: newPackageId,
@@ -207,15 +210,16 @@ const GeneratorContent = () => {
         let result: any;
         let contentType: GeneratedContent['type'] = toolName;
         let newContent: GeneratedContent | null = null;
+        const lessonPlanJson = JSON.stringify(lessonPlan);
 
         if (toolName === 'Worksheet') {
-            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateWorksheet({ lessonPlanJson });
             newContent = { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType };
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial(lessonPlan);
             newContent = { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType };
         } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateTeacherCoach({ lessonPlanJson });
             newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
@@ -227,7 +231,7 @@ const GeneratorContent = () => {
             });
             newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Study Sheet') {
-            result = await generateStudySheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateStudySheet({ lessonPlanJson });
             newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         }
 
@@ -259,7 +263,7 @@ const GeneratorContent = () => {
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              <div>Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.</div>
+              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
               <div className="text-sm text-muted-foreground pt-4 text-left">
                 <p className="font-semibold text-foreground">Here are the available tools:</p>
                 <ul className="list-disc pl-5 mt-2 space-y-2">
