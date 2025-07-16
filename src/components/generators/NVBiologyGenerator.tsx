@@ -234,12 +234,24 @@ const GeneratorContent = () => {
       try {
         translatedJson = JSON.parse(response.translatedContent);
       } catch (e) {
-        // If parsing fails, try to extract from markdown
-        const match = response.translatedContent.match(/```json\n([\s\S]*)\n```/);
-        if (match && match[1]) {
-          translatedJson = JSON.parse(match[1]);
+        // If parsing fails, try to extract from markdown or find the JSON object directly
+        const jsonMatch = response.translatedContent.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonMatch && jsonMatch[1]) {
+          translatedJson = JSON.parse(jsonMatch[1]);
         } else {
-          throw new Error("Failed to parse translated JSON content.");
+            // A more aggressive approach to find the JSON
+            const firstBrace = response.translatedContent.indexOf('{');
+            const lastBrace = response.translatedContent.lastIndexOf('}');
+            if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+                const jsonString = response.translatedContent.substring(firstBrace, lastBrace + 1);
+                try {
+                    translatedJson = JSON.parse(jsonString);
+                } catch (finalError) {
+                     throw new Error("Failed to parse translated JSON content even after extraction.");
+                }
+            } else {
+                throw new Error("Failed to parse translated JSON content.");
+            }
         }
       }
 

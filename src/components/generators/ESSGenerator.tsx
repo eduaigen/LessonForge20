@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Orbit, Sparkles, Wand2, Printer, Languages } from 'lucide-react';
+import { Loader2, Orbit, Sparkles, Wand2, Printer, Languages, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { earthScienceCurriculum } from '@/lib/earth-science-curriculum';
 import { generateESSLesson, type GenerateESSLessonOutput } from '@/ai/flows/generate-ess-lesson';
@@ -40,6 +40,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -86,6 +88,7 @@ const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<{unit: string; topic: string; lesson: string} | null>(null);
   
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
 
@@ -108,25 +111,6 @@ const GeneratorContent = () => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as GenerateESSLessonOutput | null;
   }, [lessonPackage]);
 
-
-  const selectedUnit = form.watch('unit');
-  const selectedTopic = form.watch('topic');
-
-  const units = useMemo(() => Object.keys(earthScienceCurriculum.units), []);
-  const topics = useMemo(() => {
-    if (!selectedUnit) return [];
-    const unitData = earthScienceCurriculum.units[selectedUnit as keyof typeof earthScienceCurriculum.units];
-    return unitData ? Object.keys(unitData.topics) : [];
-  }, [selectedUnit]);
-
-  const lessons = useMemo(() => {
-    if (!selectedUnit || !selectedTopic) return [];
-    const unitData = earthScienceCurriculum.units[selectedUnit as keyof typeof earthScienceCurriculum.units];
-    if (!unitData) return [];
-    const topicData = unitData.topics[selectedTopic as keyof typeof unitData.topics];
-    return topicData ? topicData.lessons : [];
-  }, [selectedUnit, selectedTopic]);
-
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (isHighlightingTools) {
@@ -143,6 +127,14 @@ const GeneratorContent = () => {
         setIsHighlightingTools(true);
     }
   }
+
+  const handleSelectLesson = (unit: string, topic: string, lessonTitle: string) => {
+    form.setValue('unit', unit);
+    form.setValue('topic', topic);
+    form.setValue('lesson', lessonTitle);
+    setSelectedLesson({ unit, topic, lesson: lessonTitle });
+  };
+
 
   const handlePrintAll = () => {
     if (!lessonPackage || lessonPackage.length === 0) return;
@@ -234,12 +226,24 @@ const GeneratorContent = () => {
       try {
         translatedJson = JSON.parse(response.translatedContent);
       } catch (e) {
-        // If parsing fails, try to extract from markdown
-        const match = response.translatedContent.match(/```json\n([\s\S]*)\n```/);
-        if (match && match[1]) {
-          translatedJson = JSON.parse(match[1]);
+        // If parsing fails, try to extract from markdown or find the JSON object directly
+        const jsonMatch = response.translatedContent.match(/```json\n([\s\S]*?)\n```/);
+        if (jsonMatch && jsonMatch[1]) {
+          translatedJson = JSON.parse(jsonMatch[1]);
         } else {
-          throw new Error("Failed to parse translated JSON content.");
+            // A more aggressive approach to find the JSON
+            const firstBrace = response.translatedContent.indexOf('{');
+            const lastBrace = response.translatedContent.lastIndexOf('}');
+            if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+                const jsonString = response.translatedContent.substring(firstBrace, lastBrace + 1);
+                try {
+                    translatedJson = JSON.parse(jsonString);
+                } catch (finalError) {
+                     throw new Error("Failed to parse translated JSON content even after extraction.");
+                }
+            } else {
+                throw new Error("Failed to parse translated JSON content.");
+            }
         }
       }
 
@@ -397,94 +401,56 @@ const GeneratorContent = () => {
                   <Form {...form}>
                       <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
                       <CardContent className="space-y-6">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <FormField
-                              control={form.control}
-                              name="unit"
-                              render={({ field }) => (
-                                  <FormItem>
-                                  <FormLabel>Unit</FormLabel>
-                                  <Select onValueChange={(value) => {
-                                      field.onChange(value);
-                                      form.setValue('topic', '');
-                                      form.setValue('lesson', '');
-                                  }} defaultValue={field.value}>
-                                      <FormControl>
-                                      <SelectTrigger>
-                                          <SelectValue placeholder="Select a unit" />
-                                      </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                      {units.map((unit) => (
-                                          <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                                      ))}
-                                      </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                  </FormItem>
-                              )}
-                              />
-                              <FormField
-                              control={form.control}
-                              name="topic"
-                              render={({ field }) => (
-                                  <FormItem>
-                                  <FormLabel>Topic</FormLabel>
-                                  <Select onValueChange={(value) => {
-                                      field.onChange(value);
-                                      form.setValue('lesson', '');
-                                  }} value={field.value} disabled={!selectedUnit}>
-                                      <FormControl>
-                                      <SelectTrigger>
-                                          <SelectValue placeholder="Select a topic" />
-                                      </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                      {topics.map((topic) => (
-                                          <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                                      ))}
-                                      </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                  </FormItem>
-                              )}
-                              />
-                          </div>
+                           <FormField
+                                control={form.control}
+                                name="lesson"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Select a Lesson</FormLabel>
+                                        <FormControl>
+                                            <ScrollArea className="h-96 w-full rounded-md border p-2">
+                                                <Accordion type="single" collapsible className="w-full">
+                                                    {Object.entries(earthScienceCurriculum.units).map(([unit, unitData]) => (
+                                                        <AccordionItem value={unit} key={unit}>
+                                                            <AccordionTrigger>{unit}</AccordionTrigger>
+                                                            <AccordionContent>
+                                                                <Accordion type="single" collapsible className="w-full pl-4">
+                                                                    {Object.entries(unitData.topics).map(([topic, topicData]) => (
+                                                                        <AccordionItem value={topic} key={topic}>
+                                                                            <AccordionTrigger>{topic}</AccordionTrigger>
+                                                                            <AccordionContent className="pl-4">
+                                                                                <div className="space-y-2">
+                                                                                    {topicData.lessons.map((lesson, index) => {
+                                                                                        const isSelected = selectedLesson?.lesson === lesson.title;
+                                                                                        return (
+                                                                                            <div key={index} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/50">
+                                                                                                <div>
+                                                                                                    <p className="font-semibold">{lesson.title}</p>
+                                                                                                    <p className="text-sm text-muted-foreground">{lesson.objective}</p>
+                                                                                                </div>
+                                                                                                <Button type="button" size="sm" onClick={() => handleSelectLesson(unit, topic, lesson.title)} variant={isSelected ? "secondary" : "outline"}>
+                                                                                                    {isSelected ? <Check className="mr-2 h-4 w-4" /> : null}
+                                                                                                    Select
+                                                                                                </Button>
+                                                                                            </div>
+                                                                                        );
+                                                                                    })}
+                                                                                </div>
+                                                                            </AccordionContent>
+                                                                        </AccordionItem>
+                                                                    ))}
+                                                                </Accordion>
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    ))}
+                                                </Accordion>
+                                            </ScrollArea>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                          {lessons && lessons.length > 0 && (
-                              <FormField
-                                  control={form.control}
-                                  name="lesson"
-                                  render={({ field }) => (
-                                      <FormItem className="space-y-3">
-                                      <FormLabel>Lesson Objective</FormLabel>
-                                      <FormControl>
-                                          <ScrollArea className="h-72 w-full rounded-md border p-4">
-                                              <RadioGroup
-                                                  onValueChange={field.onChange}
-                                                  defaultValue={field.value}
-                                                  className="flex flex-col space-y-1"
-                                              >
-                                                  {lessons.map((lesson, index) => (
-                                                  <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
-                                                      <FormControl>
-                                                          <RadioGroupItem value={lesson.title} />
-                                                      </FormControl>
-                                                      <FormLabel className="font-normal w-full cursor-pointer">
-                                                          <p className="font-semibold">{lesson.title}</p>
-                                                          <p className="text-sm text-muted-foreground">{lesson.objective}</p>
-                                                      </FormLabel>
-                                                  </FormItem>
-                                                  ))}
-                                              </RadioGroup>
-                                          </ScrollArea>
-                                      </FormControl>
-                                      <FormMessage />
-                                      </FormItem>
-                                  )}
-                              />
-                          )}
-                          
                           <FormField
                               control={form.control}
                               name="additionalInfo"
@@ -500,7 +466,7 @@ const GeneratorContent = () => {
                           />
                       </CardContent>
                       <CardFooter>
-                          <Button type="submit" disabled={isLoading} className="w-full">
+                          <Button type="submit" disabled={isLoading || !selectedLesson} className="w-full">
                           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           {isLoading ? 'Generating Lesson...' : 'Generate New Lesson'}
                           </Button>
