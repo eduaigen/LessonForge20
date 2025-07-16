@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert educator creating a comprehensive study guide for students based on a detailed lesson plan. Your task is to extract, synthesize, and reformat the most critical information into a clear, concise, and thorough study sheet in the specified language.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by the Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
 2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
 
 **Lesson Plan Data:**

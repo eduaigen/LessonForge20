@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet in the specified language.
 
 **CRITICAL RULES:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by the Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
 2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
 3.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
 4.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
