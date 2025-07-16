@@ -28,16 +28,16 @@ export const globalHistory1Curriculum: {
                         { title: "Life Before and After the Neolithic Revolution", objective: "Analyze the political, social, and economic differences in human lives before and after the Neolithic Revolution.", standard: "9.1a" }
                     ]
                 },
-                "Complex Societies and River Valleys": {
-                    topic: "Complex Societies and River Valleys",
+                "Adapting to the Environment": {
+                    topic: "Adapting to the Environment",
                     lessons: [
-                        { title: "Adapting to the Environment: Mesopotamian, Shang, and Indus River Valleys", objective: "Explore how early river valley civilizations adapted to and modified their environments.", standard: "9.1b" }
+                        { title: "Mesopotamian, Shang, and Indus River Valley Civilizations", objective: "Explore how early river valley civilizations adapted to and modified their environments to meet their need for food, clothing, and shelter.", standard: "9.1b" }
                     ]
                 },
                 "Characteristics of Civilizations": {
                     topic: "Characteristics of Civilizations",
                     lessons: [
-                        { title: "Comparing Mesopotamian, Shang, and Indus Valley Civilizations", objective: "Examine archaeological and historical evidence to compare and contrast characteristics and note unique contributions of early civilizations.", standard: "9.1c" }
+                        { title: "Comparing Early River Valley Civilizations", objective: "Examine archaeological and historical evidence to compare and contrast characteristics and note unique contributions of Mesopotamian, Shang, and Indus River valley civilizations.", standard: "9.1c" }
                     ]
                 }
             }
@@ -48,13 +48,13 @@ export const globalHistory1Curriculum: {
                 "Core Beliefs and Practices": {
                     topic: "Core Beliefs and Practices",
                     lessons: [
-                        { title: "Comparing World Religions and Philosophies", objective: "Identify origins, compare core beliefs, and explore sacred texts for Hinduism, Buddhism, Judaism, Christianity, Islam, Confucianism, and Daoism.", standard: "9.2a" }
+                        { title: "Comparing World Religions and Philosophies", objective: "Identify the place of origin, compare and contrast the core beliefs and practices, and explore the sacred texts and ethical codes for Hinduism, Buddhism, Judaism, Christianity, Islam, Confucianism, and Daoism.", standard: "9.2a" }
                     ]
                 },
-                "Social Impact of Belief Systems": {
-                    topic: "Social Impact of Belief Systems",
+                "Social and Gender Roles": {
+                    topic: "Social and Gender Roles",
                     lessons: [
-                        { title: "Belief Systems, Social Order, and Gender Roles", objective: "Examine similarities and differences between major belief systems regarding their effects on social order and gender roles.", standard: "9.2b" }
+                        { title: "Effects of Belief Systems on Social Order", objective: "Examine similarities and differences between Hinduism, Buddhism, Judaism, Christianity, Islam, and Confucianism regarding their effects on social order and gender roles.", standard: "9.2b" }
                     ]
                 }
             }
@@ -65,25 +65,25 @@ export const globalHistory1Curriculum: {
                 "Geography and Expansion": {
                     topic: "Geography and Expansion",
                     lessons: [
-                        { title: "Geography's Role in Classical Civilizations (Greece, Rome, Maya)", objective: "Investigate how geographic factors encouraged or hindered expansion and interactions.", standard: "9.3a" }
+                        { title: "Geographic Factors in Classical Civilizations", objective: "Investigate how geographic factors encouraged or hindered expansion and interactions within the Greek, Roman, and Mayan civilizations.", standard: "9.3a" }
                     ]
                 },
                 "Consolidating Power": {
                     topic: "Consolidating Power",
                     lessons: [
-                        { title: "Methods of Imperial Control (Mauryan, Qin, Roman)", objective: "Compare and contrast how different empires consolidated and increased power through belief systems, law, government, and military.", standard: "9.3b" }
+                        { title: "Methods of Imperial Control", objective: "Compare and contrast how the Mauryan, Qin, and Roman civilizations consolidated and increased power.", standard: "9.3b" }
                     ]
                 },
                 "Golden Ages": {
                     topic: "Golden Ages",
                     lessons: [
-                        { title: "Golden Ages of Greece, Gupta, Han, Maya, and Rome", objective: "Examine the achievements of classical civilizations to determine if they experienced a Golden Age.", standard: "9.3c" }
+                        { title: "Achievements of Classical Civilizations", objective: "Examine the achievements of Greece, Gupta, Han Dynasty, Maya, and Rome to determine if the civilizations experienced a Golden Age.", standard: "9.3c" }
                     ]
                 },
                 "Decline and Fall of Empires": {
                     topic: "Decline and Fall of Empires",
                     lessons: [
-                        { title: "Fall of the Han Dynasty, Mayan Civilization, and Roman Empire", objective: "Compare and contrast the political, socioeconomic, environmental, and external forces that led to the fall of classical empires.", standard: "9.3d" }
+                        { title: "Fall of the Han, Mayan, and Roman Empires", objective: "Compare and contrast the forces that led to the fall of the Han Dynasty, the Mayan civilization, and the Roman Empire.", standard: "9.3d" }
                     ]
                 }
             }
@@ -91,29 +91,29 @@ export const globalHistory1Curriculum: {
         "9.4 RISE OF TRANSREGIONAL TRADE NETWORKS": {
             unit: "9.4 RISE OF TRANSREGIONAL TRADE NETWORKS",
             topics: {
-                "Afro-Eurasian Trade Routes": {
-                    topic: "Afro-Eurasian Trade Routes",
+                "Afro-Eurasian Trade Networks": {
+                    topic: "Afro-Eurasian Trade Networks",
                     lessons: [
-                        { title: "Mapping Transregional Trade Networks", objective: "Identify the locations and connections of the Indian Ocean complex, Mediterranean Sea complex, Silk Roads, and Trans-Saharan routes.", standard: "9.4a" }
+                        { title: "Mapping Trade Routes", objective: "Identify the location of the transregional trade networks noting regional connections between the Indian Ocean complex, Mediterranean Sea complex, Silk Roads, and Trans-Saharan routes.", standard: "9.4a" }
                     ]
                 },
                 "Technology and Travel": {
                     topic: "Technology and Travel",
                     lessons: [
-                        { title: "Innovations in Interregional Travel", objective: "Examine technologies that improved travel along the Indian Ocean and Trans-Saharan networks.", standard: "9.4b" }
+                        { title: "Innovations in Interregional Travel", objective: "Examine the technologies that facilitated and improved interregional travel along the Indian Ocean and Trans-Saharan networks of exchange.", standard: "9.4b" }
                     ]
                 },
                 "Cultural Diffusion and Exchange": {
                     topic: "Cultural Diffusion and Exchange",
                     lessons: [
-                        { title: "Products, Ideas, and Peoples on the Move", objective: "Analyze the exchange of goods, resources, enslaved people, and religious ideas along major trade networks.", standard: "9.4c" },
-                        { title: "Journeys of Zheng He, Ibn Battuta, and Marco Polo", objective: "Examine the travels of significant individuals and the influence of their journeys.", standard: "9.4c" }
+                        { title: "Exchange of Products, Resources, and Ideas", objective: "Identify key resources, products, and luxury items vital to exchanges and examine the diffusion of religious ideas along major trade networks.", standard: "9.4c" },
+                        { title: "Travels of Zheng He, Ibn Battuta, and Marco Polo", objective: "Examine the travels of significant individuals and the influence of their journeys.", standard: "9.4c" }
                     ]
                 },
                 "Trade and Political States": {
                     topic: "Trade and Political States",
                     lessons: [
-                        { title: "Emergence of States along Trade Routes (Byzantine, Ottoman, Ghana, Mali)", objective: "Examine how control of trade contributed to the emergence and expansion of political states.", standard: "9.4d" }
+                        { title: "Emergence of States along Trade Routes", objective: "Examine the emergence and expansion of political states along the Mediterranean Sea complex (Byzantine Empire, Ottoman Empire) and Trans-Saharan routes (Ghana, Mali).", standard: "9.4d" }
                     ]
                 }
             }
@@ -124,20 +124,20 @@ export const globalHistory1Curriculum: {
                 "Post-Roman Europe": {
                     topic: "Post-Roman Europe",
                     lessons: [
-                        { title: "Comparing Feudal Western Europe and the Byzantine Empire", objective: "Compare and contrast the political, economic, and social institutions of feudal Western Europe and the Byzantine Empire.", standard: "9.5a" }
+                        { title: "Comparing Feudal Western Europe and the Byzantine Empire", objective: "Compare and contrast the political, economic, and social institutions of feudal Western Europe and the Byzantine Empire, including the role of Justinian and Theodora.", standard: "9.5a" }
                     ]
                 },
                 "Empire Building": {
                     topic: "Empire Building",
                     lessons: [
-                        { title: "Comparing the Mongol and Islamic Caliphate Empires", objective: "Compare and contrast the empire-building processes of the Mongols and the Islamic caliphates.", standard: "9.5b" }
+                        { title: "Comparing Mongol and Islamic Caliphate Empires", objective: "Compare and contrast the empire-building processes of the Mongols and the Islamic caliphates.", standard: "9.5b" }
                     ]
                 },
                 "Cultural and Scientific Innovations": {
                     topic: "Cultural and Scientific Innovations",
                     lessons: [
-                        { title: "Achievements of the Tang/Song Dynasties and the Abbasid Caliphate", objective: "Compare and contrast the achievements and innovations of major postclassical empires.", standard: "9.5c" },
-                        { title: "Diffusion of Technology and Learning (East Asia to Europe)", objective: "Explore the spread of technology and learning from East Asia to Western Europe.", standard: "9.5c" },
+                        { title: "Achievements of Postclassical Empires", objective: "Compare and contrast the achievements and innovations of the Tang and Song dynasties with the Abbasid Caliphate.", standard: "9.5c" },
+                        { title: "Diffusion of Technology and Learning", objective: "Explore the spread and evolution of technology and learning from East Asia to Western Europe via the Middle East.", standard: "9.5c" },
                         { title: "Feudal Japan and Chinese Cultural Influence", objective: "Examine feudal Japan and the adoption and adaptation of Chinese culture.", standard: "9.5c" }
                     ]
                 }
@@ -149,7 +149,7 @@ export const globalHistory1Curriculum: {
                 "Religious and Political Disputes": {
                     topic: "Religious and Political Disputes",
                     lessons: [
-                        { title: "Divisions within Islam and Christianity", objective: "Investigate the Sunni-Shia split in Islam and the Great Schism in Christianity and their impacts.", standard: "9.6a" },
+                        { title: "Divisions within Islam and Christianity", objective: "Investigate the Sunni-Shia split in Islam and the Great Schism and their impacts.", standard: "9.6a" },
                         { title: "The Crusades and the Delhi Sultanate", objective: "Investigate the Crusades and the Delhi Sultanate from multiple perspectives.", standard: "9.6a" },
                         { title: "Development of Sikhism", objective: "Examine the development of Sikhism in South Asia.", standard: "9.6a" }
                     ]
@@ -168,7 +168,7 @@ export const globalHistory1Curriculum: {
                 "Belief Systems and Powerful States": {
                     topic: "Belief Systems and Powerful States",
                     lessons: [
-                        { title: "Mapping Muslim, Neo-Confucian, and Christian Realms (ca. 1400)", objective: "Map and compare the extent and power of realms influenced by major belief systems.", standard: "9.7a" }
+                        { title: "Mapping Muslim, Neo-Confucian, and Christian Realms", objective: "Map the extent of the Muslim, Neo-Confucian, and Christian realms and compare their relative size and power ca. 1400.", standard: "9.7a" }
                     ]
                 },
                 "Social and Political Structures": {
@@ -192,19 +192,19 @@ export const globalHistory1Curriculum: {
                 "Development of Complex Societies": {
                     topic: "Development of Complex Societies",
                     lessons: [
-                        { title: "Environment and Trade in Aztec, Inca, and Songhai Empires", objective: "Examine the influence of environment, resources, and trade on the growth of empires in Africa and the Americas.", standard: "9.8a" }
+                        { title: "Environment and Trade in Africa and the Americas", objective: "Examine the influence of environment, resources, and trade on the growth of the Aztec, Inca, and Songhai empires and East African city-states.", standard: "9.8a" }
                     ]
                 },
                 "Religion and Power": {
                     topic: "Religion and Power",
                     lessons: [
-                        { title: "Role of Traditional Religions in Africa and the Americas", objective: "Examine the role of animism and the relationship between religious beliefs and political power in the Aztec and Inca empires.", standard: "9.8b" }
+                        { title: "Role of Traditional Religions", objective: "Examine the role of animism and the relationship between religious beliefs and political power in the Aztec and Inca empires.", standard: "9.8b" }
                     ]
                 },
                 "Cultural Achievements": {
                     topic: "Cultural Achievements",
                     lessons: [
-                        { title: "Contributions of Aztec, Inca, and Songhai Empires", objective: "Investigate the achievements and contributions of major African and American empires.", standard: "9.8c" }
+                        { title: "Contributions of African and American Empires", objective: "Investigate the achievements and contributions of the Aztec, Inca, and Songhai empires.", standard: "9.8c" }
                     ]
                 }
             }
@@ -221,19 +221,19 @@ export const globalHistory1Curriculum: {
                 "The Reformation": {
                     topic: "The Reformation",
                     lessons: [
-                        { title: "Challenges to Religious Authority", objective: "Explore the roles of key individuals and the impacts of the Reformation and Counter-Reformation on European unity.", standard: "9.9b" }
+                        { title: "Challenges to Religious Authority", objective: "Explore the roles of key individuals and the impacts of the Reformation and Counter-Reformation.", standard: "9.9b" }
                     ]
                 },
                 "Absolutism": {
                     topic: "Absolutism",
                     lessons: [
-                        { title: "Consolidation of Power in Russia and Western Europe", objective: "Investigate autocratic and absolutist rule by comparing the reigns of Louis XIV and Peter the Great.", standard: "9.9c" }
+                        { title: "Consolidation of Power", objective: "Investigate autocratic and absolutist rule by comparing the reigns of Louis XIV and Peter the Great.", standard: "9.9c" }
                     ]
                 },
                 "Scientific Revolution and Enlightenment": {
                     topic: "Scientific Revolution and Enlightenment",
                     lessons: [
-                        { title: "Challenging Traditional Authorities", objective: "Examine the Scientific Revolution and the influence of Enlightenment thinkers on political authority.", standard: "9.9d, 9.9e" }
+                        { title: "Challenging Traditional Authorities", objective: "Examine the Scientific Revolution and the influence of Enlightenment thinkers.", standard: "9.9d, 9.9e" }
                     ]
                 }
             }
@@ -247,8 +247,8 @@ export const globalHistory1Curriculum: {
                         { title: "Motives and Innovations in Transoceanic Travel", objective: "Explore the motivations, knowledge, and technological innovations that influenced European exploration.", standard: "9.10a" }
                     ]
                 },
-                "The Encounter and Columbian Exchange": {
-                    topic: "The Encounter and Columbian Exchange",
+                "The Columbian Exchange": {
+                    topic: "The Columbian Exchange",
                     lessons: [
                         { title: "Impacts on Global Populations", objective: "Analyze the exchange of crops, animals, and diseases, and evaluate the devastating impact on indigenous American populations.", standard: "9.10b" }
                     ]
@@ -262,7 +262,7 @@ export const globalHistory1Curriculum: {
                 "Colonization and its Impacts": {
                     topic: "Colonization and its Impacts",
                     lessons: [
-                        { title: "Impacts of Colonization in the Americas and Africa", objective: "Examine the political, economic, cultural, and geographic impacts of European colonization on existing societies.", standard: "9.10d" }
+                        { title: "Impacts of Colonization in the Americas and Africa", objective: "Examine the political, economic, cultural, and geographic impacts of European colonization.", standard: "9.10d" }
                     ]
                 },
                 "Shifts in Global Trade": {

@@ -49,14 +49,13 @@ export const usHistoryCurriculum: {
                 "Road to Revolution": {
                     topic: "Road to Revolution",
                     lessons: [
-                        { title: "British Control and Colonial Resistance", objective: "Examine British efforts to gain greater control over the colonies and colonial reactions to these efforts.", standard: "11.2a" }
+                        { title: "British Control and Colonial Resistance", objective: "Examine British efforts to gain greater political and economic control over the colonies and colonial reactions to these efforts.", standard: "11.2a" }
                     ]
                 },
                 "Revolutionary War and Declaration of Independence": {
                     topic: "Revolutionary War and Declaration of Independence",
                     lessons: [
-                        { title: "The Declaration of Independence", objective: "Examine the purpose of and the ideas contained in the Declaration of Independence and consider its long-term impacts.", standard: "11.2b" },
-                        { title: "Impacts of the Revolutionary War", objective: "Examine the impacts of the Revolutionary War on workers, African Americans, women, and Native Americans.", standard: "11.2b" }
+                        { title: "The Declaration of Independence", objective: "Examine the purpose of and the ideas contained in the Declaration of Independence and consider its long-term impacts.", standard: "11.2b" }
                     ]
                 },
                 "Creating a New Government": {
@@ -72,7 +71,7 @@ export const usHistoryCurriculum: {
                     lessons: [
                         { title: "Washington's Presidency and Precedents", objective: "Identify presidential actions and precedents established by George Washington.", standard: "11.2d" },
                         { title: "Hamilton's Economic Plan", objective: "Examine Hamilton’s economic plan, the debate surrounding it, and its impact on political parties.", standard: "11.2d" },
-                        { title: "Strengthening Federal Power", objective: "Examine Supreme Court cases that strengthened the powers of the federal government, such as Marbury v. Madison.", standard: "11.2d" }
+                        { title: "Strengthening Federal Power", objective: "Examine Supreme Court cases that strengthened the powers of the federal government (e.g., Marbury v. Madison).", standard: "11.2d" }
                     ]
                 }
             }
@@ -84,24 +83,21 @@ export const usHistoryCurriculum: {
                     topic: "Nationalism and Expansion",
                     lessons: [
                         { title: "Strengthening American Nationalism", objective: "Examine how the Louisiana Purchase, the War of 1812, and the Monroe Doctrine strengthened nationalism.", standard: "11.3a" },
-                        { title: "The Market Revolution", objective: "Examine the market revolution and its impact on technology, transportation, labor, and democracy.", standard: "11.3a" },
-                        { title: "Jackson's Presidency", objective: "Examine Jackson’s presidency, including the Indian Removal Act and the case of Worcester v. Georgia.", standard: "11.3a" }
+                        { title: "The Market Revolution and Jackson's Presidency", objective: "Examine the market revolution, its impacts, and Jackson’s presidency, including the Indian Removal Act.", standard: "11.3a" }
                     ]
                 },
                 "Growth of Sectionalism": {
                     topic: "Growth of Sectionalism",
                     lessons: [
-                        { title: "Debates on States' Rights", objective: "Compare different perspectives on States' rights by examining the nullification crisis.", standard: "11.3b" },
-                        { title: "Abolitionist and Women's Rights Movements", objective: "Investigate the development of the abolitionist and women’s rights movements.", standard: "11.3b" },
-                        { title: "Expansion of Slavery", objective: "Examine the issues surrounding the expansion of slavery into new territories, including the Missouri Compromise and the Dred Scott decision.", standard: "11.3b" }
+                        { title: "Debates on States' Rights and Reform Movements", objective: "Compare perspectives on States' rights and investigate the abolitionist and women’s rights movements.", standard: "11.3b" },
+                        { title: "Expansion of Slavery", objective: "Examine the issues surrounding the expansion of slavery into new territories (e.g., Missouri Compromise, Dred Scott decision).", standard: "11.3b" }
                     ]
                 },
                 "The Civil War": {
                     topic: "The Civil War",
                     lessons: [
-                        { title: "Causes of the Civil War", objective: "Analyze the long-standing disputes over States' rights and slavery that led to the Civil War.", standard: "11.3c" },
-                        { title: "Union vs. Confederacy", objective: "Compare the relative strengths of the Union and the Confederacy and evaluate the reasons for the North's victory.", standard: "11.3c" },
-                        { title: "Expansion of Federal Power During the War", objective: "Examine the expansion of executive and federal power during the Civil War, including the Emancipation Proclamation.", standard: "11.3c" }
+                        { title: "Causes and Course of the Civil War", objective: "Analyze the disputes that led to the Civil War, compare the Union and Confederacy, and evaluate the reasons for the North's victory.", standard: "11.3c" },
+                        { title: "Expansion of Federal Power", objective: "Examine the expansion of executive and federal power during the war, including the Emancipation Proclamation and Gettysburg Address.", standard: "11.3c" }
                     ]
                 }
             }
@@ -112,8 +108,7 @@ export const usHistoryCurriculum: {
                 "Reconstruction and its Aftermath": {
                     topic: "Reconstruction and its Aftermath",
                     lessons: [
-                        { title: "Constitutional Amendments and Resistance", objective: "Examine the 13th, 14th, and 15th amendments and the ways their effectiveness was undermined.", standard: "11.4a" },
-                        { title: "Life for Freedmen", objective: "Examine the ways in which freedmen attempted to build independent lives after the Civil War.", standard: "11.4a" }
+                        { title: "Constitutional Amendments and Resistance", objective: "Examine the 13th, 14th, and 15th amendments and the ways their effectiveness was undermined (e.g., Black Codes, Jim Crow laws, Plessy v. Ferguson).", standard: "11.4a" }
                     ]
                 },
                 "Struggles for Equality": {
@@ -121,7 +116,7 @@ export const usHistoryCurriculum: {
                     lessons: [
                         { title: "Women's Rights Movement", objective: "Examine the exclusion of women from the 14th and 15th amendments and the subsequent struggle for suffrage.", standard: "11.4b" },
                         { title: "Native American Policies", objective: "Examine the effect of federal policies on Native Americans, including reservation policies and the Dawes Act.", standard: "11.4c" },
-                        { title: "Discrimination against Mexican Americans and Chinese Immigrants", objective: "Analyze the racial and economic motives for discrimination against Mexican Americans and Chinese immigrants.", standard: "11.4d" }
+                        { title: "Discrimination against Mexican Americans and Chinese Immigrants", objective: "Analyze racial and economic motives for discrimination against Mexican Americans and Chinese immigrants (e.g., Chinese Exclusion Act).", standard: "11.4d" }
                     ]
                 }
             }
@@ -132,16 +127,14 @@ export const usHistoryCurriculum: {
                 "The Rise of Industry": {
                     topic: "The Rise of Industry",
                     lessons: [
-                        { title: "Technological Innovations and Industrial Growth", objective: "Examine the technological innovations that facilitated industrialization and the growth of industries under key businessmen.", standard: "11.5a" },
-                        { title: "Regulation of Business", objective: "Evaluate the effectiveness of state and federal attempts to regulate business, including the Sherman Antitrust Act.", standard: "11.5a" }
+                        { title: "Technological Innovations and Business Practices", objective: "Examine technological innovations and the growth of industries under leaders like Rockefeller and Carnegie, and evaluate attempts at regulation (e.g., Sherman Antitrust Act).", standard: "11.5a" }
                     ]
                 },
-                "Challenges of Urbanization and Reform Efforts": {
-                    topic: "Challenges of Urbanization and Reform Efforts",
+                "Challenges of Urbanization and Reform": {
+                    topic: "Challenges of Urbanization and Reform",
                     lessons: [
-                        { title: "Immigration and Urbanization", objective: "Examine demographic trends associated with urbanization and immigration and the problems faced by farmers.", standard: "11.5b" },
-                        { title: "Labor Unions and Workers' Rights", objective: "Examine the attempts of workers to unionize in response to industrial working conditions.", standard: "11.5b" },
-                        { title: "The Progressive Era", objective: "Examine Progressive Era reforms, the woman’s suffrage movement, and the efforts of key individuals like Jane Addams and W. E. B. Du Bois.", standard: "11.5b" }
+                        { title: "Immigration, Urbanization, and Labor", objective: "Examine demographic trends, problems faced by farmers (Populism), and the attempts of workers to unionize.", standard: "11.5b" },
+                        { title: "The Progressive Era", objective: "Examine Progressive Era reforms, the woman’s suffrage movement, and the efforts of key individuals like Jane Addams, W. E. B. Du Bois, and Upton Sinclair.", standard: "11.5b" }
                     ]
                 }
             }
@@ -152,8 +145,7 @@ export const usHistoryCurriculum: {
                 "American Imperialism": {
                     topic: "American Imperialism",
                     lessons: [
-                        { title: "The Spanish-American War", objective: "Investigate the causes and effects of the Spanish-American War and the debates between imperialists and anti-imperialists.", standard: "11.6a" },
-                        { title: "Expanding American Influence", objective: "Investigate expanding American influence through the creation of the Panama Canal and the Roosevelt Corollary.", standard: "11.6a" }
+                        { title: "Causes and Effects of Imperialism", objective: "Investigate the causes and effects of the Spanish-American War, debates over imperialism, and expanding American influence (e.g., Panama Canal).", standard: "11.6a" }
                     ]
                 },
                 "World War I": {
@@ -161,7 +153,7 @@ export const usHistoryCurriculum: {
                     lessons: [
                         { title: "From Neutrality to Involvement", objective: "Investigate the reasons for President Wilson’s shift from neutrality to involvement in World War I.", standard: "11.6b" },
                         { title: "Wilson's Fourteen Points and the Treaty of Versailles", objective: "Examine Wilson’s goals, his role at the Versailles Peace Conference, and the Senate's rejection of the treaty.", standard: "11.6b" },
-                        { title: "The Home Front", objective: "Investigate the effects of mobilization on the United States economy and the Great Migration.", standard: "11.6c" }
+                        { title: "The Home Front", objective: "Investigate the effects of mobilization on the United States economy, the Great Migration, and civil liberties (Schenck v. United States).", standard: "11.6c" }
                     ]
                 }
             }
@@ -172,16 +164,15 @@ export const usHistoryCurriculum: {
                 "The Roaring Twenties": {
                     topic: "The Roaring Twenties",
                     lessons: [
-                        { title: "Cultural Changes and Clashes", objective: "Examine the cultural trends of the 1920s, including clashes between modern and traditional values like the Scopes trial.", standard: "11.7a" },
-                        { title: "The Harlem Renaissance", objective: "Examine literary and artistic contributions associated with the Harlem Renaissance and the rise of Black Nationalism.", standard: "11.7b" }
+                        { title: "Cultural Changes and Clashes", objective: "Examine cultural trends of the 1920s, including clashes between modern and traditional values (e.g., Scopes trial, Prohibition, Quota Acts).", standard: "11.7a" },
+                        { title: "The Harlem Renaissance", objective: "Examine literary and artistic contributions associated with the Harlem Renaissance and the rise of Black Nationalism (Marcus Garvey).", standard: "11.7b" }
                     ]
                 },
                 "The Great Depression and the New Deal": {
                     topic: "The Great Depression and the New Deal",
                     lessons: [
-                        { title: "Causes of the Great Depression", objective: "Examine the underlying weaknesses of the economy that led to the stock market crash of 1929 and the Great Depression.", standard: "11.7c" },
-                        { title: "Hoover vs. Roosevelt", objective: "Compare and contrast the responses of Presidents Hoover and Roosevelt to the Great Depression.", standard: "11.7c" },
-                        { title: "FDR's New Deal", objective: "Evaluate President Roosevelt’s leadership and the key legislative initiatives of the New Deal.", standard: "11.7c" }
+                        { title: "Causes and Responses to the Great Depression", objective: "Examine the causes of the Great Depression and compare the responses of Presidents Hoover and Roosevelt.", standard: "11.7c" },
+                        { title: "FDR's New Deal", objective: "Evaluate President Roosevelt’s leadership and the key legislative initiatives of the New Deal, including the constitutional challenge of his court-packing effort.", standard: "11.7c" }
                     ]
                 }
             }
@@ -196,19 +187,18 @@ export const usHistoryCurriculum: {
                         { title: "Truman and the Atomic Bomb", objective: "Examine President Truman’s decision to use the atomic bomb against Hiroshima and Nagasaki.", standard: "11.8a" }
                     ]
                 },
-                "The Home Front during WWII": {
-                    topic: "The Home Front during WWII",
+                "The Home Front": {
+                    topic: "The Home Front",
                     lessons: [
-                        { title: "Mobilization and Production", objective: "Examine United States mobilization efforts and their effects on the economy and employment.", standard: "11.8b" },
-                        { title: "Japanese Internment", objective: "Examine the reasons for Japanese removal and the Supreme Court’s decision in Korematsu v. United States.", standard: "11.8b" },
-                        { title: "Contributions and Discrimination", objective: "Examine the contributions of women and minority groups to the war effort and the discrimination they faced.", standard: "11.8b" }
+                        { title: "Mobilization and Social Changes", objective: "Examine United States mobilization efforts and the contributions and discrimination faced by women and minority groups.", standard: "11.8b" },
+                        { title: "Japanese Internment", objective: "Examine the reasons for Japanese removal and the Supreme Court’s decision in Korematsu v. United States (1944).", standard: "11.8b" }
                     ]
                 },
                 "The Holocaust and Post-War Justice": {
                     topic: "The Holocaust and Post-War Justice",
                     lessons: [
                         { title: "The Holocaust and American Response", objective: "Investigate American officials' knowledge of the Holocaust and the degree to which intervention may have been possible.", standard: "11.8c" },
-                        { title: "Nuremberg Trials and Human Rights", objective: "Examine the contributions of Justice Robert Jackson at Nuremberg and Eleanor Roosevelt's role in the UN Universal Declaration of Human Rights.", standard: "11.8c" }
+                        { title: "Nuremberg Trials and Human Rights", objective: "Examine the Nuremberg War Crimes trials and Eleanor Roosevelt's role in the UN Universal Declaration of Human Rights.", standard: "11.8c" }
                     ]
                 }
             }
@@ -219,27 +209,21 @@ export const usHistoryCurriculum: {
                 "Containment Policy": {
                     topic: "Containment Policy",
                     lessons: [
-                        { title: "Origins of the Cold War", objective: "Trace the key decisions and disagreements at wartime conferences that led to the Cold War.", standard: "11.9a" },
-                        { title: "The Truman Doctrine and Marshall Plan", objective: "Trace United States containment policies and how they represent a shift in American foreign policy.", standard: "11.9a" },
-                        { title: "The Vietnam War and Domestic Unrest", objective: "Examine the US involvement in Vietnam, the antiwar movement, and the decline in public confidence in government.", standard: "11.9a" }
+                        { title: "Origins and Early Cold War Policies", objective: "Trace US containment policies, including the Truman Doctrine, Marshall Plan, and NATO.", standard: "11.9a" },
+                        { title: "The Vietnam War and Domestic Unrest", objective: "Examine the US involvement in Vietnam, the antiwar movement, and declining public confidence in government.", standard: "11.9a" }
                     ]
                 },
                 "The Nuclear Arms Race": {
                     topic: "The Nuclear Arms Race",
                     lessons: [
-                        { title: "Acceleration of the Arms Race", objective: "Trace the acceleration of the nuclear arms race from 1949 through 1969.", standard: "11.9b" },
+                        { title: "The Arms Race and Détente", objective: "Trace the acceleration of the nuclear arms race and examine the policy of détente.", standard: "11.9b" },
                         { title: "The Cuban Missile Crisis", objective: "Examine Soviet motives for placing missiles in Cuba and the impact of the crisis on US-Soviet relations.", standard: "11.9b" }
                     ]
                 },
-                "The Middle East": {
-                    topic: "The Middle East",
+                "The Middle East and End of the Cold War": {
+                    topic: "The Middle East and End of the Cold War",
                     lessons: [
-                        { title: "US Policy in the Middle East", objective: "Examine United States foreign policy toward the Middle East, including the creation of Israel and the Camp David Accords.", standard: "11.9c" }
-                    ]
-                },
-                "End of the Cold War": {
-                    topic: "End of the Cold War",
-                    lessons: [
+                        { title: "US Policy in the Middle East", objective: "Examine United States foreign policy toward the Middle East, including the creation of Israel and the Camp David Accords.", standard: "11.9c" },
                         { title: "The Fall of the Berlin Wall", objective: "Trace the factors that led to the fall of the Berlin Wall and the end of the Cold War.", standard: "11.9d" }
                     ]
                 }
@@ -251,22 +235,22 @@ export const usHistoryCurriculum: {
                 "The Civil Rights Movement": {
                     topic: "The Civil Rights Movement",
                     lessons: [
-                        { title: "Key Individuals and Groups", objective: "Examine the roles and impact of individuals like Martin Luther King Jr. and groups like the NAACP and SNCC.", standard: "11.10a" },
+                        { title: "Key Individuals, Groups, and Events", objective: "Examine the roles of individuals like MLK Jr., groups like the NAACP, and key events like the March on Washington.", standard: "11.10a" },
                         { title: "Landmark Legislation and Court Cases", objective: "Examine judicial actions like Brown v. Board of Education and legislation like the Civil Rights Act of 1964.", standard: "11.10a" }
                     ]
                 },
                 "Other Social Movements": {
                     topic: "Other Social Movements",
                     lessons: [
-                        { title: "Modern Women's Movement", objective: "Trace the modern women’s movement, including key figures, legislation, and court cases.", standard: "11.10b" },
-                        { title: "Movements for Native Americans, Brown Power, and Gay Rights", objective: "Investigate various movements for equality and their key goals and achievements.", standard: "11.10b" },
-                        { title: "The Environmental Movement", objective: "Examine the environmental movement, including Silent Spring and the creation of the EPA.", standard: "11.10b" }
+                        { title: "Modern Women's Movement", objective: "Trace the modern women’s movement, including key figures, legislation, and court cases (e.g., Title IX, Roe v. Wade).", standard: "11.10b" },
+                        { title: "Movements for Equality", objective: "Investigate movements for Native Americans, Brown Power (Chicano), people with disabilities, and Gay Rights.", standard: "11.10b" },
+                        { title: "Rights of the Accused and Student Rights", objective: "Examine key Supreme Court cases related to the rights of the accused (e.g., Miranda v. Arizona) and student rights (e.g., Tinker v. Des Moines).", standard: "11.10b" }
                     ]
                 },
                 "Economic Debates": {
                     topic: "Economic Debates",
                     lessons: [
-                        { title: "The Great Society vs. Reaganomics", objective: "Compare and contrast the economic policies of President Johnson and President Reagan.", standard: "11.10c" },
+                        { title: "The Great Society vs. Reaganomics", objective: "Compare and contrast the economic policies of President Johnson (Great Society) and President Reagan (Reaganomics).", standard: "11.10c" },
                         { title: "Contemporary Economic Issues", objective: "Examine the causes of the 2008 financial crisis and debates over Social Security, Medicare, and the Affordable Care Act.", standard: "11.10c" }
                     ]
                 }
@@ -278,7 +262,7 @@ export const usHistoryCurriculum: {
                 "Post-Cold War Foreign Policy": {
                     topic: "Post-Cold War Foreign Policy",
                     lessons: [
-                        { title: "The Persian Gulf War", objective: "Examine the decision to oppose Iraq’s invasion of Kuwait and the consequences of the Persian Gulf War.", standard: "11.11a" }
+                        { title: "The Persian Gulf War and the 1990s", objective: "Examine the decision to oppose Iraq’s invasion of Kuwait and the tension between defending human rights and reluctance to intervene in the 1990s.", standard: "11.11a" }
                     ]
                 },
                 "The War on Terror": {
