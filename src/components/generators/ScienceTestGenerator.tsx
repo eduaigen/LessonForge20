@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
-import { Loader2, TestTube, Sparkles, Wand2, FlaskConical, Atom, Leaf, Orbit, Magnet, HeartPulse } from 'lucide-react';
+import { Loader2, TestTube, Sparkles, Wand2, FlaskConical, Atom, Leaf, Orbit, Magnet, HeartPulse, Stethoscope } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateScienceTest, type GenerateScienceTestOutput } from '@/ai/flows/generate-science-test';
 import GeneratingAnimation from '../common/GeneratingAnimation';
@@ -91,7 +91,7 @@ const GeneratorContent = () => {
   const selectedSubject = watch('subject') as Subject;
 
   const unitOptions = useMemo(() => {
-    if (!selectedSubject) return [];
+    if (!selectedSubject || !curriculums[selectedSubject]) return [];
     const curriculum = curriculums[selectedSubject];
     // @ts-ignore
     return curriculum ? Object.keys(curriculum.units) : [];
@@ -106,7 +106,21 @@ const GeneratorContent = () => {
     setIsLoading(true);
     setGeneratedTest(null);
     try {
-      const result = await generateScienceTest(values);
+      const curriculum = curriculums[values.subject as Subject];
+      const selectedUnitsContent = values.units.reduce((acc, unitName) => {
+        // @ts-ignore
+        if (curriculum && curriculum.units[unitName]) {
+          // @ts-ignore
+          acc[unitName] = curriculum.units[unitName];
+        }
+        return acc;
+      }, {} as any);
+
+      const result = await generateScienceTest({
+        ...values,
+        curriculumContent: JSON.stringify(selectedUnitsContent, null, 2),
+      });
+
       setGeneratedTest(result);
     } catch (error) {
       console.error('Test generation failed:', error);
@@ -177,7 +191,7 @@ const GeneratorContent = () => {
     { name: 'NGSS Chemistry', icon: <FlaskConical className="h-4 w-4" /> },
     { name: 'NV Earth Science', icon: <Orbit className="h-4 w-4" /> },
     { name: 'NGSS Physics', icon: <Magnet className="h-4 w-4" /> },
-    { name: 'Anatomy & Physiology', icon: <TestTube className="h-4 w-4" /> },
+    { name: 'Anatomy & Physiology', icon: <Stethoscope className="h-4 w-4" /> },
     { name: 'Health', icon: <HeartPulse className="h-4 w-4" /> },
   ];
 

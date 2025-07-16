@@ -7,6 +7,7 @@ export const GenerateScienceTestInputSchema = z.object({
   units: z.array(z.string()).min(1).describe('A list of one or more units to source content from.'),
   clusterCount: z.number().min(1).max(10).describe('The number of question clusters to generate.'),
   dokLevel: z.number().min(1).max(3).describe('The desired Depth of Knowledge level for the questions (1, 2, or 3).'),
+  curriculumContent: z.string().describe('A JSON string of the curriculum content for the selected units, which the AI will use as the source of truth.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({
