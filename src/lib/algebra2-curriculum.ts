@@ -18,332 +18,132 @@ export const algebra2Curriculum: {
     units: { [key: string]: Unit };
 } = {
     units: {
-        "Unit 1: Sequences and Functions": {
-            unit: "Unit 1: Sequences and Functions",
+        "Number and Quantity": {
+            unit: "Number and Quantity",
             topics: {
-                "Section A: Sequences": {
-                    topic: "Section A: Sequences",
+                "The Real Number System": {
+                    topic: "The Real Number System",
                     lessons: [
-                        { title: "Lesson 1: A Towering Sequence", objective: "Describe sequences with informal language and identify if they are geometric, arithmetic, or neither." },
-                        { title: "Lesson 2: Introducing Geometric Sequences", objective: "Write out terms of sequences from mathematical situations." },
-                        { title: "Lesson 3: Different Types of Sequences", objective: "Interpret and create tables and graphs for given relationships." },
-                        { title: "Lesson 4: Using Technology to Work with Sequences", objective: "Use technology to analyze and work with sequences." }
+                        { title: "Rational Exponents", objective: "AII-N.RN.1 & AII-N.RN.2: Explore and convert between radical expressions and expressions with rational exponents." }
                     ]
                 },
-                "Section B: Representing Sequences": {
-                    topic: "Section B: Representing Sequences",
+                "The Complex Number System": {
+                    topic: "The Complex Number System",
                     lessons: [
-                        { title: "Lesson 5: Sequences Are Functions", objective: "Understand that sequences are functions with the input as position and output as the term." },
-                        { title: "Lesson 6: Representing Sequences", objective: "Interpret sequences and use function notation to write recursive definitions." },
-                        { title: "Lesson 7: Representing More Sequences", objective: "Make connections between sequences and different representations of functions." }
-                    ]
-                },
-                "Section C: What’s the Equation?": {
-                    topic: "Section C: What’s the Equation?",
-                    lessons: [
-                        { title: "Lesson 8: The nth Term", objective: "Develop explicit formulas for arithmetic and geometric sequences." },
-                        { title: "Lesson 9: What’s the Equation?", objective: "Model situations represented in different ways using sequence equations." },
-                        { title: "Lesson 10: Situations and Sequence Types", objective: "Choose appropriate sequence models and identify appropriate domains for situations." },
-                        { title: "Lesson 11: Adding Up", objective: "Compute the sum of a finite sequence." }
+                        { title: "Introduction to Complex Numbers", objective: "AII-N.CN.1: Know there is a complex number i such that i² = –1." },
+                        { title: "Arithmetic with Complex Numbers", objective: "AII-N.CN.2: Use the relation i² = –1 and properties to add, subtract, and multiply complex numbers." }
                     ]
                 }
             }
         },
-        "Unit 2: Polynomial Functions": {
-            unit: "Unit 2: Polynomial Functions",
+        "Algebra": {
+            unit: "Algebra",
             topics: {
-                "Section A: What Is a Polynomial?": {
-                    topic: "Section A: What Is a Polynomial?",
+                "Seeing Structure in Expressions": {
+                    topic: "Seeing Structure in Expressions",
                     lessons: [
-                        { title: "Lesson 1: Let’s Make a Box", objective: "Model a situation with a polynomial function." },
-                        { title: "Lesson 2: Funding the Future", objective: "Build understanding of what polynomials are and what their graphs can look like." },
-                        { title: "Lesson 3: Introducing Polynomials", objective: "Define polynomials and explore their properties." },
-                        { title: "Lesson 4: Combining Polynomials", objective: "Perform arithmetic operations on polynomials." }
+                        { title: "Rewriting Complex Expressions", objective: "AII-A.SSE.2: Recognize and use the structure of an expression to identify ways to rewrite it (including factoring by grouping and sum/difference of cubes)." },
+                        { title: "Factoring to Reveal Zeros", objective: "AII-A.SSE.3a: Factor quadratic expressions to reveal the zeros of the function." },
+                        { title: "Properties of Exponents with Exponential Expressions", objective: "AII-A.SSE.3c: Use the properties of exponents to rewrite exponential expressions." }
                     ]
                 },
-                "Section B: Working with Polynomials": {
-                    topic: "Section B: Working with Polynomials",
+                "Arithmetic with Polynomials and Rational Expressions": {
+                    topic: "Arithmetic with Polynomials and Rational Expressions",
                     lessons: [
-                        { title: "Lesson 5: Connecting Factors and Zeros", objective: "Connect that a factor of \\((x-a)\\) means 'a' is a zero of the function." },
-                        { title: "Lesson 6: Different Forms", objective: "Recognize the benefits of different polynomial forms." },
-                        { title: "Lesson 7: Using Factors and Zeros", objective: "Use factors and zeros to analyze polynomial functions." }
+                        { title: "The Remainder Theorem", objective: "AII-A.APR.2: Apply the Remainder Theorem." },
+                        { title: "Identifying Zeros of Polynomials", objective: "AII-A.APR.3: Identify zeros of polynomial functions when suitable factorizations are available." },
+                        { title: "Rewriting Rational Expressions", objective: "AII-A.APR.6: Rewrite rational expressions in the form q(x) + r(x)/b(x)." }
                     ]
                 },
-                "Section C: Graphs of Polynomials": {
-                    topic: "Section C: Graphs of Polynomials",
+                "Creating Equations": {
+                    topic: "Creating Equations",
                     lessons: [
-                        { title: "Lesson 8: End Behavior (Part 1)", objective: "Establish the effect of degree and leading coefficient on end behavior." },
-                        { title: "Lesson 9: End Behavior (Part 2)", objective: "Continue analyzing the end behavior of polynomial functions." },
-                        { title: "Lesson 10: Multiplicity", objective: "Understand the effect of multiplicity on the shape of the graph near zeros." },
-                        { title: "Lesson 11: Finding Intersections", objective: "Sketch polynomial functions expressed as a product of linear factors." }
+                        { title: "Creating Equations in One Variable", objective: "AII-A.CED.1: Create equations and inequalities in one variable to represent a real-world context (including rational and exponential functions)." }
                     ]
                 },
-                "Section D: Polynomial Division": {
-                    topic: "Section D: Polynomial Division",
+                "Reasoning with Equations and Inequalities": {
+                    topic: "Reasoning with Equations and Inequalities",
                     lessons: [
-                        { title: "Lesson 12: Polynomial Division (Part 1)", objective: "Divide a polynomial by a suspected factor using long division." },
-                        { title: "Lesson 13: Polynomial Division (Part 2)", objective: "Continue practicing polynomial division." },
-                        { title: "Lesson 14: What Do You Know about Polynomials?", objective: "Review and apply knowledge of polynomial functions." },
-                        { title: "Lesson 15: The Remainder Theorem", objective: "Establish and apply the Remainder Theorem." }
+                        { title: "Explaining Steps in Solving Rational/Radical Equations", objective: "AII-A.REI.1b: Explain each step when solving rational or radical equations." },
+                        { title: "Solving Rational and Radical Equations", objective: "AII-A.REI.2: Solve rational and radical equations in one variable and identify extraneous solutions." },
+                        { title: "Solving Quadratic Equations with Complex Solutions", objective: "AII-A.REI.4b: Solve quadratic equations and write complex solutions in a + bi form." },
+                        { title: "Solving Systems of Linear and Quadratic Equations", objective: "AII-A.REI.7b: Solve a system consisting of a linear equation and a quadratic equation in two variables." },
+                        { title: "Graphical Solutions of Various Function Types", objective: "AII-A.REI.11: Find and interpret approximate solutions for f(x) = g(x) and f(x) ≤ g(x) graphically for various function types." }
                     ]
                 }
             }
         },
-        "Unit 3: Rational Functions and Equations": {
-            unit: "Unit 3: Rational Functions and Equations",
+        "Functions": {
+            unit: "Functions",
             topics: {
-                "Section A: Rational Functions": {
-                    topic: "Section A: Rational Functions",
+                "Interpreting Functions": {
+                    topic: "Interpreting Functions",
                     lessons: [
-                        { title: "Lesson 1: Minimizing Surface Area", objective: "Model situations with rational functions." },
-                        { title: "Lesson 2: Graphs of Rational Functions (Part 1)", objective: "Examine the asymptotic behavior of rational function graphs." },
-                        { title: "Lesson 3: Graphs of Rational Functions (Part 2)", objective: "Continue analyzing graphs of rational functions." },
-                        { title: "Lesson 4: End Behavior of Rational Functions", objective: "Use polynomial division to identify the end behavior of a rational function." }
+                        { title: "Recursive and Explicit Sequences", objective: "AII-F.IF.3: Recognize that a sequence is a function, and translate between recursive and explicit forms." },
+                        { title: "Interpreting Key Features of Advanced Functions", objective: "AII-F.IF.4: Interpret key features of graphs and tables for polynomial, radical, exponential, logarithmic, and trigonometric functions." },
+                        { title: "Average Rate of Change for Advanced Functions", objective: "AII-F.IF.6: Calculate and interpret the average rate of change of advanced functions." },
+                        { title: "Graphing Advanced Functions", objective: "AII-F.IF.7c & 7e: Graph polynomial, cube root, exponential, logarithmic, and trigonometric functions, showing key features." },
+                        { title: "Interpreting Exponential Functions", objective: "AII-F.IF.8b: Use the properties of exponents to interpret exponential functions and classify them as growth or decay." },
+                        { title: "Comparing Advanced Functions", objective: "AII-F.IF.9: Compare properties of two functions each represented in a different way (for advanced function types)." }
                     ]
                 },
-                "Section B: Rational Equations": {
-                    topic: "Section B: Rational Equations",
+                "Building Functions": {
+                    topic: "Building Functions",
                     lessons: [
-                        { title: "Lesson 5: Rational Equations (Part 1)", objective: "Begin solving rational equations." },
-                        { title: "Lesson 6: Rational Equations (Part 2)", objective: "Continue solving rational equations and identify extraneous solutions." },
-                        { title: "Lesson 7: Solving Rational Equations", objective: "Master solving rational equations and checking for extraneous solutions." }
+                        { title: "Modeling with Various Function Types", objective: "AII-F.BF.1a: Determine a function from context (including linear, quadratic, and exponential)." },
+                        { title: "Combining Functions with Arithmetic Operations", objective: "AII-F.BF.1b: Combine standard function types using arithmetic operations." },
+                        { title: "Modeling with Sequences", objective: "AII-F.BF.2: Write arithmetic and geometric sequences both recursively and explicitly to model situations." },
+                        { title: "Transformations of Advanced Functions", objective: "AII-F.BF.3b: Identify the effect of transformations on advanced functions and recognize even/odd functions." },
+                        { title: "Finding Inverse Functions", objective: "AII-F.BF.4a: Find the inverse of a one-to-one function algebraically and graphically." },
+                        { title: "Inverse Relationship of Exponents and Logarithms", objective: "AII-F.BF.5a: Understand inverse relationships between exponents and logarithms." },
+                        { title: "Summation (Sigma) Notation", objective: "AII-F.BF.6: Represent and evaluate the sum of a finite arithmetic or finite geometric series using summation notation." },
+                        { title: "Formulas for Finite Series", objective: "AII-F.BF.7: Explore the derivation of and use the formulas for finite arithmetic and geometric series." }
                     ]
                 },
-                "Section C: Polynomial Identities": {
-                    topic: "Section C: Polynomial Identities",
+                "Linear, Quadratic, and Exponential Models": {
+                    topic: "Linear, Quadratic, and Exponential Models",
                     lessons: [
-                        { title: "Lesson 8: Polynomial Identities (Part 1)", objective: "Prove or disprove that two expressions are equivalent." },
-                        { title: "Lesson 9: Polynomial Identities (Part 2)", objective: "Continue working with polynomial identities." },
-                        { title: "Lesson 10: Summing Up", objective: "Derive the formula for the sum of a finite geometric series, \\(S_n = \\frac{a_1(1-r^n)}{1-r}\\)." },
-                        { title: "Lesson 11: Using the Sum", objective: "Use the formula for the sum of a geometric series to solve problems." }
+                        { title: "Constructing Functions from Various Contexts", objective: "AII-F.LE.2: Construct a linear or exponential function symbolically from a graph, description, or input-output pairs." },
+                        { title: "Solving Exponential Equations with Logarithms", objective: "AII-F.LE.4: Use logarithms to solve exponential equations of the form ab^(ct) = d." },
+                        { title: "Interpreting Parameters in Exponential Functions", objective: "AII-F.LE.5: Interpret the parameters in a linear or exponential function with non-integer domains." }
+                    ]
+                },
+                "Trigonometric Functions": {
+                    topic: "Trigonometric Functions",
+                    lessons: [
+                        { title: "Radian Measure and the Unit Circle", objective: "AII-F.TF.1 & AII-F.TF.2: Understand radian measure and use the unit circle to calculate trigonometric function values." },
+                        { title: "Symmetry and Periodicity of Trigonometric Functions", objective: "AII-F.TF.4: Use the unit circle to explain symmetry and periodicity of trigonometric functions." },
+                        { title: "Modeling Periodic Phenomena", objective: "AII-F.TF.5: Choose trigonometric functions to model periodic phenomena with specified amplitude, frequency, and midline." },
+                        { title: "The Pythagorean Identity", objective: "AII-F.TF.8: Prove the Pythagorean identity sin²(θ) + cos²(θ) = 1 and use it to find other trig function values." }
                     ]
                 }
             }
         },
-        "Unit 4: Complex Numbers and Rational Exponents": {
-            unit: "Unit 4: Complex Numbers and Rational Exponents",
+        "Statistics and Probability": {
+            unit: "Statistics and Probability",
             topics: {
-                "Section A: Exponent Properties": {
-                    topic: "Section A: Exponent Properties",
+                "Interpreting Categorical and Quantitative Data": {
+                    topic: "Interpreting Categorical and Quantitative Data",
                     lessons: [
-                        { title: "Lesson 1: Properties of Exponents", objective: "Review and apply exponent rules." },
-                        { title: "Lesson 2: Square Roots and Cube Roots", objective: "Explore square and cube roots as solutions to equations." },
-                        { title: "Lesson 3: Exponents That Are Unit Fractions", objective: "Extend exponent rules to include unit fraction exponents, such as \\(x^{\\frac{1}{n}} = \\sqrt[n]{x}\\)." },
-                        { title: "Lesson 4: Positive Rational Exponents", objective: "Work with positive rational exponents, such as \\(x^{\\frac{m}{n}} = (\\sqrt[n]{x})^m\\)." },
-                        { title: "Lesson 5: Negative Rational Exponents", objective: "Work with negative rational exponents, such as \\(x^{-\\frac{m}{n}} = \\frac{1}{x^{\\frac{m}{n}}}\\)." }
+                        { title: "Normal Distributions", objective: "AII-S.ID.4a & 4b: Recognize if a normal curve is appropriate for a data set and determine population percentages." },
+                        { title: "Fitting Functions to Data", objective: "AII-S.ID.6a: Fit quadratic, exponential, and power models to real-world data." }
                     ]
                 },
-                "Section B: Solving Equations with Square and Cube Roots": {
-                    topic: "Section B: Solving Equations with Square and Cube Roots",
+                "Making Inferences and Justifying Conclusions": {
+                    topic: "Making Inferences and Justifying Conclusions",
                     lessons: [
-                        { title: "Lesson 6: Squares and Square Roots", objective: "Solve equations involving squares and square roots." },
-                        { title: "Lesson 7: Inequivalent Equations?", objective: "Recognize that squaring each side of an equation can introduce extraneous solutions." },
-                        { title: "Lesson 8: Cubes and Cube Roots", objective: "Solve equations involving cubes and cube roots." },
-                        { title: "Lesson 9: Solving Radical Equations", objective: "Practice solving equations with radicals." }
+                        { title: "Evaluating Sample Statistics", objective: "AII-S.IC.2: Determine if a value for a sample proportion or mean is likely to occur based on a simulation." },
+                        { title: "Surveys, Experiments, and Observational Studies", objective: "AII-S.IC.3: Recognize the purposes of and differences among surveys, experiments, and observational studies." },
+                        { title: "Plausibility of Parameters", objective: "AII-S.IC.4: Use a simulation model to determine if a suggested parameter is plausible." },
+                        { title: "Drawing and Critiquing Conclusions", objective: "AII-S.IC.6a & 6b: Use statistical tools to draw conclusions and critique claims from informational texts." }
                     ]
                 },
-                "Section C: A New Kind of Number": {
-                    topic: "Section C: A New Kind of Number",
+                "Conditional Probability and the Rules of Probability": {
+                    topic: "Conditional Probability and the Rules of Probability",
                     lessons: [
-                        { title: "Lesson 10: A New Kind of Number", objective: "Introduce the concept of imaginary numbers." },
-                        { title: "Lesson 11: Introducing the Number i", objective: "Define \\(i\\) as the solution to \\(x^2 = -1\\), so \\(i = \\sqrt{-1}\\)." },
-                        { title: "Lesson 12: Arithmetic with Complex Numbers", objective: "Add and subtract complex numbers." },
-                        { title: "Lesson 13: Multiplying Complex Numbers", objective: "Multiply complex numbers." },
-                        { title: "Lesson 14: More Arithmetic with Complex Numbers", objective: "Continue practicing arithmetic with complex numbers." },
-                        { title: "Lesson 15: Working Backward", objective: "Find quadratic equations given complex roots." }
-                    ]
-                },
-                "Section D: Solving Quadratics with Complex Numbers": {
-                    topic: "Section D: Solving Quadratics with Complex Numbers",
-                    lessons: [
-                        { title: "Lesson 16: Solving Quadratics", objective: "Solve quadratic equations with complex solutions." },
-                        { title: "Lesson 17: Completing the Square and Complex Solutions", objective: "Use completing the square to find complex solutions." },
-                        { title: "Lesson 18: The Quadratic Formula and Complex Solutions", objective: "Use the quadratic formula, \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\), to find complex solutions." },
-                        { title: "Lesson 19: Real and Non-Real Solutions", objective: "Distinguish between real and non-real solutions of quadratic equations." }
-                    ]
-                },
-                "Section E: Let's Put It to Work": {
-                    topic: "Section E: Let's Put It to Work",
-                    lessons: [
-                        { title: "Lesson 20: Drawing Proportional Circles", objective: "Apply understanding of square roots to a data representation problem." }
-                    ]
-                }
-            }
-        },
-        "Unit 5: Exponential Functions and Equations": {
-            unit: "Unit 5: Exponential Functions and Equations",
-            topics: {
-                "Section A: Growing and Shrinking": {
-                    topic: "Section A: Growing and Shrinking",
-                    lessons: [
-                        { title: "Lesson 1: Growing and Shrinking", objective: "Connect geometric sequences to exponential growth and decay." },
-                        { title: "Lesson 2: Representations of Growth and Decay", objective: "Represent exponential relationships using functions of the form \\(f(x) = a \\cdot b^x\\)." },
-                        { title: "Lesson 3: Understanding Rational Inputs", objective: "Use rational inputs to better understand exponential functions." },
-                        { title: "Lesson 4: Representing Functions at Rational Inputs", objective: "Continue exploring exponential functions with rational inputs." },
-                        { title: "Lesson 5: Changes Over Rational Intervals", objective: "Explore growth factors over intervals of different lengths." },
-                        { title: "Lesson 6: Writing Equations for Exponential Functions", objective: "Practice writing equations for exponential functions." },
-                        { title: "Lesson 7: Interpreting and Using Exponential Functions", objective: "Interpret exponential functions in various contexts." }
-                    ]
-                },
-                "Section B: Missing Exponents": {
-                    topic: "Section B: Missing Exponents",
-                    lessons: [
-                        { title: "Lesson 8: Unknown Exponents", objective: "Introduce the need to solve for an exponent in an equation." },
-                        { title: "Lesson 9: What Is a Logarithm?", objective: "Introduce logarithms as a way to solve for unknown exponents." },
-                        { title: "Lesson 10: Interpreting and Writing Logarithmic Equations", objective: "Rewrite exponential equations in logarithmic form (e.g., \\(y = log_b(x)\\))." },
-                        { title: "Lesson 11: Evaluating Logarithmic Expressions", objective: "Evaluate simple logarithmic expressions." }
-                    ]
-                },
-                "Section C: The Constant e": {
-                    topic: "Section C: The Constant e",
-                    lessons: [
-                        { title: "Lesson 12: The Number e", objective: "Introduce the constant \\(e\\)." },
-                        { title: "Lesson 13: Exponential Functions with Base e", objective: "Compare functions of the form \\(a \\cdot b^x\\) with functions of the form \\(a \\cdot e^{kx}\\)." },
-                        { title: "Lesson 14: Solving Exponential Equations", objective: "Solve exponential equations using various methods." }
-                    ]
-                },
-                "Section D: Logarithmic Functions and Graphs": {
-                    topic: "Section D: Logarithmic Functions and Graphs",
-                    lessons: [
-                        { title: "Lesson 15: Using Graphs and Logarithms to Solve Problems (Part 1)", objective: "Use graphical and algebraic methods to solve exponential and logarithmic equations." },
-                        { title: "Lesson 16: Using Graphs and Logarithms to Solve Problems (Part 2)", objective: "Continue solving problems with exponential and logarithmic functions." },
-                        { title: "Lesson 17: Logarithmic Functions", objective: "Explore the properties and graphs of logarithmic functions." }
-                    ]
-                },
-                "Section E: Let's Put It to Work": {
-                    topic: "Section E: Let's Put It to Work",
-                    lessons: [
-                        { title: "Lesson 18: Applications of Logarithmic Functions", objective: "Interpret solutions to logarithmic equations in context." }
-                    ]
-                }
-            }
-        },
-        "Unit 6: Transformations of Functions": {
-            unit: "Unit 6: Transformations of Functions",
-            topics: {
-                "Section A: Translations, Reflections, and Symmetry": {
-                    topic: "Section A: Translations, Reflections, and Symmetry",
-                    lessons: [
-                        { title: "Lesson 1: Matching Up to Data", objective: "Informally describe transformations of graphs." },
-                        { title: "Lesson 2: Moving Functions", objective: "Explore vertical (\\(f(x)+k\\)) and horizontal (\\(f(x-h)\\)) translations." },
-                        { title: "Lesson 3: More Movement", objective: "Continue practicing function translations." },
-                        { title: "Lesson 4: Reflecting Functions", objective: "Explore reflections across the x-axis (\\(-f(x)\\)) and y-axis (\\(f(-x)\\))." },
-                        { title: "Lesson 5: Some Functions Have Symmetry", objective: "Identify even and odd functions from their graphs." },
-                        { title: "Lesson 6: Symmetry in Equations", objective: "Describe even (\\(f(-x) = f(x)\\)) and odd (\\(f(-x) = -f(x)\\)) functions algebraically." },
-                        { title: "Lesson 7: Expressing Transformations of Functions Algebraically", objective: "Write algebraic rules for transformations." }
-                    ]
-                },
-                "Section B: Scaling Outputs and Inputs": {
-                    topic: "Section B: Scaling Outputs and Inputs",
-                    lessons: [
-                        { title: "Lesson 8: Scaling the Outputs", objective: "Explore the effect of multiplying the output of a function by a scale factor (\\(a \\cdot f(x)\\))." },
-                        { title: "Lesson 9: Scaling the Inputs", objective: "Explore the effect of multiplying the input of a function by a scale factor (\\(f(bx)\\))." },
-                        { title: "Lesson 10: Combining Functions", objective: "Combine multiple transformations on a single function." }
-                    ]
-                },
-                "Section C: Transformations of Functions": {
-                    topic: "Section C: Transformations of Functions",
-                    lessons: [
-                        { title: "Lesson 11: Transforming from an Original Function", objective: "Apply transformations to various function types." },
-                        { title: "Lesson 12: Transformation Effects", objective: "Analyze the effects of different transformations." },
-                        { title: "Lesson 13: Transforming Parabolas", objective: "Apply transformations specifically to quadratic functions." },
-                        { title: "Lesson 14: Transforming Circles", objective: "Apply transformations to equations of circles." }
-                    ]
-                },
-                "Section D: Let’s Put It to Work": {
-                    topic: "Section D: Let’s Put It to Work",
-                    lessons: [
-                        { title: "Lesson 15: Making a Model for Data", objective: "Apply transformations to a function to model a real-world data set." }
-                    ]
-                }
-            }
-        },
-        "Unit 7: Trigonometric Functions": {
-            unit: "Unit 7: Trigonometric Functions",
-            topics: {
-                "Section A: The Unit Circle": {
-                    topic: "Section A: The Unit Circle",
-                    lessons: [
-                        { title: "Lesson 1: Moving in Circles", objective: "Explore circular motion in familiar contexts." },
-                        { title: "Lesson 2: Revisiting Right Triangles", objective: "Use the Pythagorean Theorem and right-triangle trigonometry." },
-                        { title: "Lesson 3: The Unit Circle (Part 1)", objective: "Determine coordinates of points on a circle." },
-                        { title: "Lesson 4: The Unit Circle (Part 2)", objective: "Generalize to the unit circle and define sine and cosine." },
-                        { title: "Lesson 5: The Pythagorean Identity (Part 1)", objective: "Introduce and understand the Pythagorean Identity, \\(\\sin^2(\\theta) + \\cos^2(\\theta) = 1\\)." },
-                        { title: "Lesson 6: The Pythagorean Identity (Part 2)", objective: "Apply the Pythagorean Identity." },
-                        { title: "Lesson 7: Finding Unknown Coordinates on a Circle", objective: "Use trigonometry to find coordinates on a circle." }
-                    ]
-                },
-                "Section B: Periodic Functions": {
-                    topic: "Section B: Periodic Functions",
-                    lessons: [
-                        { title: "Lesson 8: Rising and Falling", objective: "Transition to thinking about sine and cosine as functions." },
-                        { title: "Lesson 9: Introduction to Trigonometric Functions", objective: "Use the unit circle to graph sine and cosine." },
-                        { title: "Lesson 10: Beyond 2pi", objective: "Expand the domain of trigonometric functions to all real numbers." },
-                        { title: "Lesson 11: Extending the Domain of Trigonometric Functions", objective: "Understand the meaning of radian angles greater than \\(2\\pi\\) and less than 0." },
-                        { title: "Lesson 12: Tangent", objective: "Reason about the tangent function and its periodic nature." },
-                        { title: "Lesson 13: Some New Ratios", objective: "Introduce reciprocal trigonometric functions." }
-                    ]
-                },
-                "Section C: Trigonometry Transformations": {
-                    topic: "Section C: Trigonometry Transformations",
-                    lessons: [
-                        { title: "Lesson 14: Amplitude and Midline", objective: "Identify amplitude and midline of periodic functions." },
-                        { title: "Lesson 15: Transforming Trigonometric Functions", objective: "Apply transformations to trigonometric functions." },
-                        { title: "Lesson 16: Features of Trigonometric Graphs (Part 1)", objective: "Identify key features of trigonometric graphs." },
-                        { title: "Lesson 17: Features of Trigonometric Graphs (Part 2)", objective: "Continue analyzing trigonometric graphs." },
-                        { title: "Lesson 18: Comparing Transformations", objective: "Compare the effects of different transformations on trigonometric functions." },
-                        { title: "Lesson 19: Modeling Circular Motion", objective: "Model periodic situations algebraically and graphically." }
-                    ]
-                },
-                "Section D: Let’s Put It to Work": {
-                    topic: "Section D: Let’s Put It to Work",
-                    lessons: [
-                        { title: "Lesson 20: Beyond Circles", objective: "Apply trigonometric functions to model periodic situations." }
-                    ]
-                }
-            }
-        },
-        "Unit 8: Statistical Inferences": {
-            unit: "Unit 8: Statistical Inferences",
-            topics: {
-                "Section A: Study Types": {
-                    topic: "Section A: Study Types",
-                    lessons: [
-                        { title: "Lesson 1: Being Skeptical", objective: "Critically evaluate statistical claims." },
-                        { title: "Lesson 2: Study Types", objective: "Consider experimental, observational, and survey study types." },
-                        { title: "Lesson 3: Randomness in Groups", objective: "Understand the importance of random selection and assignment." }
-                    ]
-                },
-                "Section B: Distributions": {
-                    topic: "Section B: Distributions",
-                    lessons: [
-                        { title: "Lesson 4: Describing Distributions", objective: "Describe the shape, center, and spread of distributions." },
-                        { title: "Lesson 5: Normal Distributions", objective: "Examine the normal distribution as a common model." },
-                        { title: "Lesson 6: Areas in Histograms", objective: "Relate area in a histogram to proportions." },
-                        { title: "Lesson 7: Areas under a Normal Curve", objective: "Use a normal distribution model to approximate proportions." }
-                    ]
-                },
-                "Section C: Not All Samples Are the Same": {
-                    topic: "Section C: Not All Samples Are the Same",
-                    lessons: [
-                        { title: "Lesson 8: Not Always Ideal", objective: "Understand sources of bias in sampling." },
-                        { title: "Lesson 9: Variability in Samples", objective: "Recognize that different samples yield different estimates." },
-                        { title: "Lesson 10: Estimating Proportions from Samples", objective: "Estimate a population proportion from a sample and understand margin of error." },
-                        { title: "Lesson 11: Estimating a Population Mean", objective: "Estimate a population mean from a sample and understand margin of error." }
-                    ]
-                },
-                "Section D: Analyzing Experimental Data": {
-                    topic: "Section D: Analyzing Experimental Data",
-                    lessons: [
-                        { title: "Lesson 12: Experimenting", objective: "Design and conduct a simple experiment." },
-                        { title: "Lesson 13: Using Normal Distributions for Experiment Analysis", objective: "Check for evidence of a treatment effect." },
-                        { title: "Lesson 14: Questioning Experimenting", objective: "Critically evaluate experimental designs." }
-                    ]
-                },
-                "Section E: Let's Put It to Work": {
-                    topic: "Section E: Let's Put It to Work",
-                    lessons: [
-                        { title: "Lesson 15: Heart Rates", objective: "Design, conduct, and analyze an experimental study." }
+                        { title: "Describing Events as Subsets", objective: "AII-S.CP.1: Describe events as subsets of a sample space using unions, intersections, or complements." },
+                        { title: "Independence and Conditional Probability with Two-Way Tables", objective: "AII-S.CP.4: Use two-way frequency tables to decide if events are independent and to calculate conditional probabilities." },
+                        { title: "Applying the Addition Rule", objective: "AII-S.CP.7: Apply the Addition Rule, P(A or B) = P(A) + P(B) - P(A and B), and interpret the answer." }
                     ]
                 }
             }
