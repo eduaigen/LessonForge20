@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2, Printer } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -135,6 +135,55 @@ const GeneratorContent = () => {
         setIsHighlightingTools(true);
     }
   }
+
+  const handlePrintAll = () => {
+    if (!lessonPackage || lessonPackage.length === 0) return;
+
+    let combinedHtml = '';
+    lessonPackage.forEach(item => {
+        const contentElement = document.getElementById(`content-${item.id}`);
+        if (contentElement) {
+            combinedHtml += `
+                <div style="page-break-before: always; padding-top: 2rem;">
+                  <h2 style="font-family: sans-serif; color: #333; text-align: center; border-bottom: 1px solid #ccc; padding-bottom: 1rem; margin-bottom: 1rem;">${item.title}</h2>
+                  ${contentElement.innerHTML}
+                </div>
+            `;
+        }
+    });
+
+    const printWindow = window.open('', '', 'height=800,width=1000');
+    if (printWindow) {
+        printWindow.document.write('<html><head><title>EduAiGen - Complete Lesson Package</title>');
+        const styles = Array.from(document.styleSheets)
+            .map(styleSheet => {
+                try {
+                    if (styleSheet.href) return `<link rel="stylesheet" href="${styleSheet.href}">`;
+                    return `<style>${Array.from(styleSheet.cssRules).map(rule => rule.cssText).join('')}</style>`;
+                } catch (e) {
+                    if (styleSheet.href) return `<link rel="stylesheet" href="${styleSheet.href}">`;
+                    return '';
+                }
+            }).join('\n');
+        
+        printWindow.document.write(styles);
+        printWindow.document.write(`
+            <style>
+                @page { size: auto; margin: 2rem; }
+                body { -webkit-print-color-adjust: exact; padding: 2rem; }
+                .document-view h2, .document-view h3, .document-view h4 { color: #333 !important; }
+            </style>
+        `);
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(combinedHtml);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 250);
+    }
+  };
 
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
@@ -391,6 +440,15 @@ const GeneratorContent = () => {
                   <div className="mt-8">
                       <GeneratingAnimation />
                   </div>
+              )}
+              
+              {lessonPackage && lessonPackage.length > 1 && (
+                <div className="flex justify-end mt-4">
+                  <Button onClick={handlePrintAll}>
+                    <Printer className="mr-2 h-4 w-4" />
+                    Print All
+                  </Button>
+                </div>
               )}
 
               {lessonPackage?.map(item => (
