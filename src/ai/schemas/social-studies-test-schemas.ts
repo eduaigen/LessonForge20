@@ -10,7 +10,7 @@ export const GenerateSocialStudiesTestInputSchema = z.object({
 });
 
 const multipleChoiceQuestionSchema = z.object({
-  stimulus: z.string().describe("A stimulus, which can be a direct quote, a description of a map/chart/photo, or a short text passage. This content must be created by the AI."),
+  stimulus: z.string().describe("A stimulus, which can be a direct quote, a description of a chart, or a short text passage. This content must be created by the AI."),
   question: z.string(),
   options: z.array(z.string()).length(4),
   answer: z.string(),
@@ -22,14 +22,14 @@ const constructedResponseQuestionSchema = z.object({
 });
 
 const crqSetSchema = z.object({
-  documents: z.array(z.string()).describe("A list containing 1 or 2 document sources (direct quotes, descriptions of maps/charts, or short passages)."),
+  documents: z.array(z.string()).describe("A list containing 1 or 2 document sources (direct quotes, descriptions of charts, or short passages)."),
   questions: z.array(constructedResponseQuestionSchema).length(3).describe("An array of 3 constructed-response questions, scaffolded in difficulty (interpretation, cause/effect, reliability/synthesis)."),
 });
 
 const dbqSchema = z.object({
   historicalContext: z.string().describe("A paragraph providing the historical context for the essay."),
   task: z.string().describe("The specific prompt or task for the Document-Based Question essay."),
-  documents: z.array(z.string()).describe("A list of document sources (direct quotes, descriptions of maps/charts, or short passages)."),
+  documents: z.array(z.string()).describe("A list of document sources (direct quotes, descriptions of charts, or short passages)."),
   sampleEssay: z.string().describe("A full, high-quality sample essay that answers the prompt using the provided documents and outside information."),
 });
 
