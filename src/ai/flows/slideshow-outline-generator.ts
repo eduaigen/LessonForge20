@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert instructional designer who creates clear and engaging presentations for teachers. Your task is to convert the provided lesson plan JSON into a detailed, student-facing, slide-by-slide outline in the specified language.
 
 **CRITICAL INSTRUCTION:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]"). **CRITICAL**: Do NOT translate any numerical data within data tables; only translate textual headers and titles.
 2.  **Source Material**: Your ONLY source of information is the provided lesson plan JSON. Do not include any "teacherActions" or "sampleScript" content.
 
 **Lesson Plan Data:**

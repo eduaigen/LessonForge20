@@ -20,7 +20,7 @@ const prompt = ai.definePrompt({
 Your task is to analyze the provided lesson plan JSON and generate detailed, actionable coaching advice for a teacher in the specified language.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]"). **CRITICAL**: Do NOT translate any numerical data within data tables; only translate textual headers and titles.
 2.  **Source Material**: Use the lesson plan as your only source.
 
 **Lesson Plan Data:**
