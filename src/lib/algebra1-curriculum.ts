@@ -206,7 +206,7 @@ export const algebra1Curriculum: {
                         { title: "Lesson 3: Solving Quadratic Equations by Graphing", objective: "I can solve a quadratic equation by graphing.", standard: "AI-A.REI.4b" },
                         { title: "Lesson 4: Solving Quadratic Equations by Factoring", objective: "I can solve a quadratic equation by factoring.", standard: "AI-A.REI.4b" },
                         { title: "Lesson 5: Solving Quadratic Equations by Completing the Square", objective: "I can solve a quadratic equation by completing the square.", standard: "AI-A.REI.4a" },
-                        { title: "Lesson 6: The Quadratic Formula", objective: "I can solve a quadratic equation in the form $$ax^2 + bx + c = 0$$ by using the quadratic formula $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$.", standard: "AI-A.REI.4b" }
+                        { title: "Lesson 6: The Quadratic Formula", objective: "I can solve a quadratic equation in the form $$ax^2 + bx + c = 0$$. I can use the quadratic formula $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$.", standard: "AI-A.REI.4b" }
                     ]
                 },
                 "Quadratic inequalities": {
@@ -270,4 +270,5 @@ export const algebra1Curriculum: {
 };
 
     
+
 
