@@ -7,10 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Orbit, Sparkles, Wand2, Check } from 'lucide-react';
+import { Loader2, Orbit, Sparkles, Wand2, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { earthScienceCurriculum } from '@/lib/earth-science-curriculum';
 import { generateESSLesson, type GenerateESSLessonOutput } from '@/ai/flows/generate-ess-lesson';
@@ -119,12 +119,15 @@ const GeneratorContent = () => {
   }
 
   const units = useMemo(() => Object.keys(earthScienceCurriculum.units), []);
+  
+  const handleClearSelection = () => {
+    setCurrentlySelectedLesson(null);
+    form.reset({ unit: '', topic: '', lesson: '', additionalInfo: form.getValues('additionalInfo') });
+  }
 
   const handleLessonSelect = (unitKey: string, topicKey: string, lessonTitle: string) => {
     if (currentlySelectedLesson === lessonTitle) {
-      // Deselect if clicking the same lesson again
-      setCurrentlySelectedLesson(null);
-      form.reset({ unit: '', topic: '', lesson: '', additionalInfo: form.getValues('additionalInfo') });
+      handleClearSelection();
     } else {
       setCurrentlySelectedLesson(lessonTitle);
       form.setValue('unit', unitKey);
@@ -273,6 +276,8 @@ const GeneratorContent = () => {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
             <div className="flex-grow">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
               <Card className="w-full shadow-lg mb-8">
                   <CardHeader>
                       <div className="flex items-center justify-between flex-wrap gap-4">
@@ -287,8 +292,6 @@ const GeneratorContent = () => {
                         </div>
                       </div>
                   </CardHeader>
-                  <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
                       <CardContent className="space-y-6">
                         <Accordion type="single" collapsible className="w-full" defaultValue='item-1'>
                             {units.map((unitKey) => {
@@ -358,15 +361,28 @@ const GeneratorContent = () => {
                               )}
                           />
                       </CardContent>
-                      <CardFooter>
-                          <Button type="submit" disabled={isLoading || !currentlySelectedLesson} className="w-full">
-                          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                          {isLoading ? 'Generating Lesson...' : 'Generate New Lesson'}
-                          </Button>
-                      </CardFooter>
-                      </form>
-                  </Form>
               </Card>
+              
+               {currentlySelectedLesson && (
+                <div className="fixed bottom-6 right-6 z-50 animate-float-up">
+                    <div className="flex items-center gap-4 p-4 rounded-lg shadow-2xl bg-background border">
+                         <div className="flex-grow">
+                             <h4 className="font-semibold">Lesson Selected!</h4>
+                             <p className="text-sm text-muted-foreground truncate max-w-xs">{currentlySelectedLesson}</p>
+                         </div>
+                         <Button type="submit" size="lg" disabled={isLoading} className="bg-green-500 hover:bg-green-600 text-white">
+                             {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Wand2 className="mr-2 h-5 w-5" />}
+                             {isLoading ? 'Generating...' : 'Generate Lesson'}
+                         </Button>
+                         <Button type="button" variant="ghost" size="icon" onClick={handleClearSelection} disabled={isLoading}>
+                             <X className="h-5 w-5"/>
+                         </Button>
+                    </div>
+                </div>
+              )}
+              </form>
+            </Form>
+
               
               {isLoading && !lessonPackage && (
                   <div className="mt-8">
