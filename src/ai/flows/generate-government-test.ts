@@ -30,21 +30,21 @@ const prompt = ai.definePrompt({
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.
-- Each question must have a unique, text-based stimulus and four answer options.
+- Each question must have a unique, text-based stimulus and four complete answer options.
 
 **Part II: Constructed-Response Questions (CRQs)**
 - Generate EXACTLY {{{crqCount}}} unique CRQ sets.
-- Each set must contain 1-2 text-based documents and exactly 3 scaffolded questions:
+- Each set must contain 1-2 fully-written, text-based documents and exactly 3 scaffolded questions:
     1.  A question about the civic or economic context or point of view of a document.
     2.  A question requiring a historical/civic thinking skill (e.g., cause/effect, comparison) using both documents.
     3.  A question requiring synthesis or analysis of reliability.
 
 **Part III: Document-Based Question (DBQ)**
 - Generate ONE DBQ essay prompt.
-- Create EXACTLY {{{dbqDocCount}}} authentic, relevant, text-based documents to support the prompt.
+- Create EXACTLY {{{dbqDocCount}}} authentic, relevant, fully-written text-based documents to support the prompt.
 - Write a detailed sample essay that answers the prompt, citing the documents and incorporating outside information.
 
-Your final output MUST be a single JSON object that strictly follows the output schema.
+Your final output MUST be a single, complete JSON object that strictly follows the output schema.
 `,
 });
 
