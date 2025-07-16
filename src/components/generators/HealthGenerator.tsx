@@ -230,7 +230,18 @@ const GeneratorContent = () => {
         targetLanguage: language,
       });
 
-      const translatedJson = JSON.parse(response.translatedContent);
+      let translatedJson: any;
+      try {
+        translatedJson = JSON.parse(response.translatedContent);
+      } catch (e) {
+        // If parsing fails, try to extract from markdown
+        const match = response.translatedContent.match(/```json\n([\s\S]*)\n```/);
+        if (match && match[1]) {
+          translatedJson = JSON.parse(match[1]);
+        } else {
+          throw new Error("Failed to parse translated JSON content.");
+        }
+      }
 
       const newTranslatedContent: GeneratedContent = {
         id: `translated-${contentItem.id}-${language}`,
