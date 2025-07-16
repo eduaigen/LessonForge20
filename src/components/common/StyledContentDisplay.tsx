@@ -469,7 +469,11 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
 
 const renderStudySheet = (studySheet: StudySheetOutput) => (
     <div className="document-view">
-        {renderWorksheetHeader()}
+        <header className="text-center mb-8">
+            <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.lessonTitle}</h1>
+            <p className="text-lg text-muted-foreground mt-2"><strong>Essential Question:</strong> {studySheet.essentialQuestion}</p>
+        </header>
+
         <section className="mb-6">
             <h2>Key Vocabulary</h2>
             <ul className="list-disc pl-5 space-y-2">
@@ -480,21 +484,46 @@ const renderStudySheet = (studySheet: StudySheetOutput) => (
                 ))}
             </ul>
         </section>
+
         <section className="mb-6">
-            <h2>Key Concepts</h2>
+            <h2>Core Concepts</h2>
             <ul className="list-disc pl-5 space-y-2">
-                {studySheet.keyConcepts.map((concept, index) => (
+                {studySheet.coreConcepts.map((concept, index) => (
                     <li key={index}>{concept}</li>
                 ))}
             </ul>
         </section>
-        <section>
-            <h2>Real-World Applications & Questions</h2>
-            <ul className="list-disc pl-5 space-y-2">
-                {studySheet.applications.map((application, index) => (
-                    <li key={index}>{application}</li>
+
+        {studySheet.keyDiagram && (
+            <section className="mb-6">
+                <h2>Key Diagram / Model</h2>
+                <blockquote className="border-l-4 border-primary pl-4 italic">
+                    {studySheet.keyDiagram}
+                </blockquote>
+            </section>
+        )}
+
+        <section className="mb-6">
+            <h2>Key Activities & Data Summary</h2>
+            <ul className="list-disc pl-5 space-y-3">
+                {studySheet.activitiesAndData.map((activity, index) => (
+                    <li key={index}>
+                        <strong>{activity.activityTitle}:</strong> {activity.summary}
+                    </li>
                 ))}
             </ul>
+        </section>
+
+        <section>
+            <h2>Practice Questions</h2>
+            <ol className="list-decimal pl-5 space-y-4">
+                {studySheet.practiceQuestions.map((q, index) => (
+                    <li key={index}>
+                        <p>{q.question} <em className="text-xs text-muted-foreground">({q.source})</em></p>
+                        <div className="my-2 h-12 border-b border-dashed"></div>
+                    </li>
+                ))}
+            </ol>
         </section>
     </div>
 );

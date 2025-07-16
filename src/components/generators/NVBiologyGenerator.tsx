@@ -28,7 +28,6 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
-import { refineLessonSection } from '@/ai/flows/lesson-section-refiner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,14 +37,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -199,16 +190,15 @@ const GeneratorContent = () => {
         let result: any;
         let contentType: GeneratedContent['type'] = toolName;
         let newContent: GeneratedContent | null = null;
-        const lessonPlanJson = JSON.stringify(lessonPlan);
 
         if (toolName === 'Worksheet') {
-            result = await generateWorksheet({ lessonPlanJson });
+            result = await generateWorksheet(lessonPlan);
             newContent = { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType };
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial(lessonPlan);
             newContent = { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType };
         } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach({ lessonPlanJson });
+            result = await generateTeacherCoach(lessonPlan);
             newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
@@ -220,7 +210,7 @@ const GeneratorContent = () => {
             });
             newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Study Sheet') {
-            result = await generateStudySheet({ lessonPlanJson });
+            result = await generateStudySheet(lessonPlan);
             newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         }
 
@@ -249,7 +239,7 @@ const GeneratorContent = () => {
               Lesson Plan Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+               Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
             </AlertDialogDescription>
             <div className="text-sm text-muted-foreground pt-4 text-left">
               <span className="font-semibold text-foreground">Here are the available tools:</span>
