@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,8 +19,12 @@ import { useAuth } from '@/context/AuthContext';
 import CollapsibleSection from '../common/CollapsibleSection';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import RightSidebar, { type ToolName } from '../common/RightSidebar';
+import { generateDifferentiatedMathTest } from '@/ai/flows/generate-math-differentiated-test';
+import { generateEnhancedMathTest } from '@/ai/flows/generate-math-enhanced-test';
+import { generateMathStudySheet } from '@/ai/flows/generate-math-study-sheet';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -32,6 +36,14 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
+
+export type TestGeneratedContent = {
+  id: string;
+  title: string;
+  content: any;
+  type: 'Test' | 'Answer Key' | 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version';
+  sourceId?: string;
+};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -57,7 +69,10 @@ const SubscriptionPrompt = () => (
 const GeneratorContent = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [generatedTest, setGeneratedTest] = useState<GenerateMathTestOutput | null>(null);
+  const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
+  const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
+  const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
+  const [isHighlightingTools, setIsHighlightingTools] = useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -71,12 +86,42 @@ const GeneratorContent = () => {
 
   const units = useMemo(() => Object.keys(geometryCurriculum.units), []);
 
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (isHighlightingTools) {
+      timeoutId = setTimeout(() => {
+        setIsHighlightingTools(false);
+      }, 10000); // Highlight for 10 seconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isHighlightingTools]);
+
+  const handleDialogClose = (open: boolean) => {
+    setIsToolsInfoDialogOpen(open);
+    if (!open) {
+        setIsHighlightingTools(true);
+    }
+  }
+
   async function onSubmit(values: FormData) {
     setIsLoading(true);
-    setGeneratedTest(null);
+    setTestPackage(null);
     try {
       const result = await generateGeometryTest(values);
-      setGeneratedTest(result);
+      const testContent: TestGeneratedContent = {
+        id: `test-${Date.now()}`,
+        title: result.testTitle,
+        content: result,
+        type: 'Test',
+      };
+      const answerKeyContent: TestGeneratedContent = {
+          id: `answer-key-${Date.now()}`,
+          title: `Answer Key: ${result.testTitle}`,
+          content: result,
+          type: 'Answer Key',
+      }
+      setTestPackage([testContent, answerKeyContent]);
+      setIsToolsInfoDialogOpen(true);
     } catch (error) {
       console.error('Test generation failed:', error);
       toast({
@@ -89,8 +134,79 @@ const GeneratorContent = () => {
     }
   }
 
+  const handleToolClick = async (toolName: 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version') => {
+    const originalTestContent = testPackage?.find(item => item.type === 'Test');
+    if (!originalTestContent) {
+        toast({ title: "No Test Found", description: "Please generate a test first.", variant: "destructive" });
+        return;
+    }
+
+    if (testPackage?.some(item => item.type === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
+        return;
+    }
+
+    setIsToolLoading(toolName);
+    try {
+        let result: any;
+        let newContent: TestGeneratedContent | null = null;
+
+        switch (toolName) {
+            case 'Study Sheet':
+                result = await generateMathStudySheet({ originalTest: originalTestContent.content });
+                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
+                break;
+            case 'Differentiated Version':
+                result = await generateDifferentiatedMathTest({ originalTest: originalTestContent.content });
+                newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
+                break;
+            case 'Enhanced Version':
+                result = await generateEnhancedMathTest({ originalTest: originalTestContent.content });
+                newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
+                break;
+        }
+
+        if (newContent) {
+            setTestPackage(prev => [...(prev || []), newContent!]);
+        }
+    } catch (error) {
+         console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
+    } finally {
+        setIsToolLoading(null);
+    }
+  };
+
+
   return (
     <>
+      <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Wand2 className="h-6 w-6 text-primary" />
+              Test Generated! What's Next?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+               Your test and answer key are ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+            </AlertDialogDescription>
+            <div className="text-sm text-muted-foreground pt-4 text-left">
+              <span className="font-semibold text-foreground">Here are the available tools:</span>
+              <ul className="list-disc pl-5 mt-2 space-y-2">
+                  <li><strong>Study Sheet:</strong> Creates a concise study guide based on the test content.</li>
+                  <li><strong>Differentiated Version:</strong> Generates a version of the test with simplified language and scaffolds.</li>
+                  <li><strong>Enhanced Version:</strong> Creates a more rigorous version of the test for advanced students.</li>
+              </ul>
+            </div>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => handleDialogClose(false)}>
+              Got it, thanks!
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
           <Form {...form}>
@@ -184,11 +300,19 @@ const GeneratorContent = () => {
 
           {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
           
-          {generatedTest && (
-            <CollapsibleSection key={generatedTest.testTitle} title={generatedTest.testTitle} contentItem={{id: 'test', title: generatedTest.testTitle, content: generatedTest, type: 'Test' as any}}>
-              <StyledContentDisplay content={generatedTest} type={'Test' as any} />
+          {testPackage?.map(item => (
+            <CollapsibleSection key={item.id} title={item.title} contentItem={{...item, content: item.content as any}}>
+              <StyledContentDisplay content={item.content} type={item.type} />
+            </CollapsibleSection>
+          ))}
+          
+          {isToolLoading && (
+            <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Test'}}>
+              <GeneratingAnimation />
             </CollapsibleSection>
           )}
+
+          {testPackage && <RightSidebar onToolClick={(toolName) => handleToolClick(toolName as any)} isGenerating={!!isToolLoading} isHighlighting={isHighlightingTools} toolset="test" />}
         </div>
       </div>
     </>
