@@ -237,7 +237,7 @@ export const algebra1Curriculum: {
                 "Standard form": {
                     topic: "Standard form",
                     lessons: [
-                        { title: "Lesson 5: The Quadratic Formula", objective: "I can use the quadratic formula to solve a quadratic equation in the form $$ax^2 + bx + c = 0$$. The formula is: $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$", standard: "AI-A.REI.4b" }
+                        { title: "Lesson 5: The Quadratic Formula", objective: "I can use the quadratic formula to solve a quadratic equation. The standard form of a quadratic equation is $$ax^2 + bx + c = 0$$. The formula is: $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$", standard: "AI-A.REI.4b" }
                     ]
                 }
             }
