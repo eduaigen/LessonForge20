@@ -142,9 +142,6 @@ const GeneratorContent = () => {
 
     try {
       const result = await generateNVBiologyLesson(values);
-      if (!result) {
-        throw new Error('Lesson plan generation returned no result.');
-      }
       
       const newLessonPlan: GeneratedContent = {
         id: `lesson-plan-${Date.now()}`,
@@ -190,29 +187,28 @@ const GeneratorContent = () => {
         let result: any;
         let contentType: GeneratedContent['type'] = toolName;
         let newContent: GeneratedContent | null = null;
+        let resultTitle = title;
 
         if (toolName === 'Worksheet') {
-            result = await generateWorksheet(lessonPlan);
-            newContent = { id: `${toolName}-${Date.now()}`, title: 'Student Worksheet', content: result, type: contentType };
+            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            resultTitle = 'Student Worksheet';
         } else if (toolName === 'Reading Material') {
             result = await generateReadingMaterial(lessonPlan);
-            newContent = { id: `${toolName}-${Date.now()}`, title: result.title, content: result, type: contentType };
+            resultTitle = result.title;
         } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach(lessonPlan);
-            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
+            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
         } else if (toolName === 'Slideshow Outline') {
             result = await generateSlideshowOutline(lessonPlan);
-            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Question Cluster') {
             result = await generateQuestionCluster({
                 lessonTopic: lessonPlan.lessonOverview.topic,
                 lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
             });
-            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         } else if (toolName === 'Study Sheet') {
             result = await generateStudySheet(lessonPlan);
-            newContent = { id: `${toolName}-${Date.now()}`, title, content: result, type: contentType };
         }
+
+        newContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
 
         if (newContent) {
            setLessonPackage(prev => {
