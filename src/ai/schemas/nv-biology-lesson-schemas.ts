@@ -13,7 +13,7 @@ const lessonOverviewSchema = z.object({
   lesson: z.string(),
   lessonSummary: z.string(),
   standards: z.string().describe("NGSS / NYSSLS Standards (e.g., HS-LS1-5: Use a model to illustrate...)"),
-  aim: z.string(),
+  aim: z.string().describe("This should be the same as essentialQuestion."),
   essentialQuestion: z.string(),
   objectives: z.array(z.string()).describe("2-3 'SWBAT' objectives using Bloom’s verbs"),
   vocabulary: z.array(z.object({ term: z.string(), definition: z.string() })).describe("3-5 Tier 2 or 3 terms with definitions"),
@@ -40,14 +40,19 @@ const miniLessonSchema = lessonSectionSchema.extend({
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 
-const guidedPracticeSchema = lessonSectionSchema.extend({
-  dataTable: z.object({
-    title: z.string().describe("Title for the data table."),
-    headers: z.array(z.string()),
-    rows: z.array(z.array(z.string())),
-  }).optional().describe("A complete and structured data table."),
-  activityDescription: z.string().optional().describe("Description of the activity if not a data table."),
+const dataTableSchema = z.object({
+  title: z.string().describe("Title for the data table."),
+  headers: z.array(z.string()),
+  rows: z.array(z.array(z.string())),
 });
+
+const guidedPracticeSchema = lessonSectionSchema.extend({
+  dataTable: dataTableSchema.optional().describe("A complete and structured data table for analysis."),
+  activityDescription: z.string().optional().describe("Description of a non-data-based activity (e.g., card sort)."),
+}).refine(data => data.dataTable || data.activityDescription, {
+  message: "Either a dataTable or an activityDescription must be provided for guided practice.",
+});
+
 
 const cfuSchema = lessonSectionSchema.extend({
   multipleChoice: z.array(z.object({
@@ -55,17 +60,13 @@ const cfuSchema = lessonSectionSchema.extend({
     dok: z.number().min(1).max(3).describe("The Depth of Knowledge level (1, 2, or 3) for the question."),
     options: z.array(z.string()),
     answer: z.string(),
-  })),
+  })).min(2, "Must have at least 2 multiple-choice questions."),
   shortResponse: leveledQuestionSchema,
 });
 
 const independentPracticeSchema = lessonSectionSchema.extend({
   taskPrompt: z.string().describe("A full CER (Claim, Evidence, Reasoning) prompt or another analytical task."),
-  taskData: z.object({
-    title: z.string().describe("Title for the data table."),
-    headers: z.array(z.string()),
-    rows: z.array(z.array(z.string())),
-  }).optional().describe("Any necessary data, graph, or model to be interpreted."),
+  taskData: dataTableSchema.optional().describe("Any necessary data, graph, or model to be interpreted."),
 });
 
 const closureSchema = lessonSectionSchema.extend({
@@ -73,7 +74,7 @@ const closureSchema = lessonSectionSchema.extend({
 });
 
 const homeworkSchema = z.object({
-  activity: z.string(),
+  activity: z.string().describe("A full description of the homework, including any passages or questions."),
 });
 
 const differentiationSchema = z.object({

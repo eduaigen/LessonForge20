@@ -67,25 +67,25 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
 - **Teacher Actions**: Provide a verbatim script for launching and managing the activity. e.g., "In your groups of four, you will analyze this data table. Your goal is to identify a pattern and explain what it means. Facilitators, make sure everyone's voice is heard. Scribes, you will record your group's findings on the graphic organizer. You have 15 minutes."
 - **Expected Student Outputs**: Provide an exemplar of a completed graphic organizer or the expected collaborative output. e.g., "Exemplar Group Response: Pattern Identified - As X increases, Y decreases. Possible Reason: This is because..."
-- **Embedded Data Table**: A complete and structured data table with a title, clear headers, and logically organized data, ready for students to analyze and graph themselves. **Do not generate a graph or chart; provide only the raw data in a table.**
+- **Activity Content**: Provide **EITHER** a \`dataTable\` object with a title, headers, and rows of data, **OR** a \`activityDescription\` string detailing a non-data-based activity (like a card sort or a role-play). **You must provide one of these.**
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
 - **Teacher Actions**: Provide a script for administering the CFU. e.g., "Alright everyone, eyes on me. On your mini-whiteboards, please answer the following multiple-choice question. Show me your boards in 3, 2, 1."
 - **Expected Student Outputs**: Provide a correct, high-quality sample response for the short-answer question. e.g., "Exemplar Short Response: The process is affected because..."
-- **CFU Questions**: 2 multiple-choice questions and 1 short-response question. **Each question must have a specified DOK level (1, 2, or 3).** For multiple-choice questions, provide the options as a simple array of strings without letters like "a)", "b)". Ensure surrounding text is not cluttered.
+- **CFU Questions**: Generate 2 multiple-choice questions and 1 short-response question. **Each question must have a specified DOK level (1, 2, or 3).** For multiple-choice questions, provide the options as a simple array of strings without letters like "a)", "b)". Ensure surrounding text is not cluttered.
 
 **F. INDEPENDENT PRACTICE / PERFORMANCE TASK**
 - **Teacher Actions**: Provide a script for setting up the task. e.g., "For our final task today, you will be writing a CER response to this prompt. Remember our rubric: a strong response includes a clear claim, specific evidence from the text, and reasoning that explains how the evidence supports the claim. You may use the sentence starters on the handout."
 - **Expected Student Outputs**: Provide a full, high-quality exemplar of a complete CER response. e.g., "Exemplar CER: Claim - ... Evidence - According to the data table, ... Reasoning - This evidence supports the claim because..."
-- **Embedded Task**: One full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. If data is needed, provide it in a structured data table, not a graph. Ensure any embedded charts or diagrams are clearly labeled and contain valid descriptions.
+- **Embedded Task**: Generate one full CER (Claim, Evidence, Reasoning) prompt. Include any necessary data or model to be interpreted. If data is needed, provide it in a structured data table, not a graph. Ensure any embedded charts or diagrams are clearly labeled and contain valid descriptions.
 
 **G. CLOSURE / EXIT TICKET**
 - **Teacher Actions**: Provide a script for the closure. e.g., "Before you leave, please complete this Exit Ticket on the slip of paper I've handed out. This will help me know what we need to review tomorrow."
 - **Expected Student Outputs**: Provide an exemplar response for the exit ticket. e.g., "Exemplar Exit Ticket: One thing I learned today is... A question I still have is..."
-- **Exit Ticket Question**: One exit ticket item (e.g., a final question, a matching task, or a vocabulary use prompt).
+- **Exit Ticket Question**: Generate one exit ticket item (e.g., a final question, a matching task, or a vocabulary use prompt).
 
 **H. HOMEWORK ACTIVITY**
-- **Activity**: A short, relevant assignment to reinforce learning. If the assignment requires a reading passage, data table, or diagram description, **you must generate and embed that content here.** For example, "Read the short passage below about symbiotic relationships and answer the two questions that follow. [Generate a 150-word passage here]. 1. ... 2. ..."
+- **Activity**: Generate a short, relevant assignment to reinforce learning. If the assignment requires a reading passage, data table, or diagram description, **you must generate and embed that content here.** For example, "Read the short passage below about symbiotic relationships and answer the two questions that follow. [Generate a 150-word passage here]. 1. ... 2. ..."
 
 **III. DIFFERENTIATION & SUPPORT**
 - **Teacher Actions for Support**: **Elaborate on specific strategies.** e.g., "Provide a pre-highlighted version of the reading for select students. Offer a graphic organizer with pre-filled sentence starters for the CER task."
@@ -99,8 +99,13 @@ Based on this context, generate a complete and detailed lesson plan that is read
 function isLessonPlanComplete(plan: any): plan is GenerateNVBiologyLessonOutput {
     if (!plan || typeof plan !== 'object') return false;
     const requiredKeys = Object.keys(LessonPlanSchema.shape);
-    const hasAllKeys = requiredKeys.every(key => key in plan && plan[key] !== null && plan[key] !== undefined);
-    return hasAllKeys;
+    for (const key of requiredKeys) {
+        if (plan[key] === undefined || plan[key] === null) {
+            console.warn(`Validation failed: Missing or null key '${key}'`);
+            return false;
+        }
+    }
+    return true;
 }
 
 
@@ -131,7 +136,7 @@ const generateNVBiologyLessonFlow = ai.defineFlow(
         }
         
         currentOutput = output; // Store the incomplete output for the next attempt
-        console.log(`Attempt ${attempts} failed. Lesson plan was incomplete. Retrying...`);
+        console.log(`Attempt ${attempts} failed. Lesson plan was incomplete. Retrying...`, output);
     }
 
     throw new Error('The AI failed to generate a complete lesson plan after multiple attempts. Please try again.');
