@@ -194,32 +194,62 @@ const PremiumDashboardContent = () => {
           {hasSocialStudiesSubscription && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Social Studies Modules</h2>
-               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                 <ToolCard
-                    title="Global History I"
-                    description="Create lesson plans for 9th Grade Global History."
-                    icon={<History />}
-                    href="/global-history-1-generator"
-                 />
-                  <ToolCard
-                    title="Global History II"
-                    description="Create lesson plans for 10th Grade Global History."
-                    icon={<History />}
-                    href="/global-history-2-generator"
-                 />
-                 <ToolCard
-                    title="U.S. History"
-                    description="Create lesson plans for United States History & Government."
-                    icon={<History />}
-                    href="/us-history-generator"
-                 />
-                 <ToolCard
-                    title="Government & Economics"
-                    description="Create lesson plans for Participation in Government & Economics."
-                    icon={<Landmark />}
-                    href="/government-generator"
-                 />
-               </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                      <h3 className="text-lg font-semibold text-muted-foreground">Lesson Plan Generators</h3>
+                      <ToolCard
+                          title="Global History I"
+                          description="Create lesson plans for 9th Grade Global History."
+                          icon={<History />}
+                          href="/global-history-1-generator"
+                      />
+                      <ToolCard
+                          title="Global History II"
+                          description="Create lesson plans for 10th Grade Global History."
+                          icon={<History />}
+                          href="/global-history-2-generator"
+                      />
+                      <ToolCard
+                          title="U.S. History"
+                          description="Create lesson plans for United States History & Government."
+                          icon={<History />}
+                          href="/us-history-generator"
+                      />
+                      <ToolCard
+                          title="Government & Economics"
+                          description="Create lesson plans for Participation in Government & Economics."
+                          icon={<Landmark />}
+                          href="/government-generator"
+                      />
+                  </div>
+                  <div className="space-y-6">
+                      <h3 className="text-lg font-semibold text-muted-foreground">Assessment Generators</h3>
+                       <ToolCard
+                          title="Global History I Test"
+                          description="Create custom tests for 9th Grade Global History."
+                          icon={<FlaskConical />}
+                          href="/global-history-1-test-generator"
+                      />
+                       <ToolCard
+                          title="Global History II Test"
+                          description="Create custom tests for 10th Grade Global History."
+                          icon={<FlaskConical />}
+                          href="/global-history-2-test-generator"
+                      />
+                       <ToolCard
+                          title="U.S. History Test"
+                          description="Create custom tests for U.S. History."
+                          icon={<FlaskConical />}
+                          href="/us-history-test-generator"
+                      />
+                       <ToolCard
+                          title="Government Test"
+                          description="Create custom tests for Government & Economics."
+                          icon={<FlaskConical />}
+                          href="/government-test-generator"
+                      />
+                  </div>
+              </div>
             </section>
           )}
 
