@@ -1,6 +1,5 @@
-
 import { z } from 'zod';
-import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
+import { dataTableSchema } from './nv-biology-lesson-schemas';
 
 export const GenerateWorksheetInputSchema = z.object({
   lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
@@ -48,7 +47,7 @@ const miniLessonSchema = z.object({
 const guidedPracticeSchema = z.object({
     title: z.string().default("Guided Practice"),
     instructions: z.array(z.string()).describe("Instructions for the guided practice activity."),
-    dataTable: GenerateNVBiologyLessonOutputSchema.shape.guidedPractice.shape.dataTable.optional(),
+    dataTable: dataTableSchema.optional(),
 });
 
 const checkFoUnderstandingSchema = z.object({
@@ -68,7 +67,7 @@ const checkFoUnderstandingSchema = z.object({
 const independentPracticeSchema = z.object({
     title: z.string().default("Independent Practice"),
     taskPrompt: z.string().describe("The exact task prompt from the lesson plan."),
-    taskData: GenerateNVBiologyLessonOutputSchema.shape.independentPractice.shape.taskData.optional(),
+    taskData: dataTableSchema.optional(),
 });
 
 const closureSchema = z.object({

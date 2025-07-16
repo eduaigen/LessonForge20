@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
+import { dataTableSchema } from './nv-biology-lesson-schemas';
 
 export const QuestionClusterInputSchema = z.object({
   lessonTopic: z.string().describe('The core topic of the lesson plan.'),
@@ -15,7 +15,7 @@ const multipleChoiceQuestionSchema = z.object({
 export const QuestionClusterOutputSchema = z.object({
   phenomenon: z.string().describe('An informative passage (150-200 words) describing a compelling, real-world phenomenon.'),
   stimulus: z.object({
-    visual: GenerateNVBiologyLessonOutputSchema.shape.guidedPractice.shape.dataTable.describe('A data table for interpretation, formatted as a structured object.'),
+    visual: dataTableSchema.describe('A data table for interpretation, formatted as a structured object.'),
   }),
   questions: z.object({
     mcq1: multipleChoiceQuestionSchema,

@@ -40,7 +40,7 @@ const miniLessonSchema = lessonSectionSchema.extend({
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 
-const dataTableSchema = z.object({
+export const dataTableSchema = z.object({
   title: z.string().describe("Title for the data table."),
   headers: z.array(z.string()),
   rows: z.array(z.array(z.string())),
