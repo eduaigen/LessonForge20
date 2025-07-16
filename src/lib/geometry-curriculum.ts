@@ -59,7 +59,7 @@ export const geometryCurriculum: {
                     lessons: [
                         { title: "Lesson 19: Evidence, Angles, and Proof", objective: "Begin to use deductive reasoning to prove geometric statements about angles." },
                         { title: "Lesson 20: Transformations, Transversals, and Proof", objective: "Use properties of rigid transformations to prove theorems about parallel lines and transversals." },
-                        { title: "Lesson 21: One Hundred Eighty", objective: "Prove that the sum of the angles in a triangle is 180 degrees." }
+                        { title: "Lesson 21: One Hundred Eighty", objective: "Prove that the sum of the angles in a triangle is \\(180^{\\circ}\\)." }
                     ]
                 },
                 "Section E: Let's Put It to Work": {
@@ -139,7 +139,7 @@ export const geometryCurriculum: {
                     topic: "Section C: Similarity in Right Triangles",
                     lessons: [
                         { title: "Lesson 13: Using the Pythagorean Theorem and Similarity", objective: "Use similarity in right triangles to solve problems." },
-                        { title: "Lesson 14: Proving the Pythagorean Theorem", objective: "Prove the Pythagorean Theorem using triangle similarity." },
+                        { title: "Lesson 14: Proving the Pythagorean Theorem", objective: "Prove the Pythagorean Theorem, \\(a^2 + b^2 = c^2\\), using triangle similarity." },
                         { title: "Lesson 15: Converse of the Pythagorean Theorem", objective: "Understand and apply the converse of the Pythagorean Theorem." },
                         { title: "Lesson 16: Finding All the Unknown Values in Triangles", objective: "Solve for all unknown sides and angles in right triangles." }
                     ]
@@ -171,7 +171,7 @@ export const geometryCurriculum: {
                         { title: "Lesson 6: Working with Trigonometric Ratios", objective: "Solidify understanding of sine, cosine, and tangent." },
                         { title: "Lesson 7: Applying Ratios in Right Triangles", objective: "Use trigonometric ratios to find unknown side lengths in right triangles." },
                         { title: "Lesson 8: Sine and Cosine in the Same Right Triangle", objective: "Understand the relationship between the sine and cosine of complementary angles." },
-                        { title: "Lesson 9: Trigonometry Squared", objective: "Explore the Pythagorean Identity sin^2(x) + cos^2(x) = 1." },
+                        { title: "Lesson 9: Trigonometry Squared", objective: "Explore the Pythagorean Identity \\(\\sin^2(x) + \\cos^2(x) = 1\\)." },
                         { title: "Lesson 10: Using Trigonometric Ratios to Find Angles", objective: "Use inverse trigonometric functions to find unknown angle measures in right triangles." }
                     ]
                 },
@@ -179,7 +179,7 @@ export const geometryCurriculum: {
                     topic: "Section C: Let’s Put It to Work",
                     lessons: [
                         { title: "Lesson 11: Solving Problems with Trigonometry", objective: "Apply trigonometry to solve real-world problems." },
-                        { title: "Lesson 12: Approximating Pi", objective: "Use trigonometry and polygons to approximate the value of Pi." }
+                        { title: "Lesson 12: Approximating Pi", objective: "Use trigonometry and polygons to approximate the value of Pi (\\(\\pi\\))." }
                     ]
                 }
             }
@@ -208,7 +208,7 @@ export const geometryCurriculum: {
                 "Section C: Prism and Cylinder Volumes": {
                     topic: "Section C: Prism and Cylinder Volumes",
                     lessons: [
-                        { title: "Lesson 9: Cylinder Volumes", objective: "Develop and apply the formula for the volume of a cylinder." },
+                        { title: "Lesson 9: Cylinder Volumes", objective: "Develop and apply the formula for the volume of a cylinder, \\(V = \\pi r^2 h\\)." },
                         { title: "Lesson 10: Cross-Sections and Volume", objective: "Introduce Cavalieri's Principle to understand volume." },
                         { title: "Lesson 11: Prisms Practice", objective: "Practice calculating volumes of various prisms." }
                     ]
@@ -217,7 +217,7 @@ export const geometryCurriculum: {
                     topic: "Section D: Understanding Pyramid Volumes",
                     lessons: [
                         { title: "Lesson 12: Prisms and Pyramids", objective: "Compare the volumes of prisms and pyramids with the same base and height." },
-                        { title: "Lesson 13: Building a Volume Formula for a Pyramid", objective: "Derive the formula for the volume of a pyramid." },
+                        { title: "Lesson 13: Building a Volume Formula for a Pyramid", objective: "Derive the formula for the volume of a pyramid, \\(V = \\frac{1}{3}Bh\\)." },
                         { title: "Lesson 14: Working with Pyramids", objective: "Apply the volume formula for pyramids to solve problems." },
                         { title: "Lesson 15: Putting All the Solids Together", objective: "Calculate volumes of composite solids." }
                     ]
@@ -239,17 +239,17 @@ export const geometryCurriculum: {
                     topic: "Section A: Transformations in the Plane",
                     lessons: [
                         { title: "Lesson 1: Rigid Transformations in a Plane", objective: "Review rigid transformations on the coordinate plane." },
-                        { title: "Lesson 2: Transformations as Functions", objective: "Describe transformations using function notation." },
+                        { title: "Lesson 2: Transformations as Functions", objective: "Describe transformations using function notation, such as \\(T(x,y) = (x+2, y-3)\\)." },
                         { title: "Lesson 3: Types of Transformations", objective: "Connect geometric transformations to coordinate rules." }
                     ]
                 },
                 "Section B: Distances, Circles, and Parabolas": {
                     topic: "Section B: Distances, Circles, and Parabolas",
                     lessons: [
-                        { title: "Lesson 4: Distances and Circles", objective: "Derive the equation of a circle using the distance formula." },
+                        { title: "Lesson 4: Distances and Circles", objective: "Derive the equation of a circle, \\((x-h)^2 + (y-k)^2 = r^2\\), using the distance formula." },
                         { title: "Lesson 5: Squares and Circles", objective: "Solve problems involving squares and circles on the coordinate plane." },
                         { title: "Lesson 6: Completing the Square", objective: "Use completing the square to find the center and radius of a circle." },
-                        { title: "Lesson 7: Distances and Parabolas", objective: "Define a parabola as the set of points equidistant from a focus and directrix." },
+                        { title: "Lesson 7: Distances and Parabolas", objective: "Define a parabola as the set of points equidistant from a given point (the focus) and line (the directrix)." },
                         { title: "Lesson 8: Equations and Graphs", objective: "Write equations for parabolas given a focus and directrix." }
                     ]
                 },
@@ -325,16 +325,16 @@ export const geometryCurriculum: {
                         { title: "Lesson 3: Sample Spaces", objective: "Represent sample spaces for compound events using lists, tables, and tree diagrams." },
                         { title: "Lesson 4: Tables of Relative Frequencies", objective: "Use two-way tables to calculate probabilities." },
                         { title: "Lesson 5: Combining Events", objective: "Find probabilities of compound events (A or B, A and B)." },
-                        { title: "Lesson 6: The Addition Rule", objective: "Understand and apply the General Addition Rule for probability." }
+                        { title: "Lesson 6: The Addition Rule", objective: "Understand and apply the General Addition Rule for probability, \\(P(A \\text{ or } B) = P(A) + P(B) - P(A \\text{ and } B)\\)." }
                     ]
                 },
                 "Section B: Related Events": {
                     topic: "Section B: Related Events",
                     lessons: [
                         { title: "Lesson 7: Related Events", objective: "Introduce the concept of conditional probability." },
-                        { title: "Lesson 8: Conditional Probability", objective: "Calculate and interpret conditional probabilities." },
+                        { title: "Lesson 8: Conditional Probability", objective: "Calculate and interpret conditional probabilities, \\(P(A|B) = \\frac{P(A \\text{ and } B)}{P(B)}\\)." },
                         { title: "Lesson 9: Using Tables for Conditional Probability", objective: "Use two-way tables to find conditional probabilities." },
-                        { title: "Lesson 10: Using Probability to Determine Whether Events Are Independent", objective: "Define and test for independence of events." }
+                        { title: "Lesson 10: Using Probability to Determine Whether Events Are Independent", objective: "Define and test for independence of events using \\(P(A|B) = P(A)\\)." }
                     ]
                 },
                 "Section C: Let's Put It to Work": {

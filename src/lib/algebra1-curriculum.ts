@@ -200,7 +200,7 @@ export const algebra1Curriculum: {
                         { title: "Lesson 10: Domain and Range (Part 1)", objective: "Determine the domain and range of a function from its graph or description." },
                         { title: "Lesson 11: Domain and Range (Part 2)", objective: "Determine the domain and range in more complex situations." },
                         { title: "Lesson 12: Piecewise Functions", objective: "Understand and graph piecewise-defined functions." },
-                        { title: "Lesson 13: Absolute Value Functions (Part 1)", objective: "Graph the absolute value function and understand its properties." },
+                        { title: "Lesson 13: Absolute Value Functions (Part 1)", objective: "Graph the absolute value function, \\(y = |x|\\), and understand its properties." },
                         { title: "Lesson 14: Absolute Value Functions (Part 2)", objective: "Analyze transformations of the absolute value function." }
                     ]
                 },
@@ -311,7 +311,7 @@ export const algebra1Curriculum: {
                         { title: "Lesson 12: Graphing the Standard Form (Part 1)", objective: "Use the standard form to find the y-intercept and axis of symmetry." },
                         { title: "Lesson 13: Graphing the Standard Form (Part 2)", objective: "Graph quadratic functions given in standard form." },
                         { title: "Lesson 14: Graphs That Represent Situations", objective: "Interpret the key features of a quadratic graph in the context of a real-world situation." },
-                        { title: "Lesson 15: Vertex Form", objective: "Understand and use the vertex form of a quadratic function." },
+                        { title: "Lesson 15: Vertex Form", objective: "Understand and use the vertex form of a quadratic function, \\(y = a(x-h)^2 + k\\)." },
                         { title: "Lesson 16: Graphing from the Vertex Form", objective: "Graph quadratic functions given in vertex form." },
                         { title: "Lesson 17: Changing the Vertex", objective: "Analyze how changing the parameters in vertex form affects the graph." }
                     ]
@@ -334,7 +334,7 @@ export const algebra1Curriculum: {
                         { title: "Lesson 3: Solving Quadratic Equations by Reasoning", objective: "Solve simple quadratic equations by taking square roots." },
                         { title: "Lesson 4: Solving Quadratic Equations with the Zero Product Property", objective: "Use the zero product property to solve quadratic equations in factored form." },
                         { title: "Lesson 5: How Many Solutions?", objective: "Determine the number of solutions to a quadratic equation." },
-                        { title: "Lesson 6: Rewriting Quadratic Expressions in Factored Form (Part 1)", objective: "Factor quadratic expressions of the form x^2 + bx + c." },
+                        { title: "Lesson 6: Rewriting Quadratic Expressions in Factored Form (Part 1)", objective: "Factor quadratic expressions of the form \\(x^2 + bx + c\\)." },
                         { title: "Lesson 7: Rewriting Quadratic Expressions in Factored Form (Part 2)", objective: "Factor quadratic expressions where the leading coefficient is not 1." },
                         { title: "Lesson 8: Rewriting Quadratic Expressions in Factored Form (Part 3)", objective: "Factor special products, like difference of squares." },
                         { title: "Lesson 9: Solving Quadratic Equations by Using Factored Form", objective: "Solve quadratic equations by factoring." },
@@ -354,9 +354,9 @@ export const algebra1Curriculum: {
                 "Section D: The Quadratic Formula": {
                     topic: "Section D: The Quadratic Formula",
                     lessons: [
-                        { title: "Lesson 16: The Quadratic Formula", objective: "Understand and apply the quadratic formula to solve quadratic equations." },
+                        { title: "Lesson 16: The Quadratic Formula", objective: "Understand and apply the quadratic formula, \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\), to solve quadratic equations." },
                         { title: "Lesson 17: Applying the Quadratic Formula (Part 1)", objective: "Practice using the quadratic formula." },
-                        { title: "Lesson 18: Applying the Quadratic Formula (Part 2)", objective: "Use the discriminant to determine the number and type of solutions." },
+                        { title: "Lesson 18: Applying the Quadratic Formula (Part 2)", objective: "Use the discriminant, \\(b^2-4ac\\), to determine the number and type of solutions." },
                         { title: "Lesson 19: Deriving the Quadratic Formula", objective: "Derive the quadratic formula by completing the square." },
                         { title: "Lesson 20: Rational and Irrational Solutions", objective: "Distinguish between rational and irrational solutions." },
                         { title: "Lesson 21: Sums and Products of Rational and Irrational Numbers", objective: "Understand properties of sums and products involving rational and irrational numbers." }

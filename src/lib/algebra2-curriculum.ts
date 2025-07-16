@@ -64,7 +64,7 @@ export const algebra2Curriculum: {
                 "Section B: Working with Polynomials": {
                     topic: "Section B: Working with Polynomials",
                     lessons: [
-                        { title: "Lesson 5: Connecting Factors and Zeros", objective: "Connect that a factor of (x-a) means 'a' is a zero of the function." },
+                        { title: "Lesson 5: Connecting Factors and Zeros", objective: "Connect that a factor of \\((x-a)\\) means 'a' is a zero of the function." },
                         { title: "Lesson 6: Different Forms", objective: "Recognize the benefits of different polynomial forms." },
                         { title: "Lesson 7: Using Factors and Zeros", objective: "Use factors and zeros to analyze polynomial functions." }
                     ]
@@ -114,7 +114,7 @@ export const algebra2Curriculum: {
                     lessons: [
                         { title: "Lesson 8: Polynomial Identities (Part 1)", objective: "Prove or disprove that two expressions are equivalent." },
                         { title: "Lesson 9: Polynomial Identities (Part 2)", objective: "Continue working with polynomial identities." },
-                        { title: "Lesson 10: Summing Up", objective: "Derive the formula for the sum of a finite geometric series." },
+                        { title: "Lesson 10: Summing Up", objective: "Derive the formula for the sum of a finite geometric series, \\(S_n = \\frac{a_1(1-r^n)}{1-r}\\)." },
                         { title: "Lesson 11: Using the Sum", objective: "Use the formula for the sum of a geometric series to solve problems." }
                     ]
                 }
@@ -128,9 +128,9 @@ export const algebra2Curriculum: {
                     lessons: [
                         { title: "Lesson 1: Properties of Exponents", objective: "Review and apply exponent rules." },
                         { title: "Lesson 2: Square Roots and Cube Roots", objective: "Explore square and cube roots as solutions to equations." },
-                        { title: "Lesson 3: Exponents That Are Unit Fractions", objective: "Extend exponent rules to include unit fraction exponents." },
-                        { title: "Lesson 4: Positive Rational Exponents", objective: "Work with positive rational exponents." },
-                        { title: "Lesson 5: Negative Rational Exponents", objective: "Work with negative rational exponents." }
+                        { title: "Lesson 3: Exponents That Are Unit Fractions", objective: "Extend exponent rules to include unit fraction exponents, such as \\(x^{\\frac{1}{n}} = \\sqrt[n]{x}\\)." },
+                        { title: "Lesson 4: Positive Rational Exponents", objective: "Work with positive rational exponents, such as \\(x^{\\frac{m}{n}} = (\\sqrt[n]{x})^m\\)." },
+                        { title: "Lesson 5: Negative Rational Exponents", objective: "Work with negative rational exponents, such as \\(x^{-\\frac{m}{n}} = \\frac{1}{x^{\\frac{m}{n}}}\\)." }
                     ]
                 },
                 "Section B: Solving Equations with Square and Cube Roots": {
@@ -146,7 +146,7 @@ export const algebra2Curriculum: {
                     topic: "Section C: A New Kind of Number",
                     lessons: [
                         { title: "Lesson 10: A New Kind of Number", objective: "Introduce the concept of imaginary numbers." },
-                        { title: "Lesson 11: Introducing the Number i", objective: "Define i as the solution to x^2 = -1." },
+                        { title: "Lesson 11: Introducing the Number i", objective: "Define \\(i\\) as the solution to \\(x^2 = -1\\), so \\(i = \\sqrt{-1}\\)." },
                         { title: "Lesson 12: Arithmetic with Complex Numbers", objective: "Add and subtract complex numbers." },
                         { title: "Lesson 13: Multiplying Complex Numbers", objective: "Multiply complex numbers." },
                         { title: "Lesson 14: More Arithmetic with Complex Numbers", objective: "Continue practicing arithmetic with complex numbers." },
@@ -158,7 +158,7 @@ export const algebra2Curriculum: {
                     lessons: [
                         { title: "Lesson 16: Solving Quadratics", objective: "Solve quadratic equations with complex solutions." },
                         { title: "Lesson 17: Completing the Square and Complex Solutions", objective: "Use completing the square to find complex solutions." },
-                        { title: "Lesson 18: The Quadratic Formula and Complex Solutions", objective: "Use the quadratic formula to find complex solutions." },
+                        { title: "Lesson 18: The Quadratic Formula and Complex Solutions", objective: "Use the quadratic formula, \\(x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\\), to find complex solutions." },
                         { title: "Lesson 19: Real and Non-Real Solutions", objective: "Distinguish between real and non-real solutions of quadratic equations." }
                     ]
                 },
@@ -177,7 +177,7 @@ export const algebra2Curriculum: {
                     topic: "Section A: Growing and Shrinking",
                     lessons: [
                         { title: "Lesson 1: Growing and Shrinking", objective: "Connect geometric sequences to exponential growth and decay." },
-                        { title: "Lesson 2: Representations of Growth and Decay", objective: "Represent exponential relationships using functions of the form f(x) = a * b^x." },
+                        { title: "Lesson 2: Representations of Growth and Decay", objective: "Represent exponential relationships using functions of the form \\(f(x) = a \\cdot b^x\\)." },
                         { title: "Lesson 3: Understanding Rational Inputs", objective: "Use rational inputs to better understand exponential functions." },
                         { title: "Lesson 4: Representing Functions at Rational Inputs", objective: "Continue exploring exponential functions with rational inputs." },
                         { title: "Lesson 5: Changes Over Rational Intervals", objective: "Explore growth factors over intervals of different lengths." },
@@ -190,15 +190,15 @@ export const algebra2Curriculum: {
                     lessons: [
                         { title: "Lesson 8: Unknown Exponents", objective: "Introduce the need to solve for an exponent in an equation." },
                         { title: "Lesson 9: What Is a Logarithm?", objective: "Introduce logarithms as a way to solve for unknown exponents." },
-                        { title: "Lesson 10: Interpreting and Writing Logarithmic Equations", objective: "Rewrite exponential equations in logarithmic form." },
+                        { title: "Lesson 10: Interpreting and Writing Logarithmic Equations", objective: "Rewrite exponential equations in logarithmic form (e.g., \\(y = log_b(x)\\))." },
                         { title: "Lesson 11: Evaluating Logarithmic Expressions", objective: "Evaluate simple logarithmic expressions." }
                     ]
                 },
                 "Section C: The Constant e": {
                     topic: "Section C: The Constant e",
                     lessons: [
-                        { title: "Lesson 12: The Number e", objective: "Introduce the constant e." },
-                        { title: "Lesson 13: Exponential Functions with Base e", objective: "Compare functions of the form a*b^x with functions of the form a*e^(kx)." },
+                        { title: "Lesson 12: The Number e", objective: "Introduce the constant \\(e\\)." },
+                        { title: "Lesson 13: Exponential Functions with Base e", objective: "Compare functions of the form \\(a \\cdot b^x\\) with functions of the form \\(a \\cdot e^{kx}\\)." },
                         { title: "Lesson 14: Solving Exponential Equations", objective: "Solve exponential equations using various methods." }
                     ]
                 },
@@ -225,19 +225,19 @@ export const algebra2Curriculum: {
                     topic: "Section A: Translations, Reflections, and Symmetry",
                     lessons: [
                         { title: "Lesson 1: Matching Up to Data", objective: "Informally describe transformations of graphs." },
-                        { title: "Lesson 2: Moving Functions", objective: "Explore vertical and horizontal translations." },
+                        { title: "Lesson 2: Moving Functions", objective: "Explore vertical (\\(f(x)+k\\)) and horizontal (\\(f(x-h)\\)) translations." },
                         { title: "Lesson 3: More Movement", objective: "Continue practicing function translations." },
-                        { title: "Lesson 4: Reflecting Functions", objective: "Explore reflections across the x and y axes." },
+                        { title: "Lesson 4: Reflecting Functions", objective: "Explore reflections across the x-axis (\\(-f(x)\\)) and y-axis (\\(f(-x)\\))." },
                         { title: "Lesson 5: Some Functions Have Symmetry", objective: "Identify even and odd functions from their graphs." },
-                        { title: "Lesson 6: Symmetry in Equations", objective: "Describe even and odd functions algebraically." },
+                        { title: "Lesson 6: Symmetry in Equations", objective: "Describe even (\\(f(-x) = f(x)\\)) and odd (\\(f(-x) = -f(x)\\)) functions algebraically." },
                         { title: "Lesson 7: Expressing Transformations of Functions Algebraically", objective: "Write algebraic rules for transformations." }
                     ]
                 },
                 "Section B: Scaling Outputs and Inputs": {
                     topic: "Section B: Scaling Outputs and Inputs",
                     lessons: [
-                        { title: "Lesson 8: Scaling the Outputs", objective: "Explore the effect of multiplying the output of a function by a scale factor." },
-                        { title: "Lesson 9: Scaling the Inputs", objective: "Explore the effect of multiplying the input of a function by a scale factor." },
+                        { title: "Lesson 8: Scaling the Outputs", objective: "Explore the effect of multiplying the output of a function by a scale factor (\\(a \\cdot f(x)\\))." },
+                        { title: "Lesson 9: Scaling the Inputs", objective: "Explore the effect of multiplying the input of a function by a scale factor (\\(f(bx)\\))." },
                         { title: "Lesson 10: Combining Functions", objective: "Combine multiple transformations on a single function." }
                     ]
                 },
@@ -268,7 +268,7 @@ export const algebra2Curriculum: {
                         { title: "Lesson 2: Revisiting Right Triangles", objective: "Use the Pythagorean Theorem and right-triangle trigonometry." },
                         { title: "Lesson 3: The Unit Circle (Part 1)", objective: "Determine coordinates of points on a circle." },
                         { title: "Lesson 4: The Unit Circle (Part 2)", objective: "Generalize to the unit circle and define sine and cosine." },
-                        { title: "Lesson 5: The Pythagorean Identity (Part 1)", objective: "Introduce and understand the Pythagorean Identity." },
+                        { title: "Lesson 5: The Pythagorean Identity (Part 1)", objective: "Introduce and understand the Pythagorean Identity, \\(\\sin^2(\\theta) + \\cos^2(\\theta) = 1\\)." },
                         { title: "Lesson 6: The Pythagorean Identity (Part 2)", objective: "Apply the Pythagorean Identity." },
                         { title: "Lesson 7: Finding Unknown Coordinates on a Circle", objective: "Use trigonometry to find coordinates on a circle." }
                     ]
@@ -279,7 +279,7 @@ export const algebra2Curriculum: {
                         { title: "Lesson 8: Rising and Falling", objective: "Transition to thinking about sine and cosine as functions." },
                         { title: "Lesson 9: Introduction to Trigonometric Functions", objective: "Use the unit circle to graph sine and cosine." },
                         { title: "Lesson 10: Beyond 2pi", objective: "Expand the domain of trigonometric functions to all real numbers." },
-                        { title: "Lesson 11: Extending the Domain of Trigonometric Functions", objective: "Understand the meaning of radian angles greater than 2pi and less than 0." },
+                        { title: "Lesson 11: Extending the Domain of Trigonometric Functions", objective: "Understand the meaning of radian angles greater than \\(2\\pi\\) and less than 0." },
                         { title: "Lesson 12: Tangent", objective: "Reason about the tangent function and its periodic nature." },
                         { title: "Lesson 13: Some New Ratios", objective: "Introduce reciprocal trigonometric functions." }
                     ]
