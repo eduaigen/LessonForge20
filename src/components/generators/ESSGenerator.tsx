@@ -132,7 +132,7 @@ const GeneratorContent = () => {
 
     let combinedHtml = '';
     lessonPackage.forEach(item => {
-        const contentElement = document.getElementById(`content-${item.id}`);
+        const contentElement = document.getElementById(`printable-content-${item.id}`);
         if (contentElement) {
             combinedHtml += `
                 <div style="page-break-before: always; padding-top: 2rem;">

@@ -21,6 +21,7 @@ type CollapsibleSectionProps = {
 export default function CollapsibleSection({ title, children, contentItem }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const contentRef = useRef<HTMLDivElement>(null);
+    const printableContentRef = useRef<HTMLDivElement>(null);
 
     const getPrintableHTML = (element: HTMLElement) => {
         const headerHtml = `
@@ -40,7 +41,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     }
 
     const handlePrint = () => {
-        const printableContent = contentRef.current;
+        const printableContent = printableContentRef.current;
         if (printableContent) {
             const printWindow = window.open('', '', 'height=800,width=1000');
             if (printWindow) {
@@ -90,7 +91,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     };
 
     const handleDownloadDoc = () => {
-        const content = contentRef.current;
+        const content = printableContentRef.current;
         if (!content) return;
 
         toast({
@@ -115,7 +116,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     };
 
     const handleDownloadPdf = async () => {
-        const input = contentRef.current;
+        const input = printableContentRef.current;
         if (input) {
           toast({
             title: 'Generating PDF...',
@@ -163,6 +164,9 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
 
   return (
     <Card className="mt-6 shadow-md">
+      <div style={{ display: 'none' }}>
+        <div ref={printableContentRef} id={`printable-content-${contentItem.id}`} className="p-4">{children}</div>
+      </div>
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" className="border-b-0">
             <CardHeader className="flex flex-row items-center justify-between p-4 flex-wrap gap-4">
