@@ -606,7 +606,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
         {/* Part II: Constructed-Response Questions */}
         <section className="mb-12">
             <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partII.title}</h2>
-            {test.partII.sets.map((crqSet, setIndex) => (
+            {test.partII.sets?.map((crqSet, setIndex) => (
                 <div key={setIndex} className="mb-8 border-t pt-6">
                     <h3 className="text-xl font-semibold mb-4">Constructed-Response Set {setIndex + 1}</h3>
                     {crqSet.documents.map((doc, docIndex) => (
