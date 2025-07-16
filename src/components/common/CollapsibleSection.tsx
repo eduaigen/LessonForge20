@@ -11,26 +11,18 @@ import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { languages } from '@/lib/languages';
-import { translateContent } from '@/ai/flows/translate-content';
 import StyledContentDisplay from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
   title: string;
   children: React.ReactNode;
   contentItem: GeneratedContent;
-  onTranslate: (contentItem: GeneratedContent, language: string) => Promise<void>;
-  isTranslating: boolean;
 };
 
-export default function CollapsibleSection({ title, children, contentItem, onTranslate, isTranslating }: CollapsibleSectionProps) {
+export default function CollapsibleSection({ title, children, contentItem }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const contentRef = useRef<HTMLDivElement>(null);
     const printableContentRef = useRef<HTMLDivElement>(null);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState('');
 
     const getPrintableHTML = (element: HTMLElement) => {
         const headerHtml = `
@@ -169,26 +161,13 @@ export default function CollapsibleSection({ title, children, contentItem, onTra
           }
         }
       };
-    
-    const handleTranslateClick = async () => {
-        if (!selectedLanguage) {
-            toast({ title: 'No Language Selected', description: 'Please choose a language to translate to.', variant: 'destructive' });
-            return;
-        }
-        await onTranslate(contentItem, selectedLanguage);
-        setIsDialogOpen(false);
-    };
 
 
   return (
     <Card className="mt-6 shadow-md">
       <div style={{ display: 'none' }}>
         <div ref={printableContentRef} id={`printable-content-${contentItem.id}`} className="p-4">
-             {contentItem.type === 'Translated' ? (
-                <StyledContentDisplay content={contentItem.content} type={contentItem.originalType!} />
-            ) : (
-                children
-            )}
+             <StyledContentDisplay content={contentItem.content} type={contentItem.type} />
         </div>
       </div>
       <Accordion type="single" collapsible defaultValue="item-1">
@@ -198,43 +177,6 @@ export default function CollapsibleSection({ title, children, contentItem, onTra
                     <h3 className="text-xl font-headline">{title}</h3>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 ml-4 flex-wrap">
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                        <DialogTrigger asChild>
-                             <Button variant="outline" size="icon" title="Translate" disabled={isTranslating}>
-                                {isTranslating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Languages className="h-4 w-4" />}
-                                <span className="sr-only">Translate</span>
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Translate Content</DialogTitle>
-                                <DialogDescription>
-                                    Select a language to translate the content of "{title}".
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div className="py-4">
-                                <Select onValueChange={setSelectedLanguage} defaultValue={selectedLanguage}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Choose a language..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {languages.map(lang => (
-                                            <SelectItem key={lang.code} value={lang.name}>
-                                                {lang.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <DialogFooter>
-                                <Button variant="ghost" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-                                <Button onClick={handleTranslateClick} disabled={!selectedLanguage || isTranslating}>
-                                    {isTranslating ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                                    Translate
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
                     <Button variant="outline" size="icon" onClick={handlePrint} title="Print">
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>

@@ -1,21 +1,16 @@
 
-type Translation = {
-    en: string;
-    es: string;
-};
-
 type Lesson = {
-    title: Translation;
-    objective: Translation;
+    title: string;
+    objective: string;
 };
 
 type Topic = {
-    translations: Translation;
+    topic: string;
     lessons: Lesson[];
 };
 
 type Unit = {
-    translations: Translation;
+    unit: string;
     topics: { [key: string]: Topic };
 };
 
@@ -24,27 +19,27 @@ export const healthCurriculum: {
 } = {
     units: {
         "Communication & Healthy Relationships": {
-            translations: { en: "Communication & Healthy Relationships", es: "Comunicación y Relaciones Saludables" },
+            unit: "Communication & Healthy Relationships",
             topics: {
                 "Understanding Communication": {
-                    translations: { en: "Understanding Communication", es: "Entendiendo la Comunicación" },
+                    topic: "Understanding Communication",
                     lessons: [
                         { 
-                            title: { en: "Foundations of Effective Communication", es: "Fundamentos de la Comunicación Efectiva" },
-                            objective: { en: "To understand the foundational elements of effective listening and appropriate responses in health contexts.", es: "Comprender los elementos fundamentales de la escucha efectiva y las respuestas apropiadas en contextos de salud." }
+                            title: "Foundations of Effective Communication",
+                            objective: "To understand the foundational elements of effective listening and appropriate responses in health contexts."
                         },
                         { 
-                            title: { en: "Verbal & Non-Verbal Communication", es: "Comunicación Verbal y No Verbal" },
-                            objective: { en: "To master expressing oneself clearly and respectfully, both through words and body language.", es: "Dominar la expresión clara y respetuosa, tanto a través de las palabras como del lenguaje corporal." }
+                            title: "Verbal & Non-Verbal Communication",
+                            objective: "To master expressing oneself clearly and respectfully, both through words and body language."
                         },
                     ]
                 },
                 "Expressing Needs & Feelings": {
-                    translations: { en: "Expressing Needs & Feelings", es: "Expresando Necesidades y Sentimientos" },
+                    topic: "Expressing Needs & Feelings",
                     lessons: [
                         { 
-                            title: { en: "Constructive Self-Expression", es: "Autoexpresión Constructiva" },
-                            objective: { en: "To learn constructive methods for sharing personal emotions and desires without causing harm.", es: "Aprender métodos constructivos para compartir emociones y deseos personales sin causar daño." }
+                            title: "Constructive Self-Expression",
+                            objective: "To learn constructive methods for sharing personal emotions and desires without causing harm."
                         }
                     ]
                 },

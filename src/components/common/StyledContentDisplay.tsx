@@ -589,7 +589,7 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
 
 type StyledContentDisplayProps = {
     content: any | null;
-    type: GeneratedContent['type'] | GeneratedContent['originalType'];
+    type: GeneratedContent['type'];
 };
 
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {

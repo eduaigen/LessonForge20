@@ -21,7 +21,6 @@ import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator
 import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
 import { generateStudySheet } from '@/ai/flows/study-sheet-generator';
 import { generateWorksheet } from '@/ai/flows/worksheet-generator';
-import { translateContent } from '@/ai/flows/translate-content';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
@@ -52,8 +51,7 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions' | 'Translated';
-  originalType?: ToolName | 'Lesson Plan';
+  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
   sourceId?: string;
   language?: string;
 };
@@ -89,7 +87,6 @@ const GeneratorContent = () => {
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'es'>('en');
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -162,60 +159,6 @@ const GeneratorContent = () => {
       setIsLoading(false);
     }
   }
-
-  const handleTranslate = async (contentItem: GeneratedContent, language: string) => {
-    setIsToolLoading(`Translating ${contentItem.title}`);
-    try {
-      const response = await translateContent({
-        jsonContent: JSON.stringify(contentItem.content),
-        targetLanguage: language,
-      });
-
-      let translatedJson: any;
-      try {
-        translatedJson = JSON.parse(response.translatedContent);
-      } catch (e) {
-        // Fallback for when the AI returns a markdown block
-        const match = response.translatedContent.match(/```json\n([\s\S]*)\n```/);
-        if (match && match[1]) {
-          translatedJson = JSON.parse(match[1]);
-        } else {
-            const firstBrace = response.translatedContent.indexOf('{');
-            const lastBrace = response.translatedContent.lastIndexOf('}');
-            if (firstBrace !== -1 && lastBrace !== -1) {
-              const jsonString = response.translatedContent.substring(firstBrace, lastBrace + 1);
-              translatedJson = JSON.parse(jsonString);
-            } else {
-               throw new Error("Failed to parse translated JSON content even after extraction.");
-            }
-        }
-      }
-
-      const newTranslatedContent: GeneratedContent = {
-        id: `translated-${contentItem.id}-${language}`,
-        title: `Translated to ${language}`,
-        content: translatedJson,
-        type: 'Translated',
-        originalType: contentItem.type as any,
-        sourceId: contentItem.id,
-        language: language,
-      };
-
-      setLessonPackage(prev => {
-        if (!prev) return [newTranslatedContent];
-        const sourceIndex = prev.findIndex(item => item.id === contentItem.id);
-        const newPackage = [...prev];
-        newPackage.splice(sourceIndex + 1, 0, newTranslatedContent);
-        return newPackage;
-      });
-
-    } catch (error) {
-      console.error('Translation failed:', error);
-      toast({ title: 'Translation Failed', description: `Could not translate "${contentItem.title}".`, variant: 'destructive' });
-    } finally {
-      setIsToolLoading(null);
-    }
-  };
 
   const handleToolClick = async (toolName: ToolName) => {
     if (!lessonPlan || !lessonPackage) {
@@ -328,17 +271,6 @@ const GeneratorContent = () => {
                               <CardDescription>Create 5E model lesson plans aligned with the AP Biology curriculum.</CardDescription>
                           </div>
                         </div>
-                        <div className="w-full sm:w-auto">
-                            <Select onValueChange={(value) => setLanguage(value as 'en' | 'es')} defaultValue={language}>
-                                <SelectTrigger className="w-full sm:w-[180px]">
-                                    <SelectValue placeholder="Select language" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="en">English</SelectItem>
-                                    <SelectItem value="es">Español</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
                       </div>
                   </CardHeader>
                   <Form {...form}>
@@ -350,7 +282,7 @@ const GeneratorContent = () => {
                                 if (!unit) return null;
                                 return (
                                 <AccordionItem value={unitKey} key={unitKey}>
-                                    <AccordionTrigger>{unit.translations[language]}</AccordionTrigger>
+                                    <AccordionTrigger>{unit.unit}</AccordionTrigger>
                                     <AccordionContent>
                                         <Accordion type="single" collapsible className="w-full pl-4">
                                             {Object.keys(unit.topics).map(topicKey => {
@@ -358,26 +290,26 @@ const GeneratorContent = () => {
                                                 if(!topic) return null;
                                                 return (
                                                     <AccordionItem value={topicKey} key={topicKey}>
-                                                        <AccordionTrigger>{topic.translations[language]}</AccordionTrigger>
+                                                        <AccordionTrigger>{topic.topic}</AccordionTrigger>
                                                         <AccordionContent>
                                                           <div className="space-y-2 pl-4">
                                                               {topic.lessons.map((lesson, index) => (
                                                                   <div key={index} className="flex items-center justify-between">
                                                                       <div className="flex-1">
-                                                                          <p className="font-semibold">{lesson.title[language]}</p>
-                                                                          <p className="text-sm text-muted-foreground">{lesson.objective[language]}</p>
+                                                                          <p className="font-semibold">{lesson.title}</p>
+                                                                          <p className="text-sm text-muted-foreground">{lesson.objective}</p>
                                                                       </div>
                                                                       <Button 
                                                                         type="button"
-                                                                        variant={selectedLesson === lesson.title.en ? "secondary" : "outline"}
+                                                                        variant={selectedLesson === lesson.title ? "secondary" : "outline"}
                                                                         size="sm"
                                                                         onClick={() => {
                                                                             form.setValue('unit', unitKey);
                                                                             form.setValue('topic', topicKey);
-                                                                            form.setValue('lesson', lesson.title.en);
+                                                                            form.setValue('lesson', lesson.title);
                                                                         }}
                                                                         >
-                                                                            {selectedLesson === lesson.title.en ? <Check className="h-4 w-4" /> : 'Select'}
+                                                                            {selectedLesson === lesson.title ? <Check className="h-4 w-4" /> : 'Select'}
                                                                         </Button>
                                                                   </div>
                                                               ))}
@@ -428,12 +360,10 @@ const GeneratorContent = () => {
                     key={item.id} 
                     title={item.title} 
                     contentItem={item}
-                    onTranslate={handleTranslate}
-                    isTranslating={!!isToolLoading && isToolLoading.includes(item.title)}
                 >
                     <StyledContentDisplay
                         content={item.content}
-                        type={item.type === 'Translated' ? item.originalType! : item.type}
+                        type={item.type}
                     />
                 </CollapsibleSection>
               ))}
@@ -446,7 +376,7 @@ const GeneratorContent = () => {
               )}
              
               {isToolLoading && !isToolLoading.startsWith('Translating') && (
-                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}} onTranslate={() => Promise.resolve()} isTranslating={false}>
+                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
                       <GeneratingAnimation />
                   </CollapsibleSection>
               )}

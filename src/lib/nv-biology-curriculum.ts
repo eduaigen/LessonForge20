@@ -1,21 +1,31 @@
 
-import type { CurriculumContent } from './curriculum-data';
+type Lesson = {
+    title: string;
+    objective: string;
+};
+
+type Topic = {
+    topic: string;
+    lessons: Lesson[];
+};
+
+type Unit = {
+    unit: string;
+    topics: { [key: string]: Topic };
+};
+
 
 export const nvBiologyCurriculum: {
     units: {
-      [unit: string]: {
-        topics: {
-          [topic: string]: {
-            lessons: { title: string; objective: string }[];
-          }
-        };
-      };
+      [unit: string]: Unit;
     };
 } = {
     units: {
         "Unit 1: The Marathon Runner": {
+            unit: "Unit 1: The Marathon Runner",
             topics: {
                 "Unit Opening": {
+                    topic: "Unit Opening",
                     lessons: [
                         { title: "Lesson 1: Why would a marathon runner become disoriented during the race, then collapse afterward?", objective: "Students will watch a video, surface ideas, and develop an initial model for what could be happening to the human body during extended exercise." },
                         { title: "Lesson 2: Anchor phenomenon and Driving Question Board", objective: "Students will read texts to understand the story of a collapsed marathon runner, add to their initial model, and begin to generate ideas about what happened to her." },
@@ -23,6 +33,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Gas Exchange and Cellular Respiration 5E": {
+                    topic: "Gas Exchange and Cellular Respiration 5E",
                     lessons: [
                         { title: "Lesson 4 (Engage): Why do we breathe (ventilate) faster when exercising?", objective: "Students will share initial ideas about increased breathing during exercise, connecting to the marathon runner's breathing and oxygen." },
                         { title: "Lesson 5 (Explore 1): How do organisms generate energy for life processes?", objective: "Students will generate characteristics of a scientific model, understand the basic protocol for cellular respiration in yeast investigation, and learn about yeast." },
@@ -35,6 +46,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Muscles and Energy 5E": {
+                    topic: "Muscles and Energy 5E",
                     lessons: [
                         { title: "Lesson 12 (Engage): Why do our muscles become tired when exercising?", objective: "Students will notice and describe muscle fatigue after exercise, leading to investigation of energy acquisition, fatigue, and energy transport to muscles." },
                         { title: "Lesson 13 (Explore 1): How do muscle cells obtain the materials they need and get rid of waste products, so they can continue to do their work during exercise?", objective: "Students will gather data on exercise's impact on CO2 production, pulse rate, and breathing rate to surface how feedback mechanisms maintain homeostasis." },
@@ -48,6 +60,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Human Thermoregulation 5E": {
+                    topic: "Human Thermoregulation 5E",
                     lessons: [
                         { title: "Lesson 21 (Engage): Why are humans able to withstand great temperature extremes?", objective: "Students will share initial ideas about how humans maintain stable body temperature and withstand temperature extremes, leading to investigation of thermoregulation." },
                         { title: "Lesson 22 (Explore): How do changes in external temperature affect internal body temperature?", objective: "Students will conduct an investigation on human regulatory mechanisms by collecting data on the impact of changing external temperatures on internal body temperature, figuring out humans have a complex system for maintaining body temperature." },
@@ -58,6 +71,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Water Balance 5E": {
+                    topic: "Water Balance 5E",
                     lessons: [
                         { title: "Lesson 27 (Engage): Why do we get sweaty when we exercise? How does sweat help?", objective: "Students will share initial ideas about fluid intake during exercise (water vs. sports drink) to surface prior knowledge about osmoregulation." },
                         { title: "Lesson 28 (Explore): How does the body osmoregulate?", objective: "Students will conduct two investigations using scientific models to learn about osmoregulation: observing osmosis in onion cells and collecting data on kidney osmoregulation through a simulation." },
@@ -68,6 +82,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Unit Closing": {
+                    topic: "Unit Closing",
                     lessons: [
                         { title: "Lesson 33: Anchor Phenomenon, Driving Question Board and Performance Task", objective: "Students will return to the Driving Question Board to reflect on questions and generate a final explanatory model for why the marathon runner collapsed." },
                         { title: "Lesson 34: Performance Task (cont.)", objective: "Students will generate a final explanatory model representing why the marathon runner collapsed." },
@@ -77,8 +92,10 @@ export const nvBiologyCurriculum: {
             }
         },
         "Unit 2: Humans Vs. Bacteria": {
+            unit: "Unit 2: Humans Vs. Bacteria",
             topics: {
                 "Unit Opening": {
+                    topic: "Unit Opening",
                     lessons: [
                         { title: "Lesson 1: Anchor Phenomenon", objective: "Students read text and data tables to tell the story of increasing and re-emerging infectious diseases globally after decades of decline." },
                         { title: "Lesson 2: Anchor Phenomenon", objective: "Students read text and data tables to tell the story of how infectious diseases are increasing and re-emerging after many decades of success in decreasing infectious disease globally." },
@@ -87,6 +104,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "The Black Death 5E": {
+                    topic: "The Black Death 5E",
                     lessons: [
                         { title: "Lesson 5 (Engage): How did some people survive the Black Death?", objective: "Students are introduced to the historical events of the Black Death and share initial ideas about why some people survived the infection despite the catastrophic death toll." },
                         { title: "Lesson 6 (Explore 1): How do infectious diseases spread between people?", objective: "Students interact with simulation-generated data and apply probability concepts to investigate how different variables increase or impact disease transmission." },
@@ -100,6 +118,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Antibiotic Resistance 5E": {
+                    topic: "Antibiotic Resistance 5E",
                     lessons: [
                         { title: "Lesson 14 (Engage): Why would bacteria never exposed to people be able to resist antibiotics that we use?", objective: "Students share initial ideas about why bacteria develop resistance without human medicine exposure, leading to investigation of antibiotic resistance evolution." },
                         { title: "Lesson 15 (Explore): How do bacteria become resistant to antibiotics?", objective: "Students collect data from a simulation to investigate how antibiotics affect trait distribution in bacterial populations, surfacing patterns related to antibiotic resistance." },
@@ -109,6 +128,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "The Microbiome 5E": {
+                    topic: "The Microbiome 5E",
                     lessons: [
                         { title: "Lesson 19 (Engage): Why would we be able to treat a bacterial infection by introducing more bacteria?", objective: "Students share initial ideas and questions about why doctors treat bacterial infections with fecal transplants, leading to investigation of bacteria-human co-evolution." },
                         { title: "Lesson 20 (Explore): How are microbiomes different across different populations of people?", objective: "Students engage with secondary data sets on human microbiomes to surface patterns on causes of health problems in unhealthy gut microbiomes." },
@@ -120,6 +140,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Cooperation and Survival 5E": {
+                    topic: "Cooperation and Survival 5E",
                     lessons: [
                         { title: "Lesson 26 (Engage): Why do bacteria cooperate and generate biofilms?", objective: "Students are introduced to the phenomenon of bacteria banding together to form cooperative biofilms and share initial ideas about why bacteria would cooperate." },
                         { title: "Lesson 27 (Explore): Why is it advantageous for bacteria to cooperate? Do bacteria cheat when cooperating?", objective: "Students analyze and interpret data from a simulation to surface patterns on cooperative behaviors in bacteria." },
@@ -129,6 +150,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Unit Closing": {
+                    topic: "Unit Closing",
                     lessons: [
                         { title: "Lesson 31: Anchor Phenomenon", objective: "Students generate ideas on why infectious diseases are increasing globally based on investigations and learning throughout the unit." },
                         { title: "Lesson 32: Driving Question Board", objective: "Students return to the Driving Question Board to reflect on questions generated throughout the unit." },
@@ -139,14 +161,17 @@ export const nvBiologyCurriculum: {
             }
         },
         "Unit 3: Evolution of Sick Humans": {
+            unit: "Unit 3: Evolution of Sick Humans",
             topics: {
                 "Unit Opening": {
+                    topic: "Unit Opening",
                     lessons: [
                         { title: "Lesson 1: Anchor Phenomenon: How have our environments and cultures changed over time? How have these changes impacted our health?", objective: "Students read a text to tell the story of a young girl who experiences digestive problems after eating a high-dairy NYC school lunch." },
                         { title: "Lesson 2: Anchor phenomenon and Driving Question Board", objective: "Students will create a driving question board based on ideas surfaced through student discussion." },
                     ]
                 },
                 "Lactase Persistence 5E": {
+                    topic: "Lactase Persistence 5E",
                     lessons: [
                         { title: "Lesson 3 (Engage): Why are some people able to digest dairy into adulthood but others cannot?", objective: "Students ask questions after examining world maps of lactase persistence to surface ideas and questions about why some adults can digest dairy and others cannot." },
                         { title: "Lesson 4 (Explore 1): How do different groups of people digest dairy products? What happens to dairy in different people’s digestive systems?", objective: "Students surface questions after closely examining an enzyme structure and function model to better understand how specialized cells digest lactose." },
@@ -159,6 +184,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Leptin Resistance 5E": {
+                    topic: "Leptin Resistance 5E",
                     lessons: [
                         { title: "Lesson 11 (Engage): Why is energy or fat storage advantageous?", objective: "Students ask questions based on a theory about why it might be advantageous for human babies to store excess fat." },
                         { title: "Lesson 12 (Explore 1): Why do some people store excess fat but others do not?", objective: "Students engage with research excerpts to communicate ideas on possible causal relationships between excessive fat storage, diet, and the protein leptin." },
@@ -170,6 +196,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Circadian Rhythms 5E": {
+                    topic: "Circadian Rhythms 5E",
                     lessons: [
                         { title: "Lesson 18 (Engage): How can we investigate why most organisms display a day-night cycle?", objective: "Students investigate day-night cycles in plants and design a survey to collect data on environmental factors disrupting human day-night cycles." },
                         { title: "Lesson 19 (Explore): How can we investigate why most organisms display a day-night cycle?", objective: "Students investigate day-night cycles in plants and design a survey to collect data on which environmental factors may cause disruptions in human day-night cycles." },
@@ -179,6 +206,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Common Ancestry 5E": {
+                    topic: "Common Ancestry 5E",
                     lessons: [
                         { title: "Lesson 23 (Engage): Why are there so many examples of mismatch diseases?", objective: "Students surface initial ideas on why there are mismatches between our bodies and the current environment." },
                         { title: "Lesson 24 (Explore): How can we investigate genetic variations for important molecules across different species to better understand how traits evolve over time?", objective: "Students use the NCBI genetic database to analyze patterns in DNA sequences, comparing similarities and differences in important proteins across species." },
@@ -188,6 +216,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Unit Closing": {
+                    topic: "Unit Closing",
                     lessons: [
                         { title: "Lesson 28: Anchor Phenomenon, Driving Question Board and Performance Task", objective: "Students will return to the Driving Question Board to react on questions generated throughout the unit." },
                         { title: "Lesson 29: Performance Task cont’", objective: "Students will generate a design solution that addresses mismatch concerns in the school environment." },
@@ -197,14 +226,17 @@ export const nvBiologyCurriculum: {
             }
         },
         "Unit 4: Saving the Mountain Lion": {
+            unit: "Unit 4: Saving the Mountain Lion",
             topics: {
                 "Unit Opening": {
+                    topic: "Unit Opening",
                     lessons: [
                         { title: "Lesson 1: Anchor Phenomenon: A mountain lion was hit by a car on a highway outside NYC. How did it get there, and what can this tell us about saving mountain lions?", objective: "Students read a text and watch a video to think about why the Connecticut mountain lion was so far from its home." },
                         { title: "Lesson 2: Anchor phenomenon and Driving Question Board", objective: "Students will ask questions about the Connecticut cat and generate a driving question board." },
                     ]
                 },
                 "Mountain Lion Population 5E": {
+                    topic: "Mountain Lion Population 5E",
                     lessons: [
                         { title: "Lesson 3 (Engage): How can we figure out where the Connecticut Cat came from?", objective: "Students develop initial ideas about how to determine the Connecticut mountain lion's origin and create a table listing supporting evidence for each idea." },
                         { title: "Lesson 4 (Explore): How can we use genetic data to determine where the Connecticut Cat came from?", objective: "Students analyze patterns in genetic variation data from five North American mountain lion populations to determine the Connecticut cat's origin." },
@@ -214,6 +246,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Sexual Reproduction 3E": {
+                    topic: "Sexual Reproduction 3E",
                     lessons: [
                         { title: "Lesson 8 (Engage): Why are there a high number of strange traits in a small population of Florida mountain lions?", objective: "Students surface prior knowledge on mutations and sexual reproduction by examining an image and reading a brief text about a small Florida mountain lion population." },
                         { title: "Lesson 9 (Explore): How do mountain lions sexually reproduce?", objective: "Students use evidence-based models to closely examine the structure and function of the reproductive system." },
@@ -221,6 +254,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Genetic Variation 5E": {
+                    topic: "Genetic Variation 5E",
                     lessons: [
                         { title: "Lesson 11 (Engage): Why are there a high number of strange traits in a small population of Florida mountain lions?", objective: "Students surface prior knowledge on mutations and sexual reproduction after examining an image and reading a brief text about a small population of Florida mountain lions." },
                         { title: "Lesson 12 (Explore): How can we determine the genetic diversity of a population?", objective: "Students analyze and interpret genetic data to better understand a population's genetic diversity." },
@@ -230,6 +264,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Engineering Gene Flow 5E": {
+                    topic: "Engineering Gene Flow 5E",
                     lessons: [
                         { title: "Lesson 16 (Engage): How do you increase genetic diversity in small isolated populations?", objective: "Students generate solutions for increasing genetic diversity in the Florida panther population, connecting to their questions about the issue." },
                         { title: "Lesson 17 (Explore): What happened when additional individuals from an outside population were brought into the Florida mountain population?", objective: "Students analyze genetic data and engage with a simulation to surface how sexual reproduction between individuals can increase genetic variation at the population level." },
@@ -239,6 +274,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Unit Closing": {
+                    topic: "Unit Closing",
                     lessons: [
                         { title: "Lesson 21: Anchor Phenomenon, Driving Question Board, and Performance Task", objective: "Students will return to the Driving Question Board to reflect on questions and develop a model explaining their chosen species' genetic diversity problem and a solution." },
                         { title: "Lesson 22: Performance Task (cont’d), Unit Reflection", objective: "Students reflect on their learning and use of modeling and patterns throughout the unit." },
@@ -247,8 +283,10 @@ export const nvBiologyCurriculum: {
             }
         },
         "Unit 5: Food for All": {
+            unit: "Unit 5: Food for All",
             topics: {
                 "Unit Opening": {
+                    topic: "Unit Opening",
                     lessons: [
                         { title: "Lesson 1: Anchor Phenomenon: There was a mysterious pandemic spreading across the southern United States in the early 20th century. Why did some groups of people get sick, while others did not?", objective: "Students learn about a novel disease and ask questions about whether geography, income, microbes, and diet might be factors in causing the outbreak." },
                         { title: "Lesson 2: Driving Question Board", objective: "Students generate questions and create a driving question board based on ideas surfaced through discussion and reading from Lesson 1." },
@@ -256,6 +294,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Neolithic Revolution 3E": {
+                    topic: "Neolithic Revolution 3E",
                     lessons: [
                         { title: "Lesson 4 (Engage): How can we analyze a graph of the human population over time?", objective: "Students analyze a graph to better understand how the human population has changed over time." },
                         { title: "Lesson 5 (Explore): How do limiting factors impact a population?", objective: "Students use a simulation to generate mathematical representations of mice populations under different environmental factors to surface the idea of carrying capacity." },
@@ -263,6 +302,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "The Superfood that Changed the World 5E": {
+                    topic: "The Superfood that Changed the World 5E",
                     lessons: [
                         { title: "Lesson 7 (Engage): Why did human populations increase exponentially as they developed the technology to grow crops like corn?", objective: "Students develop initial claims about what may have led humans to cultivate corn and other grains as primary food sources, connecting to earlier questions about cultivation and energy provision." },
                         { title: "Lesson 8 (Explore 1): How do plants, like corn, transform energy from sunlight into stored chemical energy?", objective: "Students use a model to illustrate how photosynthesis transforms light energy into stored chemical energy." },
@@ -274,6 +314,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Infectious Agent or Insufficient Diet 5E": {
+                    topic: "Infectious Agent or Insufficient Diet 5E",
                     lessons: [
                         { title: "Lesson 14 (Engage): How can we use evidence to support a hypothesis on the cause behind the pellagra epidemic?", objective: "Students will identify evidence to support an explanation of the pellagra epidemic." },
                         { title: "Lesson 15 (Explore 1): What evidence can we analyze to explain the cause of the pellagra epidemic?", objective: "Students use mathematical representations of historical data to explain the pellagra epidemic at individual and population levels." },
@@ -285,6 +326,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Food for Plants 5E": {
+                    topic: "Food for Plants 5E",
                     lessons: [
                         { title: "Lesson 21 (Engage): What communities were impacted most by the pellagra epidemic?", objective: "Students analyze pellagra rates by state and demographics, then generate questions about diverse diet access and agricultural practices among those most affected." },
                         { title: "Lesson 22 (Explore): Does growing cotton alone or all of any one crop damage the soil?", objective: "Students analyze niacin and amino acid molecular structures and soil composition data to explain how farming practices impact matter flow and plant growth." },
@@ -294,6 +336,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Unit Closing": {
+                    topic: "Unit Closing",
                     lessons: [
                         { title: "Lesson 26: Performance Task", objective: "Students will use what they learned about energy driving matter cycling through plants and the environment to explain how a local innovation addresses inequities in access to diverse nutritious diets." },
                         { title: "Lesson 27: Driving Question Board", objective: "Students return to the Driving Question Board to reflect on questions generated throughout the unit." },
@@ -303,14 +346,17 @@ export const nvBiologyCurriculum: {
             }
         },
         "Unit 6: The Woolly Mammoth": {
+            unit: "Unit 6: The Woolly Mammoth",
             topics: {
                 "Unit Opening": {
+                    topic: "Unit Opening",
                     lessons: [
                         { title: "Lesson 1: Anchor Phenomenon: What is the story of woolly mammoth extinction? What types of information do we need to know in order to evaluate the cause of a species’ extinction?", objective: "Students read a text, surface prior knowledge, and write the story of what happened to woolly mammoths." },
                         { title: "Lesson 2: Performance Task", objective: "Students develop an initial model to explain the cause of the woolly mammoth's extinction." },
                     ]
                 },
                 "Tuskless Elephants 5E": {
+                    topic: "Tuskless Elephants 5E",
                     lessons: [
                         { title: "Lesson 3 (Engage): Why do some populations have a high number of tuskless elephants?", objective: "Students analyze a graph to surface ideas on how human activities, such as poaching, may impact biodiversity." },
                         { title: "Lesson 4 (Explore): Why is the trait of tusklessness increasing in some populations of female elephants?", objective: "Students use graphs and data sets of the tuskless elephant phenomenon to explore how human activities such as poaching impact biodiversity." },
@@ -320,6 +366,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Coral Bleaching 5E": {
+                    topic: "Coral Bleaching 5E",
                     lessons: [
                         { title: "Lesson 8 (Engage): How does human-induced climate change impact other organisms?", objective: "Students are presented with coral reef bleaching and use prior knowledge of human impact on biodiversity to predict causes of bleaching and decline." },
                         { title: "Lesson 9 (Explore 1): How can we understand the causes behind the bleaching and decline of coral reefs?", objective: "Students calculate and use mathematical representations of global heat stress data to surface trends on the relationship between rising sea temperatures and coral bleaching." },
@@ -331,6 +378,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Kelp Forest 5E": {
+                    topic: "Kelp Forest 5E",
                     lessons: [
                         { title: "Lesson 15 (Engage): How can two very different ecosystems exist in the same geographic location at different points in time?", objective: "Students are introduced to kelp forests being replaced by urchin barrens and consider initial claims on ecosystem stability and how/why they change." },
                         { title: "Lesson 16 (Engage): Why do ecosystems change?", objective: "Students generate mathematical representations from data to support claims on the stability of two ecosystems." },
@@ -340,6 +388,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Passenger Pigeon 5E": {
+                    topic: "Passenger Pigeon 5E",
                     lessons: [
                         { title: "Lesson 20 (Engage): Why did the passenger pigeon go extinct?", objective: "Students read a historical description to ask questions and surface ideas about the human role in the passenger pigeon's extinction." },
                         { title: "Lesson 21 (Explore): What role did the passenger pigeon play in its habitat?", objective: "Students use historical descriptions to generate models representing the passenger pigeon's important role in maintaining its environment, understanding the impact of human-caused extinction." },
@@ -349,6 +398,7 @@ export const nvBiologyCurriculum: {
                     ]
                 },
                 "Unit Closing": {
+                    topic: "Unit Closing",
                     lessons: [
                         { title: "Lesson 25: Anchor Phenomenon", objective: "Students generate a model representing woolly mammoth extinction causes and evaluate the argument for de-extinction as a solution to human-caused biodiversity loss." }
                     ]
@@ -357,5 +407,3 @@ export const nvBiologyCurriculum: {
         }
     }
 };
-
-    
