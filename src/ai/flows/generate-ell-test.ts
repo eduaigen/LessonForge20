@@ -26,6 +26,7 @@ const prompt = ai.definePrompt({
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
+- **Language**: {{{language}}}
 
 ---
 

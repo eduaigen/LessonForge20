@@ -30,6 +30,7 @@ const prompt = ai.definePrompt({
 - **Number of Part I Questions (Multiple Choice)**: {{{partICount}}}
 - **Number of Part II Questions (2-Credit Open Response)**: {{{partIICount}}}
 - **Number of Part III Questions (4-Credit Open Response)**: {{{partIIICount}}}
+- **Language**: {{{language}}}
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.

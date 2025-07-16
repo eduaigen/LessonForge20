@@ -4,7 +4,7 @@ import { type LanguageOption } from '@/components/common/LanguageSelectionDialog
 
 export const GenerateELLTestInputSchema = z.object({
   lessons: z.array(z.string()).describe('An array of curriculum lessons to base the test on.'),
-  language: z.custom<LanguageOption>(),
+  language: z.custom<LanguageOption>().describe('The language for the generated test.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({

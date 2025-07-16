@@ -7,7 +7,7 @@ export const GenerateMathTestInputSchema = z.object({
   partICount: z.number().min(1).max(24).describe('The number of multiple-choice questions.'),
   partIICount: z.number().min(1).max(8).describe('The number of 2-credit constructed-response questions.'),
   partIIICount: z.number().min(1).max(4).describe('The number of 4-credit constructed-response questions.'),
-  language: z.custom<LanguageOption>(),
+  language: z.custom<LanguageOption>().describe('The language for the generated test.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({

@@ -28,6 +28,7 @@ const prompt = ai.definePrompt({
 - **Lessons**: {{{lessons}}}
 - **Number of Reading Passages**: {{{passageCount}}} (Generate 8 MCQs per passage)
 - **Number of Argument Essay Sources**: {{{sourceCount}}}
+- **Language**: {{{language}}}
 
 ---
 
