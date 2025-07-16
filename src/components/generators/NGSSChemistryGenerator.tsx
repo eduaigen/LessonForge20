@@ -89,6 +89,7 @@ const GeneratorContent = () => {
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
+  const [language, setLanguage] = useState<'en' | 'es'>('en');
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -181,7 +182,13 @@ const GeneratorContent = () => {
       try {
         translatedJson = JSON.parse(response.translatedContent);
       } catch (e) {
-        throw new Error("Failed to parse translated JSON content even after extraction.");
+         // Fallback for malformed JSON
+        const match = response.translatedContent.match(/\{[\s\S]*\}/);
+        if (match && match[0]) {
+          translatedJson = JSON.parse(match[0]);
+        } else {
+          throw new Error("Failed to parse translated JSON content even after extraction.");
+        }
       }
 
       const newTranslatedContent: GeneratedContent = {
@@ -311,14 +318,27 @@ const GeneratorContent = () => {
             <div className="flex-grow">
               <Card className="w-full shadow-lg mb-8">
                   <CardHeader>
-                      <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                          <Atom className="h-6 w-6" />
-                      </div>
-                      <div>
-                          <CardTitle className="text-2xl font-headline">NGSS Chemistry Lesson Generator</CardTitle>
-                          <CardDescription>Create 5E model lesson plans aligned with the NGSS Chemistry curriculum.</CardDescription>
-                      </div>
+                      <div className="flex items-center justify-between flex-wrap gap-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                              <Atom className="h-6 w-6" />
+                          </div>
+                          <div>
+                              <CardTitle className="text-2xl font-headline">NGSS Chemistry Lesson Generator</CardTitle>
+                              <CardDescription>Create 5E model lesson plans aligned with the NGSS Chemistry curriculum.</CardDescription>
+                          </div>
+                        </div>
+                        <div className="w-full sm:w-auto">
+                            <Select onValueChange={(value) => setLanguage(value as 'en' | 'es')} defaultValue={language}>
+                                <SelectTrigger className="w-full sm:w-[180px]">
+                                    <SelectValue placeholder="Select language" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="en">English</SelectItem>
+                                    <SelectItem value="es">Español</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                       </div>
                   </CardHeader>
                   <Form {...form}>
@@ -342,9 +362,14 @@ const GeneratorContent = () => {
                                       </SelectTrigger>
                                       </FormControl>
                                       <SelectContent>
-                                      {units.map((unit) => (
-                                          <SelectItem key={unit} value={unit}>{unit}</SelectItem>
-                                      ))}
+                                      {units.map((unitKey) => {
+                                        const unit = chemistryCurriculum.units[unitKey as keyof typeof chemistryCurriculum.units];
+                                        return (
+                                          <SelectItem key={unitKey} value={unitKey}>
+                                            {unit.translations[language]}
+                                          </SelectItem>
+                                        )
+                                      })}
                                       </SelectContent>
                                   </Select>
                                   <FormMessage />
@@ -367,9 +392,15 @@ const GeneratorContent = () => {
                                       </SelectTrigger>
                                       </FormControl>
                                       <SelectContent>
-                                      {topics.map((topic) => (
-                                          <SelectItem key={topic} value={topic}>{topic}</SelectItem>
-                                      ))}
+                                      {topics.map((topicKey) => {
+                                        const unit = chemistryCurriculum.units[selectedUnit as keyof typeof chemistryCurriculum.units];
+                                        const topic = unit.topics[topicKey as keyof typeof unit.topics];
+                                        return (
+                                          <SelectItem key={topicKey} value={topicKey}>
+                                            {topic.translations[language]}
+                                          </SelectItem>
+                                        )
+                                      })}
                                       </SelectContent>
                                   </Select>
                                   <FormMessage />
@@ -395,11 +426,10 @@ const GeneratorContent = () => {
                                                   {lessons.map((lesson, index) => (
                                                   <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
                                                       <FormControl>
-                                                          <RadioGroupItem value={lesson.title} />
+                                                          <RadioGroupItem value={lesson.title.en} />
                                                       </FormControl>
                                                       <FormLabel className="font-normal w-full cursor-pointer">
-                                                          <p className="font-semibold">{lesson.title}</p>
-                                                          <p className="text-sm text-muted-foreground">{lesson.objective}</p>
+                                                          <p className="font-semibold">{lesson.title[language]}</p>
                                                       </FormLabel>
                                                   </FormItem>
                                                   ))}
@@ -448,7 +478,7 @@ const GeneratorContent = () => {
                     title={item.title} 
                     contentItem={item}
                     onTranslate={handleTranslate}
-                    isTranslating={isToolLoading?.includes(item.title)}
+                    isTranslating={!!isToolLoading && isToolLoading.includes(item.title)}
                 >
                     <StyledContentDisplay
                         content={item.content}

@@ -16,13 +16,13 @@ const prompt = ai.definePrompt({
   name: 'translateContentPrompt',
   input: { schema: TranslateContentInputSchema },
   output: { schema: TranslateContentOutputSchema },
-  prompt: `Translate the following JSON object into {{{targetLanguage}}}.
+  prompt: `Translate the text values in the following JSON object into {{{targetLanguage}}}.
 
-**IMPORTANT INSTRUCTIONS:**
-1.  **Preserve JSON Structure:** You MUST maintain the exact same JSON structure, including all keys, arrays, and nested objects. Do not translate keys or any non-string values (like numbers or booleans).
-2.  **Translate ONLY String Values:** Translate only the string values within the JSON object.
-3.  **Maintain Formatting:** For strings that contain Markdown, preserve all Markdown syntax (e.g., \`**\`, \`*\`, \`#\`, lists). Translate only the text content.
-4.  **Output ONLY JSON:** Your entire response must be ONLY the translated JSON object, starting with \`{\` and ending with \`}\`. Do not include any extra text, explanations, or markdown fences like \`\`\`json.
+**CRITICAL INSTRUCTIONS:**
+1.  **PRESERVE JSON STRUCTURE:** You MUST maintain the exact same JSON structure, including all keys, arrays, and nested objects. Do NOT translate the JSON keys. Only translate the string values associated with the keys.
+2.  **TRANSLATE ONLY STRING VALUES:** Translate only the string values. Do not alter numbers, booleans, or null values.
+3.  **MAINTAIN MARKDOWN:** For any string that contains Markdown formatting (e.g., \`**\`, \`*\`, \`#\`, lists), you must preserve all Markdown syntax perfectly. Translate only the text content around the Markdown.
+4.  **OUTPUT ONLY THE JSON OBJECT:** Your entire response MUST be the translated JSON object and nothing else. It must start with \`{\` and end with \`}\`. Do not include any extra text, explanations, or markdown fences like \`\`\`json.
 
 **JSON to Translate:**
 ---
@@ -37,6 +37,7 @@ const translateContentFlow = ai.defineFlow(
     name: 'translateContentFlow',
     inputSchema: TranslateContentInputSchema,
     outputSchema: TranslateContentOutputSchema,
+    timeout: 120000, // 2 minutes timeout for complex translations
   },
   async (input) => {
     const { output } = await prompt(input);
