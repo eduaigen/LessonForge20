@@ -19,6 +19,7 @@ import {
   HeartPulse,
   Magnet,
   Sparkles,
+  Body,
   FlaskConical,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -101,6 +102,12 @@ const PremiumDashboardContent = () => {
                 icon={<HeartPulse />}
                 href="/health-generator"
               />
+              <ToolCard
+                title="Anatomy & Physiology Generator"
+                description="Create detailed lesson plans for Anatomy & Physiology."
+                icon={<Body />}
+                href="/anatomy-physiology-generator"
+              />
             </>
           )}
 
@@ -139,5 +146,4 @@ const SubscriptionPrompt = () => (
 export default function PremiumDashboardPage() {
   const { isSubscribed } = useAuth();
   
-  return isSubscribed ? <PremiumDashboardContent /> : <SubscriptionPrompt />;
-}
+  

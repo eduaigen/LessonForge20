@@ -1,11 +1,10 @@
-
 'use client';
 
 import React, { useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, FileDown, Loader2 } from 'lucide-react';
+import { Printer, Download, FileDown, Loader2, Languages } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
@@ -132,39 +131,21 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
         toast({ title: 'Generating PDF...', description: 'Please wait, this may take a moment.' });
     
         try {
-            const canvas = await html2canvas(contentElement, {
-                scale: 2, // Higher scale for better quality
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff'
-            });
-
-            const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'pt', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
-
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
-
-            const ratio = imgWidth / pdfWidth;
-            const scaledHeight = imgHeight / ratio;
-
-            let heightLeft = scaledHeight;
-            let position = 0;
-
-            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
-            heightLeft -= pdfHeight;
-
-            while (heightLeft > 0) {
-                position = heightLeft - scaledHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, scaledHeight);
-                heightLeft -= pdfHeight;
-            }
-
-            pdf.save(`${title.replace(/ /g, '_')}.pdf`);
-            toast({ title: 'Success', description: 'PDF has been downloaded.' });
+    
+            await pdf.html(getPrintableHTML(contentElement), {
+                callback: function (doc) {
+                    doc.save(`${title.replace(/ /g, '_')}.pdf`);
+                    toast({ title: 'Success', description: 'PDF has been downloaded.' });
+                },
+                x: 10,
+                y: 10,
+                width: pdfWidth - 20,
+                windowWidth: contentElement.scrollWidth,
+                autoPaging: 'text',
+            });
     
         } catch (error) {
           console.error('PDF Generation Error:', error);
@@ -177,6 +158,17 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
           setIsDownloading(false);
         }
       };
+
+    const handleTranslate = () => {
+        const googleTranslateElement = document.querySelector('.goog-te-combo');
+        if (googleTranslateElement && googleTranslateElement instanceof HTMLElement) {
+            googleTranslateElement.focus();
+            toast({
+                title: 'Ready to Translate',
+                description: 'Please select a language from the Google Translate dropdown at the top of the page.',
+            });
+        }
+    };
       
   return (
     <Card className="mt-6 shadow-md">
@@ -192,6 +184,10 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     <h3 className="text-xl font-headline">{title}</h3>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 ml-4 flex-wrap">
+                    <Button variant="outline" size="icon" onClick={handleTranslate} title="Translate">
+                        <Languages className="h-4 w-4" />
+                        <span className="sr-only">Translate</span>
+                    </Button>
                     <Button variant="outline" size="icon" onClick={handlePrint} title="Print">
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>

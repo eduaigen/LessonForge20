@@ -12,6 +12,7 @@ export * from './flows/generate-ap-biology-lesson';
 export * from './flows/generate-ngss-chemistry-lesson';
 export * from './flows/generate-ngss-physics-lesson';
 export * from './flows/generate-health-lesson';
+export * from './flows/generate-anatomy-physiology-lesson';
 export * from './flows/reading-material-generator';
 export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
@@ -19,5 +20,4 @@ export * from './flows/slideshow-outline-generator';
 export * from './flows/question-cluster-generator';
 export * from './flows/study-sheet-generator';
 export * from './flows/worksheet-generator';
-export * from './flows/lesson-section-refiner';
-export * from './flows/send-contact-email';
+export * from './flows/lesson-section-

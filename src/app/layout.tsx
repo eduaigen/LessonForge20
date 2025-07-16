@@ -1,15 +1,8 @@
-
-'use client';
-
-import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
-import { cn } from '@/lib/utils';
-import { AuthProvider } from '@/context/AuthContext';
-import { AppHeader } from '@/components/common/AppHeader';
-import { Footer } from '@/components/common/Footer';
+import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
-import AccessibilityWidget from '@/components/common/AccessibilityWidget';
-
+import { cn } from '@/lib/utils';
+import './globals.css';
+import ClientLayout from './client-layout';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,6 +14,11 @@ const spaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
 });
 
+export const metadata: Metadata = {
+  title: 'EduAiGen',
+  description: 'AI-Powered Tools for Educators',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,20 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
       <body className={cn('font-body antialiased bg-background', inter.variable, spaceGrotesk.variable)}>
-        <AuthProvider>
-          
-          <div className="flex min-h-screen flex-col">
-            <AppHeader />
-            <main className="flex-1 flex flex-col">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <AccessibilityWidget />
-          <Toaster />
-        </AuthProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
