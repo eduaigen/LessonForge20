@@ -1,3 +1,4 @@
+@import "katex/dist/katex.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -269,4 +270,3 @@
 body {
   top: 0px !important;
 }
-@import "katex/dist/katex.min.css";
