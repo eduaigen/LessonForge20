@@ -12,18 +12,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, History, Sparkles, Wand2, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-import { globalHistory1Curriculum } from '@/lib/global-history-1-curriculum';
 import { globalHistory2Curriculum } from '@/lib/global-history-2-curriculum';
-import { usHistoryCurriculum } from '@/lib/us-history-curriculum';
-import { governmentEconomicsCurriculum } from '@/lib/government-economics-curriculum';
-
-import { generateGlobalHistory1Lesson } from '@/ai/flows/generate-global-history-1-lesson';
 import { generateGlobalHistory2Lesson } from '@/ai/flows/generate-global-history-2-lesson';
-import { generateUSHistoryLesson } from '@/ai/flows/generate-us-history-lesson';
-import { generateGovernmentLesson } from '@/ai/flows/generate-government-lesson';
 
 import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
@@ -39,22 +31,6 @@ import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
-
-const curriculums = {
-    "global1": globalHistory1Curriculum,
-    "global2": globalHistory2Curriculum,
-    "us": usHistoryCurriculum,
-    "gov": governmentEconomicsCurriculum,
-};
-
-const generators = {
-    "global1": generateGlobalHistory1Lesson,
-    "global2": generateGlobalHistory2Lesson,
-    "us": generateUSHistoryLesson,
-    "gov": generateGovernmentLesson,
-};
-
-type Course = keyof typeof curriculums;
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -102,7 +78,6 @@ const GeneratorContent = () => {
   
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
   const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
-  const [selectedCourse, setSelectedCourse] = useState<Course>("global1");
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
@@ -116,14 +91,7 @@ const GeneratorContent = () => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as any | null;
   }, [lessonPackage]);
 
-  const currentCurriculum = curriculums[selectedCourse];
-  const units = useMemo(() => Object.keys(currentCurriculum.units), [currentCurriculum]);
-
-  useEffect(() => {
-    form.reset({ unit: '', topic: '', lesson: '', additionalInfo: '' });
-    setCurrentlySelectedLesson(null);
-    setLessonPackage(null);
-  }, [selectedCourse, form]);
+  const units = useMemo(() => Object.keys(globalHistory2Curriculum.units), []);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -168,8 +136,7 @@ const GeneratorContent = () => {
     setLessonPackage(null);
 
     try {
-      const generator = generators[selectedCourse];
-      const result = await generator(values);
+      const result = await generateGlobalHistory2Lesson(values);
       
       const newLessonPlan: GeneratedContent = {
         id: `lesson-plan-${Date.now()}`,
@@ -265,63 +232,51 @@ const GeneratorContent = () => {
                   <div className="flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary"><History className="h-6 w-6" /></div>
                     <div>
-                      <CardTitle className="text-2xl font-headline">Social Studies Lesson Generator</CardTitle>
-                      <CardDescription>Create 5E model lesson plans for Global History, US History, and Government.</CardDescription>
+                      <CardTitle className="text-2xl font-headline">Global History & Geography II</CardTitle>
+                      <CardDescription>Create 5E model lesson plans for 10th Grade Global History.</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <Tabs value={selectedCourse} onValueChange={(value) => setSelectedCourse(value as Course)}>
-                    <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
-                      <TabsTrigger value="global1">Global History I</TabsTrigger>
-                      <TabsTrigger value="global2">Global History II</TabsTrigger>
-                      <TabsTrigger value="us">US History</TabsTrigger>
-                      <TabsTrigger value="gov">Gov & Econ</TabsTrigger>
-                    </TabsList>
-                    {(Object.keys(curriculums) as Course[]).map(course => (
-                      <TabsContent key={course} value={course} className="mt-4">
-                        <Accordion type="single" collapsible className="w-full">
-                          {Object.keys(curriculums[course].units).map((unitKey) => {
-                            const unit = curriculums[course].units[unitKey as keyof typeof curriculums[Course]['units']];
-                            if (!unit) return null;
-                            return (
-                              <AccordionItem value={unitKey} key={unitKey}>
-                                <AccordionTrigger>{unitKey}</AccordionTrigger>
-                                <AccordionContent>
-                                  <Accordion type="single" collapsible className="w-full pl-4">
-                                    {Object.keys(unit.topics).map(topicKey => {
-                                      const topic = unit.topics[topicKey as keyof typeof unit['topics']];
-                                      if(!topic) return null;
-                                      return (
-                                        <AccordionItem value={topicKey} key={topicKey}>
-                                          <AccordionTrigger>{topicKey}</AccordionTrigger>
-                                          <AccordionContent>
-                                            <div className="space-y-2 pl-4">
-                                              {topic.lessons.map((lesson, index) => {
-                                                const isSelected = currentlySelectedLesson === lesson.title;
-                                                return (
-                                                  <div key={index} className="flex items-center justify-between">
-                                                    <p className="font-semibold flex-1">{lesson.title}</p>
-                                                    <Button type="button" variant={isSelected ? "secondary" : "outline"} size="sm" onClick={() => handleLessonSelect(unitKey, topicKey, lesson.title)} disabled={isSelected && !!lessonPackage}>
-                                                      {isSelected ? <><Check className="h-4 w-4 mr-2" />Selected</> : 'Select'}
-                                                    </Button>
-                                                  </div>
-                                                );
-                                              })}
-                                            </div>
-                                          </AccordionContent>
-                                        </AccordionItem>
-                                      );
-                                    })}
-                                  </Accordion>
-                                </AccordionContent>
-                              </AccordionItem>
-                            );
-                          })}
-                        </Accordion>
-                      </TabsContent>
-                    ))}
-                  </Tabs>
+                    <Accordion type="single" collapsible className="w-full">
+                      {units.map((unitKey) => {
+                        const unit = globalHistory2Curriculum.units[unitKey as keyof typeof globalHistory2Curriculum['units']];
+                        if (!unit) return null;
+                        return (
+                          <AccordionItem value={unitKey} key={unitKey}>
+                            <AccordionTrigger>{unitKey}</AccordionTrigger>
+                            <AccordionContent>
+                              <Accordion type="single" collapsible className="w-full pl-4">
+                                {Object.keys(unit.topics).map(topicKey => {
+                                  const topic = unit.topics[topicKey as keyof typeof unit['topics']];
+                                  if(!topic) return null;
+                                  return (
+                                    <AccordionItem value={topicKey} key={topicKey}>
+                                      <AccordionTrigger>{topicKey}</AccordionTrigger>
+                                      <AccordionContent>
+                                        <div className="space-y-2 pl-4">
+                                          {topic.lessons.map((lesson, index) => {
+                                            const isSelected = currentlySelectedLesson === lesson;
+                                            return (
+                                              <div key={index} className="flex items-center justify-between">
+                                                <p className="font-semibold flex-1">{lesson}</p>
+                                                <Button type="button" variant={isSelected ? "secondary" : "outline"} size="sm" onClick={() => handleLessonSelect(unitKey, topicKey, lesson)} disabled={isSelected && !!lessonPackage}>
+                                                  {isSelected ? <><Check className="h-4 w-4 mr-2" />Selected</> : 'Select'}
+                                                </Button>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </AccordionContent>
+                                    </AccordionItem>
+                                  );
+                                })}
+                              </Accordion>
+                            </AccordionContent>
+                          </AccordionItem>
+                        );
+                      })}
+                    </Accordion>
                   <FormField control={form.control} name="additionalInfo" render={({ field }) => (
                     <FormItem>
                       <FormLabel>Additional Information (Optional)</FormLabel>
@@ -365,7 +320,7 @@ const GeneratorContent = () => {
           {!lessonPackage && !isLoading && (
             <div className="text-center py-16">
               <h2 className="text-2xl font-bold font-headline mb-4">Ready to Generate?</h2>
-              <p className="text-muted-foreground">Select a course, unit, topic, and lesson to create your first AI-powered lesson plan.</p>
+              <p className="text-muted-foreground">Select a unit, topic, and lesson to create your first AI-powered lesson plan.</p>
             </div>
           )}
 
@@ -382,7 +337,7 @@ const GeneratorContent = () => {
   );
 };
 
-export default function SocialStudiesGenerator() {
+export default function GlobalHistory2Generator() {
     const { hasSocialStudiesSubscription } = useAuth();
     return hasSocialStudiesSubscription ? <GeneratorContent /> : <SubscriptionPrompt />;
 }

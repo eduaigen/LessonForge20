@@ -21,6 +21,7 @@ import {
   Sparkles,
   Stethoscope,
   Languages,
+  Landmark
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -152,14 +153,32 @@ const PremiumDashboardContent = () => {
           {hasSocialStudiesSubscription && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Social Studies Modules</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <ToolCard
-                  title="Social Studies Generator"
-                  description="Create lesson plans for Global History, US History, and Government."
-                  icon={<History />}
-                  href="/social-studies-generator"
-                />
-              </div>
+               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                 <ToolCard
+                    title="Global History I"
+                    description="Create lesson plans for 9th Grade Global History."
+                    icon={<History />}
+                    href="/global-history-1-generator"
+                 />
+                  <ToolCard
+                    title="Global History II"
+                    description="Create lesson plans for 10th Grade Global History."
+                    icon={<History />}
+                    href="/global-history-2-generator"
+                 />
+                 <ToolCard
+                    title="U.S. History"
+                    description="Create lesson plans for United States History & Government."
+                    icon={<History />}
+                    href="/us-history-generator"
+                 />
+                 <ToolCard
+                    title="Government & Economics"
+                    description="Create lesson plans for Participation in Government & Economics."
+                    icon={<Landmark />}
+                    href="/government-generator"
+                 />
+               </div>
             </section>
           )}
 
