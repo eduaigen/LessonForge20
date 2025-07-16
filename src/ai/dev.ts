@@ -7,6 +7,7 @@ export * from './flows/vocabulary-deep-dive';
 export * from './flows/objective-refiner';
 export * from './flows/concept-explainer';
 export * from './flows/generate-nv-biology-lesson';
+export * from './flows/generate-nv-biology-test';
 export * from './flows/generate-ess-lesson';
 export * from './flows/generate-ap-biology-lesson';
 export * from './flows/generate-ngss-chemistry-lesson';

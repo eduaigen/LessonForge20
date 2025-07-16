@@ -63,12 +63,18 @@ const PremiumDashboardContent = () => {
           {hasScienceSubscription && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Science Modules</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                  <ToolCard 
                     title="NV Biology Generator"
                     description="Create 5E model lesson plans for the New Visions Biology curriculum."
                     icon={<Leaf />}
                     href="/nv-biology-generator"
+                 />
+                 <ToolCard 
+                    title="NV Biology Test Generator"
+                    description="Create tests for the New Visions Biology curriculum."
+                    icon={<TestTube />}
+                    href="/nv-biology-test-generator"
                  />
                   <ToolCard 
                     title="NV Earth Science Generator"
