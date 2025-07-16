@@ -38,3 +38,6 @@ export * from './flows/generate-nv-biology-test';
 export * from './flows/generate-test-differentiated';
 export * from './flows/generate-test-enhanced';
 export * from './flows/generate-test-study-sheet';
+export * from './flows/generate-nv-earth-science-test';
+export * from './flows/generate-ngss-physics-test';
+export * from './flows/generate-ngss-chemistry-test';

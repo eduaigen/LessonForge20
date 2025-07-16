@@ -119,6 +119,24 @@ const PremiumDashboardContent = () => {
                         icon={<FlaskConical />}
                         href="/nv-biology-test-generator"
                      />
+                     <ToolCard
+                        title="NV Earth Science Test Generator"
+                        description="Create custom tests for the New Visions Earth Science curriculum."
+                        icon={<FlaskConical />}
+                        href="/nv-earth-science-test-generator"
+                     />
+                     <ToolCard
+                        title="NGSS Physics Test Generator"
+                        description="Create custom tests for the NGSS Physics curriculum."
+                        icon={<FlaskConical />}
+                        href="/ngss-physics-test-generator"
+                     />
+                     <ToolCard
+                        title="NGSS Chemistry Test Generator"
+                        description="Create custom tests for the NGSS Chemistry curriculum."
+                        icon={<FlaskConical />}
+                        href="/ngss-chemistry-test-generator"
+                     />
                      <Card className="flex flex-col bg-muted/50">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-lg font-medium text-muted-foreground">Lab Generator</CardTitle>
