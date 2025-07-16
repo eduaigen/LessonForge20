@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import Markdown from 'react-markdown';
+import { InlineMath, BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 import { type TeacherCoachGeneratorOutput } from '@/ai/schemas/teacher-coach-generator-schemas';
 import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-generator-schemas';
@@ -44,6 +45,20 @@ const renderTableFromObject = (tableData: { title: string, headers: string[], ro
 
 
 const renderSimpleMarkdown = (content: string) => {
+    const renderMath = (match: any, isBlock: boolean) => {
+        const math = match[1];
+        try {
+            if (isBlock) {
+                return <BlockMath math={math} />;
+            } else {
+                return <InlineMath math={math} />;
+            }
+        } catch (error) {
+            console.error("KaTeX rendering error:", error);
+            return <span>{isBlock ? `\\[${math}\\]` : `\\(${math}\\)`}</span>;
+        }
+    };
+    
     return (
         <div className="document-view">
              <Markdown components={{
@@ -55,7 +70,25 @@ const renderSimpleMarkdown = (content: string) => {
                 ul: ({node, ...props}) => <ul {...props} />,
                 ol: ({node, ...props}) => <ol {...props} />,
                 li: ({node, ...props}) => <li {...props} />,
-                p: ({node, ...props}) => <p {...props} />,
+                p: ({ node, ...props }) => {
+                    const children = React.Children.toArray(props.children);
+                    const newChildren = children.map((child, index) => {
+                        if (typeof child === 'string') {
+                            const parts = child.split(/(\\\(.*?\)|\\\[.*?\\\])/g);
+                            return parts.map((part, i) => {
+                                const inlineMatch = part.match(/^\\\((.*)\\\)$/);
+                                if (inlineMatch) return <InlineMath key={i} math={inlineMatch[1]} />;
+
+                                const blockMatch = part.match(/^\\\[(.*)\\\]$/);
+                                if (blockMatch) return <BlockMath key={i} math={blockMatch[1]} />;
+                                
+                                return part;
+                            });
+                        }
+                        return child;
+                    });
+                    return <p {...props}>{newChildren}</p>;
+                },
                 strong: ({node, ...props}) => <strong {...props} />,
                 blockquote: ({node, ...props}) => <blockquote {...props} />,
                 svg: ({ node, ...props }) => {
@@ -69,6 +102,14 @@ const renderSimpleMarkdown = (content: string) => {
                     }
                     return <div className="my-4 flex justify-center" dangerouslySetInnerHTML={{ __html: svgString }} />
                 },
+                 span: ({ node, className, children, ...props }) => {
+                    if (className === 'math') {
+                        const content = (children as string[]).join('');
+                        const math = content.replace(/^\\\((.*)\\\)$/, '$1');
+                        return <InlineMath math={math} />;
+                    }
+                    return <span className={className} {...props}>{children}</span>;
+                }
             }}>
                 {content}
             </Markdown>
