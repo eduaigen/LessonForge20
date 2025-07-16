@@ -135,6 +135,18 @@ const PremiumDashboardContent = () => {
             </section>
           )}
 
+          <section>
+            <h2 className="text-2xl font-bold font-headline mb-4">ELA Modules</h2>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <ToolCard
+                title="ELA 9th Grade Generator"
+                description="Create lesson plans for 9th Grade ELA curriculum."
+                icon={<Library />}
+                href="/ela9-generator"
+              />
+            </div>
+          </section>
+
           {!hasScienceSubscription && !hasMathSubscription && (
              <div className="text-center py-16 col-span-full">
                 <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>

@@ -16,6 +16,7 @@ export * from './flows/generate-anatomy-physiology-lesson';
 export * from './flows/generate-algebra1-lesson';
 export * from './flows/generate-algebra2-lesson';
 export * from './flows/generate-geometry-lesson';
+export * from './flows/generate-ela9-lesson';
 export * from './flows/reading-material-generator';
 export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
