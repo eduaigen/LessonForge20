@@ -12,7 +12,8 @@ import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-s
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Button } from '../ui/button';
-import { Loader2, Wand2, Edit, Save, X, Checkbox } from 'lucide-react';
+import { Loader2, Wand2, Edit, Save, X } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
