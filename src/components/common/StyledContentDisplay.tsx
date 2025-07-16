@@ -12,16 +12,14 @@ import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-s
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Button } from '../ui/button';
-import { Loader2, Wand2, Edit, Save, X } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Loader2 } from 'lucide-react';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
-import { Textarea } from '../ui/textarea';
 
-const renderTableFromObject = (tableData: { title: string, headers: string[], rows: string[][] }) => {
+const renderTableFromObject = (tableData: { title: string, headers: string[], rows: string[][] } | null) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
     return (
         <div className="overflow-x-auto my-4">
@@ -78,186 +76,115 @@ const renderSimpleMarkdown = (content: string) => {
     );
 };
 
-// =================================================================
-// Lesson Plan Rendering Components with Editing
-// =================================================================
 
-type LessonSectionProps = {
-  sectionKey: string;
-  title: string;
-  children: React.ReactNode;
-  isSelected: boolean;
-  isEditing: boolean;
-  onSelect: (sectionKey: string, checked: boolean) => void;
-  onEditToggle: (sectionKey: string) => void;
-  onSave: (sectionKey: string) => void;
-  onCancel: (sectionKey: string) => void;
-  onRevise: (sectionKey: string) => void;
-};
-
-const LessonSection = ({
-  sectionKey,
-  title,
-  children,
-  isSelected,
-  isEditing,
-  onSelect,
-  onEditToggle,
-  onSave,
-  onCancel,
-  onRevise,
-}: LessonSectionProps) => (
-  <section className="mb-6 p-4 border rounded-lg transition-all hover:shadow-md relative group">
-    <div className="absolute top-2 right-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-       <Checkbox
-            checked={isSelected}
-            onCheckedChange={(checked) => onSelect(sectionKey, !!checked)}
-            id={`select-${sectionKey}`}
-            aria-label={`Select ${title}`}
-        />
-        <Button variant="ghost" size="icon" onClick={() => onEditToggle(sectionKey)} disabled={!isSelected}>
-            <Edit className="h-4 w-4" />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={() => onRevise(sectionKey)} disabled={!isSelected}>
-            <Wand2 className="h-4 w-4" />
-        </Button>
-    </div>
-    
-    <div className="flex justify-between items-start mb-2">
-      <h2 className="text-xl font-bold font-headline text-primary">{title}</h2>
-      {isEditing && (
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => onCancel(sectionKey)}><X className="h-4 w-4 mr-1" />Cancel</Button>
-          <Button size="sm" onClick={() => onSave(sectionKey)}><Save className="h-4 w-4 mr-1" />Save</Button>
-        </div>
-      )}
-    </div>
-    <div className="document-view">{children}</div>
-  </section>
+const renderLeveledQuestions = (questions: { question: string; dok: number; options?: string[]; answer?: string; }[]) => (
+  <ol className="list-decimal pl-5 space-y-4">
+    {questions.map((q, i) => (
+      <li key={i}>
+        <p>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></p>
+        {q.options && (
+          <ul className="list-[lower-alpha] pl-6 mt-2">
+            {q.options.map(opt => <li key={opt}>{opt}</li>)}
+             {q.answer && <li className="text-green-600 font-semibold mt-1">Correct Answer: {q.answer}</li>}
+          </ul>
+        )}
+      </li>
+    ))}
+  </ol>
 );
 
+const LessonSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
+    <section className="mb-8 border-b pb-6 last:border-b-0">
+        <h2 className="text-2xl font-bold font-headline text-primary mb-4">{title}</h2>
+        <div className="space-y-4 document-view">{children}</div>
+    </section>
+);
 
-type EditableFieldProps = {
-    isEditing: boolean;
-    value: any;
-    onContentChange: (fieldKey: string, newValue: string) => void;
-    fieldKey: string;
-    renderDisplay: () => React.ReactNode;
-};
+const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
+    const { 
+        lessonOverview, 
+        doNow, 
+        miniLesson, 
+        guidedPractice, 
+        checkFoUnderstanding, 
+        independentPractice, 
+        closure, 
+        homework, 
+        differentiation 
+    } = lessonPlan;
 
-const EditableField: React.FC<EditableFieldProps> = ({ isEditing, value, onContentChange, fieldKey, renderDisplay }) => {
-    if (isEditing) {
-        const stringValue = typeof value === 'string' ? value : JSON.stringify(value, null, 2);
-        return (
-            <Textarea
-                value={stringValue}
-                onChange={(e) => onContentChange(fieldKey, e.target.value)}
-                className="w-full min-h-[100px] font-mono text-sm"
-            />
-        );
-    }
-    return <>{renderDisplay()}</>;
-};
-
-const LessonOverviewSection = ({ section, isEditing, onContentChange }: { section: any, isEditing: boolean, onContentChange: (field: string, value: any) => void }) => {
     return (
-        <div className="space-y-4">
-            <EditableField isEditing={isEditing} value={section.lessonSummary} onContentChange={onContentChange} fieldKey="lessonSummary"
-                renderDisplay={() => <div><strong>Summary:</strong> <p>{section.lessonSummary}</p></div>} />
-            <EditableField isEditing={isEditing} value={section.aim} onContentChange={onContentChange} fieldKey="aim"
-                renderDisplay={() => <div><strong>Aim:</strong> <p>{section.aim}</p></div>} />
-             <EditableField isEditing={isEditing} value={section.essentialQuestion} onContentChange={onContentChange} fieldKey="essentialQuestion"
-                renderDisplay={() => <div><strong>Essential Question:</strong> <p>{section.essentialQuestion}</p></div>} />
-            <EditableField isEditing={isEditing} value={section.objectives} onContentChange={onContentChange} fieldKey="objectives"
-                renderDisplay={() => <div><strong>Objectives:</strong> <ul className="list-disc pl-5">{section.objectives.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>} />
-            <EditableField isEditing={isEditing} value={section.vocabulary} onContentChange={onContentChange} fieldKey="vocabulary"
-                renderDisplay={() => <div><strong>Vocabulary:</strong> <ul className="list-disc pl-5">{section.vocabulary.map((v: any, i: number) => <li key={i}><strong>{v.term}:</strong> {v.definition}</li>)}</ul></div>} />
-            <EditableField isEditing={isEditing} value={section.materials} onContentChange={onContentChange} fieldKey="materials"
-                renderDisplay={() => <div><strong>Materials:</strong> <ul className="list-disc pl-5">{section.materials.map((m: string, i: number) => <li key={i}>{m}</li>)}</ul></div>} />
+        <div className="p-4">
+            <header className="text-center mb-8">
+                <h1 className="text-3xl font-bold font-headline text-primary">{lessonOverview.lesson}</h1>
+                <p className="text-lg text-muted-foreground"><strong>Unit:</strong> {lessonOverview.unit}</p>
+                <p className="text-lg text-muted-foreground"><strong>Topic:</strong> {lessonOverview.topic}</p>
+            </header>
+
+            <LessonSection title="I. Lesson Overview">
+                <div><strong>Summary:</strong> <p>{lessonOverview.lessonSummary}</p></div>
+                <div><strong>Standards:</strong> <p>{lessonOverview.standards}</p></div>
+                <div><strong>Aim/Essential Question:</strong> <p>{lessonOverview.aim}</p></div>
+                <div><strong>Objectives:</strong> <ul className="list-disc pl-5">{lessonOverview.objectives.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+                <div><strong>Key Vocabulary:</strong> <ul className="list-disc pl-5">{lessonOverview.vocabulary.map((v, i) => <li key={i}><strong>{v.term}:</strong> {v.definition}</li>)}</ul></div>
+                <div><strong>Materials Needed:</strong> <ul className="list-disc pl-5">{lessonOverview.materials.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
+            </LessonSection>
+
+            <LessonSection title="B. Do Now (5–8 min)">
+                <div><h4>Question</h4><p>{doNow.question}</p></div>
+                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{doNow.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{doNow.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+            </LessonSection>
+
+            <LessonSection title="C. Mini-Lesson / Direct Instruction (10–15 min)">
+                <div><h4>Reading Passage</h4><Markdown>{miniLesson.readingPassage}</Markdown></div>
+                {miniLesson.diagram && <div><h4>Diagram Description</h4><blockquote className="border-l-4 border-primary pl-4 italic">{miniLesson.diagram}</blockquote></div>}
+                <div><h4>Concept-Check Questions</h4>{renderLeveledQuestions(miniLesson.conceptCheckQuestions)}</div>
+                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{miniLesson.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{miniLesson.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+            </LessonSection>
+
+            <LessonSection title="D. Guided Practice / Group Activity (15–20 min)">
+                {guidedPractice.activityDescription && <div><h4>Activity Description</h4><p>{guidedPractice.activityDescription}</p></div>}
+                {renderTableFromObject(guidedPractice.dataTable)}
+                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{guidedPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{guidedPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+            </LessonSection>
+
+             <LessonSection title="E. Check for Understanding (CFU)">
+                <h4>CFU Questions</h4>
+                {renderLeveledQuestions([...checkFoUnderstanding.multipleChoice, checkFoUnderstanding.shortResponse])}
+                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{checkFoUnderstanding.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{checkFoUnderstanding.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+            </LessonSection>
+
+            <LessonSection title="F. Independent Practice / Performance Task">
+                <div><h4>Task Prompt</h4><p>{independentPractice.taskPrompt}</p></div>
+                {renderTableFromObject(independentPractice.taskData)}
+                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{independentPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{independentPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+            </LessonSection>
+
+            <LessonSection title="G. Closure / Exit Ticket">
+                <div><h4>Exit Ticket Question</h4><p>{closure.exitTicketQuestion}</p></div>
+                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{closure.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{closure.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+            </LessonSection>
+
+            <LessonSection title="H. Homework Activity">
+                <div><h4>Activity</h4><Markdown>{homework.activity}</Markdown></div>
+            </LessonSection>
+
+            <LessonSection title="III. Differentiation & Support">
+                <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{differentiation.supportActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
+                <div><h4>Expected Student Outputs with Support</h4><ul className="list-disc pl-5">{differentiation.supportOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
+                <div><h4>Scaffolded Materials</h4><p>{differentiation.scaffoldedMaterials}</p></div>
+                <div><h4>Extension Activity</h4><p>{differentiation.extensionActivity}</p></div>
+            </LessonSection>
         </div>
     );
 };
 
-const DoNowSection = ({ section, isEditing, onContentChange }: { section: any, isEditing: boolean, onContentChange: (field: string, value: any) => void }) => {
-    return (
-        <div className="space-y-4">
-            <EditableField isEditing={isEditing} value={section.question} onContentChange={onContentChange} fieldKey="question"
-                renderDisplay={() => <div><strong>Question:</strong> <p>{section.question}</p></div>} />
-             <EditableField isEditing={isEditing} value={section.teacherActions} onContentChange={onContentChange} fieldKey="teacherActions"
-                renderDisplay={() => <div><strong>Teacher Actions:</strong> <ul className="list-disc pl-5">{section.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>} />
-             <EditableField isEditing={isEditing} value={section.expectedStudentOutputs} onContentChange={onContentChange} fieldKey="expectedStudentOutputs"
-                renderDisplay={() => <div><strong>Expected Student Outputs:</strong> <ul className="list-disc pl-5">{section.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>} />
-        </div>
-    );
-};
-
-const MiniLessonSection = ({ section, isEditing, onContentChange }: { section: any, isEditing: boolean, onContentChange: (field: string, value: any) => void }) => {
-    return (
-        <div className="space-y-4">
-            <EditableField isEditing={isEditing} value={section.readingPassage} onContentChange={onContentChange} fieldKey="readingPassage"
-                renderDisplay={() => <div><h4>Reading Passage</h4><Markdown>{section.readingPassage}</Markdown></div>} />
-            <EditableField isEditing={isEditing} value={section.diagram} onContentChange={onContentChange} fieldKey="diagram"
-                renderDisplay={() => section.diagram ? <div><h4>Diagram Description</h4><blockquote className="border-l-4 border-primary pl-4 italic">{section.diagram}</blockquote></div> : null} />
-            <EditableField isEditing={isEditing} value={section.conceptCheckQuestions} onContentChange={onContentChange} fieldKey="conceptCheckQuestions"
-                renderDisplay={() => (
-                    <div>
-                        <h4>Concept Check Questions</h4>
-                        <ol className="list-decimal pl-5">
-                            {section.conceptCheckQuestions.map((q: any, i: number) => <li key={i}>{q.question} (DOK {q.dok})</li>)}
-                        </ol>
-                    </div>
-                )} />
-             <EditableField isEditing={isEditing} value={section.teacherActions} onContentChange={onContentChange} fieldKey="teacherActions"
-                renderDisplay={() => <div><strong>Teacher Actions:</strong> <ul className="list-disc pl-5">{section.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>} />
-             <EditableField isEditing={isEditing} value={section.expectedStudentOutputs} onContentChange={onContentChange} fieldKey="expectedStudentOutputs"
-                renderDisplay={() => <div><strong>Expected Student Outputs:</strong> <ul className="list-disc pl-5">{section.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>} />
-        </div>
-    );
-};
-
-
-const renderLessonPlan = (
-    lessonPlan: GenerateNVBiologyLessonOutput,
-    { selectedSections, editingSections, sectionContent, ...handlers }: any
-) => {
-    const { onSectionSelect, onSectionEditToggle, onSaveSection, onCancelSection, onReviseSection, onSectionContentChange } = handlers;
-
-    const sections = [
-        { key: 'lessonOverview', title: 'I. Lesson Overview', Component: LessonOverviewSection, data: lessonPlan.lessonOverview },
-        { key: 'doNow', title: 'B. DO NOW', Component: DoNowSection, data: lessonPlan.doNow },
-        { key: 'miniLesson', title: 'C. Mini-Lesson', Component: MiniLessonSection, data: lessonPlan.miniLesson },
-        // ... Add other sections similarly
-    ];
-
-    const handleContentChange = (sectionKey: string) => (fieldKey: string, newValue: string) => {
-        onSectionContentChange(sectionKey, { ...sectionContent[sectionKey], [fieldKey]: newValue });
-    };
-
-    return (
-        <div>
-            {sections.map(({ key, title, Component, data }) => (
-                <LessonSection
-                    key={key}
-                    sectionKey={key}
-                    title={title}
-                    isSelected={selectedSections.includes(key)}
-                    isEditing={editingSections.includes(key)}
-                    onSelect={onSectionSelect}
-                    onEditToggle={onSectionEditToggle}
-                    onSave={onSaveSection}
-                    onCancel={onCancelSection}
-                    onRevise={onReviseSection}
-                >
-                    <Component
-                        section={sectionContent[key] || data}
-                        isEditing={editingSections.includes(key)}
-                        onContentChange={handleContentChange(key)}
-                    />
-                </LessonSection>
-            ))}
-        </div>
-    );
-};
 
 // =================================================================
 // Worksheet Rendering
@@ -640,7 +567,7 @@ export default function StyledContentDisplay({ content, type, lessonPlanState }:
     
     switch (type) {
         case 'Lesson Plan':
-            return renderLessonPlan(content, lessonPlanState);
+            return renderLessonPlan(content);
         case 'Worksheet':
             return renderWorksheet(content);
         case 'Teacher Coach':

@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Leaf, Sparkles, Wand2, History, ChevronLeft, ChevronRight, Printer, Download } from 'lucide-react';
+import { Loader2, Leaf, Sparkles, Wand2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyLesson, type GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
@@ -101,10 +101,6 @@ const GeneratorContent = () => {
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-
-  const [isRevisionDialogOpen, setIsRevisionDialogOpen] = useState(false);
-  const [aiRevisionPrompt, setAiRevisionPrompt] = useState('');
-  const [revisingSectionKey, setRevisingSectionKey] = useState<string | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -115,24 +111,11 @@ const GeneratorContent = () => {
       additionalInfo: '',
     },
   });
-
-  // State for lesson plan editing
-  const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [editingSections, setEditingSections] = useState<string[]>([]);
-  const [sectionContent, setSectionContent] = useState<Record<string, any>>({});
-  const [originalSectionContent, setOriginalSectionContent] = useState<Record<string, any>>({});
   
   const lessonPlan = useMemo(() => {
     return lessonPackage?.lessonPlan.content as GenerateNVBiologyLessonOutput | null;
   }, [lessonPackage]);
 
-  // When lessonPackage changes, reset editing state
-  useEffect(() => {
-    setSelectedSections([]);
-    setEditingSections([]);
-    setSectionContent(lessonPlan ? { ...lessonPlan } : {});
-    setOriginalSectionContent(lessonPlan ? { ...lessonPlan } : {});
-  }, [lessonPackage, lessonPlan]);
 
   const selectedUnit = form.watch('unit');
   const selectedTopic = form.watch('topic');
@@ -171,6 +154,8 @@ const GeneratorContent = () => {
 
   async function onLessonPlanSubmit(values: FormData) {
     setIsLoading(true);
+    setLessonPackage(null);
+
     try {
       const result = await generateNVBiologyLesson(values);
       const newPackageId = `package-${Date.now()}`;
@@ -264,91 +249,6 @@ const GeneratorContent = () => {
     }
   };
 
-  // Lesson Plan Editing Handlers
-  const handleSectionSelect = (sectionKey: string, checked: boolean) => {
-    setSelectedSections(prev => 
-        checked ? [...prev, sectionKey] : prev.filter(key => key !== sectionKey)
-    );
-  };
-
-  const handleSectionEditToggle = (sectionKey: string) => {
-    setEditingSections(prev => {
-        if (prev.includes(sectionKey)) {
-            // If already editing, cancel changes
-            handleCancelSection(sectionKey);
-            return prev.filter(key => key !== sectionKey);
-        } else {
-            return [...prev, sectionKey];
-        }
-    });
-  };
-
-  const handleSectionContentChange = (sectionKey: string, newContent: any) => {
-    setSectionContent(prev => ({
-        ...prev,
-        [sectionKey]: newContent
-    }));
-  };
-
-  const handleSaveSection = (sectionKey: string) => {
-    if (!lessonPackage) return;
-    setEditingSections(prev => prev.filter(key => key !== sectionKey));
-    setOriginalSectionContent(prev => ({...prev, [sectionKey]: sectionContent[sectionKey]}));
-    
-    // Update the lesson plan in the main lesson package state
-    const updatedLessonPlanContent = { ...lessonPackage.lessonPlan.content, [sectionKey]: sectionContent[sectionKey] };
-    setLessonPackage({
-        ...lessonPackage,
-        lessonPlan: {
-            ...lessonPackage.lessonPlan,
-            content: updatedLessonPlanContent
-        }
-    });
-
-    toast({ title: 'Section Saved', description: `Your changes to "${sectionKey}" have been saved.`});
-  };
-
-  const handleCancelSection = (sectionKey: string) => {
-    setEditingSections(prev => prev.filter(key => key !== sectionKey));
-    setSectionContent(prev => ({...prev, [sectionKey]: originalSectionContent[sectionKey]}));
-  };
-
-  const handleReviseClick = (sectionKey: string) => {
-    setRevisingSectionKey(sectionKey);
-    setIsRevisionDialogOpen(true);
-  };
-
-  const handleAiRevision = async () => {
-    if (!revisingSectionKey || !lessonPlan) return;
-    
-    setIsRevisionDialogOpen(false);
-    setIsToolLoading(`Revising ${revisingSectionKey}...`);
-
-    try {
-        const sectionToRevise = sectionContent[revisingSectionKey] || lessonPlan[revisingSectionKey as keyof typeof lessonPlan];
-        const result = await refineLessonSection({
-            sectionName: revisingSectionKey,
-            originalContent: JSON.stringify(sectionToRevise, null, 2),
-            instructions: aiRevisionPrompt,
-        });
-
-        const revisedContent = JSON.parse(result.revisedContent);
-        
-        handleSectionContentChange(revisingSectionKey, revisedContent);
-        handleSaveSection(revisingSectionKey);
-        toast({ title: 'Revision Complete', description: `The "${revisingSectionKey}" section has been updated by the AI.`});
-
-    } catch (error) {
-        console.error("AI revision failed:", error);
-        toast({ title: "Revision Failed", description: "The AI failed to revise the section. Please try again.", variant: "destructive" });
-    } finally {
-        setIsToolLoading(null);
-        setAiRevisionPrompt('');
-        setRevisingSectionKey(null);
-    }
-  };
-
-
   return (
     <>
       <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>
@@ -381,27 +281,6 @@ const GeneratorContent = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <Dialog open={isRevisionDialogOpen} onOpenChange={setIsRevisionDialogOpen}>
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>Revise Section with AI</DialogTitle>
-                <DialogDescription>
-                    Enter your instructions for how the AI should revise the "{revisingSectionKey}" section.
-                </DialogDescription>
-            </DialogHeader>
-            <Textarea
-                placeholder="e.g., 'Make this section more engaging for 9th graders', 'Add more detail about...', 'Simplify the language'"
-                value={aiRevisionPrompt}
-                onChange={(e) => setAiRevisionPrompt(e.target.value)}
-                rows={4}
-            />
-            <DialogFooter>
-                <Button variant="ghost" onClick={() => setIsRevisionDialogOpen(false)}>Cancel</Button>
-                <Button onClick={handleAiRevision} disabled={!aiRevisionPrompt}>Revise</Button>
-            </DialogFooter>
-        </DialogContent>
-      </Dialog>
-      
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
             <div className="flex-grow">
@@ -544,17 +423,6 @@ const GeneratorContent = () => {
                         <StyledContentDisplay
                             content={lessonPackage.lessonPlan.content}
                             type={lessonPackage.lessonPlan.type}
-                            lessonPlanState={{
-                                selectedSections,
-                                editingSections,
-                                sectionContent,
-                                onSectionSelect: handleSectionSelect,
-                                onSectionEditToggle: handleSectionEditToggle,
-                                onSaveSection: handleSaveSection,
-                                onCancelSection: handleCancelSection,
-                                onReviseSection: handleReviseClick,
-                                onSectionContentChange: handleSectionContentChange,
-                            }}
                         />
                     </CollapsibleSection>
                     {lessonPackage.supplementaryMaterials.map(section => (
