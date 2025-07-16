@@ -67,7 +67,7 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **D. GUIDED PRACTICE / GROUP ACTIVITY (15–20 min)**
 - **Teacher Actions**: Provide a verbatim script for launching and managing the activity. e.g., "In your groups of four, you will analyze this data table. Your goal is to identify a pattern and explain what it means. Facilitators, make sure everyone's voice is heard. Scribes, you will record your group's findings on the graphic organizer. You have 15 minutes."
 - **Expected Student Outputs**: Provide an exemplar of a completed graphic organizer or the expected collaborative output. e.g., "Exemplar Group Response: Pattern Identified - As X increases, Y decreases. Possible Reason: This is because..."
-- **Activity Content**: Provide **EITHER** a \`dataTable\` object with a title, headers, and rows of data, **OR** a \`activityDescription\` string detailing a non-data-based activity (like a card sort or a role-play). **You must provide one of these.**
+- **Activity Content**: Provide **EITHER** a \`dataTable\` object OR an \`activityDescription\` string. If providing one, the other MUST be set to \`null\`. For example, if you generate an \`activityDescription\`, then the \`dataTable\` field must be \`null\`.
 
 **E. CHECK FOR UNDERSTANDING (CFU)**
 - **Teacher Actions**: Provide a script for administering the CFU. e.g., "Alright everyone, eyes on me. On your mini-whiteboards, please answer the following multiple-choice question. Show me your boards in 3, 2, 1."

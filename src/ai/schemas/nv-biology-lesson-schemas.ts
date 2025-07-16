@@ -47,10 +47,8 @@ export const dataTableSchema = z.object({
 });
 
 const guidedPracticeSchema = lessonSectionSchema.extend({
-  dataTable: dataTableSchema.optional().describe("A complete and structured data table for analysis."),
-  activityDescription: z.string().optional().describe("Description of a non-data-based activity (e.g., card sort)."),
-}).refine(data => data.dataTable || data.activityDescription, {
-  message: "Either a dataTable or an activityDescription must be provided for guided practice.",
+  dataTable: dataTableSchema.nullable().describe("A complete and structured data table for analysis. Set to null if using activityDescription."),
+  activityDescription: z.string().nullable().describe("Description of a non-data-based activity (e.g., card sort). Set to null if using dataTable."),
 });
 
 
