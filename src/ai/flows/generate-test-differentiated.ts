@@ -19,7 +19,7 @@ const prompt = ai.definePrompt({
   output: { schema: DifferentiatedTestOutputSchema },
   prompt: `You are an expert educator specializing in differentiation for high school science students, particularly for English Language Learners and students with diverse learning needs.
 
-Your task is to revise the provided science test to make it more accessible.
+Your task is to revise the provided science test to make it more accessible using research-based strategies.
 
 **Original Test:**
 \`\`\`json
@@ -45,7 +45,7 @@ const generateTestDifferentiatedFlow = ai.defineFlow(
     outputSchema: DifferentiatedTestOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt({ ...input, jsonStringify });
     if (!output) {
       throw new Error('The AI failed to generate the differentiated test. Please try again.');
     }

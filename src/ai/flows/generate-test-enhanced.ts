@@ -29,7 +29,7 @@ Your task is to revise the provided science test to increase its rigor and compl
 1.  **Increase Passage Complexity:** Revise the phenomenon passages to include more advanced vocabulary and more complex sentence structures.
 2.  **Enhance Questions:**
     *   **Multiple Choice:** Rewrite two of the multiple-choice questions in each cluster to require a higher level of synthesis or analysis. Introduce plausible distractors that test for common misconceptions.
-    *   **Short Response:** Elevate one short response question in each cluster to require a comparison or evaluation.
+    *   **Short Response:** Elevate one short response question in each cluster to require a comparison, evaluation, or connection to a broader scientific principle.
     *   **CER Question:** Expand the CER question to require an additional piece of evidence or a connection to a broader scientific principle not explicitly stated in the text.
 3.  **Enhance Answer Key:** For the multiple-choice questions, add a brief (1-sentence) explanation for why each incorrect answer (distractor) is wrong. This is a critical step.
 4.  **Preserve Structure:** The output JSON must have the exact same structure as the original test. Do not add or remove any fields. Update the title to indicate it is an "Enhanced Version."
@@ -44,7 +44,7 @@ const generateTestEnhancedFlow = ai.defineFlow(
     outputSchema: EnhancedTestOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt({ ...input, jsonStringify });
     if (!output) {
       throw new Error('The AI failed to generate the enhanced test. Please try again.');
     }
