@@ -77,6 +77,30 @@ const PremiumDashboardContent = () => {
                 icon={<Orbit />}
                 href="/ngss-earth-science-generator"
              />
+              <ToolCard
+                title="AP Biology Generator"
+                description="Create 5E model lesson plans for the AP Biology curriculum."
+                icon={<Dna />}
+                href="/ap-biology-generator"
+              />
+              <ToolCard
+                title="NGSS Chemistry Generator"
+                description="Create 5E model lesson plans for the NGSS Chemistry curriculum."
+                icon={<Atom />}
+                href="/ngss-chemistry-generator"
+              />
+               <ToolCard
+                title="NGSS Physics Generator"
+                description="Create 5E model lesson plans for the NGSS Physics curriculum."
+                icon={<Magnet />}
+                href="/ngss-physics-generator"
+              />
+               <ToolCard
+                title="Health Lesson Generator"
+                description="Create 5E model lesson plans for Health class."
+                icon={<HeartPulse />}
+                href="/health-generator"
+              />
             </>
           )}
 
