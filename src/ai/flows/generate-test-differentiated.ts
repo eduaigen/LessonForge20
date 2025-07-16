@@ -4,7 +4,6 @@
  * @fileOverview An AI flow for generating a differentiated version of a science test.
  */
 import { ai } from '@/ai/genkit';
-import { jsonStringify } from 'genkit/tools';
 import {
   DifferentiatedTestInputSchema,
   DifferentiatedTestOutputSchema,
@@ -12,10 +11,9 @@ import {
   type DifferentiatedTestOutput,
 } from '../schemas/differentiated-test-schemas';
 
-
 const prompt = ai.definePrompt({
   name: 'generateDifferentiatedTestPrompt',
-  input: { schema: DifferentiatedTestInputSchema },
+  input: { schema: z.object({ originalTest: z.string() }) },
   output: { schema: DifferentiatedTestOutputSchema },
   prompt: `You are an expert educator specializing in differentiation for high school science students, particularly for English Language Learners and students with diverse learning needs.
 
@@ -23,7 +21,7 @@ Your task is to revise the provided science test to make it more accessible usin
 
 **Original Test:**
 \`\`\`json
-{{{jsonStringify originalTest}}}
+{{{originalTest}}}
 \`\`\`
 
 **Instructions for Differentiation:**
@@ -45,7 +43,9 @@ const generateTestDifferentiatedFlow = ai.defineFlow(
     outputSchema: DifferentiatedTestOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt({ ...input, jsonStringify });
+    const { output } = await prompt({
+      originalTest: JSON.stringify(input.originalTest),
+    });
     if (!output) {
       throw new Error('The AI failed to generate the differentiated test. Please try again.');
     }

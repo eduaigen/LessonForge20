@@ -4,7 +4,6 @@
  * @fileOverview An AI flow for generating an enhanced version of a science test for advanced learners.
  */
 import { ai } from '@/ai/genkit';
-import { jsonStringify } from 'genkit/tools';
 import {
   EnhancedTestInputSchema,
   EnhancedTestOutputSchema,
@@ -14,7 +13,7 @@ import {
 
 const prompt = ai.definePrompt({
   name: 'generateEnhancedTestPrompt',
-  input: { schema: EnhancedTestInputSchema },
+  input: { schema: z.object({ originalTest: z.string() }) },
   output: { schema: EnhancedTestOutputSchema },
   prompt: `You are an expert educator specializing in creating challenging assessments for advanced and honors-level high school science students.
 
@@ -22,7 +21,7 @@ Your task is to revise the provided science test to increase its rigor and compl
 
 **Original Test:**
 \`\`\`json
-{{{jsonStringify originalTest}}}
+{{{originalTest}}}
 \`\`\`
 
 **Instructions for Enhancement:**
@@ -44,7 +43,9 @@ const generateTestEnhancedFlow = ai.defineFlow(
     outputSchema: EnhancedTestOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt({ ...input, jsonStringify });
+    const { output } = await prompt({
+      originalTest: JSON.stringify(input.originalTest),
+    });
     if (!output) {
       throw new Error('The AI failed to generate the enhanced test. Please try again.');
     }

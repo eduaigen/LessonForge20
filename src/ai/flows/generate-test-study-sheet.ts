@@ -4,7 +4,6 @@
  * @fileOverview An AI flow for generating a study sheet from a science test.
  */
 import { ai } from '@/ai/genkit';
-import { jsonStringify } from 'genkit/tools';
 import {
   TestStudySheetInputSchema,
   TestStudySheetOutputSchema,
@@ -14,7 +13,7 @@ import {
 
 const prompt = ai.definePrompt({
   name: 'generateTestStudySheetPrompt',
-  input: { schema: TestStudySheetInputSchema },
+  input: { schema: z.object({ originalTest: z.string() }) },
   output: { schema: TestStudySheetOutputSchema },
   prompt: `You are an expert high school science teacher creating a study guide for an upcoming test.
 
@@ -22,7 +21,7 @@ Your task is to analyze the provided test and extract the most critical informat
 
 **Original Test:**
 \`\`\`json
-{{{jsonStringify originalTest}}}
+{{{originalTest}}}
 \`\`\`
 
 **Instructions:**
@@ -42,7 +41,9 @@ const generateTestStudySheetFlow = ai.defineFlow(
     outputSchema: TestStudySheetOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt({ ...input, jsonStringify });
+    const { output } = await prompt({
+      originalTest: JSON.stringify(input.originalTest),
+    });
     if (!output) {
       throw new Error('The AI failed to generate the study sheet. Please try again.');
     }
