@@ -7,6 +7,7 @@ export * from './flows/vocabulary-deep-dive';
 export * from './flows/objective-refiner';
 export * from './flows/concept-explainer';
 export * from './flows/generate-nv-biology-lesson';
+export * from './flows/generate-ess-lesson';
 export * from './flows/reading-material-generator';
 export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';

@@ -64,12 +64,20 @@ const PremiumDashboardContent = () => {
 
        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {hasScienceSubscription && (
+            <>
              <ToolCard 
                 title="NV Biology Generator"
                 description="Create 5E model lesson plans for the New Visions Biology curriculum."
                 icon={<Leaf />}
                 href="/nv-biology-generator"
              />
+              <ToolCard 
+                title="NGSS Earth & Space Science Generator"
+                description="Create 5E model lesson plans for NGSS Earth & Space Science."
+                icon={<Orbit />}
+                href="/ngss-earth-science-generator"
+             />
+            </>
           )}
 
           {!hasScienceSubscription && (
