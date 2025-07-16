@@ -21,7 +21,7 @@ import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-s
 import type { TestStudySheetOutput } from '@/ai/flows/generate-test-study-sheet';
 import type { TestGeneratedContent } from '../generators/NVBiologyTestGenerator';
 
-const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null) => {
+const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
     return (
         <div className="overflow-x-auto my-4 rounded-lg border">
@@ -500,7 +500,10 @@ const TestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput, type: 
           <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1}</h2>
           <Card className="bg-muted/50 mb-6">
             <CardHeader><CardTitle>Phenomenon</CardTitle></CardHeader>
-            <CardContent><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{cluster.phenomenon}</Markdown></CardContent>
+            <CardContent>
+              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{cluster.phenomenon}</Markdown>
+              {renderTableFromObject(cluster.dataTable)}
+            </CardContent>
           </Card>
           
           <h3 className="text-xl font-semibold mb-4">Multiple Choice Questions</h3>

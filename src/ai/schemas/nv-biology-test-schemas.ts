@@ -1,5 +1,6 @@
 
 import { z } from 'zod';
+import { dataTableSchema } from './nv-biology-lesson-schemas';
 
 export const GenerateNVBiologyTestInputSchema = z.object({
   units: z.array(z.string()).describe('An array of curriculum units to base the test on.'),
@@ -41,6 +42,7 @@ const answerKeySchema = z.object({
 
 const questionClusterSchema = z.object({
   phenomenon: z.string().describe("A 300-500 word passage describing a real-world phenomenon."),
+  dataTable: dataTableSchema.optional().describe("An optional data table to be used as stimulus material for the questions."),
   multipleChoiceQuestions: z.array(multipleChoiceQuestionSchema).length(3),
   shortAnswerQuestions: z.array(shortAnswerQuestionSchema).length(2),
   cerQuestion: cerQuestionSchema,
