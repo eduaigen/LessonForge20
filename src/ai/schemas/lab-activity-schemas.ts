@@ -40,6 +40,9 @@ export type GenerateLabActivityInput = z.infer<typeof GenerateLabActivityInputSc
 
 
 // Schema for the Student Answer Sheet
+export const LabStudentSheetInputSchema = z.object({
+  originalLab: GenerateLabActivityOutputSchema,
+});
 export const LabStudentSheetOutputSchema = z.object({
     title: z.string(),
     phenomenon: z.string(),
