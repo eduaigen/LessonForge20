@@ -846,50 +846,60 @@ const SocialStudiesAnswerKeyDisplay = ({ test }: { test: GenerateSocialStudiesTe
   
 const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
     <div className="document-view">
-      <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold font-headline text-primary">{lab.labTitle}</h1>
-        <p className="text-lg text-muted-foreground">{lab.subjectArea} | {lab.gradeLevel}</p>
-        <p className="text-sm text-muted-foreground mt-2"><strong>Time Required:</strong> {lab.timeBreakdown}</p>
-      </header>
+        <header className="text-center mb-8">
+            <h1 className="text-3xl font-bold font-headline text-primary">{lab.labTitle}</h1>
+            <p className="text-lg text-muted-foreground">{lab.subjectArea} | {lab.gradeLevel}</p>
+            <p className="text-sm text-muted-foreground mt-2"><strong>Time Required:</strong> {lab.timeBreakdown}</p>
+        </header>
 
-      <LessonSection title="Learning Objectives">
-        <ul className="list-disc pl-5">{lab.learningObjectives.map((o, i) => <li key={i}>{o}</li>)}</ul>
-      </LessonSection>
+        <LessonSection title="Introduction: Phenomenon">
+            <div className="prose prose-lg max-w-none">
+                <Markdown>{lab.phenomenonReading}</Markdown>
+            </div>
+        </LessonSection>
 
-      <LessonSection title="NGSS Alignment">
-        <p><strong>Performance Expectation (PE):</strong> {lab.ngssAlignment.performanceExpectation}</p>
-        <p><strong>Science and Engineering Practice (SEP):</strong> {lab.ngssAlignment.scienceAndEngineeringPractice}</p>
-        <p><strong>Disciplinary Core Idea (DCI):</strong> {lab.ngssAlignment.disciplinaryCoreIdea}</p>
-        <p><strong>Crosscutting Concept (CCC):</strong> {lab.ngssAlignment.crosscuttingConcept}</p>
-      </LessonSection>
+        <LessonSection title="Pre-Lab Questions">
+            <ol className="list-decimal pl-5 space-y-2">{lab.preLabQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol>
+        </LessonSection>
 
-      <LessonSection title="Phenomenon / Introduction">
-          <p>{lab.phenomenon}</p>
-      </LessonSection>
+        <LessonSection title="Student Investigation Design">
+            <div className="space-y-4">
+                <div>
+                    <h4 className="font-semibold">1. Testable Question</h4>
+                    <p className="italic">{lab.testableQuestionPrompt}</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold">2. Hypothesis</h4>
+                    <p className="italic">{lab.hypothesisPrompt}</p>
+                </div>
+                <div>
+                    <h4 className="font-semibold">3. Variables</h4>
+                    <p className="italic"><strong>Independent Variable:</strong> {lab.variablesPrompt.independent}</p>
+                    <p className="italic"><strong>Dependent Variable:</strong> {lab.variablesPrompt.dependent}</p>
+                    <p className="italic"><strong>Controlled Variables:</strong> {lab.variablesPrompt.controlled}</p>
+                </div>
+            </div>
+        </LessonSection>
 
-      <LessonSection title="Pre-Lab Questions">
-          <ol className="list-decimal pl-5 space-y-2">{lab.preLabQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol>
-      </LessonSection>
+        <LessonSection title="Materials and Safety">
+            <div><strong>Materials & Equipment:</strong> <ul className="list-disc pl-5">{lab.materialsAndEquipment.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
+            <div><strong className="text-destructive">Safety Precautions:</strong> <ul className="list-disc pl-5 text-destructive/80">{lab.safetyPrecautions.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
+        </LessonSection>
 
-      <LessonSection title="Materials and Safety">
-        <div><strong>Materials & Equipment:</strong> <ul className="list-disc pl-5">{lab.materialsAndEquipment.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
-        <div><strong className="text-destructive">Safety Precautions:</strong> <ul className="list-disc pl-5 text-destructive/80">{lab.safetyPrecautions.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-      </LessonSection>
+        <LessonSection title="Procedure">
+            <p className="italic text-muted-foreground">{lab.studentProcedureDesign}</p>
+            <p>Students should record their step-by-step procedure below:</p>
+            <div className="my-2 h-48 border rounded-md p-2"></div>
+        </LessonSection>
 
-      <LessonSection title="Procedure Design">
-        <p className="italic text-muted-foreground">{lab.studentProcedureDesign}</p>
-        <p>Students should record their step-by-step procedure below:</p>
-        <div className="my-2 h-48 border rounded-md p-2"></div>
-      </LessonSection>
+        <LessonSection title="Data Collection & Analysis">
+            <p>{lab.dataCollection.description}</p>
+            {renderTableFromObject(lab.dataCollection.dataTable)}
+        </LessonSection>
 
-      <LessonSection title="Data Collection & Analysis">
-        <p>{lab.dataCollection.description}</p>
-        {renderTableFromObject(lab.dataCollection.dataTable)}
-      </LessonSection>
-
-      <LessonSection title="Discussion">
-        <div><strong>Discussion Questions:</strong> <ol className="list-decimal pl-5 space-y-2">{lab.discussionQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></div>
-      </LessonSection>
+        <LessonSection title="Discussion">
+            <div><strong>Discussion Questions:</strong> <ol className="list-decimal pl-5 space-y-2">{lab.discussionQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></div>
+        </LessonSection>
     </div>
 );
 
