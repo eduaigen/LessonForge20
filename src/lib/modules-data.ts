@@ -42,8 +42,8 @@ export const modules: {
     { id: 'price_1PgD4pAk4y2zY5d6mNopQrSt', name: 'ELL / ENL (Grades 9-12)', description: 'Scaffolded lessons for English Language Learners.', icon: 'languages', type: 'course' },
   ],
   tools: [
-      { id: 'price_1Pg12lAk4y2zY5d6pQrStUvW', name: 'Test Generator', description: 'Generate comprehensive tests for any subject.', icon: 'bookCopy', type: 'premium_tool' },
-      { id: 'price_1PgAkXAk4y2zY5d6bCdefGhI', name: 'Lab Generator', description: 'Generate inquiry-based labs for science subjects.', icon: 'testTube', type: 'premium_tool' },
+      { id: 'price_1Pg12lAk4y2zY5d6pQrStUvW', name: 'All Test Generators', description: 'Generate comprehensive tests for all subscribed subjects.', icon: 'bookCopy', type: 'premium_tool' },
+      { id: 'price_1PgAkXAk4y2zY5d6bCdefGhI', name: 'All Lab Generators', description: 'Generate inquiry-based labs for all subscribed science subjects.', icon: 'testTube', type: 'premium_tool' },
   ]
 };
 
