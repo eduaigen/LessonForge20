@@ -28,8 +28,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+       <head>
+        <script
+            id="google-translate-script"
+            type="text/javascript"
+            src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+            async
+          ></script>
+          <script
+            id="google-translate-init"
+            dangerouslySetInnerHTML={{
+              __html: `
+                function googleTranslateElementInit() {
+                  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+                }
+              `,
+            }}
+          ></script>
+      </head>
       <body className={cn('font-body antialiased bg-background', inter.variable, spaceGrotesk.variable)}>
         <AuthProvider>
+          <div id="google_translate_element" style={{ position: 'fixed', top: '1rem', right: '1rem', zIndex: 1000 }}></div>
           <div className="flex min-h-screen flex-col">
             <AppHeader />
             <main className="flex-1 flex flex-col">

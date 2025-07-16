@@ -1,4 +1,3 @@
-
 type Lesson = {
     title: string;
     objective: string;
@@ -171,7 +170,7 @@ export const chemistryCurriculum: {
                         { title: "Lesson 2: What parts of the (smaller-scale) system might be causing the (smaller-scale) lightning?", objective: "Analyze graphical data and examine a physical model to assess the causal relationship between falling water and lightning formation." },
                         { title: "Lesson 3: What is the spark in the water dropper system and what else is happening in the system before it appears?", objective: "Conduct two rounds of investigations by adding different test objects to the water dropper system. Record observations, develop a model illustrating force patterns, discuss force and energy transfer patterns, and identify related phenomena (static)." },
                         { title: "Lesson 4: What happens when we produce static electricity?", objective: "Use several objects to investigate attractions and repulsions in different materials when rubbed together." },
-                        { title: "Lesson 5: What is happening at a particle level to produce static effects?", objective: "Investigate more static interactions. Use readings and simulations to develop atomic structure models to explain observed interactions." }
+                        { title: "Lesson 5: What is happening at a particle level to produce static effects?", objective: "Use readings and simulations to develop atomic structure models to explain observed interactions." }
                     ]
                 },
                 "Lesson Set 2: What causes a lightning strike?": {
@@ -202,5 +201,3 @@ export const chemistryCurriculum: {
         }
     }
 };
-
-    
