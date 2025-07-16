@@ -1,5 +1,6 @@
 
 import { z } from 'zod';
+import { type LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 const dataTableSchema = z.object({
   title: z.string(),
@@ -43,6 +44,7 @@ export type GenerateLabActivityOutput = z.infer<typeof GenerateLabActivityOutput
 export const GenerateLabActivityInputSchema = z.object({
   lessons: z.array(z.string()).describe("An array of lesson titles or topics the lab should be based on."),
   additionalInfo: z.string().optional().describe('Any additional notes, requests, or context from the user.'),
+  language: z.custom<LanguageOption>(),
 });
 export type GenerateLabActivityInput = z.infer<typeof GenerateLabActivityInputSchema>;
 
@@ -50,7 +52,9 @@ export type GenerateLabActivityInput = z.infer<typeof GenerateLabActivityInputSc
 // Schema for the Student Answer Sheet
 export const LabStudentSheetInputSchema = z.object({
   originalLab: GenerateLabActivityOutputSchema,
+  language: z.custom<LanguageOption>(),
 });
+
 export const LabStudentSheetOutputSchema = z.object({
     title: z.string(),
     phenomenonReading: z.string(),
@@ -72,7 +76,9 @@ export const LabStudentSheetOutputSchema = z.object({
     }),
     dataCollection: z.object({
         description: z.string(),
-        dataTable: dataTableSchema.optional(),
+        dataTable: dataTableSchema.extend({
+          rows: z.array(z.array(z.string())).min(6), // Ensure at least 6 empty rows
+        }).optional(),
     }),
     dataAnalysis: z.string().describe("A space/prompt for student's data analysis."),
     conclusion: z.object({
@@ -84,7 +90,9 @@ export const LabStudentSheetOutputSchema = z.object({
 // Schema for the Lab Answer Key
 export const LabAnswerKeyInputSchema = z.object({
   originalLab: GenerateLabActivityOutputSchema,
+  language: z.custom<LanguageOption>(),
 });
+
 export const LabAnswerKeyOutputSchema = z.object({
     title: z.string(),
     preLabAnswers: z.array(z.string()),
@@ -99,12 +107,15 @@ export const LabAnswerKeyOutputSchema = z.object({
 // Schema for the Teacher Coach document
 export const LabTeacherCoachInputSchema = z.object({
   originalLab: GenerateLabActivityOutputSchema,
+  language: z.custom<LanguageOption>(),
 });
+
 const CoachingAdviceSchema = z.object({
     pedagogicalRationale: z.string(),
     facilitationTip: z.string().optional(),
     sampleScript: z.string().optional(),
 });
+
 export const LabTeacherCoachOutputSchema = z.object({
     title: z.string(),
     introduction: CoachingAdviceSchema,
@@ -118,4 +129,5 @@ export const LabTeacherCoachOutputSchema = z.object({
 // Schema for the Differentiated Lab flow
 export const DifferentiatedLabInputSchema = z.object({
   originalLab: GenerateLabActivityOutputSchema,
+  language: z.custom<LanguageOption>(),
 });

@@ -17,16 +17,17 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateELATestOutputSchema },
   prompt: `You are an expert high school English teacher and assessment writer for the NYS ELA Regents exam. Your task is to generate a comprehensive, three-part test based on a provided list of lessons and specified question counts.
 
+**CRITICAL INSTRUCTIONS:**
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics.
+2.  All generated passages and questions must be complete and fully written out. No placeholders.
+3.  The content should be appropriate for a 9th-12th grade reading level.
+4.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
+5.  You MUST create a complete and thorough answer key for all parts of the test.
+
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
 - **Number of Reading Passages**: {{{passageCount}}} (Generate 8 MCQs per passage)
 - **Number of Argument Essay Sources**: {{{sourceCount}}}
-
-**CRITICAL INSTRUCTIONS:**
-1.  All generated passages and questions must be complete and fully written out. No placeholders.
-2.  The content should be appropriate for a 9th-12th grade reading level.
-3.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
-4.  You MUST create a complete and thorough answer key for all parts of the test.
 
 ---
 

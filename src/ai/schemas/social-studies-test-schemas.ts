@@ -1,5 +1,6 @@
 
 import { z } from 'zod';
+import { type LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const GenerateSocialStudiesTestInputSchema = z.object({
   lessons: z.array(z.string()).describe('An array of curriculum lessons to base the test on.'),
@@ -7,6 +8,7 @@ export const GenerateSocialStudiesTestInputSchema = z.object({
   mcqCount: z.number().min(1).max(28).describe('The number of multiple-choice questions to generate.'),
   crqCount: z.number().min(1).max(5).describe('The number of Constructed-Response Question sets to generate.'),
   dbqDocCount: z.number().min(3).max(7).describe('The number of documents for the Document-Based Question.'),
+  language: z.custom<LanguageOption>(),
 });
 
 const multipleChoiceQuestionSchema = z.object({

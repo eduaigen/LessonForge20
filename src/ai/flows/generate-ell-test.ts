@@ -17,14 +17,15 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateELLTestOutputSchema },
   prompt: `You are an expert educator specializing in creating assessments for high school English Language Learners (ELLs). Your task is to generate a comprehensive, three-part test that is accessible and assesses key language skills.
 
+**CRITICAL INSTRUCTIONS:**
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics.
+2.  **Use Simple Language:** All generated content (instructions, passages, questions, prompts) must use clear, simple, and accessible language suitable for high school ELLs.
+3.  **Provide Scaffolding:** Build in scaffolds like sentence starters, visual aid descriptions, and clear vocabulary support.
+4.  All generated content must be complete and fully written out. No placeholders.
+5.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
+
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
-
-**CRITICAL INSTRUCTIONS:**
-1.  **Use Simple Language:** All generated content (instructions, passages, questions, prompts) must use clear, simple, and accessible language suitable for high school ELLs.
-2.  **Provide Scaffolding:** Build in scaffolds like sentence starters, visual aid descriptions, and clear vocabulary support.
-3.  All generated content must be complete and fully written out. No placeholders.
-4.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
 
 ---
 

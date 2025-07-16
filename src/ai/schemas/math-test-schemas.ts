@@ -1,11 +1,13 @@
 
 import { z } from 'zod';
+import { type LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const GenerateMathTestInputSchema = z.object({
   lessons: z.array(z.string()).describe('An array of curriculum lessons to base the test on.'),
   partICount: z.number().min(1).max(24).describe('The number of multiple-choice questions.'),
   partIICount: z.number().min(1).max(8).describe('The number of 2-credit constructed-response questions.'),
   partIIICount: z.number().min(1).max(4).describe('The number of 4-credit constructed-response questions.'),
+  language: z.custom<LanguageOption>(),
 });
 
 const multipleChoiceQuestionSchema = z.object({

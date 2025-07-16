@@ -17,18 +17,19 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateMathTestOutputSchema },
   prompt: `You are an expert high school Geometry teacher and assessment writer for the NYS Regents curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum lessons. Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$\\triangle ABC \\cong \\triangle DEF$$.
 
+**CRITICAL INSTRUCTIONS:**
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics.
+2.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
+3.  All generated content must be complete and fully written out. No placeholders.
+4.  Use LaTeX for all mathematical expressions, equations, and symbols.
+5.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
+6.  Generate a set of clear, student-facing instructions for taking the test.
+
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
 - **Number of Part I Questions (Multiple Choice)**: {{{partICount}}}
 - **Number of Part II Questions (2-Credit Open Response)**: {{{partIICount}}}
 - **Number of Part III Questions (4-Credit Open Response)**: {{{partIIICount}}}
-
-**CRITICAL INSTRUCTIONS:**
-1.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
-2.  All generated content must be complete and fully written out. No placeholders.
-3.  Use LaTeX for all mathematical expressions, equations, and symbols.
-4.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
-5.  Generate a set of clear, student-facing instructions for taking the test.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.

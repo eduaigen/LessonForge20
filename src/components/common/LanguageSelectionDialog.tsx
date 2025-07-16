@@ -20,7 +20,7 @@ interface LanguageSelectionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSelectLanguage: (language: LanguageOption) => void;
-  toolName: ToolName | null;
+  toolName: ToolName | 'Test' | 'Lab Activity' | null;
 }
 
 export function LanguageSelectionDialog({

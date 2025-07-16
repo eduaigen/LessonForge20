@@ -1,11 +1,13 @@
 
 import { z } from 'zod';
 import { dataTableSchema } from './nv-biology-lesson-schemas';
+import { type LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const GenerateScienceTestInputSchema = z.object({
   units: z.array(z.string()).describe('An array of curriculum units to base the test on.'),
   dokLevel: z.number().min(1).max(4).describe('The desired Depth of Knowledge level for the questions.'),
   clusterCount: z.number().min(1).max(5).describe('The number of question clusters to generate.'),
+  language: z.custom<LanguageOption>(),
 });
 
 const multipleChoiceQuestionSchema = z.object({
