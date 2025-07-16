@@ -5,11 +5,8 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { GenerateLabActivityOutputSchema, LabTeacherCoachOutputSchema } from '../schemas/lab-activity-schemas';
+import { LabTeacherCoachInputSchema, LabTeacherCoachOutputSchema } from '../schemas/lab-activity-schemas';
 
-export const LabTeacherCoachInputSchema = z.object({
-  originalLab: GenerateLabActivityOutputSchema,
-});
 
 const prompt = ai.definePrompt({
   name: 'generateLabTeacherCoachPrompt',

@@ -76,12 +76,14 @@ export const LabAnswerKeyOutputSchema = z.object({
 });
 
 // Schema for the Teacher Coach document
+export const LabTeacherCoachInputSchema = z.object({
+  originalLab: GenerateLabActivityOutputSchema,
+});
 const CoachingAdviceSchema = z.object({
     pedagogicalRationale: z.string(),
     facilitationTip: z.string().optional(),
     sampleScript: z.string().optional(),
 });
-
 export const LabTeacherCoachOutputSchema = z.object({
     title: z.string(),
     introduction: CoachingAdviceSchema,
