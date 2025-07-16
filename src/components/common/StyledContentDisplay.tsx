@@ -849,13 +849,11 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{lab.labTitle}</h1>
         <p className="text-lg text-muted-foreground">{lab.subjectArea} | {lab.gradeLevel}</p>
+        <p className="text-sm text-muted-foreground mt-2"><strong>Time Required:</strong> {lab.timeBreakdown}</p>
       </header>
 
-      <LessonSection title="Lab Overview">
-        <p><strong>Total Time:</strong> {lab.totalTimeRequired}</p>
-        <p><strong>Time Breakdown:</strong> Intro: {lab.timeBreakdown.intro}, Activity: {lab.timeBreakdown.activity}, Discussion: {lab.timeBreakdown.discussion}, Cleanup: {lab.timeBreakdown.cleanup}</p>
-        <div><strong>Learning Objectives:</strong> <ul className="list-disc pl-5">{lab.learningObjectives.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-        <p><strong>Introduction:</strong> {lab.introduction}</p>
+      <LessonSection title="Learning Objectives">
+        <ul className="list-disc pl-5">{lab.learningObjectives.map((o, i) => <li key={i}>{o}</li>)}</ul>
       </LessonSection>
 
       <LessonSection title="NGSS Alignment">
@@ -865,8 +863,12 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
         <p><strong>Crosscutting Concept (CCC):</strong> {lab.ngssAlignment.crosscuttingConcept}</p>
       </LessonSection>
 
-      <LessonSection title="Pre-Lab Preparation">
-        <p>{lab.preLab}</p>
+      <LessonSection title="Phenomenon / Introduction">
+          <p>{lab.phenomenon}</p>
+      </LessonSection>
+
+      <LessonSection title="Pre-Lab Questions">
+          <ol className="list-decimal pl-5 space-y-2">{lab.preLabQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol>
       </LessonSection>
 
       <LessonSection title="Materials and Safety">
@@ -874,26 +876,19 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
         <div><strong className="text-destructive">Safety Precautions:</strong> <ul className="list-disc pl-5 text-destructive/80">{lab.safetyPrecautions.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
       </LessonSection>
 
-      <LessonSection title="Procedure">
-        <ol className="list-decimal pl-5 space-y-2">{lab.procedure.map((step, i) => <li key={i}>{step}</li>)}</ol>
+      <LessonSection title="Procedure Design">
+        <p className="italic text-muted-foreground">{lab.studentProcedureDesign}</p>
+        <p>Students should record their step-by-step procedure below:</p>
+        <div className="my-2 h-48 border rounded-md p-2"></div>
       </LessonSection>
 
       <LessonSection title="Data Collection & Analysis">
-        <p>{lab.dataCollectionAndAnalysis.description}</p>
-        {renderTableFromObject(lab.dataCollectionAndAnalysis.dataTable)}
+        <p>{lab.dataCollection.description}</p>
+        {renderTableFromObject(lab.dataCollection.dataTable)}
       </LessonSection>
 
-      <LessonSection title="Discussion & Wrap-up">
+      <LessonSection title="Discussion">
         <div><strong>Discussion Questions:</strong> <ol className="list-decimal pl-5 space-y-2">{lab.discussionQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></div>
-        <p><strong>Assessment Suggestions:</strong> {lab.assessmentSuggestions}</p>
-      </LessonSection>
-
-       <LessonSection title="Extension Activities">
-          <p>{lab.extensionActivities}</p>
-      </LessonSection>
-
-      <LessonSection title="Teacher Notes">
-        <p>{lab.teacherNotes}</p>
       </LessonSection>
     </div>
 );
@@ -927,9 +922,10 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Reading Material':
             return <ReadingMaterialDisplay content={content} />;
         case 'Lab Activity':
-            return <LabActivityDisplay lab={content} />;
-        case 'Test':
         case 'Differentiated Version':
+             if (isLabActivity) return <LabActivityDisplay lab={content} />;
+             // Fallthrough for differentiated tests
+        case 'Test':
         case 'Enhanced Version':
             if (isScienceTest) return <ScienceTestDisplay test={content} type={type} />;
             if (isSocialStudiesTest) return <SocialStudiesTestDisplay test={content} />;
@@ -944,6 +940,9 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);
+        case 'Student Answer Sheet':
+             // Assuming student answer sheet is just a variation of a worksheet for now
+            return renderWorksheet(content);
         default:
             try {
                 const jsonString = JSON.stringify(content, null, 2);
