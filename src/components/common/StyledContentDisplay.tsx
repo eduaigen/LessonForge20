@@ -21,21 +21,21 @@ import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import GeneratingAnimation from './GeneratingAnimation';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 
-const renderTableFromObject = (tableData: { title: string, headers: string[], rows: string[][] } | null) => {
+const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
     return (
-        <div className="overflow-x-auto my-4">
-            <h4 className="font-semibold text-lg mb-2">{tableData.title}</h4>
-            <table className="w-full border-collapse">
+        <div className="overflow-x-auto my-4 rounded-lg border">
+            <h4 className="font-semibold text-lg mb-2 p-4">{tableData.title}</h4>
+            <table className="w-full text-sm">
                 <thead>
-                    <tr className="border-b">
-                        {tableData.headers.map((header, index) => <th key={index} className="p-2 text-left font-semibold text-foreground">{header}</th>)}
+                    <tr className="border-b bg-muted/50">
+                        {tableData.headers.map((header, index) => <th key={index} className="p-3 text-left font-semibold text-foreground">{header}</th>)}
                     </tr>
                 </thead>
                 <tbody>
                     {tableData.rows.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="border-b">
-                            {row.map((cell, cellIndex) => <td key={cellIndex} className="p-2 align-top">{cell}</td>)}
+                        <tr key={rowIndex} className="border-b last:border-b-0">
+                            {row.map((cell, cellIndex) => <td key={cellIndex} className="p-3 align-top">{cell}</td>)}
                         </tr>
                     ))}
                 </tbody>
@@ -117,7 +117,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
 
             <LessonSection title="B. Mini-Lesson / Direct Instruction (10–15 min)">
                 <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{miniLesson.readingPassage}</Markdown></div>
-                {miniLesson.diagram && <div><h4>Diagram Description</h4><blockquote className="border-l-4 border-primary pl-4 italic">{miniLesson.diagram}</blockquote></div>}
+                {miniLesson.diagram && <div className="p-4 border-l-4 border-primary bg-muted/50 rounded-r-lg"><h4>Diagram/Model Description</h4><blockquote className="italic m-0 p-0 border-0">{miniLesson.diagram}</blockquote></div>}
                 <div><h4>Concept-Check Questions</h4>{renderLeveledQuestions(miniLesson.conceptCheckQuestions)}</div>
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{miniLesson.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{miniLesson.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
@@ -126,7 +126,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
             <LessonSection title="C. Guided Practice / Group Activity (15–20 min)">
                 {typeof guidedPractice.activityContent === 'string' 
                  ? <div><h4>Activity Description</h4><p>{guidedPractice.activityContent}</p></div>
-                 : renderTableFromObject(guidedPractice.activityContent)
+                 : renderTableFromObject(guidedPractice.activityContent as any)
                 }
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{guidedPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{guidedPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
@@ -159,7 +159,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
             <LessonSection title="H. Differentiation & Support">
                 <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{differentiation.supportActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs with Support</h4><ul className="list-disc pl-5">{differentiation.supportOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-                <div><h4>Scaffolded Materials</h4><p>{differentiation.scaffoldedMaterials}</p></div>
+                <div><h4>Scaffolded Materials</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{differentiation.scaffoldedMaterials}</Markdown></div>
                 <div><h4>Extension Activity</h4><p>{differentiation.extensionActivity}</p></div>
             </LessonSection>
         </div>
@@ -223,12 +223,12 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                 </>
             )}
              {worksheet.miniLesson.diagramDescription && (
-                <>
-                    <h4>Diagram for Analysis</h4>
-                    <blockquote className="border-l-4 border-primary pl-4 italic">
+                <div className="p-4 border-l-4 border-primary bg-muted/50 rounded-r-lg my-4">
+                    <h4 className="font-semibold">Diagram for Analysis</h4>
+                    <blockquote className="border-0 m-0 p-0 italic">
                         {worksheet.miniLesson.diagramDescription}
                     </blockquote>
-                </>
+                </div>
             )}
              <h4>{worksheet.miniLesson.notesTitle}</h4>
             <div className="overflow-x-auto my-4">
@@ -267,7 +267,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
         
         <section className="mb-6">
             <h3>{worksheet.guidedPractice.title}</h3>
-            {worksheet.guidedPractice.instructions.map((inst, i) => <p key={i}>{inst}</p>)}
+            {Array.isArray(worksheet.guidedPractice.instructions) && worksheet.guidedPractice.instructions.map((inst, i) => <p key={i}>{inst}</p>)}
             {worksheet.guidedPractice.dataTable && renderTableFromObject(worksheet.guidedPractice.dataTable)}
             <div className="my-4 h-24 border-b border-dashed"></div>
         </section>
@@ -315,9 +315,9 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                 </div>
             )}
             {worksheet.homework.differentiation_support && (
-                 <div className="mt-4">
+                 <div className="mt-4 p-4 border-l-4 border-accent bg-accent/10 rounded-r-lg">
                     <h4>Support Materials</h4>
-                    <p>{worksheet.homework.differentiation_support}</p>
+                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{worksheet.homework.differentiation_support}</Markdown>
                 </div>
             )}
         </section>
