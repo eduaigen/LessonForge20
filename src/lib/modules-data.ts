@@ -17,10 +17,7 @@ export const modules = {
     { id: 'price_1Pg11DAk4y2zY5d6GHIJkLmN', name: 'Illustrative Math Geometry', description: 'Transformations, congruence, trig.', icon: 'sigma' },
   ],
   ela: [
-    { id: 'price_1Pg11UAk4y2zY5d6OPQRsTuV', name: 'ELA 9th Grade', description: 'Analytical reading and writing skills.', icon: 'library' },
-    { id: 'price_1Pg11gAk4y2zY5d6WXYZ0a1b', name: 'ELA 10th Grade', description: 'Complex texts and critical analysis.', icon: 'library' },
-    { id: 'price_1Pg11sAk4y2zY5d6cdeFgHjK', name: 'ELA 11th Grade', description: 'American literature and research.', icon: 'library' },
-    { id: 'price_1Pg124Ak4y2zY5d6lMnOpQrS', name: 'ELA 12th Grade', description: 'College-level reading and writing.', icon: 'library' },
+    { id: 'price_1Pg11UAk4y2zY5d6OPQRsTuV', name: 'ELA Curriculum (Grades 9-12)', description: 'Comprehensive lesson plans for high school English.', icon: 'library' },
   ],
   social: [
     { id: 'price_1Pg12DAk4y2zY5d6tUvWxYz0', name: 'Global History I (Grade 9)', description: 'From ancient civilizations to the post-classical world.', icon: 'history' },

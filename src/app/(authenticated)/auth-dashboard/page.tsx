@@ -20,7 +20,6 @@ import {
   Magnet,
   Sparkles,
   Stethoscope,
-  FlaskConical,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -47,7 +46,7 @@ const ToolCard = ({ title, description, icon, href }: { title: string, descripti
 };
 
 const PremiumDashboardContent = () => {
-  const { user, hasScienceSubscription, hasMathSubscription } = useAuth();
+  const { user, hasScienceSubscription, hasMathSubscription, hasELASubscription } = useAuth();
   
   return (
     <div className="flex flex-col gap-8">
@@ -135,19 +134,21 @@ const PremiumDashboardContent = () => {
             </section>
           )}
 
-          <section>
-            <h2 className="text-2xl font-bold font-headline mb-4">ELA Modules</h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <ToolCard
-                title="ELA 9th Grade Generator"
-                description="Create lesson plans for 9th Grade ELA curriculum."
-                icon={<Library />}
-                href="/ela9-generator"
-              />
-            </div>
-          </section>
+          {hasELASubscription && (
+            <section>
+              <h2 className="text-2xl font-bold font-headline mb-4">ELA Modules</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <ToolCard
+                  title="ELA Curriculum Generator"
+                  description="Create lesson plans for 9th-12th Grade ELA."
+                  icon={<Library />}
+                  href="/ela-generator"
+                />
+              </div>
+            </section>
+          )}
 
-          {!hasScienceSubscription && !hasMathSubscription && (
+          {!hasScienceSubscription && !hasMathSubscription && !hasELASubscription && (
              <div className="text-center py-16 col-span-full">
                 <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
                 <p className="text-muted-foreground">You do not have any active subscriptions with available tools.</p>
