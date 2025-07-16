@@ -105,15 +105,15 @@ export const algebra2Curriculum: {
                 "The Unit Circle": {
                     topic: "The Unit Circle",
                     lessons: [
-                        { title: "Lesson 1: Angles and Radian Measure", objective: "I can convert between degrees and radians and find coterminal angles.", standard: "AII-F.TF.1" },
-                        { title: "Lesson 2: The Unit Circle", objective: "I can find the values of sine, cosine, and tangent for angles on the unit circle.", standard: "AII-F.TF.2" }
+                        { title: "Lesson 1: Angles and Radian Measure", objective: "I can convert between degrees (e.g., $90^\\circ$) and radians and find coterminal angles.", standard: "AII-F.TF.1" },
+                        { title: "Lesson 2: The Unit Circle", objective: "I can find the values of sine ($\\sin$), cosine ($\\cos$), and tangent ($\\tan$) for angles on the unit circle.", standard: "AII-F.TF.2" }
                     ]
                 },
                 "Graphs of Trigonometric Functions": {
                     topic: "Graphs of Trigonometric Functions",
                     lessons: [
                         { title: "Lesson 3: Graphing Sine and Cosine Functions", objective: "I can graph sine and cosine functions and identify their amplitude, period, and midline.", standard: "AII-F.IF.7e" },
-                        { title: "Lesson 4: Graphing Other Trigonometric Functions", objective: "I can graph tangent, cotangent, secant, and cosecant functions.", standard: "AII-F.IF.7e" }
+                        { title: "Lesson 4: Graphing Other Trigonometric Functions", objective: "I can graph tangent ($\\tan$), cotangent ($\\cot$), secant ($\\sec$), and cosecant ($\\csc$) functions.", standard: "AII-F.IF.7e" }
                     ]
                 },
                 "Trigonometric Identities and Equations": {
@@ -148,3 +148,4 @@ export const algebra2Curriculum: {
 };
 
     
+

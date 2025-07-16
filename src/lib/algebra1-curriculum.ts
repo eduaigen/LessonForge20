@@ -80,7 +80,7 @@ export const algebra1Curriculum: {
                     lessons: [
                         { title: "Lesson 7: Equations of Lines", objective: "I can write and graph equations of lines.", standard: "AI-A.REI.10" },
                         { title: "Lesson 8: Slope", objective: "I can find the slope of a line and interpret it in a context.", standard: "AI-F.IF.6" },
-                        { title: "Lesson 9: Slopes of Parallel and Perpendicular Lines", objective: "I can write equations of parallel and perpendicular lines.", standard: "GEO-G.GPE.5" },
+                        { title: "Lesson 9: Slopes of Parallel and Perpendicular Lines", objective: "I can write equations of parallel lines ($\\parallel$) and perpendicular lines ($\\perp$).", standard: "GEO-G.GPE.5" },
                         { title: "Lesson 10: Writing Equations of Lines", objective: "I can write an equation of a line from a description.", standard: "AI-F.LE.2" }
                     ]
                 },
@@ -270,3 +270,4 @@ export const algebra1Curriculum: {
 };
 
     
+
