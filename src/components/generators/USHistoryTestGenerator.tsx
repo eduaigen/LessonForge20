@@ -163,7 +163,7 @@ const GeneratorContent = () => {
             </form>
           </Form>
 
-          {isLoading && <GeneratingAnimation />}
+          {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
           
           {generatedTest && (
              <CollapsibleSection key={generatedTest.testTitle} title={generatedTest.testTitle} contentItem={{id: 'test', title: generatedTest.testTitle, content: generatedTest, type: 'Test' as any}}>
