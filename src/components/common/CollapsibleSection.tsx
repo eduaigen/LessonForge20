@@ -5,12 +5,12 @@ import React, { useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, FileDown, Loader2, Languages } from 'lucide-react';
+import { Printer, Download, FileDown, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
 import jsPDF from 'jspdf';
-import StyledContentDisplay, { WorksheetHeader } from './StyledContentDisplay';
+import StyledContentDisplay from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
   title: string;
@@ -169,17 +169,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
           setIsDownloading(false);
         }
       };
-
-    const handleTranslate = () => {
-        const googleTranslateElement = document.querySelector('.goog-te-combo');
-        if (googleTranslateElement && googleTranslateElement instanceof HTMLElement) {
-            googleTranslateElement.focus();
-            toast({
-                title: 'Ready to Translate',
-                description: 'Please select a language from the Google Translate dropdown at the top of the page.',
-            });
-        }
-    };
       
   return (
     <Card className="mt-6 shadow-md">
@@ -195,10 +184,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     <h3 className="text-xl font-headline">{title}</h3>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 ml-4 flex-wrap">
-                    <Button variant="outline" size="icon" onClick={handleTranslate} title="Translate">
-                        <Languages className="h-4 w-4" />
-                        <span className="sr-only">Translate</span>
-                    </Button>
                     <Button variant="outline" size="icon" onClick={handlePrint} title="Print">
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>

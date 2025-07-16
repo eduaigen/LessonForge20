@@ -1,8 +1,10 @@
 
 import { z } from 'zod';
-import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
 
-export const StudySheetInputSchema = GenerateNVBiologyLessonOutputSchema;
+export const StudySheetInputSchema = z.object({
+  lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
+  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated study sheet.'),
+});
 
 export const StudySheetOutputSchema = z.object({
   lessonTitle: z.string().describe("The main title of the lesson."),

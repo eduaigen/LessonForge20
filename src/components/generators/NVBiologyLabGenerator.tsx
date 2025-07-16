@@ -26,6 +26,7 @@ import { generateLabAnswerKey } from '@/ai/flows/generate-lab-answer-key';
 import { generateLabStudentSheet } from '@/ai/flows/generate-lab-student-sheet';
 import { generateDifferentiatedLab } from '@/ai/flows/generate-differentiated-lab';
 import { generateLabTeacherCoach } from '@/ai/flows/generate-lab-teacher-coach';
+import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine(value => value.length > 0, { message: 'Please select at least one lesson.' }),
@@ -70,6 +71,9 @@ const GeneratorContent = () => {
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
+  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
+  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
+
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -151,30 +155,42 @@ const GeneratorContent = () => {
         toast({ title: "No Lab Found", description: "Please generate a lab first.", variant: "destructive" });
         return;
     }
-    if (labPackage?.some(item => item.type === toolName)) {
-        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
+    setSelectedTool(toolName);
+    setIsLanguageDialogOpen(true);
+  };
+  
+  const executeToolGeneration = async (language: LanguageOption) => {
+    const originalLab = labPackage?.find(item => item.type === 'Lab Activity');
+    if (!originalLab || !selectedTool) {
+        toast({ title: "No Lab Found", description: "Please generate a lab first.", variant: "destructive" });
+        return;
+    }
+    if (labPackage?.some(item => item.type === selectedTool)) {
+        toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.`, variant: "default"});
         return;
     }
 
-    setIsToolLoading(toolName);
+    setIsToolLoading(selectedTool);
     try {
         let result: any;
         let newContent: GeneratedContent | null = null;
-        switch (toolName) {
+        const input = { originalLab: originalLab.content, language };
+
+        switch (selectedTool) {
             case 'Student Answer Sheet':
-                result = await generateLabStudentSheet({ originalLab: originalLab.content });
+                result = await generateLabStudentSheet(input);
                 newContent = { id: `studentsheet-${Date.now()}`, title: result.title, content: result, type: 'Student Answer Sheet' };
                 break;
             case 'Answer Key':
-                result = await generateLabAnswerKey({ originalLab: originalLab.content });
+                result = await generateLabAnswerKey(input);
                 newContent = { id: `answerkey-${Date.now()}`, title: result.title, content: result, type: 'Answer Key' };
                 break;
             case 'Differentiated Version':
-                result = await generateDifferentiatedLab({ originalLab: originalLab.content });
+                result = await generateDifferentiatedLab(input);
                 newContent = { id: `differentiated-${Date.now()}`, title: result.labTitle, content: result, type: 'Differentiated Version' };
                 break;
             case 'Teacher Coach':
-                result = await generateLabTeacherCoach({ originalLab: originalLab.content });
+                result = await generateLabTeacherCoach(input);
                 newContent = { id: `coach-${Date.now()}`, title: result.title, content: result, type: 'Teacher Coach' };
                 break;
         }
@@ -183,10 +199,11 @@ const GeneratorContent = () => {
             setLabPackage(prev => [...(prev || []), newContent!]);
         }
     } catch (error) {
-         console.error(`${toolName} generation failed:`, error);
-        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
+         console.error(`${selectedTool} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${selectedTool}.`, variant: "destructive" });
     } finally {
         setIsToolLoading(null);
+        setSelectedTool(null);
     }
   };
 
@@ -211,6 +228,13 @@ const GeneratorContent = () => {
           <AlertDialogFooter><AlertDialogAction onClick={() => handleDialogClose(false)}>Got it, thanks!</AlertDialogAction></AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <LanguageSelectionDialog 
+        open={isLanguageDialogOpen}
+        onOpenChange={setIsLanguageDialogOpen}
+        onSelectLanguage={executeToolGeneration}
+        toolName={selectedTool}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">

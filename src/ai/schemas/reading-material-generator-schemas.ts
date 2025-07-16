@@ -1,13 +1,10 @@
 
 import { z } from 'zod';
-import { GenerateNVBiologyLessonOutputSchema } from './nv-biology-lesson-schemas';
 
-export const PromptInputSchema = z.object({
-    lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
+export const ReadingMaterialInputSchema = z.object({
+  lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
+  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated reading material.'),
 });
-
-// The input for the flow is the entire lesson plan object.
-export const ReadingMaterialInputSchema = GenerateNVBiologyLessonOutputSchema;
 
 const multipleChoiceQuestionSchema = z.object({
   question: z.string(),

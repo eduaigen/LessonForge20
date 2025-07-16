@@ -15,12 +15,13 @@ const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
   input: { schema: GenerateWorksheetInputSchema },
   output: { schema: GenerateWorksheetOutputSchema },
-  prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet.
+  prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet in the specified language.
 
 **CRITICAL RULES:**
-1.  Your ONLY source of information is the provided JSON lesson plan.
-2.  You MUST follow the instructions for each section below with 100% fidelity.
-3.  Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by the Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
+3.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
+4.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
 
 **Lesson Plan Data:**
 \`\`\`json
@@ -32,14 +33,14 @@ const prompt = ai.definePrompt({
 ---
 
 **1. Header Section:**
-- **Action:** Populate the 'header' object fields as placeholders.
+- **Action:** Populate the 'header' object fields as placeholders in the target language.
 - **Output:**
-    - name: "Name: ______________________"
-    - date: "Date: _______________"
-    - period: "Period: _______"
-    - grade: "Grade: _______"
-    - class: "Class: ___________________"
-    - teacher: "Teacher: ___________________"
+    - name: "Name: ______________________" (and Spanish translation if bilingual)
+    - date: "Date: _______________" (and Spanish translation if bilingual)
+    - period: "Period: _______" (and Spanish translation if bilingual)
+    - grade: "Grade: _______" (and Spanish translation if bilingual)
+    - class: "Class: ___________________" (and Spanish translation if bilingual)
+    - teacher: "Teacher: ___________________" (and Spanish translation if bilingual)
 
 **2. Aim & Essential Question Section:**
 - **Action:** Scan 'lessonOverview' in the lesson plan.
@@ -97,7 +98,7 @@ const prompt = ai.definePrompt({
     - Copy 'differentiation.extensionActivity' into 'homework.extensionActivity'.
     - Copy 'differentiation.scaffoldedMaterials' into 'homework.differentiation_support'.
 
-**Final Check:** Review your generated JSON to ensure every instruction was followed precisely. The output must be a valid JSON object matching the 'GenerateWorksheetOutputSchema'.
+**Final Check:** Review your generated JSON to ensure every instruction was followed precisely. The output must be a valid JSON object matching the 'GenerateWorksheetOutputSchema' and be in the correct language.
 `,
 });
 

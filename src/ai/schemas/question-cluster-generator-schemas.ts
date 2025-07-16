@@ -4,6 +4,7 @@ import { dataTableSchema } from './nv-biology-lesson-schemas';
 export const QuestionClusterInputSchema = z.object({
   lessonTopic: z.string().describe('The core topic of the lesson plan.'),
   lessonObjective: z.string().describe('The main learning objective of the lesson.'),
+  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated question cluster.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({

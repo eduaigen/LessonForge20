@@ -10,18 +10,16 @@ import {
   type StudySheetInput,
   type StudySheetOutput,
 } from '../schemas/study-sheet-generator-schemas';
-import { GenerateNVBiologyLessonOutputSchema } from '../schemas/nv-biology-lesson-schemas';
-import { z } from 'zod';
-
-const PromptInputSchema = z.object({
-    lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
-});
 
 const prompt = ai.definePrompt({
   name: 'studySheetGeneratorPrompt',
-  input: { schema: PromptInputSchema },
+  input: { schema: StudySheetInputSchema },
   output: { schema: StudySheetOutputSchema },
-  prompt: `You are an expert educator creating a comprehensive study guide for students based on a detailed lesson plan. Your task is to extract, synthesize, and reformat the most critical information into a clear, concise, and thorough study sheet.
+  prompt: `You are an expert educator creating a comprehensive study guide for students based on a detailed lesson plan. Your task is to extract, synthesize, and reformat the most critical information into a clear, concise, and thorough study sheet in the specified language.
+
+**CRITICAL INSTRUCTIONS:**
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by the Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
 
 **Lesson Plan Data:**
 \`\`\`json
@@ -54,8 +52,7 @@ const studySheetGeneratorFlow = ai.defineFlow(
     outputSchema: StudySheetOutputSchema,
   },
   async (input) => {
-    const lessonPlanJson = JSON.stringify(input, null, 2);
-    const { output } = await prompt({ lessonPlanJson });
+    const { output } = await prompt(input);
     if (!output) {
       throw new Error('The AI failed to generate the study sheet. Please try again.');
     }

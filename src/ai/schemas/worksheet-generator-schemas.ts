@@ -3,6 +3,7 @@ import { dataTableSchema } from './nv-biology-lesson-schemas';
 
 export const GenerateWorksheetInputSchema = z.object({
   lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
+  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated worksheet.'),
 });
 
 const headerSchema = z.object({

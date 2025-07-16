@@ -15,9 +15,11 @@ const prompt = ai.definePrompt({
   name: 'questionClusterGeneratorPrompt',
   input: { schema: QuestionClusterInputSchema },
   output: { schema: QuestionClusterOutputSchema },
-  prompt: `You are an expert in science assessment design, specializing in creating three-dimensional, NGSS-aligned question clusters.
+  prompt: `You are an expert in science assessment design, specializing in creating three-dimensional, NGSS-aligned question clusters. Your task is to generate a 6-question cluster in the specified language based on the provided lesson plan topic.
 
-Your task is to generate a 6-question cluster based on the provided lesson plan topic. The cluster must be anchored in a real-world phenomenon and include stimulus material (a short passage and a data table).
+**CRITICAL INSTRUCTIONS:**
+1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by the Spanish translation, clearly labeled (e.g., "English: [text] / Español: [texto]").
+2.  **Source Material**: Use the lesson topic and objective as the primary inspiration.
 
 **Lesson Plan Context:**
 ---
