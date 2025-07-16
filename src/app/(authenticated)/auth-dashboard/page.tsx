@@ -137,15 +137,30 @@ const PremiumDashboardContent = () => {
                         icon={<FlaskConical />}
                         href="/ngss-chemistry-test-generator"
                      />
-                     <Card className="flex flex-col bg-muted/50">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-lg font-medium text-muted-foreground">Lab Generator</CardTitle>
-                            <TestTube className="text-muted-foreground/50"/>
-                        </CardHeader>
-                        <CardContent className="flex-grow">
-                            <p className="text-sm text-muted-foreground">Coming soon! Create safe, effective lab activities.</p>
-                        </CardContent>
-                     </Card>
+                      <ToolCard
+                        title="NV Biology Lab Generator"
+                        description="Generate 45-minute NGSS-aligned labs for NV Biology."
+                        icon={<TestTube />}
+                        href="/nv-biology-lab-generator"
+                      />
+                      <ToolCard
+                        title="NGSS Chemistry Lab Generator"
+                        description="Generate 45-minute NGSS-aligned labs for NGSS Chemistry."
+                        icon={<TestTube />}
+                        href="/ngss-chemistry-lab-generator"
+                      />
+                      <ToolCard
+                        title="NGSS Physics Lab Generator"
+                        description="Generate 45-minute NGSS-aligned labs for NGSS Physics."
+                        icon={<TestTube />}
+                        href="/ngss-physics-lab-generator"
+                      />
+                      <ToolCard
+                        title="NV Earth Science Lab Generator"
+                        description="Generate 45-minute NGSS-aligned labs for NV Earth Science."
+                        icon={<TestTube />}
+                        href="/nv-earth-science-lab-generator"
+                      />
                 </div>
               </div>
             </section>
@@ -202,15 +217,27 @@ const PremiumDashboardContent = () => {
           )}
 
           {hasELASubscription && (
-            <section>
+             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">ELA Modules</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <ToolCard
-                  title="ELA Curriculum Generator"
-                  description="Create lesson plans for 9th-12th Grade ELA."
-                  icon={<Library />}
-                  href="/ela-generator"
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold text-muted-foreground">Lesson Plan Generators</h3>
+                  <ToolCard
+                    title="ELA Curriculum Generator"
+                    description="Create lesson plans for 9th-12th Grade ELA."
+                    icon={<Library />}
+                    href="/ela-generator"
+                  />
+                </div>
+                <div className="space-y-6">
+                   <h3 className="text-lg font-semibold text-muted-foreground">Assessment Generators</h3>
+                   <ToolCard
+                    title="ELA Test Generator"
+                    description="Create Regents-style tests for high school ELA."
+                    icon={<FlaskConical />}
+                    href="/ela-test-generator"
+                  />
+                </div>
               </div>
             </section>
           )}
@@ -280,13 +307,25 @@ const PremiumDashboardContent = () => {
           {hasELLSubscription && (
              <section>
               <h2 className="text-2xl font-bold font-headline mb-4">ELL / ENL Modules</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <ToolCard
-                  title="ELL / ENL Lesson Generator"
-                  description="Create scaffolded lesson plans for English Language Learners."
-                  icon={<Languages />}
-                  href="/ell-generator"
-                />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-muted-foreground">Lesson Plan Generators</h3>
+                    <ToolCard
+                    title="ELL / ENL Lesson Generator"
+                    description="Create scaffolded lesson plans for English Language Learners."
+                    icon={<Languages />}
+                    href="/ell-generator"
+                    />
+                </div>
+                <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-muted-foreground">Assessment Generators</h3>
+                     <ToolCard
+                        title="ELL / ENL Test Generator"
+                        description="Create scaffolded tests for English Language Learners."
+                        icon={<FlaskConical />}
+                        href="/ell-test-generator"
+                    />
+                </div>
               </div>
             </section>
           )}
