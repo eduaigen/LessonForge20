@@ -21,7 +21,8 @@ import {
   Sparkles,
   Stethoscope,
   Languages,
-  Landmark
+  Landmark,
+  FlaskConical
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -32,7 +33,7 @@ import { Separator } from '@/components/ui/separator';
 
 const ToolCard = ({ title, description, icon, href, className }: { title: string, description: string, icon: React.ReactNode, href: string, className?: string }) => {
   return (
-    <Link href={href} className="block">
+    <Link href={href} className="block h-full">
       <Card
         className={`cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 flex flex-col ${className}`}
       >
@@ -118,12 +119,12 @@ const PremiumDashboardContent = () => {
                       />
                 </div>
                 <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-muted-foreground">Test & Lab Generators</h3>
+                    <h3 className="text-lg font-semibold text-muted-foreground">Assessment & Lab Generators</h3>
                      <ToolCard 
-                        title="NV Biology Test Generator"
-                        description="Create tests for the New Visions Biology curriculum."
-                        icon={<TestTube />}
-                        href="/nv-biology-test-generator"
+                        title="Science Test Generator"
+                        description="Create multi-unit tests with specific DOK levels and question clusters."
+                        icon={<FlaskConical />}
+                        href="/science-test-generator"
                      />
                      <Card className="flex flex-col bg-muted/50">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
