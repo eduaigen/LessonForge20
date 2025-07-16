@@ -27,7 +27,7 @@ export const nvBiologyCurriculum: {
                         { title: "Lesson 4 (Engage): Why do we breathe (ventilate) faster when exercising?", objective: "Students will share initial ideas about increased breathing during exercise, connecting to the marathon runner's breathing and oxygen." },
                         { title: "Lesson 5 (Explore 1): How do organisms generate energy for life processes?", objective: "Students will generate characteristics of a scientific model, understand the basic protocol for cellular respiration in yeast investigation, and learn about yeast." },
                         { title: "Lesson 6 (Explore 1 cont.): How do organisms generate energy for life processes?", objective: "Students will conduct an investigation on how sugar impacts cellular respiration in yeast to generate initial ideas on inputs and outputs of the process, and begin to understand how organisms generate energy." },
-                        { title: "Lesson 7 (Explain 1): Developing an understanding of how cells generate ATP in the process of cellular respiration.", objective: "Students will use collected data and a text about cellular respiration in yeast to modify and refine a model showing inputs and outputs in the system." },
+                        { title: "Lesson 7 (Explain 1): Developing an understanding of how cells generate ATP in the process of cellular respiration.", objective: "Students will use collected data and a text about cellular respiration in yeast to modify and refine a model that shows inputs and outputs in the system." },
                         { title: "Lesson 8 (Explore 2): How does the body regulate O2 levels in the blood?", objective: "Students will analyze secondary data on CO2 and O2 levels in the blood to surface the concept of dynamic equilibrium and the interaction of body systems in regulating oxygen levels." },
                         { title: "Lesson 9 (Explain 2): Using visual texts to construct an explanation of how interacting systems regulate gas exchange.", objective: "Students will partner-read a visual text to construct a sequence chart explaining how feedback mechanisms maintain homeostasis and regulate gas exchange." },
                         { title: "Lesson 10 (Elaborate): Extending conceptual understanding by applying their thinking to how different types of organisms regulate gas exchange.", objective: "Students will test ideas about gas exchange by applying their thinking to scenarios of gas exchange in other organisms (plants, amphibians, fish)." },
@@ -357,3 +357,5 @@ export const nvBiologyCurriculum: {
         }
     }
 };
+
+    
