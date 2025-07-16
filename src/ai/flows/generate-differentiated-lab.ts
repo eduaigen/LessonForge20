@@ -5,11 +5,10 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { GenerateLabActivityOutputSchema } from '../schemas/lab-activity-schemas';
-
-export const DifferentiatedLabInputSchema = z.object({
-  originalLab: GenerateLabActivityOutputSchema,
-});
+import {
+  GenerateLabActivityOutputSchema,
+  DifferentiatedLabInputSchema,
+} from '../schemas/lab-activity-schemas';
 
 const prompt = ai.definePrompt({
   name: 'generateDifferentiatedLabPrompt',
@@ -49,12 +48,16 @@ const generateDifferentiatedLabFlow = ai.defineFlow(
       originalLab: JSON.stringify(input.originalLab),
     });
     if (!output) {
-      throw new Error('The AI failed to generate the differentiated lab. Please try again.');
+      throw new Error(
+        'The AI failed to generate the differentiated lab. Please try again.'
+      );
     }
     return output;
   }
 );
 
-export async function generateDifferentiatedLab(input: z.infer<typeof DifferentiatedLabInputSchema>): Promise<GenerateLabActivityOutput> {
+export async function generateDifferentiatedLab(
+  input: z.infer<typeof DifferentiatedLabInputSchema>
+): Promise<GenerateLabActivityOutput> {
   return await generateDifferentiatedLabFlow(input);
 }

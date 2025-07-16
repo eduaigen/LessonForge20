@@ -91,3 +91,8 @@ export const LabTeacherCoachOutputSchema = z.object({
     dataCollection: CoachingAdviceSchema,
     discussionAndConclusion: CoachingAdviceSchema,
 });
+
+// Schema for the Differentiated Lab flow
+export const DifferentiatedLabInputSchema = z.object({
+  originalLab: GenerateLabActivityOutputSchema,
+});
