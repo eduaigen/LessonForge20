@@ -17,6 +17,7 @@ import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-s
 import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
+import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -159,7 +160,7 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
     );
 };
 
-const WorksheetHeader = () => (
+export const WorksheetHeader = () => (
     <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
         <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
             <label className="font-semibold whitespace-nowrap">Name:</label>
@@ -713,7 +714,63 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
         </div>
       </section>
     </div>
-  );
+);
+
+const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
+    <div className="document-view">
+        <header className="text-center mb-8">
+            <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+            {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
+        </header>
+        <WorksheetHeader />
+
+        {/* Part 1: Reading Comprehension */}
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.part1.title}</h2>
+            {test.part1.passages.map((p, pIndex) => (
+                <div key={pIndex} className="mb-8 border-b pb-6 last:border-b-0">
+                    <h3 className="text-xl font-semibold mb-2">Passage {pIndex + 1}: {p.passage.title}</h3>
+                    <Card className="bg-muted/30 mb-4 p-4"><Markdown>{p.passage.content}</Markdown></Card>
+                    <ol className="list-decimal pl-5 space-y-6">
+                        {p.questions.map((q, qIndex) => (
+                            <li key={qIndex}>
+                                <p>{q.question}</p>
+                                <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                                    {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                                </ul>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            ))}
+        </section>
+
+        {/* Part 2: Argument Essay */}
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.part2.title}</h2>
+            <h3 className="font-semibold">Directions:</h3>
+            <p className="mb-4">{test.part2.argumentEssay.prompt}</p>
+            <h3 className="font-semibold">Sources:</h3>
+            {test.part2.argumentEssay.sources.map((source, sIndex) => (
+                 <div key={sIndex} className="p-4 border rounded-md mt-4 bg-muted/30">
+                    <p className="font-semibold mb-2">Source {sIndex + 1}: {source.title}</p>
+                    <Markdown>{source.content}</Markdown>
+                  </div>
+            ))}
+             <div className="my-4 h-64 border-b border-dashed"></div>
+        </section>
+
+        {/* Part 3: Text Analysis */}
+        <section>
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.part3.title}</h2>
+            <h3 className="font-semibold">Directions:</h3>
+            <p className="mb-4">{test.part3.textAnalysis.prompt}</p>
+            <h3 className="font-semibold">Text:</h3>
+            <Card className="bg-muted/30 mb-4 p-4"><Markdown>{test.part3.textAnalysis.passage.content}</Markdown></Card>
+            <div className="my-4 h-64 border-b border-dashed"></div>
+        </section>
+    </div>
+);
   
 
 type StyledContentDisplayProps = {
@@ -727,6 +784,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
     const isSocialStudiesTest = content.partI && content.partII?.sets;
     const isMathTest = content.partI && content.partII?.questions && content.partIV?.question;
     const isScienceTest = content.clusters;
+    const isELATest = content.part1 && content.part2?.argumentEssay && content.part3?.textAnalysis;
+
 
     switch (type) {
         case 'Lesson Plan':
@@ -748,6 +807,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (isScienceTest) return <ScienceTestDisplay test={content} type={type} />;
             if (isSocialStudiesTest) return <SocialStudiesTestDisplay test={content} />;
             if (isMathTest) return <MathTestDisplay test={content} />;
+            if (isELATest) return <ELATestDisplay test={content} />;
             return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
         case 'Answer Key':
             if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
