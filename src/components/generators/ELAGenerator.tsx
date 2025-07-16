@@ -297,12 +297,15 @@ const GeneratorContent = () => {
                                           <AccordionTrigger>{topicKey}</AccordionTrigger>
                                           <AccordionContent>
                                             <div className="space-y-2 pl-4">
-                                              {topic.lessons.map((lessonTitle, index) => {
-                                                const isSelected = currentlySelectedLesson === lessonTitle;
+                                              {topic.lessons.map((lesson, index) => {
+                                                const isSelected = currentlySelectedLesson === lesson.title;
                                                 return (
                                                   <div key={index} className="flex items-center justify-between">
-                                                    <p className="font-semibold flex-1">{lessonTitle}</p>
-                                                    <Button type="button" variant={isSelected ? "secondary" : "outline"} size="sm" onClick={() => handleLessonSelect(unitKey, topicKey, lessonTitle)} disabled={isSelected && !!lessonPackage}>
+                                                    <div className="flex-1">
+                                                        <p className="font-semibold">{lesson.title}</p>
+                                                        <p className="text-sm text-muted-foreground">{lesson.standard}</p>
+                                                    </div>
+                                                    <Button type="button" variant={isSelected ? "secondary" : "outline"} size="sm" onClick={() => handleLessonSelect(unitKey, topicKey, lesson.title)} disabled={isSelected && !!lessonPackage}>
                                                       {isSelected ? <><Check className="h-4 w-4 mr-2" />Selected</> : 'Select'}
                                                     </Button>
                                                   </div>
