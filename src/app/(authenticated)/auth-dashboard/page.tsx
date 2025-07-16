@@ -28,6 +28,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { Separator } from '@/components/ui/separator';
 
 const ToolCard = ({ title, description, icon, href }: { title: string, description: string, icon: React.ReactNode, href: string }) => {
   return (
@@ -63,55 +64,70 @@ const PremiumDashboardContent = () => {
           {hasScienceSubscription && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Science Modules</h2>
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                 <ToolCard 
-                    title="NV Biology Generator"
-                    description="Create 5E model lesson plans for the New Visions Biology curriculum."
-                    icon={<Leaf />}
-                    href="/nv-biology-generator"
-                 />
-                 <ToolCard 
-                    title="NV Biology Test Generator"
-                    description="Create tests for the New Visions Biology curriculum."
-                    icon={<TestTube />}
-                    href="/nv-biology-test-generator"
-                 />
-                  <ToolCard 
-                    title="NV Earth Science Generator"
-                    description="Create 5E model lesson plans for NV Earth & Space Science."
-                    icon={<Orbit />}
-                    href="/ngss-earth-science-generator"
-                 />
-                  <ToolCard
-                    title="AP Biology Generator"
-                    description="Create 5E model lesson plans for the AP Biology curriculum."
-                    icon={<Dna />}
-                    href="/ap-biology-generator"
-                  />
-                  <ToolCard
-                    title="NGSS Chemistry Generator"
-                    description="Create 5E model lesson plans for the NGSS Chemistry curriculum."
-                    icon={<Atom />}
-                    href="/ngss-chemistry-generator"
-                  />
-                   <ToolCard
-                    title="NGSS Physics Generator"
-                    description="Create 5E model lesson plans for the NGSS Physics curriculum."
-                    icon={<Magnet />}
-                    href="/ngss-physics-generator"
-                  />
-                   <ToolCard
-                    title="Health Lesson Generator"
-                    description="Create 5E model lesson plans for Health class."
-                    icon={<HeartPulse />}
-                    href="/health-generator"
-                  />
-                  <ToolCard
-                    title="Anatomy & Physiology Generator"
-                    description="Create detailed lesson plans for Anatomy & Physiology."
-                    icon={<Stethoscope />}
-                    href="/anatomy-physiology-generator"
-                  />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-muted-foreground">Lesson Plan Generators</h3>
+                     <ToolCard 
+                        title="NV Biology Generator"
+                        description="Create 5E model lesson plans for the New Visions Biology curriculum."
+                        icon={<Leaf />}
+                        href="/nv-biology-generator"
+                     />
+                      <ToolCard 
+                        title="NV Earth Science Generator"
+                        description="Create 5E model lesson plans for NV Earth & Space Science."
+                        icon={<Orbit />}
+                        href="/ngss-earth-science-generator"
+                     />
+                      <ToolCard
+                        title="AP Biology Generator"
+                        description="Create 5E model lesson plans for the AP Biology curriculum."
+                        icon={<Dna />}
+                        href="/ap-biology-generator"
+                      />
+                      <ToolCard
+                        title="NGSS Chemistry Generator"
+                        description="Create 5E model lesson plans for the NGSS Chemistry curriculum."
+                        icon={<Atom />}
+                        href="/ngss-chemistry-generator"
+                      />
+                       <ToolCard
+                        title="NGSS Physics Generator"
+                        description="Create 5E model lesson plans for the NGSS Physics curriculum."
+                        icon={<Magnet />}
+                        href="/ngss-physics-generator"
+                      />
+                       <ToolCard
+                        title="Health Lesson Generator"
+                        description="Create 5E model lesson plans for Health class."
+                        icon={<HeartPulse />}
+                        href="/health-generator"
+                      />
+                      <ToolCard
+                        title="Anatomy & Physiology Generator"
+                        description="Create detailed lesson plans for Anatomy & Physiology."
+                        icon={<Stethoscope />}
+                        href="/anatomy-physiology-generator"
+                      />
+                </div>
+                <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-muted-foreground">Test & Lab Generators</h3>
+                     <ToolCard 
+                        title="NV Biology Test Generator"
+                        description="Create tests for the New Visions Biology curriculum."
+                        icon={<TestTube />}
+                        href="/nv-biology-test-generator"
+                     />
+                     <Card className="h-full flex flex-col bg-muted/50">
+                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                            <CardTitle className="text-lg font-medium text-muted-foreground">Lab Generator</CardTitle>
+                            <TestTube className="text-muted-foreground/50"/>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                            <p className="text-sm text-muted-foreground">Coming soon! Create safe, effective lab activities.</p>
+                        </CardContent>
+                     </Card>
+                </div>
               </div>
             </section>
           )}
