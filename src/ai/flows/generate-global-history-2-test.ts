@@ -25,22 +25,23 @@ const prompt = ai.definePrompt({
 - **Number of DBQ Documents**: {{{dbqDocCount}}}
 
 **CRITICAL INSTRUCTIONS:**
-Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate. All document sources must be created by you.
+1.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
+2.  All stimulus material, including for multiple-choice questions and documents, MUST be text-based. You can use direct quotes, excerpts from historical texts, or descriptions of data tables. DO NOT create stimuli that require a visual diagram, map, or political cartoon.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.
-- Each question must have a unique stimulus (e.g., a quote, map description, chart data, political cartoon description) and four answer options.
+- Each question must have a unique, text-based stimulus and four answer options.
 
 **Part II: Constructed-Response Questions (CRQs)**
 - Generate EXACTLY {{{crqCount}}} unique CRQ sets.
-- Each set must contain 1-2 documents and exactly 3 scaffolded questions:
+- Each set must contain 1-2 text-based documents and exactly 3 scaffolded questions:
     1.  A question about the historical context or point of view of a document.
     2.  A question requiring a historical thinking skill (e.g., cause/effect, turning point, comparison) using both documents.
     3.  A question requiring synthesis or analysis of reliability.
 
 **Part III: Document-Based Question (DBQ)**
 - Generate ONE DBQ essay prompt.
-- Create EXACTLY {{{dbqDocCount}}} authentic, relevant documents to support the prompt.
+- Create EXACTLY {{{dbqDocCount}}} authentic, relevant, text-based documents to support the prompt.
 - Write a detailed sample essay that answers the prompt, citing the documents and incorporating outside information.
 
 Your final output MUST be a single JSON object that strictly follows the output schema.
