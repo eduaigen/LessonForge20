@@ -4,6 +4,7 @@
  * @fileOverview An AI flow for generating an enhanced version of a science test for advanced learners.
  */
 import { ai } from '@/ai/genkit';
+import { z } from 'zod';
 import {
   EnhancedTestInputSchema,
   EnhancedTestOutputSchema,

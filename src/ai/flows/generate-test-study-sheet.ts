@@ -4,6 +4,7 @@
  * @fileOverview An AI flow for generating a study sheet from a science test.
  */
 import { ai } from '@/ai/genkit';
+import { z } from 'zod';
 import {
   TestStudySheetInputSchema,
   TestStudySheetOutputSchema,

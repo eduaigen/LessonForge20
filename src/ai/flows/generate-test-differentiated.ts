@@ -4,6 +4,7 @@
  * @fileOverview An AI flow for generating a differentiated version of a science test.
  */
 import { ai } from '@/ai/genkit';
+import { z } from 'zod';
 import {
   DifferentiatedTestInputSchema,
   DifferentiatedTestOutputSchema,
