@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, HeartPulse, Sparkles, Wand2 } from 'lucide-react';
+import { Loader2, HeartPulse, Sparkles, Wand2, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { healthCurriculum } from '@/lib/health-curriculum';
 import { generateHealthLesson, type GenerateHealthLessonOutput } from '@/ai/flows/generate-health-lesson';
@@ -25,7 +25,6 @@ import { translateContent } from '@/ai/flows/translate-content';
 import GeneratingAnimation from '../common/GeneratingAnimation';
 import StyledContentDisplay from '../common/StyledContentDisplay';
 import { useAuth } from '@/context/AuthContext';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { ScrollArea } from '../ui/scroll-area';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
@@ -38,6 +37,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -108,6 +108,7 @@ const GeneratorContent = () => {
 
   const selectedUnit = form.watch('unit');
   const selectedTopic = form.watch('topic');
+  const selectedLesson = form.watch('lesson');
 
   const units = useMemo(() => Object.keys(healthCurriculum.units), []);
   const topics = useMemo(() => {
@@ -115,14 +116,6 @@ const GeneratorContent = () => {
     const unitData = healthCurriculum.units[selectedUnit as keyof typeof healthCurriculum.units];
     return unitData ? Object.keys(unitData.topics) : [];
   }, [selectedUnit]);
-
-  const lessons = useMemo(() => {
-    if (!selectedUnit || !selectedTopic) return [];
-    const unitData = healthCurriculum.units[selectedUnit as keyof typeof healthCurriculum.units];
-    if (!unitData) return [];
-    const topicData = unitData.topics[selectedTopic as keyof typeof unitData.topics];
-    return topicData ? topicData.lessons.map(lesson => ({ title: lesson.title, objective: lesson.objective })) : [];
-  }, [selectedUnit, selectedTopic]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -182,7 +175,6 @@ const GeneratorContent = () => {
       try {
         translatedJson = JSON.parse(response.translatedContent);
       } catch (e) {
-         // Fallback for malformed JSON
         const match = response.translatedContent.match(/\{[\s\S]*\}/);
         if (match && match[0]) {
           translatedJson = JSON.parse(match[0]);
@@ -344,104 +336,54 @@ const GeneratorContent = () => {
                   <Form {...form}>
                       <form onSubmit={form.handleSubmit(onLessonPlanSubmit)}>
                       <CardContent className="space-y-6">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <FormField
-                              control={form.control}
-                              name="unit"
-                              render={({ field }) => (
-                                  <FormItem>
-                                  <FormLabel>Unit</FormLabel>
-                                  <Select onValueChange={(value) => {
-                                      field.onChange(value);
-                                      form.setValue('topic', '');
-                                      form.setValue('lesson', '');
-                                  }} defaultValue={field.value}>
-                                      <FormControl>
-                                      <SelectTrigger>
-                                          <SelectValue placeholder="Select a unit" />
-                                      </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                      {units.map((unitKey) => {
-                                        const unit = healthCurriculum.units[unitKey as keyof typeof healthCurriculum.units];
-                                        return (
-                                          <SelectItem key={unitKey} value={unitKey}>
-                                            {unit.translations[language]}
-                                          </SelectItem>
-                                        )
-                                      })}
-                                      </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                  </FormItem>
-                              )}
-                              />
-                              <FormField
-                              control={form.control}
-                              name="topic"
-                              render={({ field }) => (
-                                  <FormItem>
-                                  <FormLabel>Topic</FormLabel>
-                                  <Select onValueChange={(value) => {
-                                      field.onChange(value);
-                                      form.setValue('lesson', '');
-                                  }} value={field.value} disabled={!selectedUnit}>
-                                      <FormControl>
-                                      <SelectTrigger>
-                                          <SelectValue placeholder="Select a topic" />
-                                      </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent>
-                                      {topics.map((topicKey) => {
-                                        const unit = healthCurriculum.units[selectedUnit as keyof typeof healthCurriculum.units];
-                                        const topic = unit.topics[topicKey as keyof typeof unit.topics];
-                                        return (
-                                          <SelectItem key={topicKey} value={topicKey}>
-                                            {topic.translations[language]}
-                                          </SelectItem>
-                                        )
-                                      })}
-                                      </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                  </FormItem>
-                              )}
-                              />
-                          </div>
-
-                          {lessons && lessons.length > 0 && (
-                              <FormField
-                                  control={form.control}
-                                  name="lesson"
-                                  render={({ field }) => (
-                                      <FormItem className="space-y-3">
-                                      <FormLabel>Lesson Objective</FormLabel>
-                                      <FormControl>
-                                          <ScrollArea className="h-72 w-full rounded-md border p-4">
-                                              <RadioGroup
-                                                  onValueChange={field.onChange}
-                                                  defaultValue={field.value}
-                                                  className="flex flex-col space-y-1"
-                                              >
-                                                  {lessons.map((lesson, index) => (
-                                                  <FormItem key={index} className="flex items-start space-x-3 space-y-0 rounded-md hover:bg-muted/50 p-2 transition-colors">
-                                                      <FormControl>
-                                                          <RadioGroupItem value={lesson.title.en} />
-                                                      </FormControl>
-                                                      <FormLabel className="font-normal w-full cursor-pointer">
-                                                          <p className="font-semibold">{lesson.title[language]}</p>
-                                                          <p className="text-sm text-muted-foreground">{lesson.objective[language]}</p>
-                                                      </FormLabel>
-                                                  </FormItem>
-                                                  ))}
-                                              </RadioGroup>
-                                          </ScrollArea>
-                                      </FormControl>
-                                      <FormMessage />
-                                      </FormItem>
-                                  )}
-                              />
-                          )}
+                        <Accordion type="single" collapsible className="w-full" defaultValue='item-1'>
+                            {units.map((unitKey) => {
+                                const unit = healthCurriculum.units[unitKey as keyof typeof healthCurriculum.units];
+                                if (!unit) return null;
+                                return (
+                                <AccordionItem value={unitKey} key={unitKey}>
+                                    <AccordionTrigger>{unit.translations[language]}</AccordionTrigger>
+                                    <AccordionContent>
+                                        <Accordion type="single" collapsible className="w-full pl-4">
+                                            {Object.keys(unit.topics).map(topicKey => {
+                                                const topic = unit.topics[topicKey as keyof typeof unit.topics];
+                                                if (!topic) return null;
+                                                return (
+                                                    <AccordionItem value={topicKey} key={topicKey}>
+                                                        <AccordionTrigger>{topic.translations[language]}</AccordionTrigger>
+                                                        <AccordionContent>
+                                                          <div className="space-y-2 pl-4">
+                                                              {topic.lessons.map((lesson, index) => (
+                                                                  <div key={index} className="flex items-center justify-between">
+                                                                      <div className="flex-1">
+                                                                          <p className="font-semibold">{lesson.title[language]}</p>
+                                                                          <p className="text-sm text-muted-foreground">{lesson.objective[language]}</p>
+                                                                      </div>
+                                                                      <Button 
+                                                                        type="button"
+                                                                        variant={selectedLesson === lesson.title.en ? "secondary" : "outline"}
+                                                                        size="sm"
+                                                                        onClick={() => {
+                                                                            form.setValue('unit', unitKey);
+                                                                            form.setValue('topic', topicKey);
+                                                                            form.setValue('lesson', lesson.title.en);
+                                                                        }}
+                                                                        >
+                                                                            {selectedLesson === lesson.title.en ? <Check className="h-4 w-4" /> : 'Select'}
+                                                                        </Button>
+                                                                  </div>
+                                                              ))}
+                                                          </div>
+                                                        </AccordionContent>
+                                                    </AccordionItem>
+                                                )
+                                            })}
+                                        </Accordion>
+                                    </AccordionContent>
+                                </AccordionItem>
+                                )
+                            })}
+                        </Accordion>
                           
                           <FormField
                               control={form.control}
