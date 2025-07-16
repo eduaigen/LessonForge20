@@ -45,3 +45,6 @@ export * from './flows/generate-global-history-1-test';
 export * from './flows/generate-global-history-2-test';
 export * from './flows/generate-us-history-test';
 export * from './flows/generate-government-test';
+export * from './flows/generate-social-studies-differentiated-test';
+export * from './flows/generate-social-studies-enhanced-test';
+export * from './flows/generate-social-studies-study-sheet';

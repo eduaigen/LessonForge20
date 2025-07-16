@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 export const GenerateSocialStudiesTestInputSchema = z.object({
-  units: z.array(z.string()).describe('An array of curriculum units to base the test on.'),
+  lessons: z.array(z.string()).describe('An array of curriculum lessons to base the test on.'),
   dokLevel: z.number().min(1).max(4).describe('The desired Depth of Knowledge level for the questions.'),
   mcqCount: z.number().min(1).max(28).describe('The number of multiple-choice questions to generate.'),
   crqCount: z.number().min(1).max(5).describe('The number of Constructed-Response Question sets to generate.'),

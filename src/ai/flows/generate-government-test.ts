@@ -15,10 +15,10 @@ const prompt = ai.definePrompt({
   name: 'generateGovernmentTestPrompt',
   input: { schema: GenerateSocialStudiesTestInputSchema },
   output: { schema: GenerateSocialStudiesTestOutputSchema },
-  prompt: `You are an expert high school Government & Economics teacher and assessment writer for the NYS curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum units.
+  prompt: `You are an expert high school Government & Economics teacher and assessment writer for the NYS curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum lessons.
 
 **User Provided Context:**
-- **Units**: {{{units}}}
+- **Lessons**: {{{lessons}}}
 - **Desired DOK Level**: {{{dokLevel}}}
 - **Number of Multiple Choice Questions**: {{{mcqCount}}}
 - **Number of CRQ Sets**: {{{crqCount}}}
@@ -27,6 +27,7 @@ const prompt = ai.definePrompt({
 **CRITICAL INSTRUCTIONS:**
 1.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
 2.  All stimulus material, including for multiple-choice questions and documents, MUST be text-based. You can use direct quotes, excerpts from historical texts, or descriptions of data tables. DO NOT create stimuli that require a visual diagram or map.
+3.  All generated content must be complete and fully written out. No placeholders.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.
@@ -34,14 +35,15 @@ const prompt = ai.definePrompt({
 
 **Part II: Constructed-Response Questions (CRQs)**
 - Generate EXACTLY {{{crqCount}}} unique CRQ sets.
-- Each set must contain 1-2 fully-written, text-based documents and exactly 3 scaffolded questions:
+- Each set must contain 1-2 fully-written, text-based documents. The document length should vary, from short quotes to longer passages of 200-500 words.
+- Each set must have exactly 3 scaffolded questions:
     1.  A question about the civic or economic context or point of view of a document.
     2.  A question requiring a historical/civic thinking skill (e.g., cause/effect, comparison) using both documents.
     3.  A question requiring synthesis or analysis of reliability.
 
 **Part III: Document-Based Question (DBQ)**
 - Generate ONE DBQ essay prompt.
-- Create EXACTLY {{{dbqDocCount}}} authentic, relevant, fully-written text-based documents to support the prompt.
+- Create EXACTLY {{{dbqDocCount}}} authentic, relevant, fully-written text-based documents to support the prompt. The document length should vary significantly, from short quotes to longer passages of 200-500 words.
 - Write a detailed sample essay that answers the prompt, citing the documents and incorporating outside information.
 
 Your final output MUST be a single, complete JSON object that strictly follows the output schema.
