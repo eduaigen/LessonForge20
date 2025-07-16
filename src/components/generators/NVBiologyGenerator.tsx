@@ -63,13 +63,6 @@ export type GeneratedContent = {
   type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
 };
 
-type LessonPackage = {
-    id: string;
-    lessonPlan: GeneratedContent;
-    supplementaryMaterials: GeneratedContent[];
-};
-
-
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
         <Card className="max-w-2xl text-center p-8 shadow-lg">
@@ -97,7 +90,7 @@ const GeneratorContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   
-  const [lessonPackage, setLessonPackage] = useState<LessonPackage | null>(null);
+  const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
@@ -113,7 +106,7 @@ const GeneratorContent = () => {
   });
   
   const lessonPlan = useMemo(() => {
-    return lessonPackage?.lessonPlan.content as GenerateNVBiologyLessonOutput | null;
+    return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as GenerateNVBiologyLessonOutput | null;
   }, [lessonPackage]);
 
 
@@ -161,19 +154,15 @@ const GeneratorContent = () => {
       if (!result) {
         throw new Error('Lesson plan generation returned no result.');
       }
-      const newPackageId = `package-${Date.now()}`;
-      const newPackage: LessonPackage = {
-          id: newPackageId,
-          lessonPlan: {
-            id: `lesson-plan-${Date.now()}`,
-            title: result.lessonOverview.lesson,
-            content: result,
-            type: 'Lesson Plan',
-          },
-          supplementaryMaterials: [],
+      
+      const newLessonPlan: GeneratedContent = {
+        id: `lesson-plan-${Date.now()}`,
+        title: result.lessonOverview.lesson,
+        content: result,
+        type: 'Lesson Plan',
       };
 
-      setLessonPackage(newPackage);
+      setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
 
     } catch (error) {
@@ -199,7 +188,7 @@ const GeneratorContent = () => {
     }
 
     const title = toolName;
-    if (lessonPackage.supplementaryMaterials.some(sec => sec.title === title)) {
+    if (lessonPackage.some(sec => sec.title === title)) {
         toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
         return;
     }
@@ -238,10 +227,7 @@ const GeneratorContent = () => {
         if (newContent) {
            setLessonPackage(prev => {
                 if (!prev) return null;
-                return {
-                    ...prev,
-                    supplementaryMaterials: [...prev.supplementaryMaterials, newContent!]
-                };
+                return [...prev, newContent!];
            });
         }
 
@@ -265,7 +251,7 @@ const GeneratorContent = () => {
             <AlertDialogDescription>
               Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
               <div className="text-sm text-muted-foreground pt-4 text-left">
-                <p className="font-semibold text-foreground">Here are the available tools:</p>
+                <span className="font-semibold text-foreground">Here are the available tools:</span>
                 <ul className="list-disc pl-5 mt-2 space-y-2">
                     <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
                     <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
@@ -421,21 +407,16 @@ const GeneratorContent = () => {
                   </div>
               )}
 
-              {lessonPackage ? (
-                <>
-                    <CollapsibleSection key={lessonPackage.lessonPlan.id} title={lessonPackage.lessonPlan.title} contentItem={lessonPackage.lessonPlan}>
-                        <StyledContentDisplay
-                            content={lessonPackage.lessonPlan.content}
-                            type={lessonPackage.lessonPlan.type}
-                        />
-                    </CollapsibleSection>
-                    {lessonPackage.supplementaryMaterials.map(section => (
-                        <CollapsibleSection key={section.id} title={section.title} contentItem={section}>
-                            <StyledContentDisplay content={section.content} type={section.type} />
-                        </CollapsibleSection>
-                    ))}
-                </>
-              ) : !isLoading && (
+              {lessonPackage?.map(item => (
+                <CollapsibleSection key={item.id} title={item.title} contentItem={item}>
+                    <StyledContentDisplay
+                        content={item.content}
+                        type={item.type}
+                    />
+                </CollapsibleSection>
+              ))}
+
+              {!lessonPackage && !isLoading && (
                 <div className="text-center py-16">
                     <h2 className="text-2xl font-bold font-headline mb-4">Ready to Generate?</h2>
                     <p className="text-muted-foreground">Select a unit, topic, and lesson to create your first AI-powered lesson plan.</p>
