@@ -105,7 +105,7 @@ export const algebra2Curriculum: {
                 "The Unit Circle": {
                     topic: "The Unit Circle",
                     lessons: [
-                        { title: "Lesson 1: Angles and Radian Measure", objective: "I can convert between degrees (e.g., $90^\\circ$) and radians and find coterminal angles.", standard: "AII-F.TF.1" },
+                        { title: "Lesson 1: Angles and Radian Measure", objective: "I can convert between degrees (e.g., $$90^\\circ$$) and radians and find coterminal angles.", standard: "AII-F.TF.1" },
                         { title: "Lesson 2: The Unit Circle", objective: "I can find the values of sine ($\\sin$), cosine ($\\cos$), and tangent ($\\tan$) for angles on the unit circle.", standard: "AII-F.TF.2" }
                     ]
                 },
