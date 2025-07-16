@@ -50,7 +50,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph).
 - "readingPassage": (String) A 300-500 word, grade-appropriate reading passage. Use Markdown bold (\`**word**\`) for key vocab.
-- "diagram": (String) A detailed text description of a literary concept map or graphic organizer. **Do not generate SVG code.**
+- "diagram": (String) A detailed text description of a literary concept map, model, or flowchart for the teacher to generate. **Do not generate SVG or image code.** Provide specific instructions for how to create the visual representation.
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3). Ensure a mix of DOK levels.
 
 **C. "guidedPractice"** (Object, 15–20 min)
@@ -84,8 +84,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "scaffoldedMaterials": (String) **Provide ready-to-use scaffolds.**
 - "extensionActivity": (String) **Elaborate on a challenging prompt or activity.**
 ---
-**Final Instruction**: Review your entire response. Ensure every single section from A to H is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly.
-`,
+**Final Instruction**: Review your entire response. Ensure every single section from A to H is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly.`,
 });
 
 const generateELA9LessonFlow = ai.defineFlow(
