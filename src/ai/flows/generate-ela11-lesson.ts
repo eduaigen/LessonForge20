@@ -1,18 +1,18 @@
 
 'use server';
 /**
- * @fileOverview An AI flow for generating a 5E lesson plan for ELA 9th Grade.
+ * @fileOverview An AI flow for generating a 5E lesson plan for ELA 11th Grade.
  */
 import {ai} from '@/ai/genkit';
-import { GenerateELA9LessonInputSchema, GenerateELA9LessonOutputSchema, type GenerateELA9LessonInput, type GenerateELA9LessonOutput } from '../schemas/ela9-lesson-schemas';
+import { GenerateELA11LessonInputSchema, GenerateELA11LessonOutputSchema, type GenerateELA11LessonInput, type GenerateELA11LessonOutput } from '../schemas/ela11-lesson-schemas';
 
 const prompt = ai.definePrompt({
-  name: 'generateELA9LessonPrompt',
-  input: { schema: GenerateELA9LessonInputSchema },
-  output: { schema: GenerateELA9LessonOutputSchema },
-  prompt: `You are an expert instructional designer and master teacher specializing in 9th Grade English Language Arts. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
+  name: 'generateELA11LessonPrompt',
+  input: { schema: GenerateELA11LessonInputSchema },
+  output: { schema: GenerateELA11LessonOutputSchema },
+  prompt: `You are an expert instructional designer and master teacher specializing in 11th Grade English Language Arts. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
 
-The user has provided the following context from the ELA 9 curriculum:
+The user has provided the following context from the ELA 11 curriculum:
 - **Unit**: {{{unit}}}
 - **Topic**: {{{topic}}}
 - **Lesson**: {{{lesson}}}
@@ -32,7 +32,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "topic": (String) The full Topic name: {{{topic}}}
 - "lesson": (String) The full Lesson title: {{{lesson}}}
 - "lessonSummary": (String) A 2-3 sentence, teacher-facing summary of the lesson's flow and key learning outcomes.
-- "standards": (String) The relevant standard code and a short description (e.g., CCSS.ELA-LITERACY.RL.9-10.2: Determine a theme or central idea of a text...).
+- "standards": (String) The relevant standard code and a short description (e.g., CCSS.ELA-LITERACY.RL.11-12.2: Determine two or more themes or central ideas of a text...).
 - "aim": (String) A deep, inquiry-based question that frames the lesson.
 - "essentialQuestion": (String) The same as "aim".
 - "objectives": (Array of Strings) 2-3 "SWBAT" objectives using Bloom’s verbs.
@@ -87,11 +87,11 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 **Final Instruction**: Review your entire response. Ensure every single section from A to H is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly.`,
 });
 
-const generateELA9LessonFlow = ai.defineFlow(
+const generateELA11LessonFlow = ai.defineFlow(
   {
-    name: 'generateELA9LessonFlow',
-    inputSchema: GenerateELA9LessonInputSchema,
-    outputSchema: GenerateELA9LessonOutputSchema,
+    name: 'generateELA11LessonFlow',
+    inputSchema: GenerateELA11LessonInputSchema,
+    outputSchema: GenerateELA11LessonOutputSchema,
     timeout: 120000, // 2 minutes
   },
   async (input) => {
@@ -103,6 +103,6 @@ const generateELA9LessonFlow = ai.defineFlow(
   }
 );
 
-export async function generateELA9Lesson(input: GenerateELA9LessonInput): Promise<GenerateELA9LessonOutput> {
-    return await generateELA9LessonFlow(input);
+export async function generateELA11Lesson(input: GenerateELA11LessonInput): Promise<GenerateELA11LessonOutput> {
+    return await generateELA11LessonFlow(input);
 }
