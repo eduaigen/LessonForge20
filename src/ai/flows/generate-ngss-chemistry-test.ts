@@ -25,7 +25,8 @@ const prompt = ai.definePrompt({
 - **Number of Question Clusters**: {{{clusterCount}}}
 
 **CRITICAL INSTRUCTIONS:**
-Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
+1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
+2.  Generate a set of clear, student-facing instructions for taking the test.
 
 **For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
 1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world chemical phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.

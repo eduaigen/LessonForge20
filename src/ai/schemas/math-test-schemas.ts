@@ -21,6 +21,7 @@ const constructedResponseQuestionSchema = z.object({
 
 export const GenerateMathTestOutputSchema = z.object({
   testTitle: z.string(),
+  instructions: z.string().describe("Student-facing instructions for the test."),
   partI: z.object({
     title: z.string().default("Part I: Multiple Choice"),
     questions: z.array(multipleChoiceQuestionSchema),

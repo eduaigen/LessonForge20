@@ -51,6 +51,7 @@ const questionClusterSchema = z.object({
 
 export const GenerateScienceTestOutputSchema = z.object({
   testTitle: z.string(),
+  instructions: z.string().describe("Student-facing instructions for the test."),
   clusters: z.array(questionClusterSchema),
 });
 

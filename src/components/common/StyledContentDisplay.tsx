@@ -495,6 +495,7 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+        {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
       </header>
       
       {test.clusters?.map((cluster, clusterIndex) => (
@@ -583,6 +584,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
     <div className="document-view">
         <header className="text-center mb-8">
             <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+            {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
         </header>
         
         {/* Part I: Multiple Choice */}
@@ -658,6 +660,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
     <div className="document-view">
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+        {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
       </header>
   
       {/* Part I: Multiple Choice */}

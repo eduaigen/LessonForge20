@@ -27,6 +27,7 @@ const prompt = ai.definePrompt({
 1.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
 2.  All generated content must be complete and fully written out. No placeholders.
 3.  Use LaTeX for all mathematical expressions, equations, and variables.
+4.  Generate a set of clear, student-facing instructions for taking the test.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.

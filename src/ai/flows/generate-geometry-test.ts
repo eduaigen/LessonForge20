@@ -28,6 +28,7 @@ const prompt = ai.definePrompt({
 2.  All generated content must be complete and fully written out. No placeholders.
 3.  Use LaTeX for all mathematical expressions, equations, and symbols.
 4.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
+5.  Generate a set of clear, student-facing instructions for taking the test.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.

@@ -25,7 +25,8 @@ const prompt = ai.definePrompt({
 - **Number of Question Clusters**: {{{clusterCount}}}
 
 **CRITICAL INSTRUCTIONS:**
-Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
+1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
+2.  Generate a set of clear, student-facing instructions for taking the test.
 
 **For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
 1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.
@@ -34,7 +35,7 @@ Your primary task is to generate a JSON object where the 'clusters' array contai
 4.  **DOK Alignment:** Ensure all questions align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}).
 5.  **Answer Key:** Create a detailed answer key for every question in the cluster. For the enhanced version, this must include explanations for incorrect distractors on MCQs.
 
-Your final output MUST be a single JSON object that strictly follows the output schema. The root 'clusters' array must have a length of {{{clusterCount}}}.
+Your final output MUST be a single, complete JSON object that strictly follows the output schema. The root 'clusters' array must have a length of {{{clusterCount}}}.
 `,
 });
 
