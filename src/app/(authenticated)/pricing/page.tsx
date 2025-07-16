@@ -11,12 +11,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2, Languages } from 'lucide-react';
+import { Check, Microscope, Sigma, Library, History, FileText, TestTube, BookCopy, Atom, Leaf, Dna, Orbit, HeartPulse, Magnet, Loader2, Languages, Sparkles } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { createCheckoutSession } from '@/actions/stripe';
 import { useToast } from '@/hooks/use-toast';
-import { modules, type ModuleCategory } from '@/lib/modules-data';
+import { modules, type ModuleCategory, type Module } from '@/lib/modules-data';
+import Link from 'next/link';
 
 const iconMap: { [key: string]: React.ReactNode } = {
     dna: <Dna />,
@@ -34,11 +35,18 @@ const iconMap: { [key: string]: React.ReactNode } = {
 };
 
 const pricing = {
-    base: 19.99,
-    additional: 9.99,
+    course: {
+        first: 15.99,
+        second: 9.99,
+        additional: 5.99,
+    },
+    premium_tool: {
+        standalone: 19.99,
+        addon: 9.99,
+    }
 };
 
-const ModuleCard = ({ module, isSelected, onSelect }: { module: any, isSelected: boolean, onSelect: (id: string) => void }) => (
+const ModuleCard = ({ module, isSelected, onSelect }: { module: Module, isSelected: boolean, onSelect: (id: string) => void }) => (
     <Card
         onClick={() => onSelect(module.id)}
         className={cn(
@@ -47,7 +55,10 @@ const ModuleCard = ({ module, isSelected, onSelect }: { module: any, isSelected:
         )}
     >
         <CardHeader className="flex flex-row items-start justify-between pb-2">
-            <CardTitle className="text-lg font-medium">{module.name}</CardTitle>
+            <div>
+              <CardTitle className="text-lg font-medium">{module.name}</CardTitle>
+              <CardDescription className="text-xs pt-1">{module.id}</CardDescription>
+            </div>
             <div className="text-primary">{iconMap[module.icon]}</div>
         </CardHeader>
         <CardContent className="flex-grow">
@@ -69,10 +80,39 @@ export default function PricingPage() {
   };
 
   const totalPrice = useMemo(() => {
-    const count = selectedModules.length;
-    if (count === 0) return 0;
-    if (count === 1) return pricing.base;
-    return pricing.base + (count - 1) * pricing.additional;
+    if (selectedModules.length === 0) return 0;
+
+    const allModules = Object.values(modules).flat();
+    const selected = selectedModules.map(id => allModules.find(m => m.id === id)).filter(Boolean) as Module[];
+
+    const courses = selected.filter(m => m.type === 'course');
+    const premiumTools = selected.filter(m => m.type === 'premium_tool');
+    
+    let total = 0;
+
+    if (courses.length === 0 && premiumTools.length > 0) {
+        // Only premium tools selected
+        total += pricing.premium_tool.standalone;
+        if (premiumTools.length > 1) {
+            total += (premiumTools.length - 1) * pricing.premium_tool.addon;
+        }
+    } else {
+        // Courses are selected, possibly with tools
+        if (courses.length > 0) {
+            total += pricing.course.first;
+        }
+        if (courses.length > 1) {
+            total += pricing.course.second;
+        }
+        if (courses.length > 2) {
+            total += (courses.length - 2) * pricing.course.additional;
+        }
+
+        // Add price for any premium tools as add-ons
+        total += premiumTools.length * pricing.premium_tool.addon;
+    }
+    
+    return total;
   }, [selectedModules]);
 
   const handleSubscribe = async () => {
@@ -120,11 +160,14 @@ export default function PricingPage() {
   return (
     <div className="flex-1 bg-background">
       <section className="container mx-auto max-w-7xl px-4 py-16 text-center sm:py-24">
+         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Sparkles className="h-8 w-8" />
+        </div>
         <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
           Build Your Perfect Toolkit
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-          Select the subjects and tools you need. The first item is ${pricing.base}/month, and each additional is only ${pricing.additional}/month. All subscriptions start with a 3-day free trial.
+        <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground">
+          Select the subjects and tools you need. Mix and match to create your ideal subscription package.
         </p>
       </section>
 
@@ -192,14 +235,11 @@ export default function PricingPage() {
                                     / month
                                 </span>
                             </div>
-                            <p className="text-xs text-muted-foreground mt-2">
-                                You will be charged after your 3-day free trial ends.
-                            </p>
                          </div>
                     </CardContent>
                     <CardFooter>
                          <Button onClick={handleSubscribe} className="w-full" size="lg" disabled={isLoading || selectedModules.length === 0}>
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Start Free Trial'}
+                            {isLoading ? <Loader2 className="animate-spin" /> : 'Subscribe Now'}
                         </Button>
                     </CardFooter>
                 </Card>
