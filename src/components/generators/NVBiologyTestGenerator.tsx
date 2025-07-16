@@ -8,7 +8,7 @@ import { z } from 'zod';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
 import { Loader2, TestTube, Sparkles, Wand2, FlaskConical, PencilRuler, BookOpen, BrainCircuit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -278,7 +278,7 @@ const GeneratorContent = () => {
         </CollapsibleSection>
       )}
 
-      {testPackage && <RightSidebar onToolClick={(toolName) => handleToolClick(toolName as any)} isGenerating={!!isToolLoading} isHighlighting={false} />}
+      {testPackage && <RightSidebar onToolClick={(toolName) => handleToolClick(toolName as any)} isGenerating={!!isToolLoading} isHighlighting={false} toolset="test" />}
 
     </div>
     </div>
