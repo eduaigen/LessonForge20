@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, 'react';
+import React from 'react';
 import Markdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -105,7 +105,12 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
 
             <LessonSection title="B. Mini-Lesson / Direct Instruction (10–15 min)">
                 <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{miniLesson.readingPassage}</Markdown></div>
-                {miniLesson.diagram && <div className="p-4 border-l-4 border-primary bg-muted/50 rounded-r-lg"><h4>Diagram/Model Description</h4><blockquote className="italic m-0 p-0 border-0">{miniLesson.diagram}</blockquote></div>}
+                {miniLesson.diagram && 
+                 <div className="mt-4 p-4 border rounded-md">
+                    <h4 className="font-semibold text-foreground mb-2">Diagram/Model Description</h4>
+                    <p className="italic text-muted-foreground">{miniLesson.diagram}</p>
+                 </div>
+                }
                 <div><h4>Concept-Check Questions</h4>{renderLeveledQuestions(miniLesson.conceptCheckQuestions)}</div>
                 <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{miniLesson.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{miniLesson.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
@@ -147,7 +152,10 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
             <LessonSection title="H. Differentiation & Support">
                 <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{differentiation.supportActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
                 <div><h4>Expected Student Outputs with Support</h4><ul className="list-disc pl-5">{differentiation.supportOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-                <div><h4>Scaffolded Materials</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{differentiation.scaffoldedMaterials}</Markdown></div>
+                 <div className="mt-4 p-4 border rounded-md">
+                    <h4 className="font-semibold text-foreground mb-2">Scaffolded Materials</h4>
+                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{differentiation.scaffoldedMaterials}</Markdown>
+                 </div>
                 <div><h4>Extension Activity</h4><p>{differentiation.extensionActivity}</p></div>
             </LessonSection>
         </div>
@@ -578,6 +586,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Lesson Plan':
             return renderLessonPlan(content);
         case 'Worksheet':
+            if (!content.aim) return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Worksheet content is missing the 'aim' property.</div>;
             return renderWorksheet(content);
         case 'Teacher Coach':
             return renderCoachingAdvice(content);
