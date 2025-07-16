@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Markdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -13,6 +13,10 @@ import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-s
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Button } from '@/components/ui/button';
+import { Loader2, FileQuestion } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
 import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
@@ -480,10 +484,47 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => (
 );
 
 const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
+    const { toast } = useToast();
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [generatedQuestions, setGeneratedQuestions] = useState<ComprehensionQuestionOutput | null>(null);
+
+    const onGenerateQuestions = async () => {
+        setIsGenerating(true);
+        setGeneratedQuestions(null);
+        try {
+            const result = await generateComprehensionQuestions({ articleContent: content.articleContent });
+            setGeneratedQuestions(result);
+            toast({ title: "Success", description: "Comprehension questions generated." });
+        } catch (error) {
+            console.error(error);
+            toast({ title: "Error", description: "Failed to generate questions.", variant: "destructive" });
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+    
     return (
         <div className="document-view">
             <WorksheetHeader />
             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.articleContent}</Markdown>
+
+            <div className="mt-8 border-t pt-6">
+                <Button onClick={onGenerateQuestions} disabled={isGenerating}>
+                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileQuestion className="mr-2 h-4 w-4" />}
+                    {isGenerating ? 'Generating...' : 'Generate Comprehension Questions'}
+                </Button>
+            </div>
+
+            {generatedQuestions && (
+                <div className="mt-6">
+                    <h3 className="text-xl font-bold font-headline text-primary mb-4">Generated Comprehension Questions</h3>
+                    <ol className="list-decimal pl-5 space-y-2">
+                        {generatedQuestions.questions.map((q, i) => (
+                            <li key={i}>{q}</li>
+                        ))}
+                    </ol>
+                </div>
+            )}
         </div>
     );
 };
