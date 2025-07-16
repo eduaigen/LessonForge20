@@ -21,13 +21,6 @@ const spaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
 });
 
-// Extend the Window interface
-declare global {
-  interface Window {
-    google: any;
-  }
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,7 +29,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('font-body antialiased bg-background', inter.variable, spaceGrotesk.variable)}>
-        <div id="google_translate_element" className="fixed top-20 right-4 z-50"></div>
         <AuthProvider>
           <div className="flex min-h-screen flex-col">
             <AppHeader />
@@ -48,18 +40,6 @@ export default function RootLayout({
           <AccessibilityWidget />
           <Toaster />
         </AuthProvider>
-
-        <Script
-            src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-            strategy="afterInteractive"
-        />
-        <Script id="google-translate" strategy="afterInteractive">
-          {`
-            function googleTranslateElementInit() {
-              new window.google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-            }
-          `}
-        </Script>
       </body>
     </html>
   );

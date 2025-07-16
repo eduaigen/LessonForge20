@@ -162,19 +162,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
         }
       };
       
-    const handleTranslateClick = () => {
-        if (window.google && window.google.translate) {
-            new window.google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-        } else {
-            toast({
-                title: 'Translation Not Available',
-                description: 'The Google Translate widget could not be loaded. Please try again later.',
-                variant: 'destructive'
-            });
-        }
-    };
-
-
   return (
     <Card className="mt-6 shadow-md">
       <div style={{ display: 'none' }}>
@@ -200,10 +187,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     <Button variant="outline" size="icon" onClick={handleDownloadDoc} title="Download as .doc">
                         <FileDown className="h-4 w-4" />
                         <span className="sr-only">Download as .doc</span>
-                    </Button>
-                     <Button variant="outline" size="icon" onClick={handleTranslateClick} title="Translate">
-                        <Languages className="h-4 w-4" />
-                        <span className="sr-only">Translate</span>
                     </Button>
                 </div>
             </CardHeader>
