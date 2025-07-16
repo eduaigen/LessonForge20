@@ -56,7 +56,7 @@ const SubscriptionPrompt = () => (
                 </div>
                 <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
                 <CardDescription>
-                    The Social Studies Test Generator requires a Social Studies subscription. Subscribe now to create powerful, standards-aligned assessments.
+                    The Social Studies Test Generator requires a Social Studies curriculum subscription. Subscribe now to create powerful, standards-aligned assessments.
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -317,7 +317,7 @@ const GeneratorContent = () => {
               <StyledContentDisplay content={item.content} type={item.type} />
             </CollapsibleSection>
           ))}
-          
+
           {isToolLoading && (
             <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Test'}}>
               <GeneratingAnimation />

@@ -771,6 +771,77 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
         </section>
     </div>
 );
+
+const ELAAnswerKeyDisplay = ({ test }: { test: GenerateELATestOutput }) => (
+    <div className="document-view">
+        <header className="text-center mb-8">
+            <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
+        </header>
+
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">Part 1: Reading Comprehension Answers</h2>
+            {test.answerKey.part1.map((passageAnswers, index) => (
+                <div key={index} className="mb-4">
+                    <h3 className="text-xl font-semibold">{passageAnswers.passageTitle}</h3>
+                    <ol className="list-decimal pl-5">
+                        {passageAnswers.answers.map((answer, ansIndex) => (
+                            <li key={ansIndex}>{answer}</li>
+                        ))}
+                    </ol>
+                </div>
+            ))}
+        </section>
+
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">Part 2: Argument Essay Sample Response</h2>
+            <Markdown>{test.answerKey.part2.sampleEssay}</Markdown>
+        </section>
+
+        <section>
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">Part 3: Text Analysis Sample Response</h2>
+            <Markdown>{test.answerKey.part3.sampleResponse}</Markdown>
+        </section>
+    </div>
+);
+
+const SocialStudiesAnswerKeyDisplay = ({ test }: { test: GenerateSocialStudiesTestOutput }) => (
+    <div className="document-view">
+        <header className="text-center mb-8">
+            <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
+        </header>
+
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">Part I: Multiple Choice Answers</h2>
+            <ol className="list-decimal pl-5 space-y-2">
+                {test.answerKey.part1.map((item, index) => (
+                    <li key={index}>{item.answer}</li>
+                ))}
+            </ol>
+        </section>
+
+        <section className="mb-12">
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">Part II: Constructed-Response Sample Answers</h2>
+            {test.answerKey.part2.map((set, setIndex) => (
+                <div key={setIndex} className="mb-6">
+                    <h3 className="text-xl font-semibold">CRQ Set {set.setNumber}</h3>
+                    <ol className="list-decimal pl-5 space-y-4">
+                        {set.questions.map((q, qIndex) => (
+                            <li key={qIndex}>
+                                <p><strong>Question:</strong> {q.question}</p>
+                                <p><strong>Sample Answer:</strong> <Markdown>{q.sampleAnswer}</Markdown></p>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            ))}
+        </section>
+
+        <section>
+            <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">Part III: DBQ Sample Essay</h2>
+            <Markdown>{test.answerKey.part3.sampleEssay}</Markdown>
+        </section>
+    </div>
+);
   
 
 type StyledContentDisplayProps = {
@@ -811,7 +882,9 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
         case 'Answer Key':
             if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
-            // Add Social Studies and Math Answer Key Display when available
+            if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
+            if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
+            // Add Math Answer Key Display when available
             return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);

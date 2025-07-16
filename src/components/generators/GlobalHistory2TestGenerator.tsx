@@ -186,7 +186,6 @@ const GeneratorContent = () => {
     }
   };
 
-
   return (
     <>
       <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>

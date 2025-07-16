@@ -26,6 +26,7 @@ const prompt = ai.definePrompt({
 1.  All generated passages and questions must be complete and fully written out. No placeholders.
 2.  The content should be appropriate for a 9th-12th grade reading level.
 3.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
+4.  You MUST create a complete and thorough answer key for all parts of the test.
 
 ---
 
@@ -34,16 +35,17 @@ const prompt = ai.definePrompt({
 - **Passage Types:** Create a mix of literary text (e.g., short story excerpt), a poem, and informational text (e.g., article, essay).
 - For EACH passage, generate EXACTLY EIGHT multiple-choice questions, for a total of {{{passageCount}}} * 8 questions.
 - The questions should assess a range of skills: word meaning, literary devices, central idea, author's purpose, and inference.
+- The answer key for this section must contain the correct letter for each multiple-choice question.
 
 **Part 2: Writing from Sources - Argument Essay**
 - Generate a compelling and debatable prompt related to the themes in the provided lessons.
 - Generate EXACTLY {{{sourceCount}}} diverse, text-based sources that provide different perspectives on the prompt. These can be short excerpts from articles, speeches, or infographics described in text.
-- Write a detailed, high-quality sample essay that develops a clear claim and supports it with evidence from at least three of the generated sources.
+- **Answer Key:** Write a detailed, high-quality sample essay that develops a clear claim and supports it with evidence from at least three of the generated sources.
 
 **Part 3: Text Analysis Response**
 - Generate ONE complete literary or informational text (approximately 400-600 words).
 - Create a prompt that asks students to identify a central idea and analyze how a specific writing strategy (e.g., figurative language, characterization, point of view) develops that idea.
-- Write a detailed, high-quality sample response (2-3 paragraphs) that correctly identifies a central idea and analyzes the writing strategy with specific evidence from the text.
+- **Answer Key:** Write a detailed, high-quality sample response (2-3 paragraphs) that correctly identifies a central idea and analyzes the writing strategy with specific evidence from the text.
 `,
 });
 

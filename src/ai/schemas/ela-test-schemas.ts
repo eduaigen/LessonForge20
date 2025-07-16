@@ -22,13 +22,26 @@ const passageSchema = z.object({
 const textAnalysisResponseSchema = z.object({
   passage: passageSchema,
   prompt: z.string().describe("The prompt for the text analysis response."),
-  sampleResponse: z.string().describe("A high-quality sample essay response."),
+  sampleResponse: z.string().describe("A high-quality sample essay response for the answer key."),
 });
 
 const argumentEssaySchema = z.object({
   prompt: z.string().describe("The prompt for the source-based argument essay."),
   sources: z.array(passageSchema).describe("An array of text-based sources."),
-  sampleEssay: z.string().describe("A full, high-quality sample essay that answers the prompt using the provided sources."),
+  sampleEssay: z.string().describe("A full, high-quality sample essay that answers the prompt using the provided sources for the answer key."),
+});
+
+const answerKeySchema = z.object({
+    part1: z.array(z.object({
+        passageTitle: z.string(),
+        answers: z.array(z.string()).describe("List of correct answers (e.g., ['A', 'C', 'B', ...]) for the 8 questions of a passage.")
+    })),
+    part2: z.object({
+        sampleEssay: z.string().describe("The high-quality sample essay for the Part 2 argument prompt.")
+    }),
+    part3: z.object({
+        sampleResponse: z.string().describe("The high-quality sample response for the Part 3 text analysis prompt.")
+    }),
 });
 
 export const GenerateELATestOutputSchema = z.object({
@@ -49,6 +62,7 @@ export const GenerateELATestOutputSchema = z.object({
     title: z.string().default("Part 3: Text Analysis Response"),
     textAnalysis: textAnalysisResponseSchema,
   }),
+  answerKey: answerKeySchema,
 });
 
 export type GenerateELATestInput = z.infer<typeof GenerateELATestInputSchema>;

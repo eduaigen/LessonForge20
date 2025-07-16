@@ -18,6 +18,10 @@ const multipleChoiceQuestionSchema = z.object({
 
 const constructedResponseQuestionSchema = z.object({
     question: z.string(),
+});
+
+const answerKeyCRQSchema = z.object({
+    question: z.string(),
     sampleAnswer: z.string().describe("A detailed, high-quality sample answer for the question."),
 });
 
@@ -30,7 +34,20 @@ const dbqSchema = z.object({
   historicalContext: z.string().describe("A paragraph providing the historical context for the essay."),
   task: z.string().describe("The specific prompt or task for the Document-Based Question essay."),
   documents: z.array(z.string()).describe("A list of document sources (direct quotes, descriptions of charts, or short passages)."),
-  sampleEssay: z.string().describe("A full, high-quality sample essay that answers the prompt using the provided documents and outside information."),
+});
+
+const answerKeySchema = z.object({
+    part1: z.array(z.object({
+        question: z.string(),
+        answer: z.string(),
+    })),
+    part2: z.array(z.object({
+        setNumber: z.number(),
+        questions: z.array(answerKeyCRQSchema),
+    })),
+    part3: z.object({
+        sampleEssay: z.string().describe("A full, high-quality sample essay that answers the prompt using the provided documents and outside information."),
+    }),
 });
 
 export const GenerateSocialStudiesTestOutputSchema = z.object({
@@ -48,6 +65,7 @@ export const GenerateSocialStudiesTestOutputSchema = z.object({
     title: z.string().default("Part III: Document-Based Question (DBQ)"),
     dbq: dbqSchema,
   }),
+  answerKey: answerKeySchema,
 });
 
 export type GenerateSocialStudiesTestInput = z.infer<typeof GenerateSocialStudiesTestInputSchema>;
