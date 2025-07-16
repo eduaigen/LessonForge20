@@ -5,14 +5,18 @@
  */
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
-import { GenerateNVBiologyLessonInputSchema, GenerateNVBiologyLessonOutputSchema } from '../schemas/nv-biology-lesson-schemas';
+import { GenerateNVBiologyLessonInputSchema, GenerateNVBiologyLessonOutputSchema, GenerateNVBiologyLessonOutputSchema as LessonPlanSchema } from '../schemas/nv-biology-lesson-schemas';
 
 export type GenerateNVBiologyLessonInput = z.infer<typeof GenerateNVBiologyLessonInputSchema>;
 export type GenerateNVBiologyLessonOutput = z.infer<typeof GenerateNVBiologyLessonOutputSchema>;
 
+const PromptSchema = GenerateNVBiologyLessonInputSchema.extend({
+    previousAttempt: z.string().optional().describe("A stringified JSON of a previous incomplete attempt, if any."),
+});
+
 const prompt = ai.definePrompt({
   name: 'generateNVBiologyLessonPrompt',
-  input: { schema: GenerateNVBiologyLessonInputSchema },
+  input: { schema: PromptSchema },
   output: { schema: GenerateNVBiologyLessonOutputSchema },
   prompt: `You are an expert instructional designer and master teacher specializing in the New Visions for Public Schools science curriculum, specifically for Living Environment (Biology). Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
 
@@ -21,6 +25,14 @@ The user has provided the following context from the NV Biology curriculum:
 - **Topic**: {{{topic}}}
 - **Lesson**: {{{lesson}}}
 - **Additional Info**: {{{additionalInfo}}}
+
+{{#if previousAttempt}}
+**IMPORTANT**: Your previous attempt to generate this lesson plan was incomplete. You MUST use the provided previous attempt as a starting point and ensure that ALL sections are fully and correctly generated this time. Do not omit any sections.
+Previous (incomplete) attempt:
+\`\`\`json
+{{{previousAttempt}}}
+\`\`\`
+{{/if}}
 
 Based on this context, generate a complete and detailed lesson plan that is ready for a teacher to use in a classroom tomorrow.
 
@@ -84,6 +96,14 @@ Based on this context, generate a complete and detailed lesson plan that is read
 **Final Instruction**: Review your entire response. Ensure every single section from I to III is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content, especially data tables and question DOK levels, must be created and embedded directly as valid code. Failure to comply will result in an invalid response.`,
 });
 
+function isLessonPlanComplete(plan: any): plan is GenerateNVBiologyLessonOutput {
+    if (!plan || typeof plan !== 'object') return false;
+    const requiredKeys = Object.keys(LessonPlanSchema.shape);
+    const hasAllKeys = requiredKeys.every(key => key in plan && plan[key] !== null && plan[key] !== undefined);
+    return hasAllKeys;
+}
+
+
 const generateNVBiologyLessonFlow = ai.defineFlow(
   {
     name: 'generateNVBiologyLessonFlow',
@@ -92,11 +112,29 @@ const generateNVBiologyLessonFlow = ai.defineFlow(
     timeout: 120000, // 2 minutes
   },
   async (input) => {
-    const { output } = await prompt(input);
-    if (!output) {
-      throw new Error('The AI failed to generate the lesson plan. Please try again.');
+    let attempts = 0;
+    const maxAttempts = 3;
+    let currentOutput: GenerateNVBiologyLessonOutput | null | undefined = null;
+
+    while (attempts < maxAttempts) {
+        attempts++;
+        
+        const promptInput: z.infer<typeof PromptSchema> = { ...input };
+        if (currentOutput) {
+            promptInput.previousAttempt = JSON.stringify(currentOutput);
+        }
+
+        const { output } = await prompt(promptInput);
+
+        if (isLessonPlanComplete(output)) {
+            return output;
+        }
+        
+        currentOutput = output; // Store the incomplete output for the next attempt
+        console.log(`Attempt ${attempts} failed. Lesson plan was incomplete. Retrying...`);
     }
-    return output;
+
+    throw new Error('The AI failed to generate a complete lesson plan after multiple attempts. Please try again.');
   }
 );
 
