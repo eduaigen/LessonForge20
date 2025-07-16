@@ -46,7 +46,7 @@ const ToolCard = ({ title, description, icon, href }: { title: string, descripti
 };
 
 const PremiumDashboardContent = () => {
-  const { user, hasScienceSubscription, hasMathSubscription, hasELASubscription } = useAuth();
+  const { user, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription } = useAuth();
   
   return (
     <div className="flex flex-col gap-8">
@@ -147,8 +147,23 @@ const PremiumDashboardContent = () => {
               </div>
             </section>
           )}
+          
+          {hasSocialStudiesSubscription && (
+            <section>
+              <h2 className="text-2xl font-bold font-headline mb-4">Social Studies Modules</h2>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <ToolCard
+                  title="Social Studies Generator"
+                  description="Create lesson plans for Global History, US History, and Government."
+                  icon={<History />}
+                  href="/social-studies-generator"
+                />
+              </div>
+            </section>
+          )}
 
-          {!hasScienceSubscription && !hasMathSubscription && !hasELASubscription && (
+
+          {!hasScienceSubscription && !hasMathSubscription && !hasELASubscription && !hasSocialStudiesSubscription && (
              <div className="text-center py-16 col-span-full">
                 <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
                 <p className="text-muted-foreground">You do not have any active subscriptions with available tools.</p>
