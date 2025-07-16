@@ -5,7 +5,7 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { GenerateLabActivityOutputSchema, LabStudentSheetOutputSchema, LabStudentSheetInputSchema } from '../schemas/lab-activity-schemas';
+import { LabStudentSheetInputSchema, LabStudentSheetOutputSchema } from '../schemas/lab-activity-schemas';
 
 
 const prompt = ai.definePrompt({
@@ -29,17 +29,18 @@ const prompt = ai.definePrompt({
 ---
 
 1.  **Title:** Copy the 'labTitle' from the original lab.
-2.  **Reading Phenomenon:** Copy the entire 'phenomenon' text.
+2.  **Reading Phenomenon:** Copy the entire 'phenomenonReading' text.
 3.  **Pre-Lab Questions:** Copy all questions from the 'preLabQuestions' array.
-4.  **Testable Question:** Provide a labeled space for the student to write their question.
-5.  **Hypothesis:** Provide a labeled space for the student to write their hypothesis, perhaps with an "If... then... because..." prompt.
-6.  **Materials:** Copy the 'materialsAndEquipment' list.
-7.  **Procedure:** Provide a large, lined, or blank space labeled "Procedure" for students to write their own steps.
-8.  **Data Collection:**
+4.  **Testable Question:** Copy the 'testableQuestionPrompt' and provide a labeled space for the student to write their question.
+5.  **Hypothesis:** Copy the 'hypothesisPrompt' and provide a labeled space for the student to write their hypothesis.
+6.  **Variables:** Copy the prompts for independent, dependent, and controlled variables from 'variablesPrompt'.
+7.  **Materials:** Copy the 'materialsAndEquipment' list.
+8.  **Procedure:** Copy the 'studentProcedureDesign' prompt and provide a large, lined, or blank space for students to write their own steps.
+9.  **Data Collection:**
     *   Copy the 'dataCollection.description'.
-    *   If 'dataCollection.dataTable' exists, recreate the table with empty rows for students to fill in. If no table exists, provide a blank space for data collection.
-9.  **Data Analysis & Conclusion:** Provide labeled spaces for "Data Analysis" and "Conclusion" for students to write their interpretations.
-10. **Discussion Questions:** Copy all questions from the 'discussionQuestions' array, with space after each for answers.
+    *   If 'dataCollection.dataTable' exists, recreate the table with AT LEAST 6 empty rows for students to fill in. If no table exists, provide a blank space for data collection.
+10. **Data Analysis & Conclusion:** Provide labeled spaces for "Data Analysis" and "Conclusion" for students to write their interpretations. Copy the 'conclusionPrompt' into the conclusion section.
+11. **Discussion Questions:** Copy all questions from the 'discussionQuestions' array, with space after each for answers.
 
 Generate a complete student worksheet based on these instructions.`,
 });

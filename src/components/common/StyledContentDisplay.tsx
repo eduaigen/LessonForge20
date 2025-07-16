@@ -897,6 +897,11 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
             {renderTableFromObject(lab.dataCollection.dataTable)}
         </LessonSection>
 
+         <LessonSection title="Conclusion">
+            <p className="italic text-muted-foreground">{lab.conclusionPrompt}</p>
+            <div className="my-2 h-32 border rounded-md p-2"></div>
+        </LessonSection>
+
         <LessonSection title="Discussion">
             <div><strong>Discussion Questions:</strong> <ol className="list-decimal pl-5 space-y-2">{lab.discussionQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></div>
         </LessonSection>
@@ -924,6 +929,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (!content.aim) return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Worksheet content is missing the 'aim' property.</div>;
             return renderWorksheet(content);
         case 'Teacher Coach':
+            if (isLabActivity) return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Teacher Coach for labs coming soon.</div>; // Placeholder
             return renderCoachingAdvice(content);
         case 'Slideshow Outline':
             return renderSlideshowOutline(content);

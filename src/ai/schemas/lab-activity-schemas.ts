@@ -20,7 +20,7 @@ export const GenerateLabActivityOutputSchema = z.object({
     crosscuttingConcept: z.string().describe("The central Crosscutting Concept (CCC) highlighted."),
   }),
   phenomenonReading: z.string().describe("A 500-800 word, grade-appropriate reading passage that presents a real-world phenomenon or scenario to anchor the lab and provide context."),
-  preLabQuestions: z.array(z.string()).describe("2-3 questions for students to answer based on the phenomenon reading before starting the lab."),
+  preLabQuestions: z.array(z.string()).describe("2-3 high-level (DOK 3-4) questions for students to answer based on the phenomenon reading before starting the lab."),
   testableQuestionPrompt: z.string().default("Based on the reading and pre-lab questions, what is one testable question you can investigate?"),
   hypothesisPrompt: z.string().default("Write a hypothesis for your testable question. Use an 'If... then... because...' format."),
   variablesPrompt: z.object({
@@ -35,7 +35,8 @@ export const GenerateLabActivityOutputSchema = z.object({
     description: z.string().describe("Instructions for what data to collect."),
     dataTable: dataTableSchema.optional(),
   }),
-  discussionQuestions: z.array(z.string()).describe("3-4 essential questions for a post-lab class or small group discussion."),
+  conclusionPrompt: z.string().default("Based on your data and analysis, was your hypothesis supported or refuted? Use evidence from your investigation to explain your reasoning."),
+  discussionQuestions: z.array(z.string()).describe("At least 5 high-level (DOK 3-4) essential questions for a post-lab class or small group discussion."),
 });
 export type GenerateLabActivityOutput = z.infer<typeof GenerateLabActivityOutputSchema>;
 
@@ -52,18 +53,31 @@ export const LabStudentSheetInputSchema = z.object({
 });
 export const LabStudentSheetOutputSchema = z.object({
     title: z.string(),
-    phenomenon: z.string(),
+    phenomenonReading: z.string(),
     preLabQuestions: z.array(z.string()),
-    testableQuestion: z.string().describe("A space/prompt for the student's question."),
-    hypothesis: z.string().describe("A space/prompt for the student's hypothesis."),
+    testableQuestion: z.object({
+        prompt: z.string(),
+    }),
+    hypothesis: z.object({
+        prompt: z.string(),
+    }),
+    variables: z.object({
+        independentPrompt: z.string(),
+        dependentPrompt: z.string(),
+        controlledPrompt: z.string(),
+    }),
     materials: z.array(z.string()),
-    procedure: z.string().describe("A space/prompt for the student's procedure."),
+    procedure: z.object({
+        prompt: z.string(),
+    }),
     dataCollection: z.object({
         description: z.string(),
         dataTable: dataTableSchema.optional(),
     }),
     dataAnalysis: z.string().describe("A space/prompt for student's data analysis."),
-    conclusion: z.string().describe("A space/prompt for student's conclusion."),
+    conclusion: z.object({
+        prompt: z.string(),
+    }),
     discussionQuestions: z.array(z.string()),
 });
 
