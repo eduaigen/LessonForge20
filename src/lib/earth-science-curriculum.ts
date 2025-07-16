@@ -1,57 +1,105 @@
 
 import type { CurriculumContent } from './curriculum-data';
 
-export const earthScienceCurriculum: CurriculumContent['Earth_Science'] = {
+export const earthScienceCurriculum: {
+    units: {
+      [unit: string]: {
+        topics: {
+          [topic: string]: {
+            lessons: { title: string; objective: string }[];
+          }
+        };
+      };
+    };
+} = {
     units: {
         "Unit 1: Discovering New Worlds": {
             topics: {
                 "Unit Opening": {
                     lessons: [
-                        "Lesson 1: Launch Anchor Phenomenon",
-                        "Lesson 2: Define the Problem",
-                        "Lesson 3: Introduce the Performance Task and Developing a Driving Question Board"
+                        { title: "Lesson 1: Launch Anchor Phenomenon", objective: "Out of all the planets in the solar system, Earth has life! Earth didn’t have life for a long time and now it does. What is it about Earth that makes it the only planet in our solar system that has sustained life?" },
+                        { title: "Lesson 2: Define the Problem", objective: "For 12,000 years our Earth has been an ideal place for humans and other life to exist. Now rising global temperatures have caused sea-levels to rise, and an increase in floods and droughts, all forcing groups of people to leave their homes There is also a rapid decline in populations of species worldwide that many scientists are referring to as the “Sixth Mass Extinction.” Our Earth is becoming less and less welcoming due to human impact, and our population is continuing to increase! What are your initial ideas for what we can do to stop what is occurring to planet Earth and ensure the survival of humans and other species? What can humans do to survive as a species if we are not successful in stopping the negative changes to planet Earth?" },
+                        { title: "Lesson 3: Introduce the Performance Task and Developing a Driving Question Board", objective: "A rise in global average temperatures is making Earth less and less habitable! Your task for this unit is to investigate what has made Earth the only planet in our solar system that can sustain life. After each investigation you will consider what you have learned and decide if and how you would like to revise your initial model from page 4 of your performance task organizer. Throughout the unit you will use your model to help you analyze and interpret data from stars and planets in other solar systems in order to write an argument from evidence about which exoplanet is most likely to be habitable. Good luck, the fate of the human species might depend on it! Based on their initial ideas for why planet Earth is the only planet in our solar system that has been habitable, students formulate a driving question board that will drive unit instruction." }
                     ]
                 },
                 "How the Sun Works 5E": {
                     lessons: [
-                        "Lesson 4: Engage - How does the Sun Provide Energy?",
-                        "Lesson 5: Explore - Investigating light from the Sun",
-                        "Lesson 6: Explain - Developing a claim about the Sun’s composition",
-                        "Lesson 7: Elaborate - Using additional evidence to construct a scientific explanation about the mechanism of energy released by the Sun",
-                        "Lesson 8: Evaluate - Developing explanatory and predictive models of the Sun"
+                        { title: "Lesson 4: How the Sun Works 5E - Engage", objective: "How does the Sun Provide Energy? Connecting to their earlier questions about finding an exoplanet that has a star like our Sun and their ideas about how the Sun provides light and heat for life on Earth, students share their initial claim for how the Sun is able to release energy on a large scale and express a need to investigate the Sun further to figure out its composition and how it works." },
+                        { title: "Lesson 5: How the Sun Works 5E - Explore", objective: "Investigating light from the Sun. Students use a simulator to figure out how a spectroscopy telescope works. They then analyze and interpret a data set (light spectra from the Sun and laboratory references of gas light spectra), looking for empirical evidence of patterns that either refutes or supports their initial claims." },
+                        { title: "Lesson 6: How the Sun Works 5E - Explain", objective: "Developing a claim about the Sun’s composition. Using what they know about the behavior of light when it passes through different materials, students use patterns identified from empirical evidence in light spectra as evidence to support a claim about our Sun’s composition." },
+                        { title: "Lesson 7: How the Sun Works 5E - Elaborate", objective: "Using additional evidence to construct a scientific explanation about the mechanism of energy released by the Sun. Students use the evidence related to scale (duration and quantity) of energy released by the Sun to construct a scientific explanation about the process that is releasing the energy received by Earth." },
+                        { title: "Lesson 8: How the Sun Works 5E - Evaluate", objective: "Developing explanatory and predictive models of the Sun. Students revise and critique their models for why Earth has been such an ideal place for life to exist and evolve using empirical evidence of patterns in the Sun’s spectra and lab samples of elemental gasses and comparisons of scale (duration and quantity) of energy released by the Sun. Students use their model of our Sun to predict how the relative proportions of hydrogen to helium changes as the Sun ages and what that means for the future stages of our Sun." }
                     ]
                 },
                 "Star Life Cycles 5E": {
                     lessons: [
-                        "Lesson 9: Engage - What happens to stars over time? What will happen to our Sun in the future?",
-                        "Lesson 10: Explore 1 - Observing Patterns of star stability and change over time",
-                        "Lesson 11: Explore 2 - Making connections between observable star properties and lifespan",
-                        "Lesson 12: Explain - Developing an explanatory model for patterns of stability and change observed in stars",
-                        "Lesson 13: Elaborate - Using a model of nucleosynthesis in stars in order to explain differences in stability and change in stars",
-                        "Lesson 14: Evaluate - Constructing arguments for which star is most likely to support a planet that can sustain life"
+                        { title: "Lesson 9: Star Life Cycles 5E - Engage", objective: "What happens to stars over time? What will happen to our Sun in the future? Students observe a data visualization of a supernova and share their initial ideas about what caused the star to change and explode. Students then generate questions related to the stability of a star that is likely to support an Earth-like planet." },
+                        { title: "Lesson 10: Star Life Cycles 5E - Explore 1", objective: "Observing Patterns of star stability and change over time. Students use a computational model of star life cycles to look for evidence of patterns in the relationship between star mass and stability and change in stars, so that they can identify stars with the longest and most stable lifespans." },
+                        { title: "Lesson 11: Star Life Cycles 5E - Explore 2", objective: "Making connections between observable star properties and lifespan. Students develop and analyze a mathematical model (the Hertzsprung-Russell Diagram) to look for evidence of patterns in the relationships between observable star properties and lifespan." },
+                        { title: "Lesson 12: Star Life Cycles 5E - Explain", objective: "Developing an explanatory model for patterns of stability and change observed in stars. Students use their understanding of nucleosynthesis and gravity in stars to develop an explanatory model for stability and change in star life cycles observed during the Explore phases." },
+                        { title: "Lesson 13: Star Life Cycles 5E - Elaborate", objective: "Using a model of nucleosynthesis in stars in order to explain differences in stability and change in stars. Students collect data from a computational model of nucleosynthesis in stars in order to identify patterns in the relationship between mass of a star and nucleosynthesis. They use these patterns to explain why stability varies across stars of different mass, and why higher mass stars are able to produce heavier elements." },
+                        { title: "Lesson 14: Star Life Cycles 5E - Evaluate", objective: "Constructing arguments for which star is most likely to support a planet that can sustain life. Students critique and revise their models for why Earth has been an ideal planet for sustaining life using evidence about star stability. They use evidence about how and why our Sun and other stars change or remain stable over time to argue about which star in the performance task data set is most likely to support an Earth-like planet." }
                     ]
                 },
                 "Planets and Orbits 5E": {
                     lessons: [
-                        "Lesson 15: Engage - Why does water on Comet Borrelly change from ice to vapor every 6 years?",
-                        "Lesson 16: Explore 1 - Identifying patterns in solar system data to test their initial models",
-                        "Lesson 17: Explain 1 - Revising solar system models",
-                        "Lesson 18: Explore 2 - Developing a mathematical model for solar system orbits",
-                        "Lesson 19: Explain 2 - Using a mathematical representation to determine the orbit of exoplanets",
-                        "Lesson 20: Elaborate - Constructing orbits of exoplanets to determine whether liquid water can exist on each planet",
-                        "Lesson 21: Evaluate - Developing or revising models to include new ideas about orbits"
+                        { title: "Lesson 15: Planets and Orbits 5E - Engage", objective: "Why does water on Comet Borrelly change from ice to vapor every 6 years? Students develop an initial solar system model to show how characteristics of orbits might explain the phenomenon of phase change during a comet’s revolution around the Sun and generate questions about what data they would like to investigate." },
+                        { title: "Lesson 16: Planets and Orbits 5E - Explore 1", objective: "Identifying patterns in solar system data to test their initial models. Students are provided with orbital data from our solar system and graph it in order to identify evidence of patterns and test their explanatory models for phase change and stability of water on Comet Borrelly and other objects that orbit the Sun." },
+                        { title: "Lesson 17: Planets and Orbits 5E - Explain 1", objective: "Revising solar system models. Students use the evidence of patterns identified in graphs they created to revise their solar system models that explain water’s phase change and stability on objects orbiting the Sun. They use their models to identify important features of the motions of orbiting objects that would allow a planet to maintain liquid water." },
+                        { title: "Lesson 18: Planets and Orbits 5E - Explore 2", objective: "Developing a mathematical model for solar system orbits. Students use algebraic thinking to examine graphs from the Explore 1 in order to create a mathematical representation that allows them to identify the exact pattern in the relationship between orbital period and average distance between a planet/object and its star." },
+                        { title: "Lesson 19: Planets and Orbits 5E - Explain 2", objective: "Using a mathematical representation to determine the orbit of exoplanets. Students use a mathematical equation representing the relationship between orbital semi major axis and orbital period (Kepler’s Third Law) to make predictions about exoplanets’ orbital semi major axis based on each exoplanet’s orbital period." },
+                        { title: "Lesson 20: Planets and Orbits 5E - Elaborate", objective: "Constructing orbits of exoplanets to determine whether liquid water can exist on each planet. Students use a mathematical model (Kepler’s First Law) to describe the relationship between orbital eccentricity, major axis, and distance between foci of a planet/object revolving around its host star. Students then use the mathematical model and algebraic thinking to construct exoplanet orbits, allowing them to make predictions about which exoplanets stay within the habitable zone of their stars throughout an entire orbit." },
+                        { title: "Lesson 21: Planets and Orbits 5E - Evaluate", objective: "Developing or revising models to include new ideas about orbits. Students develop new models or revise existing ones to represent the idea that stable temperatures and the maintenance of liquid water result from features of the motions of orbiting objects." }
                     ]
                 },
                 "Unit Closing": {
                     lessons: [
-                        "Lesson 22: Unit Closing - Complete the Performance Task"
+                        { title: "Lesson 22: Unit Closing - Complete the Performance Task", objective: "Based on their explanatory models for what has made Earth the only planet in our solar system that has been habitable, students argue from evidence about which exoplanet in the performance task data set is most likely to be habitable." }
                     ]
                 }
             }
         },
-        "Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
+        "Unit 2: Earthquakes, Volcanoes, and Tsunamis: Who's at Risk?": {
             topics: {
-                "Assessing natural hazard risk": { lessons: ["Modeling the layers of the Earth", "Understanding the theory of plate tectonics", "Investigating interactions at plate boundaries", "Explaining the cause and effects of earthquakes", "Analyzing the formation and eruption of volcanoes", "Using maps to identify areas of high risk", "Connecting underwater earthquakes to tsunami formation", "Investigating factors that make communities vulnerable", "Designing structures to withstand seismic activity", "Developing plans to improve community resilience", "Conducting a risk assessment for a specific location"] }
+                "Unit Opening": {
+                    lessons: [
+                        { title: "Lesson 1: Unit Opening - Anchor Phenomenon", objective: "What locations on Earth are most at risk of loss of life and property caused by an earthquake, volcanic eruption, or tsunami in the near future? Why do earthquakes, volcanic eruptions, and tsunamis occur in some places on Earth, how are they related, and what does this all mean for risk in different parts of the world?" },
+                        { title: "Lesson 2: Unit Opening - Performance Task", objective: "Students review the performance task for the unit, focusing on evaluating risk and proposing solutions." },
+                        { title: "Lesson 3: Unit Opening - Driving Question Board", objective: "Based on ideas that have surfaced through student discussion and scientific modeling, students develop a driving question board that will drive investigations during the unit." }
+                    ]
+                },
+                "Waves Inside the Earth 5E": {
+                    lessons: [
+                        { title: "Lesson 4: Waves Inside The Earth 5E - Engage", objective: "Where do earthquakes, tsunamis, and volcanic eruptions occur? Students use prior knowledge and empirical evidence of patterns in earthquakes, volcanic activity, and tsunamis to generate claims, ideas and questions about how these natural hazards occur." },
+                        { title: "Lesson 5: Waves Inside The Earth 5E - Explore 1", objective: "How do we figure out what’s underneath the Earth’s surface? Students use models to collect empirical evidence of patterns associated with the movement of energy from earthquakes in the form of seismic waves, and begin to make inferences about Earth’s interior structure." },
+                        { title: "Lesson 6: Waves Inside The Earth 5E - Explain 1", objective: "What do differences in seismic waves detected around the world tell us about Earth’s interior? Students use differences in the way that energy from earthquakes drive the movement of matter in the form of p and s-waves to develop a model of Earth’s interior structure that explains patterns of wave arrival at Earth’ surface." },
+                        { title: "Lesson 7: Waves Inside The Earth 5E - Explore 2", objective: "What is the composition of Earth’s interior layers? What is the earth made of near the surface where these hazards occur? Students calculate the density of three liquids and make observations from a model in order to identify empirical evidence of patterns regarding relative density and sinking/rising." },
+                        { title: "Lesson 8: Waves Inside The Earth 5E - Explain 2", objective: "How can we use what we know about density to figure out the composition of Earth’s interior layers? Students learn how structure of materials determines the property of density and how gravity affects materials of different densities to revise their models of Earth’s interior structure by adding the composition of Earth’s layers." },
+                        { title: "Lesson 9: Waves Inside The Earth 5E - Elaborate 1", objective: "How do we know the earth’s outer core is liquid metal? Students evaluate additional evidence for the composition of Earth’s outer core using ideas about the structure and properties of liquid metal." },
+                        { title: "Lesson 10: Waves Inside The Earth 5E - Elaborate 2", objective: "What is the ground like underneath where earthquakes, volcano eruptions and tsunamis occur? Students use a data visualization of earthquake properties (depth) to evaluate evidence for claims about the structure of plate boundaries underneath the Earth’s surface where earthquakes occur and begin to relate these structures to the frequency of earthquakes at different types of plate boundaries." },
+                        { title: "Lesson 11: Waves Inside The Earth 5E - Evaluate", objective: "Who is most at risk? Students use what they learn about subsurface structure and composition from evidence of how energy from an earthquake drives the motion of matter in earth’s interior and calculate the rate at which earthquakes have occurred at the performance task locations in the past in order to revise and critique their models and arguments regarding risk." }
+                    ]
+                },
+                "Surface Features and Plate Boundaries 5E": {
+                    lessons: [
+                        { title: "Lesson 12: Surface Features and Plate Boundaries 5E - Engage", objective: "What is happening at plate boundaries that causes earthquakes, volcanic eruptions and tsunamis? Students make observations of volcanic eruptions in Iceland and share their initial claims and questions regarding why we observe magma reaching Earth’s surface at such a tremendous rate in Iceland." },
+                        { title: "Lesson 13: Surface Features and Plate Boundaries 5E - Explore 1", objective: "Why did earthquakes and volcanic eruptions occur in Iceland? Students analyze a graphical representation of seafloor rock at plate boundaries and identify empirical evidence of patterns in the age of rocks on the seafloor at different plate boundaries." },
+                        { title: "Lesson 14: Surface Features and Plate Boundaries 5E - Explain 1", objective: "Why is so much magma reaching the surface along mid ocean ridges? Students evaluate evidence for the claim that new crust is produced at Earth’s divergent plate boundaries on the ocean floor and old crust is destroyed at subduction zones by reviewing empirical evidence of patterns and considering whether there are processes supported by science ideas that can connect the evidence to the claim." },
+                        { title: "Lesson 15: Surface Features and Plate Boundaries 5E - Explore 2", objective: "Does the theory of plate tectonics explain the occurrence of earthquakes, volcanic eruptions? Students use models to observe the rate of change associated with the occurrence of earthquakes and volcanic eruptions, and the formation of other surface features." },
+                        { title: "Lesson 16: Surface Features and Plate Boundaries 5E - Explain 2", objective: "Students develop a model based on evidence that explains how plate interactions lead to the formation of surface features and natural hazards on different time scales, due to the time scale of processes that lead to their formation or occurrence." },
+                        { title: "Lesson 17: Surface Features and Plate Boundaries 5E - Elaborate", objective: "What’s the age of continental rock? Students analyze age of rock data and model to evaluate whether plate tectonics can explain the imperial evidence of patterns observed in the age continental rocks." },
+                        { title: "Lesson 18: Surface Features and Plate Boundaries 5E - Evaluate", objective: "Who’s at risk? Students use what they have learned about how earthquakes, volcanic eruptions, and tsunamis occur at plate boundaries and calculate the rate at which volcanic eruptions and tsunamis have occurred at the performance task locations in the past in order to revise and critique their models and arguments regarding risk." }
+                    ]
+                },
+                "Energy Transfer 5E": {
+                    lessons: [
+                        { title: "Lesson 19: Energy Transfer 5E - Engage", objective: "What is happening inside Earth that drives plate motion? Students use what they know about Earth’s interior to make initial claims about the source of energy that drives plate motion and how it reaches Earth’s surface." },
+                        { title: "Lesson 20: Energy Transfer 5E - Explore", objective: "How do differences in temperature affect matter inside the Earth lead to the movement of matter caused by the Tonga volcanic eruption? Students develop and use a physical model that presents analog behavior for processes within Earth’s interior in order to collect empirical evidence of patterns in movement of matter and energy." },
+                        { title: "Lesson 21: Energy Transfer 5E - Explain", objective: "Developing an explanatory model for the movement of matter caused by the Tonga volcanic eruption. Students develop an explanatory model for how energy inside the Earth drives the motion of tectonic plates on Earth’s surface." },
+                        { title: "Lesson 22: Energy Transfer 5E - Elaborate", objective: "What is the source of such tremendous amounts of energy? Students evaluate evidence for potential sources of energy in Earth’s interior in order to revise their models and include how and where energy that drives the movement of matter from Earth’s interior to Earth’s surface is produced." },
+                        { title: "Lesson 23: Energy Transfer 5E - Evaluate", objective: "Students use what they learn about energy and matter flows from Earth’s interior to Earth’s surface, and tectonic hazard vulnerability profiles for each performance task location to revise and critique their models and arguments regarding risk." }
+                    ]
+                }
             }
         },
         "Climate Change Throughout Human History": {
