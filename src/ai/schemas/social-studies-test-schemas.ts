@@ -12,7 +12,7 @@ export const GenerateSocialStudiesTestInputSchema = z.object({
 const multipleChoiceQuestionSchema = z.object({
   stimulus: z.string().describe("A stimulus, which can be a direct quote, a description of a chart, or a short text passage. This content must be created by the AI."),
   question: z.string(),
-  options: z.array(z.string()).length(4),
+  options: z.array(z.string()).length(4).describe("An array of exactly four string options for the multiple-choice question."),
   answer: z.string(),
 });
 
