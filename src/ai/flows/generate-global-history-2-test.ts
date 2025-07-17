@@ -16,7 +16,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Pr
     try {
       return await fn();
     } catch (err: any) {
-      if (err.message?.includes("503") || err.message?.includes("model is overloaded")) {
+      if (err.message?.includes("503") || err.message?.includes("model is overloaded") || err.message?.includes("An unexpected response was received from the server")) {
         if (i === retries - 1) {
           throw new Error("The AI model is temporarily overloaded. Please try again in a few moments.");
         }
@@ -36,13 +36,6 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateSocialStudiesTestOutputSchema },
   prompt: `You are an expert high school Global History teacher and assessment writer for the NYS Global History & Geography II curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum units and lessons.
 
-**User Provided Context:**
-- **Lessons**: {{{lessons}}}
-- **Desired DOK Level**: {{{dokLevel}}}
-- **Number of Multiple Choice Questions**: {{{mcqCount}}}
-- **Number of CRQ Sets**: {{{crqCount}}}
-- **Number of DBQ Documents**: {{{dbqDocCount}}}
-
 **CRITICAL INSTRUCTIONS:**
 1.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
 2.  All stimulus material, including for multiple-choice questions and documents, MUST be text-based. You can use direct quotes, excerpts from historical texts, or descriptions of data tables. DO NOT create stimuli that require a visual diagram or map.
@@ -50,6 +43,13 @@ const prompt = ai.definePrompt({
 4.  All generated content must be complete and fully written out. No placeholders.
 5.  Generate a set of clear, student-facing instructions for taking the test.
 6.  You MUST create a complete and thorough answer key for all parts of the test.
+
+**User Provided Context:**
+- **Lessons**: {{{lessons}}}
+- **Desired DOK Level**: {{{dokLevel}}}
+- **Number of Multiple Choice Questions**: {{{mcqCount}}}
+- **Number of CRQ Sets**: {{{crqCount}}}
+- **Number of DBQ Documents**: {{{dbqDocCount}}}
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.

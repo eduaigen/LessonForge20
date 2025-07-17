@@ -16,7 +16,7 @@ async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Pr
     try {
       return await fn();
     } catch (err: any) {
-      if (err.message?.includes("503") || err.message?.includes("model is overloaded")) {
+      if (err.message?.includes("503") || err.message?.includes("model is overloaded") || err.message?.includes("An unexpected response was received from the server")) {
         if (i === retries - 1) {
           throw new Error("The AI model is temporarily overloaded. Please try again in a few moments.");
         }
