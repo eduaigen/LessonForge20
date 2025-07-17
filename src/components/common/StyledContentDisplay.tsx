@@ -256,7 +256,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
               <>
                 <h4 className="mt-4">{worksheet.vocabulary.title}</h4>
                 <ul className="list-disc pl-5 mt-2 space-y-2">
-                    {worksheet.vocabulary.terms.map(v => <li key={v.term}><strong>{v.term}:</strong> {v.definition}</li>)}
+                    {worksheet.vocabulary.terms.map((v, i) => <li key={i}><strong>{v.term}:</strong> {v.definition}</li>)}
                 </ul>
               </>
             )}
