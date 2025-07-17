@@ -13,7 +13,7 @@ export const StudySheetOutputSchema = z.object({
     term: z.string(),
     definition: z.string(),
   })).describe('A list of key vocabulary terms and their definitions from the lesson.'),
-  coreConcepts: z.array(z.string()).describe('A bulleted list summarizing the 3-5 most important scientific concepts or big ideas from the lesson, synthesized from the mini-lesson reading and objectives.'),
+  coreConcepts: z.array(z.string()).describe('A bulleted list summarizing the 3-5 most important concepts or big ideas from the lesson, synthesized from the mini-lesson reading and objectives.'),
   keyDiagram: z.string().optional().describe("A text description of the most important diagram or model from the mini-lesson, explaining what it shows."),
   practiceQuestions: z.array(z.object({
     question: z.string(),

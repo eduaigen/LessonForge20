@@ -525,14 +525,14 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                 </section>
             )}
 
-            {Array.isArray(studySheet.keyConcepts) && studySheet.keyConcepts.length > 0 && (
-                <section className="mb-6">
-                    <h2>Key Concepts</h2>
-                    <ul className="list-disc pl-5 space-y-2">
-                        {studySheet.keyConcepts?.map((concept, index) => (
-                            <li key={index}>{concept}</li>
-                        ))}
-                    </ul>
+            {Array.isArray(studySheet.coreConcepts) && studySheet.coreConcepts.length > 0 && (
+                 <section className="mb-6">
+                    <h2>Core Concepts</h2>
+                     <ul className="list-disc pl-5 space-y-2">
+                         {studySheet.coreConcepts.map((concept, index) => (
+                             <li key={index}>{concept}</li>
+                         ))}
+                     </ul>
                 </section>
             )}
 
@@ -550,7 +550,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
             )}
             
             {Array.isArray(studySheet.essentialQuestions) && studySheet.essentialQuestions.length > 0 && (
-                <section>
+                <section className="mb-6">
                     <h2>Essential Questions</h2>
                     <ol className="list-decimal pl-5 space-y-4">
                         {studySheet.essentialQuestions?.map((q, index) => (
@@ -560,6 +560,41 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                             </li>
                         ))}
                     </ol>
+                </section>
+            )}
+
+            {studySheet.keyDiagram && (
+                 <section className="mb-6">
+                    <h2>Key Diagram / Model</h2>
+                    <p>{studySheet.keyDiagram}</p>
+                </section>
+            )}
+
+            {Array.isArray(studySheet.practiceQuestions) && studySheet.practiceQuestions.length > 0 && (
+                <section className="mb-6">
+                    <h2>Practice Questions</h2>
+                    <ol className="list-decimal pl-5 space-y-4">
+                        {studySheet.practiceQuestions.map((q, index) => (
+                            <li key={index}>
+                                <p>{q.question} <em className="text-sm text-muted-foreground">({q.source})</em></p>
+                                <div className="my-2 h-12 border-b border-dashed"></div>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+            )}
+
+            {Array.isArray(studySheet.activitiesAndData) && studySheet.activitiesAndData.length > 0 && (
+                <section className="mb-6">
+                    <h2>Key Activities & Data</h2>
+                    <div className="space-y-4">
+                        {studySheet.activitiesAndData.map((activity, index) => (
+                            <div key={index}>
+                                <h4>{activity.activityTitle}</h4>
+                                <p>{activity.summary}</p>
+                            </div>
+                        ))}
+                    </div>
                 </section>
             )}
         </div>
