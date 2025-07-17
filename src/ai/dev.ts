@@ -71,3 +71,5 @@ export * from './flows/generate-lab-student-sheet';
 export * from './flows/generate-differentiated-lab';
 export * from './flows/generate-lab-teacher-coach';
 export * from './flows/curriculum-audit';
+
+export * from './schemas/send-contact-email-schemas';
