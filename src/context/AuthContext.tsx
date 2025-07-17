@@ -91,8 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.setItem('user', JSON.stringify(currentUser));
     if (isAdminUser) {
         sessionStorage.setItem('isAdmin', 'true');
-        // Admins get all access
-        const allPriceIds = [...allModules.courses.map(c => c.id), ...allModules.tools.map(t => t.id)];
+        const allPriceIds = [...allModules.courses.map(c => c.id), ...allModules.assessment_tools.map(t => t.id), ...allModules.premium_tools.map(t => t.id)];
         setSubscriptions(allPriceIds);
         sessionStorage.setItem('subscriptions', JSON.stringify(allPriceIds));
     }
@@ -137,26 +136,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const isSubscribed = isAdmin || subscriptions.length > 0;
   
-  const hasSubscriptionFor = (subject: string): boolean => {
+  const hasSubscriptionFor = useCallback((subject: string): boolean => {
       if (isAdmin) return true;
-      const subjectCourses = allModules.coursesBySubject[subject] || [];
+      const subjectCourses = allModules.coursesBySubject?.[subject] || [];
       return subjectCourses.some(course => subscriptions.includes(course.id));
-  };
+  }, [isAdmin, subscriptions]);
 
-  const hasToolSubscription = (toolId: string): boolean => {
+  const hasToolSubscription = useCallback((toolId: string): boolean => {
       if (isAdmin) return true;
       return subscriptions.includes(toolId);
-  }
+  }, [isAdmin, subscriptions]);
 
-  const hasScienceSubscription = useMemo(() => hasSubscriptionFor('science'), [subscriptions, isAdmin]);
-  const hasMathSubscription = useMemo(() => hasSubscriptionFor('math'), [subscriptions, isAdmin]);
-  const hasELASubscription = useMemo(() => hasSubscriptionFor('ela'), [subscriptions, isAdmin]);
-  const hasSocialStudiesSubscription = useMemo(() => hasSubscriptionFor('social studies'), [subscriptions, isAdmin]);
-  const hasELLSubscription = useMemo(() => hasSubscriptionFor('ell'), [subscriptions, isAdmin]);
+  const hasScienceSubscription = useMemo(() => hasSubscriptionFor('science'), [hasSubscriptionFor]);
+  const hasMathSubscription = useMemo(() => hasSubscriptionFor('math'), [hasSubscriptionFor]);
+  const hasELASubscription = useMemo(() => hasSubscriptionFor('ela'), [hasSubscriptionFor]);
+  const hasSocialStudiesSubscription = useMemo(() => hasSubscriptionFor('social studies'), [hasSubscriptionFor]);
+  const hasELLSubscription = useMemo(() => hasSubscriptionFor('ell'), [hasSubscriptionFor]);
 
   const hasPremiumTools = useMemo(() => {
       if(isAdmin) return true;
-      return allModules.tools.some(tool => subscriptions.includes(tool.id));
+      // This logic can be expanded if there are more premium tools
+      return allModules.premium_tools.some(tool => subscriptions.includes(tool.id));
   }, [subscriptions, isAdmin]);
 
 

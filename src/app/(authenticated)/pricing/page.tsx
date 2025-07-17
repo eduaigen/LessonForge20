@@ -17,7 +17,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert"
 
-const ModuleCard = ({ module, isSelected, onSelect }: { module: Module, isSelected: boolean, onSelect: (id: string, type: 'course' | 'premium_tool') => void }) => {
+const ModuleCard = ({ module, isSelected, onSelect }: { module: Module, isSelected: boolean, onSelect: (id: string) => void }) => {
     const Icon = module.icon;
     return (
         <Card className={cn("transition-all duration-200", isSelected && "border-primary ring-2 ring-primary")}>
@@ -29,7 +29,7 @@ const ModuleCard = ({ module, isSelected, onSelect }: { module: Module, isSelect
                  <Checkbox
                     id={module.id}
                     checked={isSelected}
-                    onCheckedChange={() => onSelect(module.id, module.type)}
+                    onCheckedChange={() => onSelect(module.id)}
                     className="h-5 w-5"
                 />
             </CardHeader>
@@ -52,28 +52,31 @@ export default function PricingPage() {
         );
     };
     
-    const { totalPrice, coursesCount, premiumToolsCount } = useMemo(() => {
-        const courses = selectedModules.filter(id => allModules.courses.some(c => c.id === id));
-        const tools = selectedModules.filter(id => allModules.tools.some(t => t.id === id));
+    const { totalPrice, coursesCount, assessmentToolsCount } = useMemo(() => {
+        const selectedCourses = selectedModules.filter(id => allModules.courses.some(c => c.id === id));
+        const selectedAssessments = selectedModules.filter(id => allModules.assessment_tools.some(t => t.id === id));
         
+        const coursesCount = selectedCourses.length;
+        const assessmentToolsCount = selectedAssessments.length;
+
         let coursePrice = 0;
-        if (courses.length === 1) coursePrice = 15.99;
-        if (courses.length === 2) coursePrice = 15.99 + 9.99;
-        if (courses.length >= 3) coursePrice = 15.99 + 9.99 + (5.99 * (courses.length - 2));
+        if (coursesCount === 1) coursePrice = 15.99;
+        if (coursesCount === 2) coursePrice = 15.99 + 9.99;
+        if (coursesCount >= 3) coursePrice = 15.99 + 9.99 + (5.99 * (coursesCount - 2));
 
         let toolPrice = 0;
-        if (courses.length > 0) {
-            // Add-on pricing
-            toolPrice = tools.length * 9.99;
+        if (coursesCount > 0) {
+            // Add-on pricing for assessment tools
+            toolPrice = assessmentToolsCount * 9.99;
         } else {
-            // Standalone pricing
-            toolPrice = tools.length * 19.99;
+            // Standalone pricing for assessment tools
+            toolPrice = assessmentToolsCount * 15.99;
         }
 
         return {
             totalPrice: coursePrice + toolPrice,
-            coursesCount: courses.length,
-            premiumToolsCount: tools.length
+            coursesCount,
+            assessmentToolsCount,
         };
 
     }, [selectedModules]);
@@ -124,15 +127,18 @@ export default function PricingPage() {
                             </div>
                         </section>
                     ))}
+                    
+                    {Object.entries(allModules.assessmentsBySubject).map(([subject, modules]) => (
+                         <section key={`assessment-${subject}`}>
+                            <h2 className="text-2xl font-bold font-headline mb-4 capitalize">{subject} Assessment Generators</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {modules.map(module => (
+                                    <ModuleCard key={module.id} module={module} isSelected={selectedModules.includes(module.id)} onSelect={() => handleSelectModule(module.id)} />
+                                ))}
+                            </div>
+                        </section>
+                    ))}
 
-                    <section>
-                         <h2 className="text-2xl font-bold font-headline mb-4">Premium Tools</h2>
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {allModules.tools.map(tool => (
-                                <ModuleCard key={tool.id} module={tool} isSelected={selectedModules.includes(tool.id)} onSelect={() => handleSelectModule(tool.id)} />
-                            ))}
-                         </div>
-                    </section>
                 </main>
                 
                 <aside className="lg:col-span-4 sticky top-24 self-start">
@@ -152,9 +158,9 @@ export default function PricingPage() {
                                 {coursesCount > 3 && <p className="text-sm text-destructive font-semibold">For more than 3 courses, please contact us for a site license.</p>}
                             </div>
                             <div className="space-y-2">
-                                <h4 className="font-semibold">Premium Tools ({premiumToolsCount})</h4>
+                                <h4 className="font-semibold">Test & Lab Generators ({assessmentToolsCount})</h4>
                                  <ul className="text-sm text-muted-foreground list-disc pl-5">
-                                    <li>Standalone: $19.99 each</li>
+                                    <li>Standalone: $15.99 each</li>
                                     <li>As Add-on: $9.99 each</li>
                                 </ul>
                             </div>
