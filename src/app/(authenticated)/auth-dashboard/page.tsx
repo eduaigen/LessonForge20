@@ -66,6 +66,18 @@ const PremiumDashboardContent = () => {
       </div>
 
        <div className="space-y-8">
+          <section>
+              <h2 className="text-2xl font-bold font-headline mb-4">Advanced Tools</h2>
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                 <ToolCard 
+                    title="Curriculum Audit Tool"
+                    description="Audit curriculum against standards, identify gaps, and get suggestions for improvement."
+                    icon={<FolderSync />}
+                    href="/curriculum-audit"
+                 />
+               </div>
+          </section>
+
           {hasScienceSubscription && (
             <section>
               <h2 className="text-2xl font-bold font-headline mb-4">Science Modules</h2>
@@ -332,14 +344,6 @@ const PremiumDashboardContent = () => {
                 </div>
               </div>
             </section>
-          )}
-
-
-          {!hasScienceSubscription && !hasMathSubscription && !hasELASubscription && !hasSocialStudiesSubscription && !hasELLSubscription && (
-             <div className="text-center py-16 col-span-full">
-                <h2 className="text-2xl font-bold font-headline mb-4">No Tools Available</h2>
-                <p className="text-muted-foreground">You do not have any active subscriptions with available tools.</p>
-            </div>
           )}
        </div>
     </div>
