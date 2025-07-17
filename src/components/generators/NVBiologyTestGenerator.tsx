@@ -101,19 +101,19 @@ const GeneratorContent = () => {
   };
 
   const handleTestGeneration = async (language: LanguageOption) => {
-    const values = form.getValues();
-    const potentialTitle = `${result.testTitle} (${language})`;
-    if (testPackage?.some(item => item.title === potentialTitle)) {
-        toast({ title: "Already Generated", description: `A ${language} version of this test has already been generated.`, variant: "default" });
-        setIsLoading(false);
-        setSelectedTool(null);
-        return;
-    }
-
     setIsLoading(true);
     
     try {
+      const values = form.getValues();
       const result = await generateNVBiologyTest({ ...values, language });
+      
+      const potentialTitle = `${result.testTitle} (${language})`;
+      if (testPackage?.some(item => item.title === potentialTitle)) {
+          toast({ title: "Already Generated", description: `A ${language} version of this test has already been generated.`, variant: "default" });
+          setIsLoading(false);
+          setSelectedTool(null);
+          return;
+      }
 
       const testContent: TestGeneratedContent = {
         id: `test-${Date.now()}`,
@@ -166,7 +166,7 @@ const GeneratorContent = () => {
     }
 
     const originalTestContent = testPackage?.find(item => item.type === 'Test');
-    if (!originalTestContent) {
+    if (!originalTestContent || !selectedTool) {
         toast({ title: "No Test Found", description: "Please generate a test first.", variant: "destructive" });
         return;
     }
@@ -229,9 +229,9 @@ const GeneratorContent = () => {
             <div className="text-sm text-muted-foreground pt-4 text-left">
               <span className="font-semibold text-foreground">Available Tools:</span>
               <ul className="list-disc pl-5 mt-2 space-y-2">
-                <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                <li><strong>Differentiated Version:</strong> Generates a version with simplified language.</li>
-                <li><strong>Enhanced Version:</strong> Creates a more rigorous version for advanced students.</li>
+                  <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                  <li><strong>Differentiated Version:</strong> Generates a version with simplified language.</li>
+                  <li><strong>Enhanced Version:</strong> Creates a more rigorous version for advanced students.</li>
               </ul>
             </div>
           </AlertDialogHeader>
