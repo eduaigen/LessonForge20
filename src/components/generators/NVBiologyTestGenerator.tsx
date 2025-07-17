@@ -102,7 +102,7 @@ const GeneratorContent = () => {
 
   const handleTestGeneration = async (language: LanguageOption) => {
     const values = form.getValues();
-    const potentialTitle = `NV Biology Test (${values.clusterCount} Clusters, DOK ${values.dokLevel}) (${language})`;
+    const potentialTitle = `${result.testTitle} (${language})`;
     if (testPackage?.some(item => item.title === potentialTitle)) {
         toast({ title: "Already Generated", description: `A ${language} version of this test has already been generated.`, variant: "default" });
         setIsLoading(false);
@@ -111,13 +111,7 @@ const GeneratorContent = () => {
     }
 
     setIsLoading(true);
-    // Don't clear the whole package, just the loading state for a new generation
-    if (selectedTool === 'Test') {
-       // If it's a new primary test generation, we can optionally clear previous packages
-       // For now, we'll append to allow multiple different tests on one page.
-       // setTestPackage(null); 
-    }
-
+    
     try {
       const result = await generateNVBiologyTest({ ...values, language });
 
@@ -136,7 +130,7 @@ const GeneratorContent = () => {
           type: 'Answer Key',
           language,
       }
-
+      
       setTestPackage(prev => [...(prev || []), testContent, answerKeyContent]);
       setIsToolsInfoDialogOpen(true);
       
