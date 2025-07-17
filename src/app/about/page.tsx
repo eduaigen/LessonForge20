@@ -53,14 +53,14 @@ export default function AboutPage() {
         </AboutSection>
 
         <AboutSection title="Data Privacy & Security" icon={<ShieldCheck className="h-6 w-6" />}>
-          <p>
-            We take your privacy and the security of your data with the utmost seriousness. Our commitment to you is simple and unwavering:
-          </p>
-          <ul>
-            <li><strong>We will NEVER sell your data.</strong> Your personal information, usage data, and any content you create are yours and yours alone. We do not sell or rent data to third parties, marketers, or anyone else.</li>
-            <li><strong>Secure Transactions.</strong> All payments are processed through Stripe, a global leader in online payment processing. We do not store your full credit card information on our servers.</li>
-            <li><strong>Use of Data.</strong> We only use anonymized data about tool usage to improve our services and AI models. This helps us understand which features are most helpful and where we can make improvements, without compromising your privacy.</li>
-          </ul>
+            <p>
+              We take your privacy and the security of your data with the utmost seriousness. Our commitment to you is simple and unwavering:
+            </p>
+            <ul>
+              <li><strong>We will NEVER sell your data.</strong> Your personal information, usage data, and any content you create are yours and yours alone. We do not sell or rent data to third parties, marketers, or anyone else.</li>
+              <li><strong>No Third-Party Analytics.</strong> We do not use third-party analytics tools that would compromise or share student or teacher data. Our service improvements are based on aggregated, anonymized usage patterns, not individual tracking.</li>
+              <li><strong>Secure Transactions.</strong> All payments are processed through Stripe, a global leader in online payment processing. We do not store your full credit card information on our servers. All Personally Identifiable Information (PII) is handled with strict security protocols.</li>
+            </ul>
         </AboutSection>
         
         <AboutSection title="Accessibility & Equity Commitment" icon={<Accessibility className="h-6 w-6" />}>
