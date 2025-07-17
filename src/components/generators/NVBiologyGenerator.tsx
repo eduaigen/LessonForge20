@@ -52,7 +52,8 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
+  type: ToolName | 'Lesson Plan';
+  language: LanguageOption;
   sourceId?: string;
 };
 
@@ -171,6 +172,7 @@ const GeneratorContent = () => {
         title: result.lessonOverview.lesson,
         content: result,
         type: 'Lesson Plan',
+        language: 'English',
       };
       
       const newPackage = [newLessonPlan];
@@ -209,41 +211,29 @@ const GeneratorContent = () => {
   const executeToolGeneration = async (language: LanguageOption) => {
     if (!lessonPlan || !lessonPackage || !selectedTool) return;
 
-    const title = selectedTool;
-    if (lessonPackage.some(sec => sec.title.startsWith(title))) {
-        toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
+    const titleWithLanguage = `${selectedTool} (${language})`;
+    if (lessonPackage.some(sec => sec.title.startsWith(titleWithLanguage))) {
+        toast({ title: "Already Generated", description: `A ${language} ${selectedTool} has already been generated.` });
         return;
     }
 
-    setIsToolLoading(title);
+    setIsToolLoading(titleWithLanguage);
 
     try {
         let result: any;
-        let contentType: GeneratedContent['type'] = selectedTool;
-        let resultTitle = title;
+        let resultTitle = selectedTool;
         const input = { lessonPlanJson: JSON.stringify(lessonPlan), language };
 
-        if (selectedTool === 'Worksheet') {
-            result = await generateWorksheet(input);
-            resultTitle = 'Student Worksheet';
-        } else if (selectedTool === 'Reading Material') {
-            result = await generateReadingMaterial(input);
-            resultTitle = result.title;
-        } else if (selectedTool === 'Teacher Coach') {
-            result = await generateTeacherCoach(input);
-            resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`;
-        } else if (selectedTool === 'Slideshow Outline') {
-            result = await generateSlideshowOutline(input);
-            resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`;
-        } else if (selectedTool === 'Question Cluster') {
-            result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')});
-            resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`;
-        } else if (selectedTool === 'Study Sheet') {
-            result = await generateStudySheet(input);
-            resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`;
+        switch (selectedTool) {
+            case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
+            case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
+            case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Question Cluster': result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
+            case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
         }
 
-        const newContent: GeneratedContent = { id: `${selectedTool}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
+        const newContent: GeneratedContent = { id: `${selectedTool}-${language}-${Date.now()}`, title: `${resultTitle} (${language})`, content: result, type: selectedTool, language };
         setLessonPackage(prev => {
              const newPackage = prev ? [...prev, newContent] : [newContent];
              return newPackage;
@@ -421,6 +411,7 @@ const GeneratorContent = () => {
                     <StyledContentDisplay
                         content={item.content}
                         type={item.type}
+                        language={item.language}
                     />
                 </CollapsibleSection>
               ))}
@@ -433,7 +424,7 @@ const GeneratorContent = () => {
               )}
              
               {isToolLoading && (
-                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet', language: 'English'}}>
                       <GeneratingAnimation />
                   </CollapsibleSection>
               )}

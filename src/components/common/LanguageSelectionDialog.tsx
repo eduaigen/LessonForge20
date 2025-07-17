@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Languages } from 'lucide-react';
 import type { ToolName } from './RightSidebar';
 
-export type LanguageOption = 'English' | 'Spanish' | 'Bilingual';
+export type LanguageOption = 'English' | 'Spanish';
 
 interface LanguageSelectionDialogProps {
   open: boolean;
@@ -45,13 +45,12 @@ export function LanguageSelectionDialog({
             Choose Language for "{toolName}"
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Select the language for the generated content. "Bilingual" will produce two identical documents: one in English and one in Spanish.
+            Select a language to generate a complete document. You can generate a version in the other language afterward.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-col sm:space-x-0 gap-2">
-          <Button onClick={() => handleSelect('English')}>English Only</Button>
-          <Button onClick={() => handleSelect('Spanish')}>Spanish Only</Button>
-          <Button onClick={() => handleSelect('Bilingual')}>Bilingual (English & Spanish)</Button>
+          <Button onClick={() => handleSelect('English')}>English</Button>
+          <Button onClick={() => handleSelect('Spanish')}>Spanish</Button>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
