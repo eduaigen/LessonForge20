@@ -244,27 +244,8 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
     );
 };
 
-export const WorksheetHeader = () => (
-    <header className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4 border-b pb-4">
-        <div className="flex items-end space-x-2 col-span-1 sm:col-span-2">
-            <label className="font-semibold whitespace-nowrap">Name:</label>
-            <div className="flex-grow border-b border-foreground/50 w-full"></div>
-        </div>
-        <div className="flex items-end space-x-2">
-            <label className="font-semibold">Date:</label>
-            <div className="flex-grow border-b border-foreground/50"></div>
-        </div>
-        <div className="flex items-end space-x-2">
-            <label className="font-semibold">Period:</label>
-            <div className="flex-grow border-b border-foreground/50"></div>
-        </div>
-    </header>
-);
-
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
-        <WorksheetHeader />
-
         <p className="italic text-muted-foreground mb-6">{worksheet.introduction}</p>
 
         <section className="mb-6">
@@ -461,7 +442,6 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
 const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     return (
       <div className="document-view">
-        <WorksheetHeader />
         <section className="mb-6">
           <h2>Phenomenon</h2>
           <p className="italic">{cluster.phenomenon}</p>
@@ -574,7 +554,6 @@ const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMateria
         try {
             const result = await generateComprehensionQuestions({ 
                 articleContent: content.articleContent,
-                language: language as any,
              });
             setGeneratedQuestions(result);
             toast({ title: "Success", description: "Comprehension questions generated." });
@@ -588,7 +567,6 @@ const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMateria
     
     return (
         <div className="document-view">
-            <WorksheetHeader />
             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.articleContent}</Markdown>
 
             <div className="mt-8 border-t pt-6">
@@ -618,7 +596,6 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
         {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
       </header>
-       <WorksheetHeader />
       
       {test.clusters?.map((cluster, clusterIndex) => (
         <section key={clusterIndex} className="mb-12 border-t pt-8">
@@ -666,7 +643,6 @@ const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }
       <header className="text-center mb-8">
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle} - Answer Key</h1>
       </header>
-        <WorksheetHeader />
        {test.clusters?.map((cluster, clusterIndex) => (
         <section key={clusterIndex} className="mb-12 border-t pt-8">
           <h2 className="text-2xl font-bold mb-4">Cluster {clusterIndex + 1} Answer Key</h2>
@@ -708,7 +684,6 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
             <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
             {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
         </header>
-         <WorksheetHeader />
         
         {/* Part I: Multiple Choice */}
         <section className="mb-12">
@@ -785,7 +760,6 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
         <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
         {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
       </header>
-      <WorksheetHeader />
   
       {/* Part I: Multiple Choice */}
       <section className="mb-12">
@@ -847,7 +821,6 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
             <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
             {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
         </header>
-        <WorksheetHeader />
 
         {/* Part 1: Reading Comprehension */}
         <section className="mb-12">
@@ -1008,10 +981,9 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
 type StyledContentDisplayProps = {
     content: any | null;
     type: string;
-    language?: 'English' | 'Spanish' | 'Bilingual';
 };
 
-export default function StyledContentDisplay({ content, type, language }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
     
     const isSocialStudiesTest = content.partI && content.partII?.sets;
@@ -1034,7 +1006,7 @@ export default function StyledContentDisplay({ content, type, language }: Styled
         case 'Question Cluster':
             return renderQuestionCluster(content);
         case 'Reading Material':
-            return <ReadingMaterialDisplay content={content} language={language} />;
+            return <ReadingMaterialDisplay content={content} />;
         case 'Lab Activity':
         case 'Differentiated Version':
              if (isLabActivity) return <LabActivityDisplay lab={content} />;
