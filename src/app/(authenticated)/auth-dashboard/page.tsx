@@ -34,9 +34,9 @@ import { createCheckoutSession } from '@/actions/stripe';
 import { Loader2 } from 'lucide-react';
 import { allModules } from '@/lib/modules-data';
 
-const ToolCard = ({ title, description, icon, href, isSubscribed }: { title: string, description: string, icon: React.ReactNode, href: string, isSubscribed: boolean }) => {
+const ToolCard = ({ title, description, icon, href, isSubscribed }: { title: string, description: string, icon: React.ReactNode, href?: string, isSubscribed: boolean }) => {
   return (
-    <Link href={isSubscribed ? href : '/pricing'} className="block h-full">
+    <Link href={isSubscribed ? (href || '/auth-dashboard') : '/pricing'} className="block h-full">
       <Card
         className={`cursor-pointer hover:shadow-lg hover:-translate-y-1 transition-transform duration-200 flex flex-col h-full ${!isSubscribed && 'bg-muted/50'}`}
       >
