@@ -22,6 +22,7 @@ const prompt = ai.definePrompt({
 2.  The content should be appropriate for a 9th-12th grade reading level.
 3.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
 4.  You MUST create a complete and thorough answer key for all parts of the test.
+5.  For Part 1, you MUST generate EXACTLY {{{passageCount}}} passages, and each passage MUST have EXACTLY 8 multiple-choice questions. This is a non-negotiable requirement.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}

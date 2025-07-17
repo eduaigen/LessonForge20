@@ -20,9 +20,10 @@ const prompt = ai.definePrompt({
 **CRITICAL INSTRUCTIONS:**
 1.  Generate a set of clear, student-facing instructions for taking the test.
 2.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
-3.  All generated content must be complete and fully written out. No placeholders.
-4.  Use LaTeX for all mathematical expressions, equations, and symbols.
-5.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
+3.  You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I. This is a non-negotiable requirement.
+4.  All generated content must be complete and fully written out. No placeholders.
+5.  Use LaTeX for all mathematical expressions, equations, and symbols.
+6.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
