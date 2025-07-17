@@ -22,7 +22,7 @@ import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
-import type { GenerateLabActivityOutput, LabStudentSheetOutputSchema } from '@/ai/schemas/lab-activity-schemas';
+import type { GenerateLabActivityOutput, LabStudentSheetOutputSchema, LabTeacherCoachOutputSchema } from '@/ai/schemas/lab-activity-schemas';
 import EditSectionDialog from './EditSectionDialog';
 import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
@@ -423,7 +423,6 @@ const renderLabStudentSheet = (sheet: z.infer<typeof LabStudentSheetOutputSchema
     );
 };
 
-
 const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
     const sections = [
         { title: "B. DO NOW", advice: advice.doNow },
@@ -469,6 +468,52 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
         </div>
     );
 };
+
+const renderLabCoachingAdvice = (advice: LabTeacherCoachOutputSchema) => {
+    const sections = [
+        { title: "Introduction/Phenomenon", advice: advice.introduction },
+        { title: "Pre-Lab", advice: advice.preLab },
+        { title: "Testable Question & Hypothesis", advice: advice.testableQuestionAndHypothesis },
+        { title: "Procedure Design", advice: advice.procedureDesign },
+        { title: "Data Collection", advice: advice.dataCollection },
+        { title: "Discussion & Conclusion", advice: advice.discussionAndConclusion },
+    ];
+
+    return (
+        <div className="document-view">
+            <header className="mb-8 pb-4 border-b">
+                <h1 className="text-3xl font-bold font-headline text-primary">{advice.title}</h1>
+            </header>
+            {sections.map(sec => {
+                if (!sec.advice) return null;
+                return (
+                    <section key={sec.title} className="mb-8">
+                        <h2>{sec.title}</h2>
+                        <div className="space-y-4">
+                            <div>
+                                <h4>Pedagogical Rationale</h4>
+                                <p>{sec.advice.pedagogicalRationale}</p>
+                            </div>
+                            {sec.advice.sampleScript && (
+                                <div>
+                                    <h4>Sample Teacher Script / Talk Moves</h4>
+                                    <blockquote className="whitespace-pre-wrap">{sec.advice.sampleScript}</blockquote>
+                                </div>
+                            )}
+                            {sec.advice.facilitationTip && (
+                                <div>
+                                    <h4>Facilitation Tip</h4>
+                                    <p>{sec.advice.facilitationTip}</p>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                )
+            })}
+        </div>
+    );
+};
+
 
 const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
     return (
@@ -1097,6 +1142,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
     const isLabActivity = content.labTitle && content.ngssAlignment;
     const isWorksheet = content.header && content.doNow;
     const isLabStudentSheet = content.phenomenonReading && content.testableQuestion;
+    const isLessonTeacherCoach = content.doNow && content.doNow.pedagogicalRationale;
+    const isLabTeacherCoach = content.introduction && content.introduction.pedagogicalRationale;
 
     switch (type) {
         case 'Lesson Plan':
@@ -1105,8 +1152,9 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (isWorksheet) return renderWorksheet(content);
             return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Invalid worksheet content.</div>;
         case 'Teacher Coach':
-            if (isLabActivity) return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Teacher Coach for labs coming soon.</div>; // Placeholder
-            return renderCoachingAdvice(content);
+            if(isLessonTeacherCoach) return renderCoachingAdvice(content);
+            if(isLabTeacherCoach) return renderLabCoachingAdvice(content);
+            return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown Teacher Coach structure.</div>;
         case 'Slideshow Outline':
             return renderSlideshowOutline(content);
         case 'Question Cluster':

@@ -26,7 +26,7 @@ Your task is to analyze the provided lab activity JSON and generate detailed, ac
 2.  **Introduction/Phenomenon:**
     *   **Pedagogical Rationale:** Explain the purpose of this section (e.g., to engage students, activate prior knowledge).
     *   **Sample Script:** Provide a verbatim example of what a teacher could say to introduce the phenomenon and elicit student questions. Include a "turn and talk" prompt.
-3.  **Pre-Lab Questions:**
+3.  **Pre-Lab:**
     *   **Rationale:** Explain how these questions prepare students for the inquiry.
     *   **Facilitation Tip:** Suggest a strategy for reviewing the pre-lab questions (e.g., small group share-out, whole-class review of one key question).
 4.  **Testable Question & Hypothesis:**
@@ -35,7 +35,7 @@ Your task is to analyze the provided lab activity JSON and generate detailed, ac
 5.  **Procedure Design:**
     *   **Rationale:** Explain why student-designed procedures are critical for NGSS Science and Engineering Practices.
     *   **Facilitation Tip:** Describe how the teacher can circulate and provide feedback on procedures without giving away the answer. Suggest a quick "procedure check" before students begin.
-6.  **Data Collection & Analysis:**
+6.  **Data Collection:**
     *   **Rationale:** Explain the importance of accurate data collection and initial analysis.
     *   **Facilitation Tip:** Provide advice on how to manage time during this phase and how to prompt students to look for patterns in their data as they collect it.
 7.  **Discussion & Conclusion:**

@@ -77,7 +77,7 @@ export const LabStudentSheetOutputSchema = z.object({
           rows: z.array(z.array(z.string())).min(6), // Ensure at least 6 empty rows
         }).optional(),
     }),
-    dataAnalysis: z.string().describe("A space/prompt for student's data analysis."),
+    dataAnalysis: z.object({ prompt: z.string().default("Analyze your data. What patterns or trends do you see? Create a graph if appropriate. Explain what your results mean.") }),
     conclusion: z.object({
         prompt: z.string(),
     }),
@@ -120,6 +120,8 @@ export const LabTeacherCoachOutputSchema = z.object({
     dataCollection: CoachingAdviceSchema,
     discussionAndConclusion: CoachingAdviceSchema,
 });
+export type LabTeacherCoachOutputSchema = z.infer<typeof LabTeacherCoachOutputSchema>;
+
 
 // Schema for the Differentiated Lab flow
 export const DifferentiatedLabInputSchema = z.object({
