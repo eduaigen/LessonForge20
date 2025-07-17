@@ -13,6 +13,25 @@ import {
   type GenerateScienceTestOutput,
 } from '../schemas/nv-earth-science-test-schemas';
 
+async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      if (err.message?.includes("503") || err.message?.includes("model is overloaded")) {
+        if (i === retries - 1) {
+          throw new Error("The AI model is temporarily overloaded. Please try again in a few moments.");
+        }
+        await new Promise(res => setTimeout(res, delay * (i + 1)));
+      } else {
+        throw err; // Non-retryable error
+      }
+    }
+  }
+  throw new Error("Operation failed after multiple retries.");
+}
+
+
 const prompt = ai.definePrompt({
   name: 'generateNVEarthScienceTestPrompt',
   input: { schema: GenerateScienceTestInputSchema },
@@ -47,7 +66,8 @@ const generateNVEarthScienceTestFlow = ai.defineFlow(
     timeout: 300000, // 5 minutes
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const result = await withRetry(() => prompt(input));
+    const { output } = result;
     if (!output) {
       throw new Error('The AI failed to generate a test. Please try again.');
     }
