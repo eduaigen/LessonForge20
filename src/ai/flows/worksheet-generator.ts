@@ -68,7 +68,7 @@ const prompt = ai.definePrompt({
 - **Format:** "📘 Today’s Lesson Overview: In today’s lesson, you will learn about [topic from lesson summary]. You will explore [key skill or idea from lesson summary], and practice applying it through guided examples and independent work."
 
 **4. Vocabulary Section:**
-- **Action:** Scan 'lessonOverview.vocabulary'. Rewrite each term and its definition into a complete, student-friendly sentence.
+- **Action:** Scan 'lessonOverview.vocabulary'. If it exists and has terms, rewrite each term and its definition into a complete, student-friendly sentence inside the 'terms' array.
 - **Output:** Populate the 'vocabulary.terms' array.
 - **Example:** For a term "Photosynthesis" with definition "The process...", the output sentence is "Photosynthesis is the process...".
 - **IMPORTANT**: If the source 'lessonOverview.vocabulary' is empty or missing, you MUST still include the 'vocabulary' key in your output with an empty 'terms' array. e.g., \`"vocabulary": { "title": "Vocabulary", "terms": [] }\`.
@@ -88,7 +88,7 @@ const prompt = ai.definePrompt({
 **7. Guided Practice Section:**
 - **Action:**
     - Set the 'title' to "Guided Practice".
-    - If 'guidedPractice.activityContent' is a string, copy it into 'instructions'.
+    - If 'guidedPractice.activityContent' is a string, copy it into 'instructions' as a single-element array.
     - If 'guidedPractice.activityContent' is an object (a data table), copy the entire JSON object for the table into the 'guidedPractice.dataTable' field. Write a generic instruction like "Analyze the data table below and follow your teacher's directions." for the 'instructions' field. Do NOT use teacherActions.
 
 **8. Check for Understanding Section:**
@@ -125,12 +125,12 @@ const worksheetGeneratorFlow = ai.defineFlow(
   async (input) => {
     const result = await withRetry(() => prompt(input));
     
-    const englishOutput = result.output;
-    if (!englishOutput) {
-      throw new Error('The AI failed to generate the worksheet in English. Please try again.');
+    const output = result.output;
+    if (!output) {
+      throw new Error('The AI failed to generate the worksheet. Please try again.');
     }
 
-    return englishOutput;
+    return output;
   }
 );
 

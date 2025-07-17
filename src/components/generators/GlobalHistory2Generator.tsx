@@ -180,11 +180,11 @@ const GeneratorContent = () => {
 
         switch (toolName) {
             case 'Worksheet': result = await generateWorksheet({ lessonPlanJson }); resultTitle = 'Student Worksheet'; break;
-            case 'Reading Material': result = await generateReadingMaterial(lessonPlan); resultTitle = result.title; break;
+            case 'Reading Material': result = await generateReadingMaterial({ lessonPlanJson }); resultTitle = result.title; break;
             case 'Teacher Coach': result = await generateTeacherCoach({ lessonPlanJson }); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
-            case 'Slideshow Outline': result = await generateSlideshowOutline(lessonPlan); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Slideshow Outline': result = await generateSlideshowOutline({ lessonPlanJson }); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
             case 'Question Cluster': result = await generateQuestionCluster({ lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
-            case 'Study Sheet': result = await generateStudySheet(lessonPlan); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Study Sheet': result = await generateStudySheet({ lessonPlanJson }); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
         }
 
         const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
