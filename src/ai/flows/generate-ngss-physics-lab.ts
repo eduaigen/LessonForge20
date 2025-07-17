@@ -41,7 +41,11 @@ const prompt = ai.definePrompt({
 3.  **Student-Centered & Inquiry-Based:** The lab must be structured to promote student inquiry. This includes:
     *   **Extensive Phenomenon Reading:** Write a detailed, 500-800 word, grade-appropriate reading passage that presents a real-world phenomenon or scenario to anchor the lab and provide context.
     *   **High-Level Pre-Lab Questions:** Generate 2-3 pre-lab questions based on the reading that are at DOK Level 3-4, requiring students to analyze, evaluate, or synthesize information.
-    *   **Student-Led Investigation:** The prompts for the 'testableQuestion', 'hypothesis', and 'variables' MUST guide the student to create their own, not provide them with a ready-made one. The hypothesis prompt MUST include a sentence starter like "If... then... because...".
+    *   **Student-Led Investigation:**
+        - The prompt for 'testableQuestion' MUST guide the student to create their own, not provide a ready-made one.
+        - The 'hypothesisPrompt' MUST include a sentence starter like "If... then... because...".
+        - The 'variablesPrompt' MUST only contain direct questions asking the student to identify the independent, dependent, and controlled variables. Do NOT add any extra explanatory text.
+        - The 'studentProcedureDesign' MUST be a concise prompt instructing the student to write their own step-by-step experimental procedure. Do NOT write the procedure for them or give a long explanation on how to do it.
 4.  **Safety First:** Clearly list essential and specific safety precautions.
 5.  **Accessible Materials:** Use materials commonly found in a high school physics lab.
 6.  **Rigorous Discussion:** Generate at least 5 high-level (DOK 3-4) discussion questions that encourage students to analyze their data, consider sources of error, and connect their findings to broader scientific concepts.
