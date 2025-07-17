@@ -8,7 +8,7 @@ import { z } from 'zod';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
 import { Loader2, TestTube, Sparkles, Wand2, FlaskConical, PencilRuler, BookOpen, BrainCircuit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -101,10 +101,24 @@ const GeneratorContent = () => {
   };
 
   const handleTestGeneration = async (language: LanguageOption) => {
+    const values = form.getValues();
+    const potentialTitle = `NV Biology Test (${values.clusterCount} Clusters, DOK ${values.dokLevel}) (${language})`;
+    if (testPackage?.some(item => item.title === potentialTitle)) {
+        toast({ title: "Already Generated", description: `A ${language} version of this test has already been generated.`, variant: "default" });
+        setIsLoading(false);
+        setSelectedTool(null);
+        return;
+    }
+
     setIsLoading(true);
-    setTestPackage(null);
+    // Don't clear the whole package, just the loading state for a new generation
+    if (selectedTool === 'Test') {
+       // If it's a new primary test generation, we can optionally clear previous packages
+       // For now, we'll append to allow multiple different tests on one page.
+       // setTestPackage(null); 
+    }
+
     try {
-      const values = form.getValues();
       const result = await generateNVBiologyTest({ ...values, language });
 
       const testContent: TestGeneratedContent = {
@@ -123,7 +137,7 @@ const GeneratorContent = () => {
           language,
       }
 
-      setTestPackage([testContent, answerKeyContent]);
+      setTestPackage(prev => [...(prev || []), testContent, answerKeyContent]);
       setIsToolsInfoDialogOpen(true);
       
     } catch (error) {
@@ -147,8 +161,8 @@ const GeneratorContent = () => {
   }
 
   const handleToolClick = (toolName: ToolName) => {
-    setSelectedTool(toolName);
-    setIsLanguageDialogOpen(true);
+      setSelectedTool(toolName);
+      setIsLanguageDialogOpen(true);
   };
 
   const executeToolGeneration = async (language: LanguageOption) => {
@@ -261,7 +275,7 @@ const GeneratorContent = () => {
                     <FormItem>
                     <div className="mb-4">
                         <FormLabel className="text-base">Select Units</FormLabel>
-                        <FormDescription>Choose one or more units to include in the test.</FormDescription>
+                        <FormMessage />
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {units.map((unit) => (
