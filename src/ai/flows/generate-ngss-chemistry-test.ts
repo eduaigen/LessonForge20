@@ -58,7 +58,7 @@ const prompt = ai.definePrompt({
 2.  **Optional Data Table:** If relevant to the phenomenon, include a data table that students must analyze. The data should be realistic and aligned with the reading.
 3.  **Answer Key:** Create a detailed answer key for every question in the cluster.
 
-Your final output MUST be a single JSON object that strictly follows the output schema.
+Your final output MUST be a single, complete JSON object that strictly follows the output schema.
 `,
 });
 

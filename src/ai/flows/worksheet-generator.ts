@@ -15,14 +15,9 @@ import { JSON5_INVALID_CHAR_REGEX } from 'html-to-text/lib/constants';
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   for (let i = 0; i < retries; i++) {
     try {
-      const result = await fn();
-      // Attempt to parse to see if it's valid JSON, if not, it will throw and retry
-      if (typeof result === 'string') {
-        JSON.parse(result);
-      }
-      return result;
+      return await fn();
     } catch (err: any) {
-       if (err instanceof SyntaxError || err.message?.includes("503") || err.message?.includes("model is overloaded")) {
+      if (err instanceof SyntaxError || err.message?.includes("503") || err.message?.includes("model is overloaded") || err.message?.includes("An unexpected response was received from the server")) {
         if (i === retries - 1) {
           console.error("Final attempt failed:", err);
           throw new Error("The AI model failed to generate a valid worksheet after multiple attempts. Please try again.");
