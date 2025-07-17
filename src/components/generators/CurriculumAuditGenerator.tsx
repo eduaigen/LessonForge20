@@ -144,9 +144,10 @@ const GeneratorContent = () => {
         }
     }
     
-    const handleCheckChange = (items: (Lesson | Topic | Unit)[], checked: boolean | 'indeterminate') => {
+    const handleCheckChange = (items: (Lesson | Topic | Unit | any)[], checked: boolean | 'indeterminate') => {
         const getLessonsFromItem = (item: any): Lesson[] => {
             if (item.objective) return [item as Lesson]; // It's a lesson
+            
             let lessons: Lesson[] = [];
             if (item.lessons) lessons = lessons.concat(item.lessons);
             if (item.topics) {
@@ -162,7 +163,6 @@ const GeneratorContent = () => {
         };
 
         const allLessonsFromItems = items.flatMap(getLessonsFromItem);
-        const allItemTitles = allLessonsFromItems.map(l => l.title);
         
         const currentSelectionJSON = form.getValues('lessons');
         const currentSelectionObjects = currentSelectionJSON.map(l => JSON.parse(l));
@@ -174,7 +174,7 @@ const GeneratorContent = () => {
             const newLessonsToAdd = allLessonsFromItems.filter(l => !existingTitles.has(l.title));
             newSelectionObjects = [...currentSelectionObjects, ...newLessonsToAdd];
         } else {
-            const titlesToRemove = new Set(allItemTitles);
+            const titlesToRemove = new Set(allLessonsFromItems.map(l => l.title));
             newSelectionObjects = currentSelectionObjects.filter(l => !titlesToRemove.has(l.title));
         }
         
@@ -182,143 +182,155 @@ const GeneratorContent = () => {
     };
 
     return (
-        <div className="md:col-span-12 relative">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                    <Card className="w-full shadow-lg mb-8">
-                        <CardHeader>
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                    <FolderSync className="h-6 w-6" />
+        <>
+            <div className="md:col-span-12 relative">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
+                        <Card className="w-full shadow-lg mb-8">
+                            <CardHeader>
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                        <FolderSync className="h-6 w-6" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-2xl font-headline">Curriculum Audit Tool</CardTitle>
+                                        <CardDescription>Analyze a lesson against educational standards to identify gaps and get improvement suggestions.</CardDescription>
+                                    </div>
                                 </div>
-                                <div>
-                                    <CardTitle className="text-2xl font-headline">Curriculum Audit Tool</CardTitle>
-                                    <CardDescription>Analyze a lesson against educational standards to identify gaps and get improvement suggestions.</CardDescription>
-                                </div>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <FormField
-                                control={form.control}
-                                name="lessons"
-                                render={() => (
-                                    <FormItem>
-                                        <FormLabel className="text-base">1. Select Curriculum Content to Audit</FormLabel>
-                                         <p className="text-sm text-muted-foreground">You can select an entire unit, topic, or individual lessons.</p>
-                                        <Accordion type="multiple" className="w-full">
-                                            {allCurriculums.map(subject => {
-                                                if (!subject.curriculum?.units) return null;
-                                                return (
-                                                    <AccordionItem value={subject.name} key={subject.name}>
-                                                        <AccordionTrigger>{subject.name}</AccordionTrigger>
-                                                        <AccordionContent>
-                                                            <Accordion type="multiple" className="w-full pl-4">
-                                                                {Object.keys(subject.curriculum.units).map(unitKey => {
-                                                                    const unit = subject.curriculum.units[unitKey];
-                                                                    const allUnitLessons = Object.values(unit.topics).flatMap((t: any) => t.lessons);
-                                                                    const selectedInUnit = selectedLessonTitles.filter(title => allUnitLessons.some(ul => ul.title === title));
-                                                                    const unitCheckedState = selectedInUnit.length === allUnitLessons.length ? true : (selectedInUnit.length > 0 ? 'indeterminate' : false);
-                                                                    
-                                                                    return (
-                                                                    <AccordionItem value={unitKey} key={unitKey}>
-                                                                        <div className="flex items-center">
-                                                                            <Checkbox id={`unit-${unitKey}`} className="mr-2" onCheckedChange={(c) => handleCheckChange([unit], c)} checked={unitCheckedState}/>
-                                                                            <AccordionTrigger className="flex-1">{unit.unit}</AccordionTrigger>
-                                                                        </div>
-                                                                        <AccordionContent>
-                                                                            <Accordion type="multiple" className="w-full pl-4">
-                                                                                {Object.keys(unit.topics).map(topicKey => {
-                                                                                    const topic = unit.topics[topicKey];
-                                                                                    const selectedInTopic = selectedLessonTitles.filter(title => topic.lessons.some(tl => tl.title === title));
-                                                                                    const topicCheckedState = selectedInTopic.length === topic.lessons.length ? true : (selectedInTopic.length > 0 ? 'indeterminate' : false);
-                                                                                    return (
-                                                                                        <AccordionItem value={topicKey} key={topicKey}>
-                                                                                             <div className="flex items-center">
-                                                                                                <Checkbox id={`topic-${topicKey}`} className="mr-2" onCheckedChange={(c) => handleCheckChange([topic], c)} checked={topicCheckedState} />
-                                                                                                <AccordionTrigger className="flex-1">{topic.topic}</AccordionTrigger>
-                                                                                             </div>
-                                                                                            <AccordionContent>
-                                                                                                <div className="space-y-2 pl-4">
-                                                                                                    {topic.lessons.map((lesson, index) => (
-                                                                                                         <FormField
-                                                                                                            key={index}
-                                                                                                            control={form.control}
-                                                                                                            name="lessons"
-                                                                                                            render={({ field }) => (
-                                                                                                                <FormItem className="flex flex-row items-center space-x-3 space-y-0 py-1">
-                                                                                                                    <FormControl>
-                                                                                                                        <Checkbox
-                                                                                                                            checked={field.value?.some(v => JSON.parse(v).title === lesson.title)}
-                                                                                                                            onCheckedChange={(checked) => {
-                                                                                                                                const lessonString = JSON.stringify(lesson);
-                                                                                                                                const newValues = checked
-                                                                                                                                    ? [...field.value, lessonString]
-                                                                                                                                    : field.value?.filter(v => v !== lessonString);
-                                                                                                                                field.onChange(newValues);
-                                                                                                                            }}
-                                                                                                                        />
-                                                                                                                    </FormControl>
-                                                                                                                    <FormLabel className="font-normal text-sm">{lesson.title}</FormLabel>
-                                                                                                                </FormItem>
-                                                                                                            )}
-                                                                                                        />
-                                                                                                    ))}
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                <FormField
+                                    control={form.control}
+                                    name="lessons"
+                                    render={() => (
+                                        <FormItem>
+                                            <FormLabel className="text-base">1. Select Curriculum Content to Audit</FormLabel>
+                                            <p className="text-sm text-muted-foreground">You can select an entire unit, topic, or individual lessons.</p>
+                                            <Accordion type="multiple" className="w-full">
+                                                {allCurriculums.map(subject => {
+                                                    if (!subject.curriculum?.units) return null;
+                                                    return (
+                                                        <AccordionItem value={subject.name} key={subject.name}>
+                                                            <AccordionTrigger>{subject.name}</AccordionTrigger>
+                                                            <AccordionContent>
+                                                                <Accordion type="multiple" className="w-full pl-4">
+                                                                    {Object.keys(subject.curriculum.units).map(unitKey => {
+                                                                        const unit = subject.curriculum.units[unitKey];
+                                                                        const getLessonsFromItem = (item: any): Lesson[] => {
+                                                                            if (item.objective) return [item as Lesson]; // It's a lesson
+                                                                            let lessons: Lesson[] = [];
+                                                                            if (item.lessons) lessons = lessons.concat(item.lessons);
+                                                                            if (item.topics) lessons = lessons.concat(Object.values(item.topics).flatMap((t: any) => getLessonsFromItem(t)));
+                                                                            if (item.weeks) lessons = lessons.concat(Object.values(item.weeks).flatMap((w: any) => getLessonsFromItem(w)));
+                                                                            if (item.units) lessons = lessons.concat(Object.values(item.units).flatMap((u: any) => getLessonsFromItem(u)));
+                                                                            return lessons;
+                                                                        };
+
+                                                                        const allUnitLessons = getLessonsFromItem(unit);
+                                                                        const selectedInUnit = selectedLessonTitles.filter(title => allUnitLessons.some(ul => ul.title === title));
+                                                                        const unitCheckedState = selectedInUnit.length === allUnitLessons.length ? true : (selectedInUnit.length > 0 ? 'indeterminate' : false);
+                                                                        
+                                                                        return (
+                                                                        <AccordionItem value={unitKey} key={unitKey}>
+                                                                            <div className="flex items-center">
+                                                                                <Checkbox id={`unit-${unitKey}`} className="mr-2" onCheckedChange={(c) => handleCheckChange([unit], c)} checked={unitCheckedState}/>
+                                                                                <AccordionTrigger className="flex-1">{unit.unit}</AccordionTrigger>
+                                                                            </div>
+                                                                            <AccordionContent>
+                                                                                <Accordion type="multiple" className="w-full pl-4">
+                                                                                    {unit.topics && Object.keys(unit.topics).map(topicKey => {
+                                                                                        const topic = unit.topics[topicKey];
+                                                                                        const selectedInTopic = selectedLessonTitles.filter(title => topic.lessons.some(tl => tl.title === title));
+                                                                                        const topicCheckedState = selectedInTopic.length === topic.lessons.length ? true : (selectedInTopic.length > 0 ? 'indeterminate' : false);
+                                                                                        return (
+                                                                                            <AccordionItem value={topicKey} key={topicKey}>
+                                                                                                <div className="flex items-center">
+                                                                                                    <Checkbox id={`topic-${topicKey}`} className="mr-2" onCheckedChange={(c) => handleCheckChange([topic], c)} checked={topicCheckedState} />
+                                                                                                    <AccordionTrigger className="flex-1">{topic.topic}</AccordionTrigger>
                                                                                                 </div>
-                                                                                            </AccordionContent>
-                                                                                        </AccordionItem>
-                                                                                    );
-                                                                                })}
-                                                                            </Accordion>
-                                                                        </AccordionContent>
-                                                                    </AccordionItem>
-                                                                );
-                                                                })}
-                                                            </Accordion>
-                                                        </AccordionContent>
-                                                    </AccordionItem>
-                                                )
-                                            })}
-                                        </Accordion>
+                                                                                                <AccordionContent>
+                                                                                                    <div className="space-y-2 pl-4">
+                                                                                                        {topic.lessons.map((lesson, index) => (
+                                                                                                            <FormField
+                                                                                                                key={index}
+                                                                                                                control={form.control}
+                                                                                                                name="lessons"
+                                                                                                                render={({ field }) => (
+                                                                                                                    <FormItem className="flex flex-row items-center space-x-3 space-y-0 py-1">
+                                                                                                                        <FormControl>
+                                                                                                                            <Checkbox
+                                                                                                                                checked={field.value?.some(v => JSON.parse(v).title === lesson.title)}
+                                                                                                                                onCheckedChange={(checked) => {
+                                                                                                                                    const lessonString = JSON.stringify(lesson);
+                                                                                                                                    const newValues = checked
+                                                                                                                                        ? [...field.value, lessonString]
+                                                                                                                                        : field.value?.filter(v => v !== lessonString);
+                                                                                                                                    field.onChange(newValues);
+                                                                                                                                }}
+                                                                                                                            />
+                                                                                                                        </FormControl>
+                                                                                                                        <FormLabel className="font-normal text-sm">{lesson.title}</FormLabel>
+                                                                                                                    </FormItem>
+                                                                                                                )}
+                                                                                                            />
+                                                                                                        ))}
+                                                                                                    </div>
+                                                                                                </AccordionContent>
+                                                                                            </AccordionItem>
+                                                                                        );
+                                                                                    })}
+                                                                                </Accordion>
+                                                                            </AccordionContent>
+                                                                        </AccordionItem>
+                                                                    );
+                                                                    })}
+                                                                </Accordion>
+                                                            </AccordionContent>
+                                                        </AccordionItem>
+                                                    )
+                                                })}
+                                            </Accordion>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="auditStandard"
+                                    render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-base">2. Select a Standard to Audit Against</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                            <SelectValue placeholder="Select a standard framework..." />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {educationalStandards.map(standard => (
+                                                <SelectItem key={standard.code} value={standard.name}>{standard.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                        </Select>
                                         <FormMessage />
                                     </FormItem>
-                                )}
-                            />
+                                    )}
+                                />
 
-                             <FormField
-                                control={form.control}
-                                name="auditStandard"
-                                render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-base">2. Select a Standard to Audit Against</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                        <SelectTrigger>
-                                        <SelectValue placeholder="Select a standard framework..." />
-                                        </Trigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {educationalStandards.map(standard => (
-                                            <SelectItem key={standard.code} value={standard.name}>{standard.name}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                                )}
-                            />
+                                <Button type="submit" disabled={isLoading} className="w-full">
+                                    {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Auditing...</> : <><Wand2 className="mr-2 h-4 w-4" />Run Audit</>}
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </form>
+                </Form>
+                
+                {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
 
-                            <Button type="submit" disabled={isLoading} className="w-full">
-                                {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Auditing...</> : <><Wand2 className="mr-2 h-4 w-4" />Run Audit</>}
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </form>
-            </Form>
-            
-            {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
-
-            {auditResult && <AuditResultDisplay audit={auditResult} />}
-        </div>
+                {auditResult && <AuditResultDisplay audit={auditResult} />}
+            </div>
+        </>
     );
 };
 
