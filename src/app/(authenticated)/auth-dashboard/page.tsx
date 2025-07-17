@@ -30,6 +30,10 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { Separator } from '@/components/ui/separator';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { createCheckoutSession } from '@/actions/stripe';
+import { Loader2 } from 'lucide-react';
 
 const ToolCard = ({ title, description, icon, href, className }: { title: string, description: string, icon: React.ReactNode, href: string, className?: string }) => {
   return (
@@ -342,8 +346,37 @@ const PremiumDashboardContent = () => {
   );
 };
 
-const SubscriptionPrompt = () => (
-    <div className="flex flex-1 items-center justify-center">
+const SubscriptionPrompt = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    setIsLoading(true);
+    toast({
+      title: 'Redirecting to checkout...',
+      description: 'Please wait while we prepare your secure checkout page.',
+    });
+    
+    const { url, error } = await createCheckoutSession();
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error,
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (url) {
+      router.push(url);
+    }
+  };
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-4">
         <Card className="max-w-2xl text-center p-8 shadow-lg">
             <CardHeader>
                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -355,13 +388,13 @@ const SubscriptionPrompt = () => (
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <Button size="lg" asChild>
-                    <Link href="/pricing">Explore Premium Tools & Subscribe</Link>
+                <Button size="lg" onClick={handleSubscribe} disabled={isLoading}>
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Subscribe to All-Access'}
                 </Button>
             </CardContent>
         </Card>
     </div>
-);
+)};
 
 export default function PremiumDashboardPage() {
   const { isSubscribed } = useAuth();

@@ -5,7 +5,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -35,6 +34,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { createCheckoutSession } from '@/actions/stripe';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -53,26 +54,56 @@ export type GeneratedContent = {
   sourceId?: string;
 };
 
-const SubscriptionPrompt = () => (
-    <div className="flex flex-1 items-center justify-center">
-        <Card className="max-w-2xl text-center p-8 shadow-lg">
-            <CardHeader>
-                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Sparkles className="h-8 w-8" />
-                </div>
-                <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
-                <CardDescription>
-                    The AP Biology Generator requires a Science curriculum subscription. Subscribe now to create powerful, standards-aligned 5E lesson plans.
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <Button size="lg" asChild>
-                    <Link href="/pricing">Subscribe to Science Tools</Link>
-                </Button>
-            </CardContent>
-        </Card>
+const SubscriptionPrompt = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = async () => {
+    setIsLoading(true);
+    toast({
+      title: 'Redirecting to checkout...',
+      description: 'Please wait while we prepare your secure checkout page.',
+    });
+    
+    const { url, error } = await createCheckoutSession();
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error,
+        variant: 'destructive',
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (url) {
+      router.push(url);
+    }
+  };
+
+  return (
+    <div className="flex flex-1 items-center justify-center p-4">
+      <Card className="max-w-2xl text-center p-8 shadow-lg">
+          <CardHeader>
+               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Sparkles className="h-8 w-8" />
+              </div>
+              <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
+              <CardDescription className="text-lg text-muted-foreground pt-2">
+                  The AP Biology Generator requires a subscription to access. Subscribe now to create powerful, standards-aligned 5E lesson plans and supporting materials.
+              </CardDescription>
+          </CardHeader>
+          <CardContent>
+              <Button size="lg" onClick={handleSubscribe} disabled={isLoading}>
+                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Subscribe to All-Access'}
+              </Button>
+          </CardContent>
+      </Card>
     </div>
-);
+  );
+};
 
 
 const GeneratorContent = () => {
