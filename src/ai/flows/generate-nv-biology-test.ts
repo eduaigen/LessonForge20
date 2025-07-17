@@ -38,11 +38,6 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateNVBiologyTestOutputSchema },
   prompt: `You are an expert high school biology teacher and assessment writer for the New Visions for Public Schools Biology curriculum. Your task is to generate a comprehensive test based on specific curriculum units.
 
-**User Provided Context:**
-- **Units**: {{{units}}}
-- **Desired DOK Level**: {{{dokLevel}}}
-- **Number of Question Clusters**: {{{clusterCount}}}
-
 **CRITICAL INSTRUCTIONS:**
 1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number.
 2.  For EACH cluster, you MUST generate a mix of questions with the following precise counts:
@@ -52,6 +47,11 @@ const prompt = ai.definePrompt({
 3.  You MUST ensure all questions strictly align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}). This is a critical requirement.
 4.  Generate a set of clear, student-facing instructions for taking the test.
 5.  All generated content must be complete and fully written out. No placeholders.
+
+**User Provided Context:**
+- **Units**: {{{units}}}
+- **Desired DOK Level**: {{{dokLevel}}}
+- **Number of Question Clusters**: {{{clusterCount}}}
 
 **For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
 1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.

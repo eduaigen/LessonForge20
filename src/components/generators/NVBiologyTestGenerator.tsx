@@ -313,7 +313,7 @@ const GeneratorContent = () => {
         </form>
       </Form>
 
-      {isLoading && <GeneratingAnimation />}
+      {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
       
       {testPackage?.map(item => (
         <CollapsibleSection key={item.id} title={item.title} contentItem={{...item, content: item.content as any}}>
