@@ -23,11 +23,7 @@ const prompt = ai.definePrompt({
 3.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
 4.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
 5.  **EXCLUDE TEACHER ACTIONS**: Do NOT include any content from fields named 'teacherActions' or 'expectedStudentOutputs'. The worksheet is for students only.
-
-**Lesson Plan Data:**
-\`\`\`json
-{{{lessonPlanJson}}}
-\`\`\`
+6.  **ALWAYS INCLUDE VOCABULARY**: The 'vocabulary' section MUST always be present in your final JSON output, even if the 'terms' array within it is empty.
 
 ---
 **WORKSHEET GENERATION INSTRUCTIONS**
@@ -57,6 +53,7 @@ const prompt = ai.definePrompt({
 - **Action:** Scan 'lessonOverview.vocabulary'. Rewrite each term and its definition into a complete, student-friendly sentence.
 - **Output:** Populate the 'vocabulary.terms' array.
 - **Example:** For a term "Photosynthesis" with definition "The process...", the output sentence is "Photosynthesis is the process...".
+- **IMPORTANT**: If the source 'lessonOverview.vocabulary' is empty or missing, you MUST still include the 'vocabulary' key in your output with an empty 'terms' array. e.g., \`"vocabulary": { "title": "Vocabulary", "terms": [] }\`.
 
 **5. Do Now Section:**
 - **Action:** Scan 'doNow'. Copy the 'question' field exactly.
