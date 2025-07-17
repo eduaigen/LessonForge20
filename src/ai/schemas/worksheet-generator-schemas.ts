@@ -1,11 +1,9 @@
 
 import { z } from 'zod';
 import { dataTableSchema } from './nv-biology-lesson-schemas';
-import type { LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const GenerateWorksheetInputSchema = z.object({
   lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
-  language: z.custom<LanguageOption>().describe('The language for the generated worksheet.'),
 });
 
 const headerSchema = z.object({

@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 export const StudySheetInputSchema = z.object({
   lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
-  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated study sheet.'),
 });
 
 export const StudySheetOutputSchema = z.object({

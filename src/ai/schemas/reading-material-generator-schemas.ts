@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 export const ReadingMaterialInputSchema = z.object({
   lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
-  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated reading material.'),
 });
 
 const multipleChoiceQuestionSchema = z.object({

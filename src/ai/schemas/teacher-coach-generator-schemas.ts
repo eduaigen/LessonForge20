@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 export const TeacherCoachGeneratorInputSchema = z.object({
     lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
-    language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated coaching advice.'),
 });
 
 const coachingAdviceSchema = z.object({

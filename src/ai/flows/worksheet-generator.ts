@@ -10,7 +10,6 @@ import {
   type GenerateWorksheetInput,
   type GenerateWorksheetOutput,
 } from '../schemas/worksheet-generator-schemas';
-import { translateContent } from './translate-content';
 
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   for (let i = 0; i < retries; i++) {
@@ -125,32 +124,14 @@ const worksheetGeneratorFlow = ai.defineFlow(
     outputSchema: GenerateWorksheetOutputSchema,
   },
   async (input) => {
-    // Always generate in English first.
-    const englishInput = { ...input, language: 'English' as const };
-    const result = await withRetry(() => prompt(englishInput));
+    const result = await withRetry(() => prompt(input));
     
     let englishOutput = result.output;
     if (!englishOutput) {
       throw new Error('The AI failed to generate the worksheet in English. Please try again.');
     }
 
-    if (input.language === 'English') {
-        return englishOutput;
-    }
-
-    // If a different language is requested, translate the English content.
-    const { translatedContent } = await translateContent({
-      jsonContent: JSON.stringify(englishOutput),
-      language: input.language,
-    });
-    
-    try {
-      const parsedTranslatedContent = JSON.parse(translatedContent);
-      return GenerateWorksheetOutputSchema.parse(parsedTranslatedContent);
-    } catch (e) {
-      console.error("Error parsing translated JSON:", e);
-      throw new Error("Failed to parse the translated worksheet content. The format was invalid.");
-    }
+    return englishOutput;
   }
 );
 

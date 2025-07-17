@@ -1,12 +1,10 @@
 
 import { z } from 'zod';
-import { type LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const GenerateELATestInputSchema = z.object({
   lessons: z.array(z.string()).describe('An array of curriculum lessons to base the test on.'),
   passageCount: z.number().min(1).max(4).describe('The number of reading comprehension passages.'),
   sourceCount: z.number().min(2).max(5).describe('The number of sources for the argument essay.'),
-  language: z.custom<LanguageOption>(),
 });
 
 const multipleChoiceQuestionSchema = z.object({

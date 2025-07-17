@@ -15,11 +15,10 @@ const prompt = ai.definePrompt({
   name: 'studySheetGeneratorPrompt',
   input: { schema: StudySheetInputSchema },
   output: { schema: StudySheetOutputSchema },
-  prompt: `You are an expert educator creating a comprehensive study guide for students based on a detailed lesson plan. Your task is to extract, synthesize, and reformat the most critical information into a clear, concise, and thorough study sheet in the specified language.
+  prompt: `You are an expert educator creating a comprehensive study guide for students based on a detailed lesson plan. Your task is to extract, synthesize, and reformat the most critical information into a clear, concise, and thorough study sheet.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics. **CRITICAL**: Do NOT translate any numerical data within data tables; only translate textual headers and titles.
-2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
+1.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
 
 **Lesson Plan Data:**
 \`\`\`json

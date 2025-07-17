@@ -17,11 +17,9 @@ const prompt = ai.definePrompt({
   output: { schema: TeacherCoachGeneratorOutputSchema },
   prompt: `You are an expert instructional coach and a master teacher, deeply familiar with research-based pedagogical practices including the Danielson Framework for Teaching, Universal Design for Learning (UDL), and Culturally Responsive-Sustaining Education (CRSE).
 
-Your task is to analyze the provided lesson plan JSON and generate detailed, actionable coaching advice for a teacher in the specified language.
+Your task is to analyze the provided lesson plan JSON and generate detailed, actionable coaching advice for a teacher.
 
-**CRITICAL INSTRUCTIONS:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics. **CRITICAL**: Do NOT translate any numerical data within data tables; only translate textual headers and titles.
-2.  **Source Material**: Use the lesson plan as your only source.
+**Source Material**: Use the lesson plan as your only source.
 
 **Lesson Plan Data:**
 \`\`\`json

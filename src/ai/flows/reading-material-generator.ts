@@ -15,13 +15,12 @@ const prompt = ai.definePrompt({
   name: 'readingMaterialGeneratorPrompt',
   input: { schema: ReadingMaterialInputSchema },
   output: { schema: ReadingMaterialOutputSchema },
-  prompt: `You are an expert curriculum writer and subject matter expert. Your task is to transform the provided lesson plan JSON into a high-quality, engaging, and informative article for a high school audience, in the specified language.
+  prompt: `You are an expert curriculum writer and subject matter expert. Your task is to transform the provided lesson plan JSON into a high-quality, engaging, and informative article for a high school audience.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics. **CRITICAL**: Do NOT translate any numerical data within data tables; only translate textual headers and titles.
-2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan. Do not invent new content, topics, or data.
-3.  **SYNTHESIZE, DON'T JUST COPY:** Weave information from different parts of the lesson into a coherent narrative.
-4.  **STUDENT-FACING TONE:** Write in a style that is engaging and accessible for high school students.
+1.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan. Do not invent new content, topics, or data.
+2.  **SYNTHESIZE, DON'T JUST COPY:** Weave information from different parts of the lesson into a coherent narrative.
+3.  **STUDENT-FACING TONE:** Write in a style that is engaging and accessible for high school students.
 
 **Lesson Plan Data:**
 ---

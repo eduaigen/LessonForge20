@@ -72,6 +72,5 @@ export * from './flows/generate-differentiated-lab';
 export * from './flows/generate-lab-teacher-coach';
 export * from './flows/curriculum-audit';
 export * from './flows/generate-diagram-image';
-export * from './flows/translate-content';
 
 export * from './schemas/send-contact-email-schemas';
