@@ -44,20 +44,21 @@ const prompt = ai.definePrompt({
 - **Number of Question Clusters**: {{{clusterCount}}}
 
 **CRITICAL INSTRUCTIONS:**
-1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
-2.  Generate a set of clear, student-facing instructions for taking the test.
+1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number.
+2.  For EACH cluster, you MUST generate a mix of questions with the following precise counts:
+    *   **Multiple Choice:** Exactly 3 questions. Each must have four complete answer options.
+    *   **Short Response:** Exactly 2 questions.
+    *   **CER (Claim, Evidence, Reasoning):** Exactly 1 question.
+3.  You MUST ensure all questions strictly align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}). This is a critical requirement.
+4.  Generate a set of clear, student-facing instructions for taking the test.
+5.  All generated content must be complete and fully written out. No placeholders.
 
 **For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
 1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.
 2.  **Optional Data Table:** If relevant to the phenomenon, include a data table that students must analyze. The data should be realistic and aligned with the reading.
-3.  **Question Mix:** Generate a mix of questions with the following precise counts:
-    *   **Multiple Choice:** Exactly 3 questions.
-    *   **Short Response:** Exactly 2 questions.
-    *   **CER (Claim, Evidence, Reasoning):** Exactly 1 question.
-4.  **DOK Alignment:** You MUST ensure all questions strictly align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}). This is a critical requirement.
-5.  **Answer Key:** Create a detailed answer key for every question in the cluster.
+3.  **Answer Key:** Create a detailed answer key for every question in the cluster.
 
-Your final output MUST be a single, complete JSON object that strictly follows the output schema. The root 'clusters' array must have a length of {{{clusterCount}}}.
+Your final output MUST be a single, complete JSON object that strictly follows the output schema.
 `,
 });
 
