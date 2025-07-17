@@ -10,6 +10,7 @@ import {
   type GenerateWorksheetInput,
   type GenerateWorksheetOutput,
 } from '../schemas/worksheet-generator-schemas';
+import { translateContent } from './translate-content';
 
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   for (let i = 0; i < retries; i++) {
@@ -34,10 +35,10 @@ const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
   input: { schema: GenerateWorksheetInputSchema },
   output: { schema: GenerateWorksheetOutputSchema },
-  prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet in the specified language.
+  prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet.
 
 **CRITICAL RULES:**
-1.  **Language**: Generate all text content in **{{{language}}}**.
+1.  **Language**: Generate all text content in **English**.
 2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
 3.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
 4.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
@@ -49,7 +50,7 @@ const prompt = ai.definePrompt({
 ---
 
 **1. Header Section:**
-- **Action:** Populate the 'header' object fields as placeholders in the target language.
+- **Action:** Populate the 'header' object fields as placeholders.
 - **Output:**
     - name: "Name: ______________________"
     - date: "Date: _______________"
@@ -113,7 +114,7 @@ const prompt = ai.definePrompt({
     - Set 'title' to "Homework Assignment".
     - **CRITICAL:** Copy the 'homework.activity' content, which may include passages or questions, exactly into 'homework.activity'.
 
-**Final Check:** Review your generated JSON to ensure every instruction was followed precisely. The output must be a valid JSON object matching the 'GenerateWorksheetOutputSchema' and be in the correct language.
+**Final Check:** Review your generated JSON to ensure every instruction was followed precisely. The output must be a valid JSON object matching the 'GenerateWorksheetOutputSchema'.
 `,
 });
 
@@ -124,12 +125,32 @@ const worksheetGeneratorFlow = ai.defineFlow(
     outputSchema: GenerateWorksheetOutputSchema,
   },
   async (input) => {
-    const result = await withRetry(() => prompt(input));
-    const { output } = result;
-    if (!output) {
-      throw new Error('The AI failed to generate the worksheet. Please try again.');
+    // Always generate in English first.
+    const englishInput = { ...input, language: 'English' as const };
+    const result = await withRetry(() => prompt(englishInput));
+    
+    let englishOutput = result.output;
+    if (!englishOutput) {
+      throw new Error('The AI failed to generate the worksheet in English. Please try again.');
     }
-    return output;
+
+    if (input.language === 'English') {
+        return englishOutput;
+    }
+
+    // If a different language is requested, translate the English content.
+    const { translatedContent } = await translateContent({
+      jsonContent: JSON.stringify(englishOutput),
+      language: input.language,
+    });
+    
+    try {
+      const parsedTranslatedContent = JSON.parse(translatedContent);
+      return GenerateWorksheetOutputSchema.parse(parsedTranslatedContent);
+    } catch (e) {
+      console.error("Error parsing translated JSON:", e);
+      throw new Error("Failed to parse the translated worksheet content. The format was invalid.");
+    }
   }
 );
 
