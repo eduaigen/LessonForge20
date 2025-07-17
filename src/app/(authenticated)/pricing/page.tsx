@@ -62,7 +62,7 @@ export default function ConversationalCheckoutPage() {
 
     const handleSelectAddon = (id: string) => {
         setSelectedAddons(prev =>
-            prev.includes(id) ? prev.filter(aId => aId !== id) : [...prev, id]
+            prev.includes(aId) ? prev.filter(aId => aId !== id) : [...prev, id]
         );
     };
     
@@ -80,17 +80,19 @@ export default function ConversationalCheckoutPage() {
 
     const getPriceDetails = () => {
         const coursesCount = selectedCourses.length;
-        
+        const selectedSubjects = new Set(allModules.courses.filter(c => selectedCourses.includes(c.id)).map(c => c.subject));
+        const showSiteLicensePrompt = selectedSubjects.size >= 3;
+
         const hasTestMaker = selectedAddons.includes('price_1PjJrTRpWk9d9d2Fc3d4e5f6');
         const hasLabGenerator = selectedAddons.includes('price_1PjJseRpWk9d9d2Fq3r4s5t6');
         
         let coursePrice = 0;
-        if (coursesCount > 0) {
-            coursePrice = 15.99 + (coursesCount - 1) * 9.99;
-        }
+        if (coursesCount === 1) coursePrice = 14.99;
+        if (coursesCount === 2) coursePrice = 14.99 + 9.99;
+        if (coursesCount >= 3) coursePrice = 14.99 + 9.99 + (coursesCount - 2) * 5.99;
 
-        let testMakerPrice = hasTestMaker ? (coursesCount > 0 ? 9.99 : 15.99) : 0;
-        let labGeneratorPrice = hasLabGenerator ? (coursesCount > 0 ? 9.99 : 15.99) : 0;
+        let testMakerPrice = hasTestMaker ? (coursesCount > 0 ? 9.99 : 14.99) : 0;
+        let labGeneratorPrice = hasLabGenerator ? (coursesCount > 0 ? 9.99 : 14.99) : 0;
         
         const totalPrice = coursePrice + testMakerPrice + labGeneratorPrice;
         
@@ -104,24 +106,32 @@ export default function ConversationalCheckoutPage() {
         if(hasLabGenerator) {
             priceIds.push(...allModules.assessment_tools.filter(t => t.href?.includes('lab-generator')).map(t=>t.id));
         }
-        // Always include premium tools like the audit tool with any subscription
-        if (coursesCount > 0 || hasTestMaker || hasLabGenerator) {
+        
+        if (priceIds.length > 0) {
             priceIds.push(...allModules.premium_tools.map(t => t.id));
         }
 
-
         return {
             totalPrice,
+            showSiteLicensePrompt,
             selectedItems: [
                 ...allModules.courses.filter(c => selectedCourses.includes(c.id)).map(m => m.name),
                 ...(hasTestMaker ? ['Test Maker Suite'] : []),
                 ...(hasLabGenerator ? ['Science Lab Generator Suite'] : []),
             ],
-            priceIds: [...new Set(priceIds)] // Ensure unique price IDs
+            priceIds: [...new Set(priceIds)]
         };
     };
 
-    const { totalPrice, selectedItems, priceIds } = getPriceDetails();
+    const { totalPrice, selectedItems, priceIds, showSiteLicensePrompt } = getPriceDetails();
+
+    const getUpsellMessage = () => {
+        const courseCount = selectedCourses.length;
+        if (courseCount === 1) return "Great choice! Add a second course for just $9.99/mo and unlock our powerful tool suites for the same discounted price.";
+        if (courseCount === 2) return "Excellent! Add a third course for only $5.99/mo to expand your toolkit even further.";
+        if (courseCount >= 3) return `You're building a powerful collection! Each additional course is just $5.99/mo.`;
+        return "Each additional course is just $9.99/mo. Supercharge your subjects with our tool suites for the same price.";
+    };
 
     const handleSubscribe = async () => {
         if (priceIds.length === 0) {
@@ -150,7 +160,7 @@ export default function ConversationalCheckoutPage() {
                     <Sparkles className="h-8 w-8" />
                 </div>
                 <h1 className="text-4xl font-bold font-headline">Build Your Perfect Toolkit</h1>
-                <p className="text-muted-foreground mt-2">Start by selecting the course lesson generators you teach.</p>
+                <p className="text-muted-foreground mt-2">Start by selecting the course lesson generators you teach. Your first is $14.99/mo.</p>
             </header>
 
             <div className="space-y-8">
@@ -174,8 +184,8 @@ export default function ConversationalCheckoutPage() {
                         exit={{ opacity: 0, y: -20 }}
                         className="mt-16 pt-12 border-t border-dashed"
                     >
-                        <h2 className="text-2xl font-bold font-headline mb-2 text-center">Great! Now, let's complete your toolkit.</h2>
-                        <p className="text-muted-foreground text-center mb-8">Each additional course is just <strong className="text-primary">$9.99/mo</strong>. Supercharge your subjects with our tool suites for the same price.</p>
+                        <h2 className="text-2xl font-bold font-headline mb-2 text-center">Complete Your Toolkit</h2>
+                        <p className="text-muted-foreground text-center mb-8">{getUpsellMessage()}</p>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {addonTools.map(tool => (
@@ -204,6 +214,28 @@ export default function ConversationalCheckoutPage() {
                         </div>
                     </motion.div>
                 )}
+            </AnimatePresence>
+            
+            <AnimatePresence>
+            {showSiteLicensePrompt && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-12"
+                >
+                    <Card className="bg-primary/10 border-primary/20 text-center p-6">
+                        <CardHeader>
+                            <CardTitle className="font-headline text-2xl">Need Access for Your Department or School?</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground">You've selected courses across three or more subjects! You may qualify for a discounted site license. Contact our team to get a custom quote for your school or district.</p>
+                        </CardContent>
+                        <CardFooter className="justify-center">
+                            <Button onClick={() => router.push('/school-license')}>Request a Site License Quote</Button>
+                        </CardFooter>
+                    </Card>
+                </motion.div>
+            )}
             </AnimatePresence>
 
 
@@ -244,5 +276,6 @@ export default function ConversationalCheckoutPage() {
         </div>
     );
 }
+
 
 
