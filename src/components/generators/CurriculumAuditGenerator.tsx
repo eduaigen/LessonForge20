@@ -102,11 +102,33 @@ const AuditResultDisplay = ({ audit }: { audit: CurriculumAuditOutput }) => {
                 </Card>
                 <Card>
                     <CardHeader><CardTitle className="text-lg">Pedagogical Insights</CardTitle></CardHeader>
-                    <CardContent className="space-y-4">
-                        <div><h4 className="font-semibold">Simplify:</h4><p className="text-muted-foreground">{audit.pedagogicalInsights.simplify}</p></div>
-                        <div><h4 className="font-semibold">Differentiate:</h4><p className="text-muted-foreground">{audit.pedagogicalInsights.differentiate}</p></div>
-                        <div><h4 className="font-semibold">Engage:</h4><p className="text-muted-foreground">{audit.pedagogicalInsights.engage}</p></div>
-                        <div><h4 className="font-semibold">Assess:</h4><p className="text-muted-foreground">{audit.pedagogicalInsights.assess}</p></div>
+                    <CardContent className="space-y-6">
+                        <div>
+                            <h4 className="font-semibold text-primary">Simplify</h4>
+                            <blockquote className="mt-2 border-l-2 pl-6 italic">
+                               <p><strong>Instead of this:</strong> "{audit.pedagogicalInsights.simplify.insteadOf}"</p>
+                               <p><strong>Try this:</strong> "{audit.pedagogicalInsights.simplify.tryThis}"</p>
+                               <p><strong>Because:</strong> {audit.pedagogicalInsights.simplify.because}</p>
+                            </blockquote>
+                        </div>
+                         <div>
+                            <h4 className="font-semibold text-primary">Differentiate</h4>
+                             <blockquote className="mt-2 border-l-2 pl-6 italic">
+                                <p><strong>For the activity:</strong> "{audit.pedagogicalInsights.differentiate.activity}"</p>
+                                <p><strong>Provide this scaffold:</strong> {audit.pedagogicalInsights.differentiate.scaffold}</p>
+                             </blockquote>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-primary">Engage</h4>
+                            <blockquote className="mt-2 border-l-2 pl-6 italic">
+                                <p><strong>To introduce the:</strong> "{audit.pedagogicalInsights.engage.concept}"</p>
+                                <p><strong>Use this hook:</strong> {audit.pedagogicalInsights.engage.hook}</p>
+                            </blockquote>
+                        </div>
+                         <div>
+                            <h4 className="font-semibold text-primary">Assess</h4>
+                            <p className="text-muted-foreground">{audit.pedagogicalInsights.assess}</p>
+                        </div>
                     </CardContent>
                 </Card>
             </CardContent>

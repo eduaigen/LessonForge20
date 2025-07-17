@@ -42,7 +42,20 @@ const prompt = ai.definePrompt({
     - List 1-2 key strengths of the curriculum content in relation to the audit standard.
     - Clearly identify any major gaps or misalignments.
 6.  **Provide Suggestions for Improvement:** Offer 2-3 concrete, actionable suggestions to improve alignment for the overall selection.
-7.  **Generate Pedagogical Insights:** Provide a set of pedagogical strategies under the categories: "Simplify," "Differentiate," "Engage," and "Assess." These should be practical tips a teacher can use to improve instruction for this content.
+7.  **Generate Pedagogical Insights with Specific Examples:** For "Simplify," "Differentiate," and "Engage," you MUST provide concrete examples by quoting or referencing specific parts of the provided curriculum content.
+
+    - **Simplify:**
+        - **"Instead of this..."**: Quote a specific complex sentence or question from the lesson.
+        - **"Try this..."**: Rewrite the quoted part to be clearer and more accessible.
+        - **"Because..."**: Briefly explain why the revised version is better for student understanding.
+
+    - **Differentiate:**
+        - **"For the activity..."**: Name a specific activity from the lesson (e.g., "the 'guidedPractice' data analysis").
+        - **"Provide this scaffold..."**: Describe a concrete scaffold (e.g., "a graphic organizer with sentence starters," "a version of the data table with the first row completed as an example").
+
+    - **Engage:**
+        - **"To introduce the..."**: Name a specific concept or section from the lesson (e.g., "the 'miniLesson' on photosynthesis").
+        - **"Use this hook..."**: Describe a specific, engaging activity (e.g., "a 'Notice and Wonder' protocol with a time-lapse video of a growing plant").
 
 Your response must be structured according to the output schema.
 `,
