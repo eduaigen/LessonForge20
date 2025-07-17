@@ -187,14 +187,14 @@ const GeneratorContent = () => {
                                                     <AccordionTrigger>{subject.name}</AccordionTrigger>
                                                     <AccordionContent>
                                                         <Accordion type="single" collapsible className="w-full pl-4">
-                                                            {Object.keys(subject.curriculum.units).map(unitKey => {
+                                                            {subject.curriculum && subject.curriculum.units && Object.keys(subject.curriculum.units).map(unitKey => {
                                                                 const unit = subject.curriculum.units[unitKey];
                                                                 return (
                                                                     <AccordionItem value={unitKey} key={unitKey}>
                                                                         <AccordionTrigger>{unit.unit}</AccordionTrigger>
                                                                         <AccordionContent>
                                                                             <Accordion type="single" collapsible className="w-full pl-4">
-                                                                                {Object.keys(unit.topics).map(topicKey => {
+                                                                                {unit.topics && Object.keys(unit.topics).map(topicKey => {
                                                                                     const topic = unit.topics[topicKey];
                                                                                     return (
                                                                                         <AccordionItem value={topicKey} key={topicKey}>
