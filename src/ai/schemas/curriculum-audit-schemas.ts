@@ -2,9 +2,7 @@
 import { z } from 'zod';
 
 export const CurriculumAuditInputSchema = z.object({
-  lessonTitle: z.string().describe('The title of the lesson being audited.'),
-  lessonObjective: z.string().describe('The stated learning objective of the lesson.'),
-  lessonStandard: z.string().describe('The standard the lesson is originally aligned to.'),
+  curriculumContent: z.string().describe('A string containing the JSON representation of the lesson(s), topic, or unit being audited.'),
   auditStandard: z.string().describe('The educational standard to audit the lesson against.'),
 });
 
