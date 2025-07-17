@@ -14,11 +14,19 @@ import {
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   for (let i = 0; i < retries; i++) {
     try {
-      return await fn();
+      const result = await fn();
+      // Attempt to parse if it's a string, assuming the output should be JSON.
+      // This is a check to ensure the AI didn't return a string instead of a JSON object.
+      if (typeof (result as any).output === 'string') {
+        JSON.parse((result as any).output);
+      }
+      return result;
     } catch (err: any) {
-      if (err.message?.includes("503") || err.message?.includes("model is overloaded")) {
+      const isRetryableError = err.message?.includes("503") || err.message?.includes("model is overloaded") || err instanceof SyntaxError;
+      if (isRetryableError) {
         if (i === retries - 1) {
-          throw new Error("The AI model is temporarily overloaded. Please try again in a few moments.");
+          console.error("Final attempt failed:", err);
+          throw new Error("The AI model is temporarily overloaded or returned an invalid format. Please try again in a few moments.");
         }
         await new Promise(res => setTimeout(res, delay * (i + 1)));
       } else {
@@ -110,10 +118,7 @@ const prompt = ai.definePrompt({
 **11. Homework Section:**
 - **Action:**
     - Set 'title' to "Homework Assignment".
-    - **CRITICAL:** Copy the 'homework.activity' content, which may include passages or questions, exactly into 'homework.activity'.
-
-**Final Check:** Review your generated JSON to ensure every instruction was followed precisely. The output must be a valid JSON object matching the 'GenerateWorksheetOutputSchema'.
-`,
+    - **CRITICAL:** Copy the 'homework.activity' content, which may include passages or questions, exactly into 'homework.activity'.`,
 });
 
 const worksheetGeneratorFlow = ai.defineFlow(
