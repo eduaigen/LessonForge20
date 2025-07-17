@@ -36,6 +36,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
+import ManualEditDialog from '../common/ManualEditDialog';
+import EditSectionDialog from '../common/EditSectionDialog';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -109,6 +111,12 @@ const GeneratorContent = () => {
   const units = useMemo(() => Object.keys(nvBiologyCurriculum.units), []);
 
   useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
+
+  useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (isHighlightingTools) {
       timeoutId = setTimeout(() => {
@@ -167,7 +175,6 @@ const GeneratorContent = () => {
       
       const newPackage = [newLessonPlan];
       setLessonPackage(newPackage);
-      addToHistory(newPackage);
 
       setIsToolsInfoDialogOpen(true);
       form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
@@ -239,7 +246,6 @@ const GeneratorContent = () => {
         const newContent: GeneratedContent = { id: `${selectedTool}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
         setLessonPackage(prev => {
              const newPackage = prev ? [...prev, newContent] : [newContent];
-             addToHistory(newPackage);
              return newPackage;
         });
 

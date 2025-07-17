@@ -66,6 +66,7 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
@@ -80,6 +81,12 @@ const GeneratorContent = () => {
   });
 
   const units = useMemo(() => Object.keys(nvBiologyCurriculum.units), []);
+
+  useEffect(() => {
+    if (testPackage) {
+      addToHistory(testPackage);
+    }
+  }, [testPackage, addToHistory]);
 
   async function onSubmit(values: FormData) {
     setIsLoading(true);
