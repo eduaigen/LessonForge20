@@ -1,17 +1,24 @@
 
-export type CurriculumContent = {
-  [subject: string]: {
-    units: {
-      [unit: string]: {
-        topics: {
-          [topic: string]: {
-            lessons: string[];
-          }
-        };
-      };
-    };
-  };
+
+export type Lesson = {
+    title: string;
+    objective: string;
+    standard?: string;
 };
+
+export type Topic = {
+    topic: string;
+    lessons: Lesson[];
+};
+
+export type Unit = {
+    unit: string;
+    topics: { [key: string]: Topic };
+};
+
+export type Curriculum = {
+    units: { [key: string]: Unit };
+}
 
 export const curriculumData: {
   subjects: string[];

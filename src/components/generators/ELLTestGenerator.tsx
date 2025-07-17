@@ -72,7 +72,8 @@ const GeneratorContent = () => {
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
   const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
+  const [isGeneratingTest, setIsGeneratingTest] = useState(false);
+  const [selectedTool, setSelectedTool] = useState<ToolName | 'Test' | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -99,15 +100,25 @@ const GeneratorContent = () => {
     setIsToolsInfoDialogOpen(open);
     if (!open) setIsHighlightingTools(true);
   }
+
+  const onSubmit = () => {
+    setSelectedTool('Test');
+    setIsGeneratingTest(true);
+    setIsLanguageDialogOpen(true);
+  };
   
   const executeToolGeneration = async (language: LanguageOption) => {
+    if (selectedTool === 'Test') {
+        await handleTestGeneration(language);
+        return;
+    }
     const originalTestContent = testPackage?.find(item => item.type === 'Test');
     if (!originalTestContent || !selectedTool) {
       toast({ title: 'No Test Found', description: 'Please generate a test first.', variant: 'destructive' });
       return;
     }
     if (testPackage?.some(item => item.type === selectedTool)) {
-      toast({ title: 'Already Generated', description: `A ${selectedTool} has already been generated.`, variant: 'default' });
+      toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.`, variant: "default" });
       return;
     }
 
@@ -144,7 +155,6 @@ const GeneratorContent = () => {
   };
 
   const handleToolClick = (toolName: ToolName) => {
-      // For ELL, translation is core, so we always ask
       setSelectedTool(toolName);
       setIsLanguageDialogOpen(true);
   };
@@ -165,6 +175,8 @@ const GeneratorContent = () => {
         toast({ title: 'Generation Failed', description: 'An error occurred while generating the test. Please try again.', variant: 'destructive' });
       } finally {
         setIsLoading(false);
+        setIsGeneratingTest(false);
+        setSelectedTool(null);
       }
   };
 
@@ -191,14 +203,14 @@ const GeneratorContent = () => {
       <LanguageSelectionDialog 
         open={isLanguageDialogOpen}
         onOpenChange={setIsLanguageDialogOpen}
-        onSelectLanguage={selectedTool ? executeToolGeneration : handleTestGeneration}
-        toolName={selectedTool || 'Test'}
+        onSelectLanguage={executeToolGeneration}
+        toolName={selectedTool}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(() => setIsLanguageDialogOpen(true))}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <Card className="w-full shadow-lg mb-8">
                 <CardHeader>
                   <div className="flex items-center gap-4">
@@ -255,9 +267,9 @@ const GeneratorContent = () => {
                   />
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                    {isLoading ? 'Generating Test...' : 'Generate Test'}
+                  <Button type="submit" disabled={isLoading || isGeneratingTest} className="w-full">
+                    {isLoading || isGeneratingTest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                    {isLoading || isGeneratingTest ? 'Generating Test...' : 'Generate Test'}
                   </Button>
                 </CardFooter>
               </Card>

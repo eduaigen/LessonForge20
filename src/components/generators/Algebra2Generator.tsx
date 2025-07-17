@@ -34,8 +34,9 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { createCheckoutSession } from '@/actions/stripe';
 import { useRouter } from 'next/navigation';
+import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
+import Link from 'next/link';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -50,103 +51,72 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
-  sourceId?: string;
+  type: ToolName | 'Lesson Plan';
 };
 
-const SubscriptionPrompt = () => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubscribe = async () => {
-    setIsLoading(true);
-    toast({
-      title: 'Redirecting to checkout...',
-      description: 'Please wait while we prepare your secure checkout page.',
-    });
-    
-    const { url, error } = await createCheckoutSession();
-
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error,
-        variant: 'destructive',
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (url) {
-      router.push(url);
-    }
-  };
-
-  return (
-    <div className="flex flex-1 items-center justify-center p-4">
-      <Card className="max-w-2xl text-center p-8 shadow-lg">
-          <CardHeader>
-               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Sparkles className="h-8 w-8" />
-              </div>
-              <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
-              <CardDescription className="text-lg text-muted-foreground pt-2">
-                  The Algebra 2 Generator requires a subscription to access. Subscribe now to create powerful, standards-aligned 5E lesson plans and supporting materials.
-              </CardDescription>
-          </CardHeader>
-          <CardContent>
-              <Button size="lg" onClick={handleSubscribe} disabled={isLoading}>
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Subscribe to All-Access'}
-              </Button>
-          </CardContent>
-      </Card>
+const SubscriptionPrompt = () => (
+    <div className="flex flex-1 items-center justify-center">
+        <Card className="max-w-2xl text-center p-8 shadow-lg">
+            <CardHeader>
+                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Sparkles className="h-8 w-8" />
+                </div>
+                <CardTitle className="font-headline text-3xl font-bold">Unlock This Premium Tool</CardTitle>
+                <CardDescription>
+                    The Algebra 2 Generator requires a Math curriculum subscription. Subscribe now to create powerful, standards-aligned 5E lesson plans.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button size="lg" asChild>
+                    <Link href="/pricing">Subscribe to Math Tools</Link>
+                </Button>
+            </CardContent>
+        </Card>
     </div>
-  );
-};
+);
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
+  const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
   const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
+  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
+  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      unit: '',
-      topic: '',
-      lesson: '',
-      additionalInfo: '',
-    },
+    defaultValues: { unit: '', topic: '', lesson: '', additionalInfo: '' },
   });
   
   const lessonPlan = useMemo(() => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as GenerateAlgebra2LessonOutput | null;
   }, [lessonPackage]);
 
+  useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
+
   const units = useMemo(() => Object.keys(algebra2Curriculum.units), []);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (isHighlightingTools) {
-      timeoutId = setTimeout(() => {
-        setIsHighlightingTools(false);
-      }, 10000); // Highlight for 10 seconds
+      timeoutId = setTimeout(() => setIsHighlightingTools(false), 10000);
     }
     return () => clearTimeout(timeoutId);
   }, [isHighlightingTools]);
 
   const handleDialogClose = (open: boolean) => {
     setIsToolsInfoDialogOpen(open);
-    if (!open) {
-        setIsHighlightingTools(true);
-    }
+    if (!open) setIsHighlightingTools(true);
   }
 
   const handleClearSelection = () => {
@@ -162,7 +132,7 @@ const GeneratorContent = () => {
       form.setValue('unit', unitKey);
       form.setValue('topic', topicKey);
       form.setValue('lesson', lessonTitle);
-      setLessonPackage(null); // Clear previous generations
+      setLessonPackage(null);
     }
   };
 
@@ -180,7 +150,6 @@ const GeneratorContent = () => {
 
     try {
       const result = await generateAlgebra2Lesson(values);
-      
       const newLessonPlan: GeneratedContent = {
         id: `lesson-plan-${Date.now()}`,
         title: result.lessonOverview.lesson,
@@ -188,7 +157,9 @@ const GeneratorContent = () => {
         type: 'Lesson Plan',
       };
 
-      setLessonPackage([newLessonPlan]);
+      const newPackage = [newLessonPlan];
+      setLessonPackage(newPackage);
+
       setIsToolsInfoDialogOpen(true);
        form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
        setCurrentlySelectedLesson(null);
@@ -205,67 +176,47 @@ const GeneratorContent = () => {
     }
   }
 
-  const handleToolClick = async (toolName: ToolName) => {
-    if (!lessonPlan || !lessonPackage) {
-        toast({
-            title: "No Lesson Plan",
-            description: "Please generate a lesson plan first before using AI tools.",
-            variant: "destructive"
-        });
+  const handleToolClick = (toolName: ToolName) => {
+    if (!lessonPlan) {
+        toast({ title: "No Lesson Plan", description: "Please generate a lesson plan first.", variant: "destructive" });
         return;
     }
+    setSelectedTool(toolName);
+    setIsLanguageDialogOpen(true);
+  };
+  
+  const executeToolGeneration = async (language: LanguageOption) => {
+    if (!lessonPlan || !lessonPackage || !selectedTool) return;
 
-    const title = toolName;
-    if (lessonPackage.some(sec => sec.title.startsWith(title))) {
-        toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
-        return;
+    if (lessonPackage.some(sec => sec.title.startsWith(selectedTool))) {
+      toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.` });
+      return;
     }
 
-    setIsToolLoading(title);
-
+    setIsToolLoading(selectedTool);
     try {
-        let result: any;
-        let contentType: GeneratedContent['type'] = toolName;
-        let newContent: GeneratedContent | null = null;
-        let resultTitle = title;
+      let result: any;
+      let resultTitle = selectedTool;
+      const input = { lessonPlanJson: JSON.stringify(lessonPlan), language };
 
-        if (toolName === 'Worksheet') {
-            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            resultTitle = 'Student Worksheet';
-        } else if (toolName === 'Reading Material') {
-            result = await generateReadingMaterial(lessonPlan);
-            resultTitle = result.title;
-        } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`;
-        } else if (toolName === 'Slideshow Outline') {
-            result = await generateSlideshowOutline(lessonPlan);
-            resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`;
-        } else if (toolName === 'Question Cluster') {
-            result = await generateQuestionCluster({
-                lessonTopic: lessonPlan.lessonOverview.topic,
-                lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
-            });
-            resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`;
-        } else if (toolName === 'Study Sheet') {
-            result = await generateStudySheet(lessonPlan);
-            resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`;
-        }
+      switch (selectedTool) {
+        case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
+        case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
+        case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
+        case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+        case 'Question Cluster': result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
+        case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
+      }
 
-        newContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
-
-        if (newContent) {
-           setLessonPackage(prev => {
-                if (!prev) return null;
-                return [...prev, newContent!];
-           });
-        }
+      const newContent: GeneratedContent = { id: `${selectedTool}-${Date.now()}`, title: resultTitle, content: result, type: selectedTool };
+      setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
 
     } catch (error) {
-        console.error(`${toolName} generation failed:`, error);
-        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
+      console.error(`${selectedTool} generation failed:`, error);
+      toast({ title: "Generation Failed", description: `An error occurred while generating the ${selectedTool}.`, variant: "destructive" });
     } finally {
-        setIsToolLoading(null);
+      setIsToolLoading(null);
+      setSelectedTool(null);
     }
   };
 
@@ -274,32 +225,32 @@ const GeneratorContent = () => {
       <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              <Wand2 className="h-6 w-6 text-primary" />
-              Lesson Plan Generated! What's Next?
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-               Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
-            </AlertDialogDescription>
+            <AlertDialogTitle className="flex items-center gap-2"><Wand2 className="h-6 w-6 text-primary" />Lesson Plan Generated!</AlertDialogTitle>
+            <AlertDialogDescription>Your lesson plan is ready. Use the AI tools on the right sidebar to create aligned materials.</AlertDialogDescription>
             <div className="text-sm text-muted-foreground pt-4 text-left">
-              <span className="font-semibold text-foreground">Here are the available tools:</span>
+              <span className="font-semibold text-foreground">Available Tools:</span>
               <ul className="list-disc pl-5 mt-2 space-y-2">
-                  <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
-                  <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
-                  <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                  <li><strong>Question Cluster:</strong> Builds a set of NGSS-style assessment questions.</li>
-                  <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
-                  <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
+                <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
+                <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
+                <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
+                <li><strong>Question Cluster:</strong> Builds NGSS-style assessment questions.</li>
+                <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
+                <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
               </ul>
             </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogAction onClick={() => handleDialogClose(false)}>
-              Got it, thanks!
-            </AlertDialogAction>
+            <AlertDialogAction onClick={() => handleDialogClose(false)}>Got it, thanks!</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <LanguageSelectionDialog 
+        open={isLanguageDialogOpen}
+        onOpenChange={setIsLanguageDialogOpen}
+        onSelectLanguage={executeToolGeneration}
+        toolName={selectedTool}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
