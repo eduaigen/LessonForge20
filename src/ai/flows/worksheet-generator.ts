@@ -37,12 +37,11 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet.
 
 **CRITICAL RULES:**
-1.  **Language**: Generate all text content in **English**.
-2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
-3.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
-4.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
-5.  **EXCLUDE TEACHER ACTIONS**: Do NOT include any content from fields named 'teacherActions' or 'expectedStudentOutputs'. The worksheet is for students only.
-6.  **ALWAYS INCLUDE VOCABULARY**: The 'vocabulary' section MUST always be present in your final JSON output, even if the 'terms' array within it is empty.
+1.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
+2.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
+3.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
+4.  **EXCLUDE TEACHER ACTIONS**: Do NOT include any content from fields named 'teacherActions' or 'expectedStudentOutputs'. The worksheet is for students only.
+5.  **ALWAYS INCLUDE VOCABULARY**: The 'vocabulary' section MUST always be present in your final JSON output, even if the 'terms' array within it is empty.
 
 ---
 **WORKSHEET GENERATION INSTRUCTIONS**
@@ -126,7 +125,7 @@ const worksheetGeneratorFlow = ai.defineFlow(
   async (input) => {
     const result = await withRetry(() => prompt(input));
     
-    let englishOutput = result.output;
+    const englishOutput = result.output;
     if (!englishOutput) {
       throw new Error('The AI failed to generate the worksheet in English. Please try again.');
     }

@@ -21,10 +21,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
-import { generateDifferentiatedELLTest } from '@/ai/flows/generate-ell-differentiated-test';
-import { generateEnhancedELLTest } from '@/ai/flows/generate-ell-enhanced-test';
+import { generateDifferentiatedELLTest } from '@/ai/flows/generate-ela-differentiated-test';
+import { generateEnhancedELLTest } from '@/ai/flows/generate-ela-enhanced-test';
 import { generateELLStudySheet } from '@/ai/flows/generate-ell-study-sheet';
-import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -71,9 +70,6 @@ const GeneratorContent = () => {
   const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
-  const [isGeneratingTest, setIsGeneratingTest] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<ToolName | 'Test' | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -101,70 +97,11 @@ const GeneratorContent = () => {
     if (!open) setIsHighlightingTools(true);
   }
 
-  const onSubmit = () => {
-    setSelectedTool('Test');
-    setIsGeneratingTest(true);
-    setIsLanguageDialogOpen(true);
-  };
-  
-  const executeToolGeneration = async (language: LanguageOption) => {
-    if (selectedTool === 'Test') {
-        await handleTestGeneration(language);
-        return;
-    }
-    const originalTestContent = testPackage?.find(item => item.type === 'Test');
-    if (!originalTestContent || !selectedTool) {
-      toast({ title: 'No Test Found', description: 'Please generate a test first.', variant: 'destructive' });
-      return;
-    }
-    if (testPackage?.some(item => item.type === selectedTool)) {
-      toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.`, variant: "default" });
-      return;
-    }
-
-    setIsToolLoading(selectedTool);
-    try {
-      let result: any;
-      let newContent: TestGeneratedContent | null = null;
-      const input = { originalTest: originalTestContent.content, language };
-
-      switch (selectedTool) {
-        case 'Study Sheet':
-          result = await generateELLStudySheet({ originalTest: originalTestContent.content });
-          newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
-          break;
-        case 'Differentiated Version':
-          result = await generateDifferentiatedELLTest({ originalTest: originalTestContent.content });
-          newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
-          break;
-        case 'Enhanced Version':
-          result = await generateEnhancedELLTest({ originalTest: originalTestContent.content });
-          newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
-          break;
-      }
-      if (newContent) {
-        setTestPackage(prev => [...(prev || []), newContent!]);
-      }
-    } catch (error) {
-      console.error(`${selectedTool} generation failed:`, error);
-      toast({ title: 'Generation Failed', description: `An error occurred while generating the ${selectedTool}.`, variant: 'destructive' });
-    } finally {
-      setIsToolLoading(null);
-      setSelectedTool(null);
-    }
-  };
-
-  const handleToolClick = (toolName: ToolName) => {
-      setSelectedTool(toolName);
-      setIsLanguageDialogOpen(true);
-  };
-  
-  const handleTestGeneration = async (language: LanguageOption) => {
+  async function onSubmit(values: FormData) {
       setIsLoading(true);
       setTestPackage(null);
       try {
-        const values = form.getValues();
-        const result = await generateELLTest({ lessons: values.lessons, language });
+        const result = await generateELLTest(values);
         const testContent: TestGeneratedContent = { id: `test-${Date.now()}`, title: result.testTitle, content: result, type: 'Test' };
         const answerKeyContent: TestGeneratedContent = { id: `answer-key-${Date.now()}`, title: `Answer Key: ${result.testTitle}`, content: result, type: 'Answer Key' };
         const newPackage = [testContent, answerKeyContent];
@@ -175,9 +112,49 @@ const GeneratorContent = () => {
         toast({ title: 'Generation Failed', description: 'An error occurred while generating the test. Please try again.', variant: 'destructive' });
       } finally {
         setIsLoading(false);
-        setIsGeneratingTest(false);
-        setSelectedTool(null);
       }
+  };
+  
+  const handleToolClick = async (toolName: ToolName) => {
+    const originalTestContent = testPackage?.find(item => item.type === 'Test');
+    if (!originalTestContent) {
+      toast({ title: "No Test Found", description: "Please generate a test first.", variant: "destructive" });
+      return;
+    }
+    if (testPackage?.some(item => item.type === toolName)) {
+      toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
+      return;
+    }
+
+    setIsToolLoading(toolName);
+    try {
+        let result: any;
+        let newContent: TestGeneratedContent | null = null;
+        const input = { originalTest: originalTestContent.content };
+
+        switch (toolName) {
+            case 'Study Sheet':
+                result = await generateELLStudySheet(input);
+                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
+                break;
+            case 'Differentiated Version':
+                result = await generateDifferentiatedELLTest(input);
+                newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
+                break;
+            case 'Enhanced Version':
+                result = await generateEnhancedELLTest(input);
+                newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
+                break;
+        }
+        if (newContent) {
+            setTestPackage(prev => [...(prev || []), newContent!]);
+        }
+    } catch (error) {
+         console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
+    } finally {
+        setIsToolLoading(null);
+    }
   };
 
   return (
@@ -199,13 +176,6 @@ const GeneratorContent = () => {
           <AlertDialogFooter><AlertDialogAction onClick={() => handleDialogClose(false)}>Got it, thanks!</AlertDialogAction></AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <LanguageSelectionDialog 
-        open={isLanguageDialogOpen}
-        onOpenChange={setIsLanguageDialogOpen}
-        onSelectLanguage={executeToolGeneration}
-        toolName={selectedTool}
-      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
@@ -267,9 +237,9 @@ const GeneratorContent = () => {
                   />
                 </CardContent>
                 <CardFooter>
-                  <Button type="submit" disabled={isLoading || isGeneratingTest} className="w-full">
-                    {isLoading || isGeneratingTest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                    {isLoading || isGeneratingTest ? 'Generating Test...' : 'Generate Test'}
+                  <Button type="submit" disabled={isLoading} className="w-full">
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                    {isLoading ? 'Generating Test...' : 'Generate Test'}
                   </Button>
                 </CardFooter>
               </Card>

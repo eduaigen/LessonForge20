@@ -49,7 +49,7 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
+  type: ToolName | 'Lesson Plan';
   sourceId?: string;
 };
 
@@ -185,51 +185,44 @@ const GeneratorContent = () => {
         return;
     }
 
-    const title = toolName;
-    if (lessonPackage.some(sec => sec.title.startsWith(title))) {
-        toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
+    if (lessonPackage.some(sec => sec.title.startsWith(toolName))) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated for this lesson plan.` });
         return;
     }
 
-    setIsToolLoading(title);
+    setIsToolLoading(toolName);
 
     try {
         let result: any;
-        let contentType: GeneratedContent['type'] = toolName;
-        let newContent: GeneratedContent | null = null;
-        let resultTitle = title;
+        let resultTitle = toolName;
+        const input = { lessonPlanJson: JSON.stringify(lessonPlan) };
 
         if (toolName === 'Worksheet') {
-            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateWorksheet(input);
             resultTitle = 'Student Worksheet';
         } else if (toolName === 'Reading Material') {
-            result = await generateReadingMaterial(lessonPlan);
+            result = await generateReadingMaterial(input);
             resultTitle = result.title;
         } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateTeacherCoach(input);
             resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`;
         } else if (toolName === 'Slideshow Outline') {
-            result = await generateSlideshowOutline(lessonPlan);
+            result = await generateSlideshowOutline(input);
             resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`;
         } else if (toolName === 'Question Cluster') {
-            result = await generateQuestionCluster({
-                lessonTopic: lessonPlan.lessonOverview.topic,
-                lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
-            });
+            result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') });
             resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`;
         } else if (toolName === 'Study Sheet') {
-            result = await generateStudySheet(lessonPlan);
+            result = await generateStudySheet(input);
             resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`;
         }
 
-        newContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
-
-        if (newContent) {
-           setLessonPackage(prev => {
-                if (!prev) return null;
-                return [...prev, newContent!];
-           });
-        }
+        const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
+        
+        setLessonPackage(prev => {
+             if (!prev) return null;
+             return [...prev, newContent!];
+        });
 
     } catch (error) {
         console.error(`${toolName} generation failed:`, error);

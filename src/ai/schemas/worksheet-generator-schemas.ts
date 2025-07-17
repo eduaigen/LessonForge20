@@ -86,7 +86,7 @@ export const GenerateWorksheetOutputSchema = z.object({
     header: headerSchema,
     introduction: z.string().describe("A brief overview of the lesson for the student."),
     aim: aimSchema,
-    vocabulary: vocabularySchema,
+    vocabulary: vocabularySchema.optional(),
     doNow: doNowSchema,
     miniLesson: miniLessonSchema,
     guidedPractice: guidedPracticeSchema,

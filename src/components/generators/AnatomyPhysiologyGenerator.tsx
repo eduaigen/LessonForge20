@@ -34,8 +34,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { useRouter } from 'next/navigation';
-import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 import Link from 'next/link';
 
 const formSchema = z.object({
@@ -88,8 +86,6 @@ const GeneratorContent = () => {
 
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -178,47 +174,40 @@ const GeneratorContent = () => {
     }
   }
 
-  const handleToolClick = (toolName: ToolName) => {
-    if (!lessonPlan) {
+  const handleToolClick = async (toolName: ToolName) => {
+    if (!lessonPlan || !lessonPackage) {
         toast({ title: "No Lesson Plan", description: "Please generate a lesson plan first.", variant: "destructive" });
         return;
     }
-    setSelectedTool(toolName);
-    setIsLanguageDialogOpen(true);
-  };
-  
-  const executeToolGeneration = async (language: LanguageOption) => {
-    if (!lessonPlan || !lessonPackage || !selectedTool) return;
-
-    if (lessonPackage.some(sec => sec.title.startsWith(selectedTool))) {
-      toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.` });
-      return;
+    
+    if (lessonPackage.some(sec => sec.title === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.` });
+        return;
     }
 
-    setIsToolLoading(selectedTool);
+    setIsToolLoading(toolName);
     try {
-      let result: any;
-      let resultTitle = selectedTool;
-      const input = { lessonPlanJson: JSON.stringify(lessonPlan), language };
+        let result: any;
+        let resultTitle = toolName;
+        const input = { lessonPlanJson: JSON.stringify(lessonPlan) };
 
-      switch (selectedTool) {
-        case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
-        case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
-        case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
-        case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
-        case 'Question Cluster': result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
-        case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
-      }
+        switch (toolName) {
+            case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
+            case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
+            case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Question Cluster': result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
+            case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
+        }
 
-      const newContent: GeneratedContent = { id: `${selectedTool}-${Date.now()}`, title: resultTitle, content: result, type: selectedTool };
-      setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
+        const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
+        setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
 
     } catch (error) {
-      console.error(`${selectedTool} generation failed:`, error);
-      toast({ title: "Generation Failed", description: `An error occurred while generating the ${selectedTool}.`, variant: "destructive" });
+        console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
     } finally {
-      setIsToolLoading(null);
-      setSelectedTool(null);
+        setIsToolLoading(null);
     }
   };
 
@@ -256,13 +245,6 @@ const GeneratorContent = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <LanguageSelectionDialog 
-        open={isLanguageDialogOpen}
-        onOpenChange={setIsLanguageDialogOpen}
-        onSelectLanguage={executeToolGeneration}
-        toolName={selectedTool}
-      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">

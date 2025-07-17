@@ -34,7 +34,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 import Link from 'next/link';
 
 const formSchema = z.object({
@@ -51,7 +50,6 @@ export type GeneratedContent = {
   title: string;
   content: any;
   type: ToolName | 'Lesson Plan';
-  language: LanguageOption;
   sourceId?: string;
 };
 
@@ -82,14 +80,10 @@ const GeneratorContent = () => {
   const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
-  
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
   const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
-
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -118,7 +112,7 @@ const GeneratorContent = () => {
     if (isHighlightingTools) {
       timeoutId = setTimeout(() => {
         setIsHighlightingTools(false);
-      }, 10000); // Highlight for 10 seconds
+      }, 10000);
     }
     return () => clearTimeout(timeoutId);
   }, [isHighlightingTools]);
@@ -143,7 +137,7 @@ const GeneratorContent = () => {
       form.setValue('unit', unitKey);
       form.setValue('topic', topicKey);
       form.setValue('lesson', lessonTitle);
-      setLessonPackage(null); // Clear previous generations
+      setLessonPackage(null);
     }
   };
 
@@ -168,13 +162,12 @@ const GeneratorContent = () => {
         title: result.lessonOverview.lesson,
         content: result,
         type: 'Lesson Plan',
-        language: 'English',
       };
 
       setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
-       form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
-       setCurrentlySelectedLesson(null);
+      form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
+      setCurrentlySelectedLesson(null);
 
     } catch (error) {
       console.error('Lesson generation failed:', error);
@@ -188,30 +181,24 @@ const GeneratorContent = () => {
     }
   }
 
-  const handleToolClick = (toolName: ToolName) => {
-    if (!lessonPlan) {
+  const handleToolClick = async (toolName: ToolName) => {
+    if (!lessonPlan || !lessonPackage) {
         toast({ title: "No Lesson Plan", description: "Please generate a lesson plan first.", variant: "destructive" });
         return;
     }
-    setSelectedTool(toolName);
-    setIsLanguageDialogOpen(true);
-  };
-  
-  const executeToolGeneration = async (language: LanguageOption) => {
-    if (!lessonPlan || !lessonPackage || !selectedTool) return;
-
-    if (lessonPackage.some(sec => sec.title === `${selectedTool} (${language})`)) {
-        toast({ title: "Already Generated", description: `A ${language} ${selectedTool} has already been generated.` });
+    
+    if (lessonPackage.some(sec => sec.title === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.` });
         return;
     }
 
-    setIsToolLoading(selectedTool);
+    setIsToolLoading(toolName);
     try {
         let result: any;
-        let resultTitle = selectedTool;
-        const input = { lessonPlanJson: JSON.stringify(lessonPlan), language };
+        let resultTitle = toolName;
+        const input = { lessonPlanJson: JSON.stringify(lessonPlan) };
 
-        switch (selectedTool) {
+        switch (toolName) {
             case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
             case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
             case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
@@ -220,15 +207,14 @@ const GeneratorContent = () => {
             case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
         }
 
-        const newContent: GeneratedContent = { id: `${selectedTool}-${language}-${Date.now()}`, title: `${resultTitle} (${language})`, content: result, type: selectedTool, language };
+        const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
         setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
 
     } catch (error) {
-        console.error(`${selectedTool} generation failed:`, error);
-        toast({ title: "Generation Failed", description: `An error occurred while generating the ${selectedTool}.`, variant: "destructive" });
+        console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
     } finally {
         setIsToolLoading(null);
-        setSelectedTool(null);
     }
   };
 
@@ -263,13 +249,6 @@ const GeneratorContent = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <LanguageSelectionDialog 
-        open={isLanguageDialogOpen}
-        onOpenChange={setIsLanguageDialogOpen}
-        onSelectLanguage={executeToolGeneration}
-        toolName={selectedTool}
-      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
@@ -408,7 +387,7 @@ const GeneratorContent = () => {
               )}
              
               {isToolLoading && (
-                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet', language: 'English'}}>
+                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
                       <GeneratingAnimation />
                   </CollapsibleSection>
               )}

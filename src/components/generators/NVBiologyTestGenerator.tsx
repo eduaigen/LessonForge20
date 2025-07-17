@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
-import { Loader2, TestTube, Sparkles, Wand2, FlaskConical, PencilRuler, BookOpen, BrainCircuit } from 'lucide-react';
+import { Loader2, TestTube, Sparkles, Wand2, FlaskConical } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { nvBiologyCurriculum } from '@/lib/nv-biology-curriculum';
 import { generateNVBiologyTest, type GenerateNVBiologyTestOutput } from '@/ai/flows/generate-nv-biology-test';
@@ -23,7 +23,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { generateDifferentiatedTest } from '@/ai/flows/generate-test-differentiated';
 import { generateEnhancedTest } from '@/ai/flows/generate-test-enhanced';
 import { generateTestStudySheet } from '@/ai/flows/generate-test-study-sheet';
-import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 const formSchema = z.object({
@@ -41,7 +40,6 @@ export type TestGeneratedContent = {
   title: string;
   content: any;
   type: 'Test' | 'Answer Key' | 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version';
-  language: LanguageOption;
   sourceId?: string;
 };
 
@@ -73,8 +71,6 @@ const GeneratorContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
-  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<ToolName | 'Test' | null>(null);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
 
@@ -95,40 +91,38 @@ const GeneratorContent = () => {
     }
   }, [testPackage, addToHistory]);
 
-  const onSubmit = () => {
-    setSelectedTool('Test');
-    setIsLanguageDialogOpen(true);
-  };
+  const handleDialogClose = (open: boolean) => {
+    setIsToolsInfoDialogOpen(open);
+    if (!open) {
+        setIsHighlightingTools(true);
+    }
+  }
 
-  const handleTestGeneration = async (language: LanguageOption) => {
+  async function onSubmit(values: FormData) {
     setIsLoading(true);
     
     try {
-      const values = form.getValues();
-      const result = await generateNVBiologyTest({ ...values, language });
+      const result = await generateNVBiologyTest(values);
       
-      const potentialTitle = `${result.testTitle} (${language})`;
+      const potentialTitle = result.testTitle;
       if (testPackage?.some(item => item.title === potentialTitle)) {
-          toast({ title: "Already Generated", description: `A ${language} version of this test has already been generated.`, variant: "default" });
+          toast({ title: "Already Generated", description: `A test for these units has already been generated.`, variant: "default" });
           setIsLoading(false);
-          setSelectedTool(null);
           return;
       }
 
       const testContent: TestGeneratedContent = {
         id: `test-${Date.now()}`,
-        title: `${result.testTitle} (${language})`,
+        title: result.testTitle,
         content: result,
         type: 'Test',
-        language,
       };
       
       const answerKeyContent: TestGeneratedContent = {
           id: `answer-key-${Date.now()}`,
-          title: `Answer Key: ${result.testTitle} (${language})`,
+          title: `Answer Key: ${result.testTitle}`,
           content: result,
           type: 'Answer Key',
-          language,
       }
       
       setTestPackage(prev => [...(prev || []), testContent, answerKeyContent]);
@@ -143,57 +137,39 @@ const GeneratorContent = () => {
       });
     } finally {
       setIsLoading(false);
-      setSelectedTool(null);
-    }
-  }
-  
-  const handleDialogClose = (open: boolean) => {
-    setIsToolsInfoDialogOpen(open);
-    if (!open) {
-        setIsHighlightingTools(true);
     }
   }
 
-  const handleToolClick = (toolName: ToolName) => {
-      setSelectedTool(toolName);
-      setIsLanguageDialogOpen(true);
-  };
-
-  const executeToolGeneration = async (language: LanguageOption) => {
-    if (selectedTool === 'Test') {
-        handleTestGeneration(language);
-        return;
-    }
-
+  const handleToolClick = async (toolName: 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version') => {
     const originalTestContent = testPackage?.find(item => item.type === 'Test');
-    if (!originalTestContent || !selectedTool) {
+    if (!originalTestContent) {
         toast({ title: "No Test Found", description: "Please generate a test first.", variant: "destructive" });
         return;
     }
-    
-    if (testPackage?.some(item => item.type === selectedTool && item.language === language)) {
-        toast({ title: "Already Generated", description: `A ${language} ${selectedTool} has already been generated.`, variant: "default"});
+
+    if (testPackage?.some(item => item.type === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
         return;
     }
 
-    setIsToolLoading(selectedTool);
+    setIsToolLoading(toolName);
     try {
         let result: any;
         let newContent: TestGeneratedContent | null = null;
-        const input = { originalTest: originalTestContent.content, language };
+        const input = { originalTest: originalTestContent.content };
 
-        switch (selectedTool) {
+        switch (toolName) {
             case 'Study Sheet':
                 result = await generateTestStudySheet(input);
-                newContent = { id: `study-sheet-${Date.now()}`, title: `${result.title} (${language})`, content: result, type: 'Study Sheet', language };
+                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
                 break;
             case 'Differentiated Version':
                 result = await generateDifferentiatedTest(input);
-                newContent = { id: `differentiated-${Date.now()}`, title: `${result.testTitle} (${language})`, content: result, type: 'Differentiated Version', language };
+                newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
                 break;
             case 'Enhanced Version':
                 result = await generateEnhancedTest(input);
-                newContent = { id: `enhanced-${Date.now()}`, title: `${result.testTitle} (${language})`, content: result, type: 'Enhanced Version', language };
+                newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
                 break;
         }
 
@@ -201,11 +177,10 @@ const GeneratorContent = () => {
             setTestPackage(prev => [...(prev || []), newContent!]);
         }
     } catch (error) {
-         console.error(`${selectedTool} generation failed:`, error);
-        toast({ title: "Generation Failed", description: `An error occurred while generating the ${selectedTool}.`, variant: "destructive" });
+         console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
     } finally {
         setIsToolLoading(null);
-        setSelectedTool(null);
     }
   };
   
@@ -239,12 +214,6 @@ const GeneratorContent = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <LanguageSelectionDialog 
-        open={isLanguageDialogOpen}
-        onOpenChange={setIsLanguageDialogOpen}
-        onSelectLanguage={executeToolGeneration}
-        toolName={selectedTool}
-      />
     <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
       <div className="md:col-span-12 relative">
       <Form {...form}>
@@ -347,12 +316,12 @@ const GeneratorContent = () => {
       
       {testPackage?.map(item => (
         <CollapsibleSection key={item.id} title={item.title} contentItem={{...item, content: item.content as any}}>
-            <StyledContentDisplay content={item.content} type={item.type} language={item.language} />
+            <StyledContentDisplay content={item.content} type={item.type} />
         </CollapsibleSection>
       ))}
 
       {isToolLoading && (
-        <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Test', language: 'English'}}>
+        <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Test'}}>
             <GeneratingAnimation />
         </CollapsibleSection>
       )}

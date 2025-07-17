@@ -26,7 +26,6 @@ import { generateLabAnswerKey } from '@/ai/flows/generate-lab-answer-key';
 import { generateLabStudentSheet } from '@/ai/flows/generate-lab-student-sheet';
 import { generateDifferentiatedLab } from '@/ai/flows/generate-differentiated-lab';
 import { generateLabTeacherCoach } from '@/ai/flows/generate-lab-teacher-coach';
-import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine(value => value.length > 0, { message: 'Please select at least one lesson.' }),
@@ -39,7 +38,7 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName;
+  type: ToolName | 'Lab Activity';
 };
 
 const SubscriptionPrompt = () => (
@@ -72,8 +71,6 @@ const GeneratorContent = () => {
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
-  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
 
   
   const form = useForm<FormData>({
@@ -162,28 +159,18 @@ const GeneratorContent = () => {
         toast({ title: "No Lab Found", description: "Please generate a lab first.", variant: "destructive" });
         return;
     }
-    setSelectedTool(toolName);
-    setIsLanguageDialogOpen(true);
-  };
-  
-  const executeToolGeneration = async (language: LanguageOption) => {
-    const originalLab = labPackage?.find(item => item.type === 'Lab Activity');
-    if (!originalLab || !selectedTool) {
-        toast({ title: "No Lab Found", description: "Please generate a lab first.", variant: "destructive" });
-        return;
-    }
-    if (labPackage?.some(item => item.type === selectedTool)) {
-        toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.`, variant: "default"});
+    if (labPackage?.some(item => item.type === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
         return;
     }
 
-    setIsToolLoading(selectedTool);
+    setIsToolLoading(toolName);
     try {
         let result: any;
         let newContent: GeneratedContent | null = null;
-        const input = { originalLab: originalLab.content, language };
+        const input = { originalLab: originalLab.content };
 
-        switch (selectedTool) {
+        switch (toolName) {
             case 'Student Answer Sheet':
                 result = await generateLabStudentSheet(input);
                 newContent = { id: `studentsheet-${Date.now()}`, title: result.title, content: result, type: 'Student Answer Sheet' };
@@ -206,11 +193,10 @@ const GeneratorContent = () => {
             setLabPackage(prev => [...(prev || []), newContent!]);
         }
     } catch (error) {
-         console.error(`${selectedTool} generation failed:`, error);
-        toast({ title: "Generation Failed", description: `An error occurred while generating the ${selectedTool}.`, variant: "destructive" });
+         console.error(`${toolName} generation failed:`, error);
+        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
     } finally {
         setIsToolLoading(null);
-        setSelectedTool(null);
     }
   };
 
@@ -235,13 +221,6 @@ const GeneratorContent = () => {
           <AlertDialogFooter><AlertDialogAction onClick={() => handleDialogClose(false)}>Got it, thanks!</AlertDialogAction></AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
-      <LanguageSelectionDialog 
-        open={isLanguageDialogOpen}
-        onOpenChange={setIsLanguageDialogOpen}
-        onSelectLanguage={executeToolGeneration}
-        toolName={selectedTool}
-      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">

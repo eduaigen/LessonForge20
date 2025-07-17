@@ -26,7 +26,6 @@ import type { GenerateLabActivityOutput } from '@/ai/schemas/lab-activity-schema
 import EditSectionDialog from './EditSectionDialog';
 import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
-import type { LanguageOption } from './LanguageSelectionDialog';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -58,7 +57,7 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
         <p>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></p>
         {q.options && (
           <ul className="list-[lower-alpha] pl-6 mt-2">
-            {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+            {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
              {q.answer && <li className="text-green-600 font-semibold mt-1">Correct Answer: {q.answer}</li>}
           </ul>
         )}
@@ -253,10 +252,14 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             <p className="mt-2">{worksheet.aim.rewriteSpace}</p>
             <div className="my-4 h-24 border-b border-dashed"></div>
             
-            <h4 className="mt-4">{worksheet.vocabulary.title}</h4>
-            <ul className="list-disc pl-5 mt-2 space-y-2">
-                {worksheet.vocabulary.terms.map(v => <li key={v.term}><strong>{v.term}:</strong> {v.definition}</li>)}
-            </ul>
+            {worksheet.vocabulary && worksheet.vocabulary.terms && worksheet.vocabulary.terms.length > 0 && (
+              <>
+                <h4 className="mt-4">{worksheet.vocabulary.title}</h4>
+                <ul className="list-disc pl-5 mt-2 space-y-2">
+                    {worksheet.vocabulary.terms.map(v => <li key={v.term}><strong>{v.term}:</strong> {v.definition}</li>)}
+                </ul>
+              </>
+            )}
         </section>
 
         <section className="mb-6">
@@ -500,7 +503,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
                 <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
             </header>
 
-            {Array.isArray(studySheet.keyConcepts) && (
+            {Array.isArray(studySheet.keyConcepts) && studySheet.keyConcepts.length > 0 && (
                 <section className="mb-6">
                     <h2>Key Concepts</h2>
                     <ul className="list-disc pl-5 space-y-2">
@@ -511,7 +514,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
                 </section>
             )}
 
-            {Array.isArray(studySheet.vocabulary) && (
+            {Array.isArray(studySheet.vocabulary) && studySheet.vocabulary.length > 0 && (
                 <section className="mb-6">
                     <h2>Key Vocabulary</h2>
                     <ul className="list-disc pl-5 space-y-2">
@@ -524,7 +527,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
                 </section>
             )}
             
-            {Array.isArray(studySheet.essentialQuestions) && (
+            {Array.isArray(studySheet.essentialQuestions) && studySheet.essentialQuestions.length > 0 && (
                 <section>
                     <h2>Essential Questions</h2>
                     <ol className="list-decimal pl-5 space-y-4">
@@ -541,7 +544,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
     );
 };
 
-const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMaterialOutput, language?: LanguageOption }) => {
+const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
     const { toast } = useToast();
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedQuestions, setGeneratedQuestions] = useState<ComprehensionQuestionOutput | null>(null);
@@ -552,7 +555,6 @@ const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMateria
         try {
             const result = await generateComprehensionQuestions({ 
                 articleContent: content.articleContent,
-                language: language as any,
              });
             setGeneratedQuestions(result);
             toast({ title: "Success", description: "Comprehension questions generated." });
@@ -613,7 +615,7 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
               <li key={i}>
                 <p>{q.question}</p>
                 <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                  {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                  {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
                 </ul>
               </li>
             ))}
@@ -695,7 +697,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                         </div>
                         <p>{mc.question}</p>
                         <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                            {mc.options.map((opt, optIndex) => <li key={`${index}-${optIndex}`}>{opt}</li>)}
                         </ul>
                     </li>
                 ))}
@@ -769,7 +771,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
               <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
-                  <li key={optIndex}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
+                  <li key={`${index}-${optIndex}`}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
                 ))}
               </ul>
             </li>
@@ -833,7 +835,7 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
                                 <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                                    {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                                    {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{opt}</li>)}
                                 </ul>
                             </li>
                         ))}
@@ -980,10 +982,9 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
 type StyledContentDisplayProps = {
     content: any | null;
     type: string;
-    language?: 'English' | 'Spanish';
 };
 
-export default function StyledContentDisplay({ content, type, language }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
     if (!content) return null;
     
     const isSocialStudiesTest = content.partI && content.partII?.sets;
@@ -1006,7 +1007,7 @@ export default function StyledContentDisplay({ content, type, language }: Styled
         case 'Question Cluster':
             return renderQuestionCluster(content);
         case 'Reading Material':
-            return <ReadingMaterialDisplay content={content} language={language} />;
+            return <ReadingMaterialDisplay content={content} />;
         case 'Lab Activity':
         case 'Differentiated Version':
              if (isLabActivity) return <LabActivityDisplay lab={content} />;
@@ -1038,5 +1039,3 @@ export default function StyledContentDisplay({ content, type, language }: Styled
             }
     }
 }
-
-    

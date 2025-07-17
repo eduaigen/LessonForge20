@@ -174,7 +174,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     <Card className="mt-6 shadow-md">
       <div style={{ display: 'none' }}>
         <div ref={printableContentRef} id={`printable-content-${contentItem.id}`} className="p-4 bg-white text-black">
-             <StyledContentDisplay content={contentItem.content} type={contentItem.type} language={contentItem.language} />
+             <StyledContentDisplay content={contentItem.content} type={contentItem.type} />
         </div>
       </div>
       <Accordion type="single" collapsible defaultValue="item-1">
