@@ -6,13 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { createCheckoutSession } from '@/actions/stripe';
-import { Loader2, Sparkles, ArrowRight, ArrowLeft, CheckCircle, ShoppingCart } from 'lucide-react';
+import { Loader2, Sparkles, ArrowRight, CheckCircle, ShoppingCart } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { allModules, type Module } from '@/lib/modules-data';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-
-type Step = 'courses' | 'addons' | 'summary';
 
 const subjectsWithCourses = [
     { name: 'Science', icon: allModules.coursesBySubject.science[0].icon, courses: allModules.coursesBySubject.science },
@@ -51,8 +49,7 @@ export default function ConversationalCheckoutPage() {
     const { toast } = useToast();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [step, setStep] = useState<Step>('courses');
-
+    
     const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
     const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
@@ -145,32 +142,40 @@ export default function ConversationalCheckoutPage() {
         router.push(url);
     };
 
-    const renderStep = () => {
-        switch (step) {
-            case 'courses':
-                return (
-                    <motion.div key="courses" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }}>
-                        <h2 className="text-2xl font-bold font-headline mb-2 text-center">Let's build your toolkit.</h2>
-                        <p className="text-muted-foreground text-center mb-8">Start by selecting the courses you teach. The first is $15.99, and each additional course is just $9.99.</p>
-                        <div className="space-y-8">
-                            {subjectsWithCourses.map(subject => (
-                                <div key={subject.name}>
-                                    <h3 className="text-xl font-semibold mb-4 flex items-center gap-3"><subject.icon className="h-6 w-6 text-primary" /> {subject.name}</h3>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {subject.courses.map(course => (
-                                            <CourseSelectionCard key={course.id} item={course} isSelected={selectedCourses.includes(course.id)} onSelect={handleSelectCourse} />
-                                        ))}
-                                    </div>
-                                </div>
+    return (
+        <div className="container mx-auto py-12 max-w-5xl">
+            <header className="text-center mb-12">
+                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                    <Sparkles className="h-8 w-8" />
+                </div>
+                <h1 className="text-4xl font-bold font-headline">Build Your Perfect Toolkit</h1>
+                <p className="text-muted-foreground mt-2">Start by selecting the course lesson generators you teach.</p>
+            </header>
+
+            <div className="space-y-8">
+                {subjectsWithCourses.map(subject => (
+                    <div key={subject.name}>
+                        <h3 className="text-xl font-semibold mb-4 flex items-center gap-3"><subject.icon className="h-6 w-6 text-primary" /> {subject.name}</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {subject.courses.map(course => (
+                                <CourseSelectionCard key={course.id} item={course} isSelected={selectedCourses.includes(course.id)} onSelect={handleSelectCourse} />
                             ))}
                         </div>
-                    </motion.div>
-                );
-            case 'addons':
-                return (
-                    <motion.div key="addons" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }}>
-                        <h2 className="text-2xl font-bold font-headline mb-2 text-center">Supercharge your subjects with our tool suites.</h2>
-                        <p className="text-muted-foreground text-center mb-8">These powerful add-ons work across all the subjects you've selected and are only $9.99 each when bundled with a course.</p>
+                    </div>
+                ))}
+            </div>
+
+            <AnimatePresence>
+                {selectedCourses.length > 0 && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="mt-16 pt-12 border-t border-dashed"
+                    >
+                        <h2 className="text-2xl font-bold font-headline mb-2 text-center">Great! Now, let's complete your toolkit.</h2>
+                        <p className="text-muted-foreground text-center mb-8">Each additional course is just <strong className="text-primary">$9.99/mo</strong>. Supercharge your subjects with our tool suites for the same price.</p>
+                        
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {addonTools.map(tool => (
                                 <Card key={tool.id} className={cn("flex flex-col cursor-pointer transition-all", selectedAddons.includes(tool.id) && "border-primary ring-2 ring-primary")} onClick={() => handleSelectAddon(tool.id)}>
@@ -194,81 +199,42 @@ export default function ConversationalCheckoutPage() {
                             ))}
                         </div>
                     </motion.div>
-                );
-            case 'summary':
-                return (
-                     <motion.div key="summary" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }}>
-                        <h2 className="text-2xl font-bold font-headline mb-2 text-center">Your Custom Toolkit Summary</h2>
-                        <p className="text-muted-foreground text-center mb-8">Here's what you've selected. Ready to supercharge your teaching?</p>
-                        <Card>
-                            <CardContent className="p-6">
-                                {selectedItems.length > 0 ? (
-                                    <ul className="space-y-2">
-                                        {selectedItems.map(item => (
-                                            <li key={item} className="flex items-center gap-2">
-                                                <CheckCircle className="h-5 w-5 text-green-500" />
-                                                <span className="font-medium">{item}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p className="text-muted-foreground text-center">No items selected. Go back to add modules to your toolkit.</p>
-                                )}
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                );
-        }
-    };
-
-    const handleNext = () => {
-        if (step === 'courses') setStep('addons');
-        if (step === 'addons') setStep('summary');
-    };
-
-    const handleBack = () => {
-        if (step === 'summary') setStep('addons');
-        if (step === 'addons') setStep('courses');
-    };
-
-    return (
-        <div className="container mx-auto py-12 max-w-5xl">
-            <header className="text-center mb-12">
-                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                    <Sparkles className="h-8 w-8" />
-                </div>
-                <h1 className="text-4xl font-bold font-headline">Build Your Perfect Toolkit</h1>
-            </header>
-
-            <AnimatePresence mode="wait">
-                {renderStep()}
+                )}
             </AnimatePresence>
 
-            <footer className="mt-12 flex items-center justify-between">
-                <div>
-                    {step !== 'courses' && (
-                        <Button variant="ghost" onClick={handleBack}>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Back
-                        </Button>
-                    )}
-                </div>
-                 <div className="flex items-center gap-4">
-                     <p className="text-2xl font-bold">
-                        Total: ${totalPrice.toFixed(2)}
-                        <span className="text-sm font-normal text-muted-foreground ml-1">/ month</span>
-                    </p>
-                    {step === 'summary' ? (
-                         <Button size="lg" onClick={handleSubscribe} disabled={isLoading || selectedItems.length === 0}>
-                            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
-                            {isLoading ? "Redirecting..." : "Proceed to Checkout"}
-                        </Button>
-                    ) : (
-                        <Button size="lg" onClick={handleNext} disabled={step === 'courses' && selectedCourses.length === 0}>
-                            Next <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                    )}
-                </div>
-            </footer>
+
+            <AnimatePresence>
+            {selectedCourses.length > 0 && (
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-12 sticky bottom-6 z-50"
+                >
+                    <Card className="shadow-2xl border-primary/20">
+                        <CardContent className="p-4 flex items-center justify-between">
+                             <div>
+                                <h3 className="font-semibold">Your Custom Toolkit:</h3>
+                                <div className="text-sm text-muted-foreground max-w-md">
+                                    {selectedItems.length > 0 ? selectedItems.join(', ') : 'Select a course to get started.'}
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <p className="text-2xl font-bold">
+                                    Total: ${totalPrice.toFixed(2)}
+                                    <span className="text-sm font-normal text-muted-foreground ml-1">/ mo</span>
+                                </p>
+                                <Button size="lg" onClick={handleSubscribe} disabled={isLoading || selectedItems.length === 0}>
+                                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
+                                    {isLoading ? "Redirecting..." : "Proceed to Checkout"}
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            )}
+            </AnimatePresence>
+
         </div>
     );
 }
+
