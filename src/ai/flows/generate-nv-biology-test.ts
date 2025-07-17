@@ -31,9 +31,12 @@ const prompt = ai.definePrompt({
 **For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
 1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.
 2.  **Optional Data Table:** If relevant to the phenomenon, include a data table that students must analyze. The data should be realistic and aligned with the reading.
-3.  **Question Mix:** Generate a mix of Multiple Choice (3 questions), Short Response (2 questions), and one CER (Claim, Evidence, Reasoning) question.
+3.  **Question Mix:** Generate a mix of questions with the following precise counts:
+    *   **Multiple Choice:** Exactly 3 questions.
+    *   **Short Response:** Exactly 2 questions.
+    *   **CER (Claim, Evidence, Reasoning):** Exactly 1 question.
 4.  **DOK Alignment:** Ensure all questions align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}).
-5.  **Answer Key:** Create a detailed answer key for every question in the cluster. For the enhanced version, this must include explanations for incorrect distractors on MCQs.
+5.  **Answer Key:** Create a detailed answer key for every question in the cluster.
 
 Your final output MUST be a single, complete JSON object that strictly follows the output schema. The root 'clusters' array must have a length of {{{clusterCount}}}.
 `,
