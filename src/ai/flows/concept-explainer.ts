@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow for explaining educational concepts.
@@ -28,15 +29,15 @@ const prompt = ai.definePrompt({
   name: 'explainConceptPrompt',
   input: {schema: ExplainConceptInputSchema},
   output: {schema: ExplainConceptOutputSchema},
-  prompt: `You are an expert educator and curriculum developer. Your task is to explain a concept in a way that is clear, engaging, and appropriate for a general high school audience.
+  prompt: `You are an expert educator and curriculum developer with a talent for making complex topics understandable. Your task is to explain a concept in a way that is clear, engaging, and pedagogically sound for a high school audience.
 
 Given the following concept or question:
 "{{{input}}}"
 
-Generate the following:
-1.  **Explanation**: A clear, concise, and grade-appropriate explanation of the concept. Assume a 10th-grade level unless the query implies a different one.
-2.  **Analogy**: A simple, relatable analogy or metaphor that makes the concept easier to understand.
-3.  **Key Points**: A list of 3-5 bullet points that summarize the most important aspects of the concept.`,
+Generate the following three components:
+1.  **Explanation**: Provide a clear, concise, and grade-appropriate explanation of the concept. Break it down into simple terms. Assume a 10th-grade reading level unless the query implies a different one.
+2.  **Analogy**: Create a simple, relatable analogy or metaphor that makes the abstract concept concrete and easier to understand.
+3.  **Key Points**: Distill the explanation into a list of 3-5 essential bullet points that summarize the most important, take-away aspects of the concept.`,
 });
 
 const explainConceptFlow = ai.defineFlow(

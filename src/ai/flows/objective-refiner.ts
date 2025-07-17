@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI flow for refining learning objectives to be SMART.
@@ -34,18 +35,18 @@ const prompt = ai.definePrompt({
   name: 'refineObjectivePrompt',
   input: {schema: RefineObjectiveInputSchema},
   output: {schema: RefineObjectiveOutputSchema},
-  prompt: `You are an expert instructional coach specializing in curriculum design. Your task is to refine a learning objective to be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).
+  prompt: `You are an expert instructional coach specializing in curriculum design and pedagogy. Your task is to take a learning objective and rewrite it to be a SMART objective (Specific, Measurable, Achievable, Relevant, Time-bound).
 
 Given the following learning objective:
 "{{{input}}}"
 
-Rewrite it into a SMART objective. For each component of the SMART framework, provide a clear statement. Also provide a brief suggestion explaining the improvements made.
+Deconstruct and rewrite it into a full SMART objective. For each component of the SMART framework, provide a clear, actionable statement. Also provide a brief suggestion explaining why the refined version is a pedagogical improvement.
 
-- **Specific**: What will students know or be able to do? Who is involved?
-- **Measurable**: How will you measure success? What is the evidence of learning?
-- **Achievable**: Is the objective realistic for the students given their current skills?
-- **Relevant**: Why is this important for students to learn? Does it connect to a larger goal?
-- **Time-bound**: By when should this objective be met? (e.g., "by the end of the lesson," "by the end of the week")`,
+- **Specific**: What exactly will students know or be able to do? Use a strong action verb. Who is this for?
+- **Measurable**: How will learning be measured and evaluated? What is the concrete evidence of success?
+- **Achievable**: Is the objective realistic for the students given a typical timeframe and resources?
+- **Relevant**: Why is this objective important for students to master? How does it connect to a larger learning goal or real-world skill?
+- **Time-bound**: By when should this objective be met? (e.g., "by the end of this lesson," "by the end of the week's project")`,
 });
 
 const refineObjectiveFlow = ai.defineFlow(
