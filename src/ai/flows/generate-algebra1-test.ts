@@ -18,18 +18,16 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert high school Algebra 1 teacher and assessment writer for the NYS Regents curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum lessons. Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$x^2 + 2x - 1$$.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics.
+1.  Generate a set of clear, student-facing instructions for taking the test.
 2.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
 3.  All generated content must be complete and fully written out. No placeholders.
 4.  Use LaTeX for all mathematical expressions, equations, and variables.
-5.  Generate a set of clear, student-facing instructions for taking the test.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
 - **Number of Part I Questions (Multiple Choice)**: {{{partICount}}}
 - **Number of Part II Questions (2-Credit Open Response)**: {{{partIICount}}}
 - **Number of Part III Questions (4-Credit Open Response)**: {{{partIIICount}}}
-- **Language**: {{{language}}}
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.

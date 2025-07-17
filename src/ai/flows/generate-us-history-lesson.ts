@@ -94,7 +94,7 @@ const generateUSHistoryLessonFlow = ai.defineFlow(
     name: 'generateUSHistoryLessonFlow',
     inputSchema: GenerateSocialStudiesLessonInputSchema,
     outputSchema: GenerateSocialStudiesLessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);

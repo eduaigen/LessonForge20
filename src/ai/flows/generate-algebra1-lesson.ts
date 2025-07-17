@@ -92,7 +92,7 @@ const generateAlgebra1LessonFlow = ai.defineFlow(
     name: 'generateAlgebra1LessonFlow',
     inputSchema: GenerateAlgebra1LessonInputSchema,
     outputSchema: GenerateAlgebra1LessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);

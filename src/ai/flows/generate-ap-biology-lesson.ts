@@ -92,7 +92,7 @@ const generateAPBiologyLessonFlow = ai.defineFlow(
     name: 'generateAPBiologyLessonFlow',
     inputSchema: GenerateAPBiologyLessonInputSchema,
     outputSchema: GenerateAPBiologyLessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);

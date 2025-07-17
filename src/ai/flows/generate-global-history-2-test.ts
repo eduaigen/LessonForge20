@@ -23,7 +23,6 @@ const prompt = ai.definePrompt({
 - **Number of Multiple Choice Questions**: {{{mcqCount}}}
 - **Number of CRQ Sets**: {{{crqCount}}}
 - **Number of DBQ Documents**: {{{dbqDocCount}}}
-- **Language**: {{{language}}}
 
 **CRITICAL INSTRUCTIONS:**
 1.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
@@ -31,7 +30,6 @@ const prompt = ai.definePrompt({
 3.  All generated content must be complete and fully written out. No placeholders.
 4.  Generate a set of clear, student-facing instructions for taking the test.
 5.  You MUST create a complete and thorough answer key for all parts of the test.
-6.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.

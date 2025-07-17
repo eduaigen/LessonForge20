@@ -23,12 +23,10 @@ const prompt = ai.definePrompt({
 - **Units**: {{{units}}}
 - **Desired DOK Level**: {{{dokLevel}}}
 - **Number of Question Clusters**: {{{clusterCount}}}
-- **Language**: {{{language}}}
 
 **CRITICAL INSTRUCTIONS:**
 1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number. Each cluster must be distinct and based on the provided context.
 2.  Generate a set of clear, student-facing instructions for taking the test.
-3.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics. Do not translate numbers in data tables.
 
 **For EACH of the {{{clusterCount}}} clusters, you must perform the following steps:**
 1.  **Phenomenon Reading:** Write a 300-500 word, grade-appropriate passage describing a real-world phenomenon or scenario directly related to one of the topics in the provided curriculum content for the given units. This passage is the primary stimulus for all questions in its cluster.
@@ -46,7 +44,7 @@ const generateNVBiologyTestFlow = ai.defineFlow(
     name: 'generateNVBiologyTestFlow',
     inputSchema: GenerateNVBiologyTestInputSchema,
     outputSchema: GenerateNVBiologyTestOutputSchema,
-    timeout: 240000, // 4 minutes
+    timeout: 300000, // 5 minutes
   },
   async (input) => {
     const { output } = await prompt(input);

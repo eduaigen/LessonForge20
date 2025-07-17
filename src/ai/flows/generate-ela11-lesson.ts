@@ -92,7 +92,7 @@ const generateELA11LessonFlow = ai.defineFlow(
     name: 'generateELA11LessonFlow',
     inputSchema: GenerateELA11LessonInputSchema,
     outputSchema: GenerateELA11LessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);

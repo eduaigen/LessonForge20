@@ -92,7 +92,7 @@ const generateELLLessonFlow = ai.defineFlow(
     name: 'generateELLLessonFlow',
     inputSchema: GenerateELLLessonInputSchema,
     outputSchema: GenerateELLLessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);

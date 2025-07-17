@@ -50,7 +50,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph).
 - "readingPassage": (String) A 300-500 word, grade-appropriate reading passage. Use Markdown bold (\`**word**\`) for key vocab.
-- "diagram": (String) A detailed text description of a scientific concept map, model, or flowchart for the teacher to generate. **Do not generate SVG or image code.** Provide specific instructions for how to create the visual representation.
+- "diagram": (String) A highly detailed text description of a scientific concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A free-body diagram of a box on an inclined plane. The box is a rectangle. An arrow labeled 'Gravity' points straight down. An arrow labeled 'Normal Force' points perpendicular to the inclined plane. An arrow labeled 'Friction' points up the incline, parallel to the surface.' All text must be exactly as written here.'
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3). Ensure a mix of DOK levels.
 
 **C. "guidedPractice"** (Object, 15–20 min)
@@ -92,7 +92,7 @@ const generateNGSSPhysicsLessonFlow = ai.defineFlow(
     name: 'generateNGSSPhysicsLessonFlow',
     inputSchema: GenerateNGSSPhysicsLessonInputSchema,
     outputSchema: GenerateNGSSPhysicsLessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);

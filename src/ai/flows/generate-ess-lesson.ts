@@ -92,7 +92,7 @@ const generateESSLessonFlow = ai.defineFlow(
     name: 'generateESSLessonFlow',
     inputSchema: GenerateESSLessonInputSchema,
     outputSchema: GenerateESSLessonOutputSchema,
-    timeout: 120000, // 2 minutes
+    timeout: 180000,
   },
   async (input) => {
     const { output } = await prompt(input);
