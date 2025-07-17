@@ -3,10 +3,10 @@
 
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { createCheckoutSession } from '@/actions/stripe';
-import { Loader2, Sparkles, ArrowRight, CheckCircle, ShoppingCart } from 'lucide-react';
+import { Loader2, Sparkles, ArrowRight, CheckCircle, ShoppingCart, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { allModules, type Module } from '@/lib/modules-data';
 import { cn } from '@/lib/utils';
@@ -35,11 +35,12 @@ const CourseSelectionCard = ({ item, isSelected, onSelect }: { item: Module, isS
                     <CardDescription className="text-xs mt-1">{item.description}</CardDescription>
                 </div>
             </CardHeader>
-             <CardContent className="mt-auto flex justify-end pt-4">
+             <CardFooter className="mt-auto flex justify-between items-center pt-4">
+                <p className="text-xs text-muted-foreground">ID: {item.id}</p>
                 <div className={cn("h-6 w-6 rounded-full border flex items-center justify-center", isSelected ? "bg-primary border-primary" : "bg-muted")}>
                     {isSelected && <CheckCircle className="h-4 w-4 text-primary-foreground" />}
                 </div>
-            </CardContent>
+            </CardFooter>
         </Card>
     );
 };
@@ -73,15 +74,15 @@ export default function ConversationalCheckoutPage() {
     }, [selectedCourses]);
 
     const addonTools = [
-        { id: 'test_maker', name: 'Test Maker Suite', description: 'Unlock powerful test generators for all your selected subjects. Create Regents-style exams, NGSS-aligned cluster assessments, and scaffolded tests for all learners.', icon: allModules.assessment_tools[0].icon },
-        ...(showLabAddon ? [{ id: 'lab_generator', name: 'Science Lab Generator Suite', description: 'Bring science to life! Generate hands-on, 45-minute, NGSS-aligned lab activities for Biology, Chemistry, Physics, and Earth Science. (AP Bio and Health not included).', icon: allModules.assessment_tools.find(t=>t.href?.includes('lab'))!.icon }] : []),
+        { id: 'price_1PjJrTRpWk9d9d2Fc3d4e5f6', name: 'Test Maker Suite', description: 'Unlock powerful test generators for all your selected subjects. Create Regents-style exams, NGSS-aligned cluster assessments, and scaffolded tests for all learners.', icon: allModules.assessment_tools[0].icon },
+        ...(showLabAddon ? [{ id: 'price_1PjJseRpWk9d9d2Fq3r4s5t6', name: 'Science Lab Generator Suite', description: 'Bring science to life! Generate hands-on, 45-minute, NGSS-aligned lab activities for Biology, Chemistry, Physics, and Earth Science. (AP Bio and Health not included).', icon: allModules.assessment_tools.find(t=>t.href?.includes('lab'))!.icon }] : []),
     ];
 
     const getPriceDetails = () => {
         const coursesCount = selectedCourses.length;
         
-        const hasTestMaker = selectedAddons.includes('test_maker');
-        const hasLabGenerator = selectedAddons.includes('lab_generator');
+        const hasTestMaker = selectedAddons.includes('price_1PjJrTRpWk9d9d2Fc3d4e5f6');
+        const hasLabGenerator = selectedAddons.includes('price_1PjJseRpWk9d9d2Fq3r4s5t6');
         
         let coursePrice = 0;
         if (coursesCount > 0) {
@@ -195,6 +196,9 @@ export default function ConversationalCheckoutPage() {
                                     <CardContent className="flex-grow">
                                         <p className="text-sm text-muted-foreground">{tool.description}</p>
                                     </CardContent>
+                                    <CardFooter className="mt-auto flex justify-between items-center pt-4">
+                                        <p className="text-xs text-muted-foreground">ID: {tool.id}</p>
+                                    </CardFooter>
                                 </Card>
                             ))}
                         </div>
@@ -211,23 +215,26 @@ export default function ConversationalCheckoutPage() {
                     className="mt-12 sticky bottom-6 z-50"
                 >
                     <Card className="shadow-2xl border-primary/20">
-                        <CardContent className="p-4 flex items-center justify-between">
-                             <div>
-                                <h3 className="font-semibold">Your Custom Toolkit:</h3>
+                        <CardContent className="p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                             <div className="flex-1">
+                                <h3 className="font-semibold text-lg">Your Custom Toolkit:</h3>
                                 <div className="text-sm text-muted-foreground max-w-md">
                                     {selectedItems.length > 0 ? selectedItems.join(', ') : 'Select a course to get started.'}
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4">
-                                <p className="text-2xl font-bold">
+                            <div className="flex flex-col sm:items-end w-full sm:w-auto">
+                                <p className="text-3xl font-bold">
                                     Total: ${totalPrice.toFixed(2)}
                                     <span className="text-sm font-normal text-muted-foreground ml-1">/ mo</span>
                                 </p>
-                                <Button size="lg" onClick={handleSubscribe} disabled={isLoading || selectedItems.length === 0}>
-                                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
-                                    {isLoading ? "Redirecting..." : "Proceed to Checkout"}
-                                </Button>
+                                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                                    <Lock className="h-3 w-3" /> Secure checkout powered by Stripe
+                                </p>
                             </div>
+                             <Button size="lg" onClick={handleSubscribe} disabled={isLoading || selectedItems.length === 0} className="w-full sm:w-auto">
+                                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
+                                {isLoading ? "Redirecting..." : "Proceed to Checkout"}
+                            </Button>
                         </CardContent>
                     </Card>
                 </motion.div>
@@ -237,4 +244,5 @@ export default function ConversationalCheckoutPage() {
         </div>
     );
 }
+
 
