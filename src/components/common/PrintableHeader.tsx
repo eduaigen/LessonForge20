@@ -9,27 +9,9 @@ interface PrintableHeaderProps {
 }
 
 const PrintableHeader = ({ contentItem }: PrintableHeaderProps) => {
-    return (
-       <>
-        <div style={{ paddingBottom: '20px', borderBottom: '1px solid #ccc', marginBottom: '20px', textAlign: 'center' }}>
-            <h2 style={{ fontFamily: 'sans-serif', color: '#333' }}>{contentItem.title} - Created by EduAiGen</h2>
-        </div>
-        <div style={{ marginBottom: '20px' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'sans-serif', border: '1px solid #ddd' }}>
-            <tbody>
-              <tr>
-                <td style={{ width: '60%', padding: '8px', border: '1px solid #ddd' }}><strong>Name:</strong> ____________________________</td>
-                <td style={{ width: '40%', padding: '8px', border: '1px solid #ddd' }}><strong>Date:</strong> _________________</td>
-              </tr>
-              <tr>
-                <td style={{ width: '60%', padding: '8px', border: '1px solid #ddd' }}><strong>Class:</strong> _____________________________</td>
-                <td style={{ width: '40%', padding: '8px', border: '1px solid #ddd' }}><strong>Period:</strong> _________</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-       </>
-    );
+    // This component is now a placeholder. The header is part of the worksheet content itself.
+    // We keep the component in case we want to add universal print headers back in the future.
+    return null;
 };
 
 export default PrintableHeader;
