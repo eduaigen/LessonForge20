@@ -146,7 +146,7 @@ const GeneratorContent = () => {
             const result = await auditCurriculum({
                 lessonTitle: lessonData.title,
                 lessonObjective: lessonData.objective,
-                lessonStandard: lessonData.standard,
+                lessonStandard: lessonData.standard || '', // Pass empty string if standard is missing
                 auditStandard: values.auditStandard,
             });
             setAuditResult(result);
@@ -189,6 +189,7 @@ const GeneratorContent = () => {
                                                         <Accordion type="single" collapsible className="w-full pl-4">
                                                             {subject.curriculum && subject.curriculum.units && Object.keys(subject.curriculum.units).map(unitKey => {
                                                                 const unit = subject.curriculum.units[unitKey];
+                                                                if (!unit) return null;
                                                                 return (
                                                                     <AccordionItem value={unitKey} key={unitKey}>
                                                                         <AccordionTrigger>{unit.unit}</AccordionTrigger>
@@ -196,6 +197,7 @@ const GeneratorContent = () => {
                                                                             <Accordion type="single" collapsible className="w-full pl-4">
                                                                                 {unit.topics && Object.keys(unit.topics).map(topicKey => {
                                                                                     const topic = unit.topics[topicKey];
+                                                                                    if (!topic) return null;
                                                                                     return (
                                                                                         <AccordionItem value={topicKey} key={topicKey}>
                                                                                             <AccordionTrigger>{topic.topic}</AccordionTrigger>

@@ -22,7 +22,7 @@ import { ellCurriculum } from './ell-curriculum';
 export type Lesson = {
   title: string;
   objective: string;
-  standard: string;
+  standard?: string;
 };
 
 type Topic = {
