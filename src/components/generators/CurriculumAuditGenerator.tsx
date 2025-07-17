@@ -20,7 +20,6 @@ import { useAuth } from '@/context/AuthContext';
 import { allCurriculums, type Lesson, type Topic, type Unit } from '@/lib/all-curriculums';
 import { educationalStandards } from '@/lib/educational-standards';
 
-
 const formSchema = z.object({
   lessons: z.array(z.string()).refine(value => value.length > 0, {
     message: 'Please select at least one lesson, topic, or unit.'
@@ -44,7 +43,7 @@ const SubscriptionPrompt = () => (
             </CardHeader>
             <CardContent>
                 <Button size="lg" asChild>
-                    <Link href="/auth-dashboard">Return to Dashboard</Link>
+                    <Link href="/pricing">Subscribe Now</Link>
                 </Button>
             </CardContent>
         </Card>
@@ -125,16 +124,15 @@ const GeneratorContent = () => {
         defaultValues: { lessons: [], auditStandard: '' },
     });
     
-    const selectedLessons = form.watch('lessons');
+    const selectedLessonsJSON = form.watch('lessons');
+    const selectedLessonTitles = useMemo(() => selectedLessonsJSON.map(l => JSON.parse(l).title), [selectedLessonsJSON]);
 
     async function onSubmit(values: FormData) {
         setIsLoading(true);
         setAuditResult(null);
         try {
-            const curriculumContent = values.lessons.map(l => JSON.parse(l));
-
             const result = await auditCurriculum({
-                curriculumContent: JSON.stringify(curriculumContent),
+                curriculumContent: `[${values.lessons.join(',')}]`,
                 auditStandard: values.auditStandard,
             });
             setAuditResult(result);
@@ -147,36 +145,38 @@ const GeneratorContent = () => {
     }
     
     const handleCheckChange = (items: (Lesson | Topic | Unit)[], checked: boolean | 'indeterminate') => {
-        const currentSelectionJSON = form.getValues('lessons');
-        let currentSelection: (Lesson)[] = [];
-        try {
-            currentSelection = currentSelectionJSON.map(l => JSON.parse(l));
-        } catch (e) {
-            console.error("Error parsing current selection", e);
-        }
-
-        const getLessonsFromItem = (item: Lesson | Topic | Unit): Lesson[] => {
-            if ('objective' in item) return [item as Lesson];
-            if ('lessons' in item) return (item as Topic).lessons;
-            if ('topics' in item) return Object.values((item as Unit).topics).flatMap(t => t.lessons);
-            return [];
+        const getLessonsFromItem = (item: any): Lesson[] => {
+            if (item.objective) return [item as Lesson]; // It's a lesson
+            let lessons: Lesson[] = [];
+            if (item.lessons) lessons = lessons.concat(item.lessons);
+            if (item.topics) {
+                lessons = lessons.concat(Object.values(item.topics).flatMap((t: any) => getLessonsFromItem(t)));
+            }
+            if (item.weeks) {
+                 lessons = lessons.concat(Object.values(item.weeks).flatMap((w: any) => getLessonsFromItem(w)));
+            }
+             if (item.units) {
+                 lessons = lessons.concat(Object.values(item.units).flatMap((u: any) => getLessonsFromItem(u)));
+            }
+            return lessons;
         };
 
         const allLessonsFromItems = items.flatMap(getLessonsFromItem);
         const allItemTitles = allLessonsFromItems.map(l => l.title);
         
-        const currentLessonTitles = currentSelection.map(l => l.title);
-
-        let newSelectionTitles: string[];
+        const currentSelectionJSON = form.getValues('lessons');
+        const currentSelectionObjects = currentSelectionJSON.map(l => JSON.parse(l));
+        
+        let newSelectionObjects;
 
         if (checked) {
-            newSelectionTitles = [...new Set([...currentLessonTitles, ...allItemTitles])];
+            const existingTitles = new Set(currentSelectionObjects.map(l => l.title));
+            const newLessonsToAdd = allLessonsFromItems.filter(l => !existingTitles.has(l.title));
+            newSelectionObjects = [...currentSelectionObjects, ...newLessonsToAdd];
         } else {
-            newSelectionTitles = currentLessonTitles.filter(title => !allItemTitles.includes(title));
+            const titlesToRemove = new Set(allItemTitles);
+            newSelectionObjects = currentSelectionObjects.filter(l => !titlesToRemove.has(l.title));
         }
-
-        const allLessonsInCurriculum = allCurriculums.flatMap(s => s.curriculum ? Object.values(s.curriculum.units).flatMap(u => Object.values(u.topics).flatMap(t => t.lessons)) : []);
-        const newSelectionObjects = allLessonsInCurriculum.filter(l => newSelectionTitles.includes(l.title));
         
         form.setValue('lessons', newSelectionObjects.map(l => JSON.stringify(l)), { shouldValidate: true });
     };
@@ -213,9 +213,10 @@ const GeneratorContent = () => {
                                                         <AccordionTrigger>{subject.name}</AccordionTrigger>
                                                         <AccordionContent>
                                                             <Accordion type="multiple" className="w-full pl-4">
-                                                                {Object.entries(subject.curriculum.units).map(([unitKey, unit]) => {
-                                                                    const allUnitLessons = Object.values(unit.topics).flatMap(t => t.lessons);
-                                                                    const selectedInUnit = selectedLessons.filter(l => allUnitLessons.some(ul => ul.title === JSON.parse(l).title));
+                                                                {Object.keys(subject.curriculum.units).map(unitKey => {
+                                                                    const unit = subject.curriculum.units[unitKey];
+                                                                    const allUnitLessons = Object.values(unit.topics).flatMap((t: any) => t.lessons);
+                                                                    const selectedInUnit = selectedLessonTitles.filter(title => allUnitLessons.some(ul => ul.title === title));
                                                                     const unitCheckedState = selectedInUnit.length === allUnitLessons.length ? true : (selectedInUnit.length > 0 ? 'indeterminate' : false);
                                                                     
                                                                     return (
@@ -226,8 +227,9 @@ const GeneratorContent = () => {
                                                                         </div>
                                                                         <AccordionContent>
                                                                             <Accordion type="multiple" className="w-full pl-4">
-                                                                                {Object.entries(unit.topics).map(([topicKey, topic]) => {
-                                                                                    const selectedInTopic = selectedLessons.filter(l => topic.lessons.some(tl => tl.title === JSON.parse(l).title));
+                                                                                {Object.keys(unit.topics).map(topicKey => {
+                                                                                    const topic = unit.topics[topicKey];
+                                                                                    const selectedInTopic = selectedLessonTitles.filter(title => topic.lessons.some(tl => tl.title === title));
                                                                                     const topicCheckedState = selectedInTopic.length === topic.lessons.length ? true : (selectedInTopic.length > 0 ? 'indeterminate' : false);
                                                                                     return (
                                                                                         <AccordionItem value={topicKey} key={topicKey}>
@@ -321,6 +323,6 @@ const GeneratorContent = () => {
 };
 
 export default function CurriculumAuditGenerator() {
-    const { isSubscribed } = useAuth();
-    return isSubscribed ? <GeneratorContent /> : <SubscriptionPrompt />;
+    const { hasPremiumTools } = useAuth();
+    return hasPremiumTools ? <GeneratorContent /> : <SubscriptionPrompt />;
 }
