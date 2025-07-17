@@ -52,6 +52,7 @@ export type GeneratedContent = {
   title: string;
   content: any;
   type: ToolName | 'Lesson Plan';
+  language: LanguageOption;
   sourceId?: string;
 };
 
@@ -155,6 +156,7 @@ const GeneratorContent = () => {
         title: result.lessonOverview.lesson,
         content: result,
         type: 'Lesson Plan',
+        language: 'English',
       };
       setLessonPackage([newLessonPlan]);
       setIsToolsInfoDialogOpen(true);
@@ -185,9 +187,9 @@ const GeneratorContent = () => {
   const executeToolGeneration = async (language: LanguageOption) => {
     if (!lessonPlan || !lessonPackage || !selectedTool) return;
 
-    if (lessonPackage.some(sec => sec.title.startsWith(selectedTool))) {
-      toast({ title: "Already Generated", description: `A ${selectedTool} has already been generated.` });
-      return;
+    if (lessonPackage.some(sec => sec.title === `${selectedTool} (${language})`)) {
+        toast({ title: "Already Generated", description: `A ${language} ${selectedTool} has already been generated.` });
+        return;
     }
 
     setIsToolLoading(selectedTool);
@@ -205,7 +207,7 @@ const GeneratorContent = () => {
         case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
       }
 
-      const newContent: GeneratedContent = { id: `${selectedTool}-${Date.now()}`, title: resultTitle, content: result, type: selectedTool };
+      const newContent: GeneratedContent = { id: `${selectedTool}-${language}-${Date.now()}`, title: `${resultTitle} (${language})`, content: result, type: selectedTool, language };
       setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
 
     } catch (error) {
@@ -396,7 +398,7 @@ const GeneratorContent = () => {
               )}
              
               {isToolLoading && (
-                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+                  <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet', language: 'English'}}>
                       <GeneratingAnimation />
                   </CollapsibleSection>
               )}
