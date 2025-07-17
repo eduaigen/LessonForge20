@@ -30,7 +30,7 @@ export const GenerateLabActivityOutputSchema = z.object({
   }),
   materialsAndEquipment: z.array(z.string()).describe("A detailed list of all necessary materials, assuming standard lab access."),
   safetyPrecautions: z.array(z.string()).describe("Crucial safety warnings and procedures."),
-  studentProcedureDesign: z.string().describe("A prompt that instructs the student to write their own step-by-step experimental procedure. This should not contain the steps, but rather a simple instruction for designing them."),
+  studentProcedureDesign: z.string().describe("A concise prompt instructing the student to write their own step-by-step experimental procedure."),
   dataCollection: z.object({
     description: z.string().describe("Instructions for what data to collect."),
     dataTable: dataTableSchema.optional(),

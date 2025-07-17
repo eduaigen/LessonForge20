@@ -41,7 +41,7 @@ const prompt = ai.definePrompt({
 3.  **Student-Centered & Inquiry-Based:** The lab must be structured to promote student inquiry. This includes:
     *   **Extensive Phenomenon Reading:** Write a detailed, 500-800 word, grade-appropriate reading passage that presents a real-world phenomenon or scenario to anchor the lab and provide context.
     *   **High-Level Pre-Lab Questions:** Generate 2-3 pre-lab questions based on the reading that are at DOK Level 3-4, requiring students to analyze, evaluate, or synthesize information.
-    *   **Student-Led Investigation:** 
+    *   **Student-Led Investigation:**
         - The prompt for 'testableQuestion' MUST guide the student to create their own, not provide a ready-made one.
         - The 'hypothesisPrompt' MUST include a sentence starter like "If... then... because...".
         - The 'variablesPrompt' MUST only contain direct questions asking the student to identify the independent, dependent, and controlled variables. Do NOT add any extra explanatory text.
