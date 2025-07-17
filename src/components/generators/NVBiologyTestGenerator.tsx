@@ -100,7 +100,7 @@ const GeneratorContent = () => {
 
   async function onSubmit(values: FormData) {
     setIsLoading(true);
-    
+    setTestPackage(null);
     try {
       const result = await generateNVBiologyTest(values);
       
@@ -125,7 +125,8 @@ const GeneratorContent = () => {
           type: 'Answer Key',
       }
       
-      setTestPackage(prev => [...(prev || []), testContent, answerKeyContent]);
+      const newPackage = [testContent, answerKeyContent];
+      setTestPackage(newPackage);
       setIsToolsInfoDialogOpen(true);
       
     } catch (error) {

@@ -25,6 +25,7 @@ import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { generateDifferentiatedMathTest } from '@/ai/flows/generate-math-differentiated-test';
 import { generateEnhancedMathTest } from '@/ai/flows/generate-math-enhanced-test';
 import { generateMathStudySheet } from '@/ai/flows/generate-math-study-sheet';
+import type { TestGeneratedContent } from './NVBiologyTestGenerator';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -36,14 +37,6 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-export type TestGeneratedContent = {
-  id: string;
-  title: string;
-  content: any;
-  type: 'Test' | 'Answer Key' | 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version';
-  sourceId?: string;
-};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
