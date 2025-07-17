@@ -68,7 +68,7 @@ const prompt = ai.definePrompt({
     - **CRITICAL:** If 'miniLesson.conceptCheckQuestions' exists, copy ALL questions into 'miniLesson.conceptCheckQuestions'.
     - Populate 'miniLesson.notesTitle' with "Key Ideas or Terms | Notes, Definitions, or Examples".
     - Populate 'miniLesson.sentenceStarters' with: "“This reminds me of…”, “An example of this is…”, “This is important because…”".
-    - If 'miniLesson.diagram' exists, copy its description into 'miniLesson.diagramDescription'.
+    - If 'miniLesson.diagram' exists, set the 'diagramDescription' field to "Use the space below to draw and label the diagram or model from the lesson."
 
 **7. Guided Practice Section:**
 - **Action:**

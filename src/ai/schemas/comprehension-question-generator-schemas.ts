@@ -1,8 +1,10 @@
 
 import { z } from 'zod';
+import type { LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const ComprehensionQuestionInputSchema = z.object({
   articleContent: z.string().describe('The full text of the article to generate questions from.'),
+  language: z.custom<LanguageOption>().optional().default('English'),
 });
 
 export const ComprehensionQuestionOutputSchema = z.object({

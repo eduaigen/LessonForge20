@@ -298,9 +298,10 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
              {worksheet.miniLesson.diagramDescription && (
                 <div className="p-4 border-l-4 border-primary bg-muted/50 rounded-r-lg my-4">
                     <h4 className="font-semibold">Diagram for Analysis</h4>
-                    <blockquote className="border-0 m-0 p-0 italic">
-                        {worksheet.miniLesson.diagramDescription}
-                    </blockquote>
+                    <p className="italic">{worksheet.miniLesson.diagramDescription}</p>
+                    <div className="my-4 h-64 border-2 border-dashed rounded-lg bg-background flex items-center justify-center text-muted-foreground">
+                        <p>Space for Diagram</p>
+                    </div>
                 </div>
             )}
              <h4>{worksheet.miniLesson.notesTitle}</h4>
@@ -562,7 +563,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => (
     </div>
 );
 
-const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
+const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMaterialOutput, language?: string }) => {
     const { toast } = useToast();
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedQuestions, setGeneratedQuestions] = useState<ComprehensionQuestionOutput | null>(null);
@@ -571,7 +572,10 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
         setIsGenerating(true);
         setGeneratedQuestions(null);
         try {
-            const result = await generateComprehensionQuestions({ articleContent: content.articleContent });
+            const result = await generateComprehensionQuestions({ 
+                articleContent: content.articleContent,
+                language: language as any,
+             });
             setGeneratedQuestions(result);
             toast({ title: "Success", description: "Comprehension questions generated." });
         } catch (error) {
@@ -1004,9 +1008,10 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
 type StyledContentDisplayProps = {
     content: any | null;
     type: string;
+    language?: 'English' | 'Spanish' | 'Bilingual';
 };
 
-export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type, language }: StyledContentDisplayProps) {
     if (!content) return null;
     
     const isSocialStudiesTest = content.partI && content.partII?.sets;
@@ -1029,7 +1034,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Question Cluster':
             return renderQuestionCluster(content);
         case 'Reading Material':
-            return <ReadingMaterialDisplay content={content} />;
+            return <ReadingMaterialDisplay content={content} language={language} />;
         case 'Lab Activity':
         case 'Differentiated Version':
              if (isLabActivity) return <LabActivityDisplay lab={content} />;

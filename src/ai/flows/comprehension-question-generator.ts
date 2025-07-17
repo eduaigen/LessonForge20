@@ -16,7 +16,9 @@ const prompt = ai.definePrompt({
   name: 'comprehensionQuestionGeneratorPrompt',
   input: { schema: ComprehensionQuestionInputSchema },
   output: { schema: ComprehensionQuestionOutputSchema },
-  prompt: `You are an expert educator. Your task is to generate a set of insightful comprehension questions based on the provided article. The questions should assess a student's understanding of the key concepts, main ideas, and important details.
+  prompt: `You are an expert educator. Your task is to generate a set of insightful comprehension questions based on the provided article, in the specified language.
+
+**Language:** {{{language}}}
 
 **Article Content:**
 ---
@@ -25,7 +27,7 @@ const prompt = ai.definePrompt({
 
 **Instructions:**
 1.  Read the article carefully.
-2.  Generate a list of 5 comprehension questions.
+2.  Generate a list of 5 comprehension questions in the specified language.
 3.  The questions should be a mix of question types (e.g., 'what', 'why', 'how').
 4.  Ensure the questions are directly answerable from the text.
 `,
