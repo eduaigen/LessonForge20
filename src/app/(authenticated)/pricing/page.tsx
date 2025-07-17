@@ -6,19 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { createCheckoutSession } from '@/actions/stripe';
-import { Loader2, Sparkles, ArrowRight, CheckCircle, ShoppingCart, Lock } from 'lucide-react';
+import { Loader2, Sparkles, ArrowRight, CheckCircle, ShoppingCart, Lock, CalendarDays } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { allModules, type Module } from '@/lib/modules-data';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
-
-const subjectsWithCourses = [
-    { name: 'Science', icon: allModules.coursesBySubject.science[0].icon, courses: allModules.coursesBySubject.science },
-    { name: 'Mathematics', icon: allModules.coursesBySubject.math[0].icon, courses: allModules.coursesBySubject.math },
-    { name: 'English Language Arts', icon: allModules.coursesBySubject.ela[0].icon, courses: allModules.coursesBySubject.ela },
-    { name: 'Social Studies', icon: allModules.coursesBySubject['social studies'][0].icon, courses: allModules.coursesBySubject['social studies'] },
-    { name: 'ELL / ENL', icon: allModules.coursesBySubject.ell[0].icon, courses: allModules.coursesBySubject.ell },
-];
 
 const CourseSelectionCard = ({ item, isSelected, onSelect }: { item: Module, isSelected: boolean, onSelect: (id: string) => void }) => {
     return (
@@ -62,7 +54,7 @@ export default function ConversationalCheckoutPage() {
 
     const handleSelectAddon = (id: string) => {
         setSelectedAddons(prev =>
-            prev.includes(aId) ? prev.filter(aId => aId !== id) : [...prev, id]
+            prev.includes(id) ? prev.filter(aId => aId !== id) : [...prev, id]
         );
     };
     
@@ -74,6 +66,7 @@ export default function ConversationalCheckoutPage() {
     }, [selectedCourses]);
 
     const addonTools = [
+        ...allModules.premium_tools.map(tool => ({ ...tool, priceId: tool.id })),
         { id: 'price_1PjJrTRpWk9d9d2Fc3d4e5f6', name: 'Test Maker Suite', description: 'Unlock powerful test generators for all your selected subjects. Create Regents-style exams, NGSS-aligned cluster assessments, and scaffolded tests for all learners.', icon: allModules.assessment_tools[0].icon },
         ...(showLabAddon ? [{ id: 'price_1PjJseRpWk9d9d2Fq3r4s5t6', name: 'Science Lab Generator Suite', description: 'Bring science to life! Generate hands-on, 45-minute, NGSS-aligned lab activities for Biology, Chemistry, Physics, and Earth Science. (AP Bio and Health not included).', icon: allModules.assessment_tools.find(t=>t.href?.includes('lab'))!.icon }] : []),
     ];
@@ -85,16 +78,19 @@ export default function ConversationalCheckoutPage() {
 
         const hasTestMaker = selectedAddons.includes('price_1PjJrTRpWk9d9d2Fc3d4e5f6');
         const hasLabGenerator = selectedAddons.includes('price_1PjJseRpWk9d9d2Fq3r4s5t6');
+        const hasPremiumTools = selectedAddons.some(id => allModules.premium_tools.some(t => t.id === id));
         
         let coursePrice = 0;
         if (coursesCount === 1) coursePrice = 14.99;
         if (coursesCount === 2) coursePrice = 14.99 + 9.99;
         if (coursesCount >= 3) coursePrice = 14.99 + 9.99 + (coursesCount - 2) * 5.99;
 
-        let testMakerPrice = hasTestMaker ? (coursesCount > 0 ? 9.99 : 14.99) : 0;
-        let labGeneratorPrice = hasLabGenerator ? (coursesCount > 0 ? 9.99 : 14.99) : 0;
+        const baseItemCount = coursesCount + (hasPremiumTools ? 1 : 0);
+        let testMakerPrice = hasTestMaker ? (baseItemCount > 0 ? 9.99 : 14.99) : 0;
+        let labGeneratorPrice = hasLabGenerator ? (baseItemCount > 0 ? 9.99 : 14.99) : 0;
+        let premiumToolsPrice = hasPremiumTools ? (coursesCount > 0 ? 9.99 : 14.99) : 0;
         
-        const totalPrice = coursePrice + testMakerPrice + labGeneratorPrice;
+        const totalPrice = coursePrice + testMakerPrice + labGeneratorPrice + (hasPremiumTools && coursesCount === 0 ? premiumToolsPrice : 0);
         
         const priceIds: string[] = [];
         if (coursesCount > 0) priceIds.push(...selectedCourses);
@@ -106,16 +102,16 @@ export default function ConversationalCheckoutPage() {
         if(hasLabGenerator) {
             priceIds.push(...allModules.assessment_tools.filter(t => t.href?.includes('lab-generator')).map(t=>t.id));
         }
-        
-        if (priceIds.length > 0) {
-            priceIds.push(...allModules.premium_tools.map(t => t.id));
+        if(hasPremiumTools){
+             priceIds.push(...allModules.premium_tools.map(t => t.id));
         }
-
+        
         return {
             totalPrice,
             showSiteLicensePrompt,
             selectedItems: [
                 ...allModules.courses.filter(c => selectedCourses.includes(c.id)).map(m => m.name),
+                ...(hasPremiumTools ? allModules.premium_tools.map(t => t.name) : []),
                 ...(hasTestMaker ? ['Test Maker Suite'] : []),
                 ...(hasLabGenerator ? ['Science Lab Generator Suite'] : []),
             ],
@@ -160,7 +156,7 @@ export default function ConversationalCheckoutPage() {
                     <Sparkles className="h-8 w-8" />
                 </div>
                 <h1 className="text-4xl font-bold font-headline">Build Your Perfect Toolkit</h1>
-                <p className="text-muted-foreground mt-2">Start by selecting the course lesson generators you teach. Your first is $14.99/mo.</p>
+                <p className="text-muted-foreground mt-2">Start by selecting the course lesson generators you teach. Your first is $14.99/mo. All subscriptions include a 3-day free trial.</p>
             </header>
 
             <div className="space-y-8">
@@ -240,7 +236,7 @@ export default function ConversationalCheckoutPage() {
 
 
             <AnimatePresence>
-            {selectedCourses.length > 0 && (
+            {selectedItems.length > 0 && (
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -259,13 +255,16 @@ export default function ConversationalCheckoutPage() {
                                     Total: ${totalPrice.toFixed(2)}
                                     <span className="text-sm font-normal text-muted-foreground ml-1">/ mo</span>
                                 </p>
+                                <p className="text-xs text-green-600 font-semibold flex items-center gap-1 mt-1">
+                                    <CalendarDays className="h-3 w-3" /> Includes a 3-day free trial
+                                </p>
                                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                                     <Lock className="h-3 w-3" /> Secure checkout powered by Stripe
                                 </p>
                             </div>
                              <Button size="lg" onClick={handleSubscribe} disabled={isLoading || selectedItems.length === 0} className="w-full sm:w-auto">
                                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
-                                {isLoading ? "Redirecting..." : "Proceed to Checkout"}
+                                {isLoading ? "Redirecting..." : "Start Free Trial"}
                             </Button>
                         </CardContent>
                     </Card>
@@ -276,6 +275,3 @@ export default function ConversationalCheckoutPage() {
         </div>
     );
 }
-
-
-
