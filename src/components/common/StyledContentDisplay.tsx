@@ -12,9 +12,9 @@ import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-genera
 import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, FileQuestion } from 'lucide-react';
+import { Loader2, FileQuestion, Wand2, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
@@ -23,6 +23,7 @@ import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studie
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
 import type { GenerateLabActivityOutput } from '@/ai/schemas/lab-activity-schemas';
+import EditSectionDialog from './EditSectionDialog';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -63,14 +64,50 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
   </ol>
 );
 
-const LessonSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <section className="mb-8 border-b pb-6 last:border-b-0">
-        <h2 className="text-2xl font-bold font-headline text-primary mb-4">{title}</h2>
-        <div className="space-y-4 document-view">{children}</div>
-    </section>
-);
+const LessonSectionCard = ({ title, children, sectionName, sectionContent, onSectionUpdate }: { title: string; children: React.ReactNode, sectionName: string; sectionContent: any; onSectionUpdate: (sectionName: string, newContent: any) => void; }) => {
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
+    const handleUpdate = (newContent: any) => {
+        onSectionUpdate(sectionName, newContent);
+    };
+
+    return (
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle className="text-xl font-bold font-headline text-primary">{title}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 document-view">
+                {children}
+            </CardContent>
+             <CardFooter className="bg-muted/50 p-2 flex justify-end gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setIsEditDialogOpen(true)}>
+                    <Wand2 className="mr-2 h-4 w-4" /> Edit with AI
+                </Button>
+            </CardFooter>
+            <EditSectionDialog 
+                open={isEditDialogOpen}
+                onOpenChange={setIsEditDialogOpen}
+                sectionName={sectionName}
+                sectionContent={sectionContent}
+                onSectionUpdate={handleUpdate}
+            />
+        </Card>
+    );
+};
+
+const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: GenerateNVBiologyLessonOutput }) => {
+    const [lessonPlan, setLessonPlan] = useState(initialLessonPlan);
+
+    const handleSectionUpdate = (sectionName: string, newContent: any) => {
+        setLessonPlan(prev => {
+            if (!prev) return null;
+            const updatedPlan = { ...prev, [sectionName]: newContent };
+            return updatedPlan;
+        });
+    };
+    
+    if (!lessonPlan) return null;
+
     const { 
         lessonOverview, 
         doNow, 
@@ -82,6 +119,17 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
         homework, 
         differentiation 
     } = lessonPlan;
+    
+    const sections = [
+        { name: "doNow", title: "A. Do Now (5–8 min)", content: doNow },
+        { name: "miniLesson", title: "B. Mini-Lesson / Direct Instruction (10–15 min)", content: miniLesson },
+        { name: "guidedPractice", title: "C. Guided Practice / Group Activity (15–20 min)", content: guidedPractice },
+        { name: "checkFoUnderstanding", title: "D. Check for Understanding (CFU)", content: checkFoUnderstanding },
+        { name: "independentPractice", title: "E. Independent Practice / Performance Task", content: independentPractice },
+        { name: "closure", title: "F. Closure / Exit Ticket", content: closure },
+        { name: "homework", title: "G. Homework Activity", content: homework },
+        { name: "differentiation", title: "H. Differentiation & Support", content: differentiation }
+    ];
 
     return (
         <div className="p-4">
@@ -91,76 +139,47 @@ const renderLessonPlan = (lessonPlan: GenerateNVBiologyLessonOutput) => {
                 <p className="text-lg text-muted-foreground"><strong>Topic:</strong> {lessonOverview.topic}</p>
             </header>
 
-            <LessonSection title="I. Lesson Overview">
+            <LessonSectionCard title="I. Lesson Overview" sectionName="lessonOverview" sectionContent={lessonOverview} onSectionUpdate={handleSectionUpdate}>
                 <div><strong>Summary:</strong> <p>{lessonOverview.lessonSummary}</p></div>
                 <div><strong>Standards:</strong> <p>{lessonOverview.standards}</p></div>
                 <div><strong>Aim/Essential Question:</strong> <p>{lessonOverview.aim}</p></div>
                 <div><strong>Objectives:</strong> <ul className="list-disc pl-5">{lessonOverview.objectives.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
                 <div><strong>Key Vocabulary:</strong> <ul className="list-disc pl-5">{lessonOverview.vocabulary.map((v, i) => <li key={i}><strong>{v.term}:</strong> {v.definition}</li>)}</ul></div>
                 <div><strong>Materials Needed:</strong> <ul className="list-disc pl-5">{lessonOverview.materials.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
-            </LessonSection>
+            </LessonSectionCard>
 
-            <LessonSection title="A. Do Now (5–8 min)">
-                <div><h4>Question</h4><p>{doNow.question}</p></div>
-                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{doNow.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{doNow.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-            </LessonSection>
-
-            <LessonSection title="B. Mini-Lesson / Direct Instruction (10–15 min)">
-                <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{miniLesson.readingPassage}</Markdown></div>
-                {miniLesson.diagram && 
-                 <div className="mt-4 p-4 border rounded-md">
-                    <h4 className="font-semibold text-foreground mb-2">Diagram/Model Description</h4>
-                    <p className="italic text-muted-foreground">{miniLesson.diagram}</p>
-                 </div>
-                }
-                <div><h4>Concept-Check Questions</h4>{leveledQuestions(miniLesson.conceptCheckQuestions)}</div>
-                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{miniLesson.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{miniLesson.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-            </LessonSection>
-
-            <LessonSection title="C. Guided Practice / Group Activity (15–20 min)">
-                {typeof guidedPractice.activityContent === 'string' 
-                 ? <div><h4>Activity Description</h4><p>{guidedPractice.activityContent}</p></div>
-                 : renderTableFromObject(guidedPractice.activityContent as any)
-                }
-                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{guidedPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{guidedPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-            </LessonSection>
-
-             <LessonSection title="D. Check for Understanding (CFU)">
-                <h4>CFU Questions</h4>
-                {leveledQuestions([...checkFoUnderstanding.multipleChoice, checkFoUnderstanding.shortResponse])}
-                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{checkFoUnderstanding.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{checkFoUnderstanding.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-            </LessonSection>
-
-            <LessonSection title="E. Independent Practice / Performance Task">
-                <div><h4>Task Prompt</h4><p>{independentPractice.taskPrompt}</p></div>
-                {renderTableFromObject(independentPractice.taskData)}
-                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{independentPractice.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{independentPractice.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-            </LessonSection>
-
-            <LessonSection title="F. Closure / Exit Ticket">
-                <div><h4>Exit Ticket Question</h4><p>{closure.exitTicketQuestion}</p></div>
-                <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{closure.teacherActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{closure.expectedStudentOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-            </LessonSection>
-
-            <LessonSection title="G. Homework Activity">
-                <div><h4>Activity</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{homework.activity}</Markdown></div>
-            </LessonSection>
-
-            <LessonSection title="H. Differentiation & Support">
-                <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{differentiation.supportActions.map((a, i) => <li key={i}>{a}</li>)}</ul></div>
-                <div><h4>Expected Student Outputs with Support</h4><ul className="list-disc pl-5">{differentiation.supportOutputs.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
-                 <div className="mt-4 p-4 border rounded-md">
-                    <h4 className="font-semibold text-foreground mb-2">Scaffolded Materials</h4>
-                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{differentiation.scaffoldedMaterials}</Markdown>
-                 </div>
-                <div><h4>Extension Activity</h4><p>{differentiation.extensionActivity}</p></div>
-            </LessonSection>
+            {sections.map(section => {
+                 if (!section.content) return null;
+                 const sectionContent = section.content as any;
+                 return (
+                    <LessonSectionCard key={section.name} title={section.title} sectionName={section.name} sectionContent={sectionContent} onSectionUpdate={handleSectionUpdate}>
+                       {section.name === 'doNow' && <div><h4>Question</h4><p>{sectionContent.question}</p></div>}
+                       {section.name === 'miniLesson' && <>
+                           <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.readingPassage}</Markdown></div>
+                           {sectionContent.diagram && <div className="mt-4 p-4 border rounded-md"><h4 className="font-semibold text-foreground mb-2">Diagram/Model Description</h4><p className="italic text-muted-foreground">{sectionContent.diagram}</p></div>}
+                           <div><h4>Concept-Check Questions</h4>{leveledQuestions(sectionContent.conceptCheckQuestions)}</div>
+                       </>}
+                       {section.name === 'guidedPractice' && (typeof sectionContent.activityContent === 'string' 
+                           ? <div><h4>Activity Description</h4><p>{sectionContent.activityContent}</p></div>
+                           : renderTableFromObject(sectionContent.activityContent as any)
+                       )}
+                       {section.name === 'checkFoUnderstanding' && leveledQuestions([...sectionContent.multipleChoice, sectionContent.shortResponse])}
+                       {section.name === 'independentPractice' && <>
+                           <div><h4>Task Prompt</h4><p>{sectionContent.taskPrompt}</p></div>
+                           {renderTableFromObject(sectionContent.taskData)}
+                       </>}
+                       {section.name === 'closure' && <div><h4>Exit Ticket Question</h4><p>{sectionContent.exitTicketQuestion}</p></div>}
+                       {section.name === 'homework' && <div><h4>Activity</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.activity}</Markdown></div>}
+                       {section.name === 'differentiation' && <>
+                           <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{sectionContent.supportActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>
+                           <div className="mt-4 p-4 border rounded-md"><h4 className="font-semibold text-foreground mb-2">Scaffolded Materials</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.scaffoldedMaterials}</Markdown></div>
+                           <div><h4>Extension Activity</h4><p>{sectionContent.extensionActivity}</p></div>
+                       </>}
+                       {sectionContent.teacherActions && <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{sectionContent.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>}
+                       {sectionContent.expectedStudentOutputs && <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{sectionContent.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>}
+                   </LessonSectionCard>
+                )
+            })}
         </div>
     );
 };
@@ -893,59 +912,32 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
             <p className="text-sm text-muted-foreground mt-2"><strong>Time Required:</strong> {lab.timeBreakdown}</p>
         </header>
 
-        <LessonSection title="Introduction: Phenomenon">
-            <div className="prose prose-lg max-w-none">
-                <Markdown>{lab.phenomenonReading}</Markdown>
-            </div>
-        </LessonSection>
+        <Card className="mb-6">
+            <CardHeader><CardTitle className="text-xl font-bold font-headline text-primary">Introduction: Phenomenon</CardTitle></CardHeader>
+            <CardContent><div className="prose prose-lg max-w-none"><Markdown>{lab.phenomenonReading}</Markdown></div></CardContent>
+        </Card>
 
-        <LessonSection title="Pre-Lab Questions">
-            <ol className="list-decimal pl-5 space-y-2">{lab.preLabQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol>
-        </LessonSection>
+        <Card className="mb-6">
+            <CardHeader><CardTitle className="text-xl font-bold font-headline text-primary">Pre-Lab Questions</CardTitle></CardHeader>
+            <CardContent><ol className="list-decimal pl-5 space-y-2">{lab.preLabQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></CardContent>
+        </Card>
+        
+        <Card className="mb-6">
+            <CardHeader><CardTitle className="text-xl font-bold font-headline text-primary">Student Investigation Design</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+                <div><h4 className="font-semibold">1. Testable Question</h4><p className="italic">{lab.testableQuestionPrompt}</p></div>
+                <div><h4 className="font-semibold">2. Hypothesis</h4><p className="italic">{lab.hypothesisPrompt}</p></div>
+                <div><h4 className="font-semibold">3. Variables</h4><p className="italic"><strong>Independent:</strong> {lab.variablesPrompt.independent}</p><p className="italic"><strong>Dependent:</strong> {lab.variablesPrompt.dependent}</p><p className="italic"><strong>Controlled:</strong> {lab.variablesPrompt.controlled}</p></div>
+            </CardContent>
+        </Card>
 
-        <LessonSection title="Student Investigation Design">
-            <div className="space-y-4">
-                <div>
-                    <h4 className="font-semibold">1. Testable Question</h4>
-                    <p className="italic">{lab.testableQuestionPrompt}</p>
-                </div>
-                <div>
-                    <h4 className="font-semibold">2. Hypothesis</h4>
-                    <p className="italic">{lab.hypothesisPrompt}</p>
-                </div>
-                <div>
-                    <h4 className="font-semibold">3. Variables</h4>
-                    <p className="italic"><strong>Independent Variable:</strong> {lab.variablesPrompt.independent}</p>
-                    <p className="italic"><strong>Dependent Variable:</strong> {lab.variablesPrompt.dependent}</p>
-                    <p className="italic"><strong>Controlled Variables:</strong> {lab.variablesPrompt.controlled}</p>
-                </div>
-            </div>
-        </LessonSection>
-
-        <LessonSection title="Materials and Safety">
-            <div><strong>Materials & Equipment:</strong> <ul className="list-disc pl-5">{lab.materialsAndEquipment.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
-            <div><strong className="text-destructive">Safety Precautions:</strong> <ul className="list-disc pl-5 text-destructive/80">{lab.safetyPrecautions.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-        </LessonSection>
-
-        <LessonSection title="Procedure">
-            <p className="italic text-muted-foreground">{lab.studentProcedureDesign}</p>
-            <p>Students should record their step-by-step procedure below:</p>
-            <div className="my-2 h-48 border rounded-md p-2"></div>
-        </LessonSection>
-
-        <LessonSection title="Data Collection & Analysis">
-            <p>{lab.dataCollection.description}</p>
-            {renderTableFromObject(lab.dataCollection.dataTable)}
-        </LessonSection>
-
-         <LessonSection title="Conclusion">
-            <p className="italic text-muted-foreground">{lab.conclusionPrompt}</p>
-            <div className="my-2 h-32 border rounded-md p-2"></div>
-        </LessonSection>
-
-        <LessonSection title="Discussion">
-            <div><strong>Discussion Questions:</strong> <ol className="list-decimal pl-5 space-y-2">{lab.discussionQuestions.map((q, i) => <li key={i}>{q}</li>)}</ol></div>
-        </LessonSection>
+        <Card className="mb-6">
+            <CardHeader><CardTitle className="text-xl font-bold font-headline text-primary">Materials and Safety</CardTitle></CardHeader>
+            <CardContent>
+                <div><strong>Materials & Equipment:</strong> <ul className="list-disc pl-5">{lab.materialsAndEquipment.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
+                <div><strong className="text-destructive">Safety Precautions:</strong> <ul className="list-disc pl-5 text-destructive/80">{lab.safetyPrecautions.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
+            </CardContent>
+        </Card>
     </div>
 );
 
@@ -965,7 +957,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
 
     switch (type) {
         case 'Lesson Plan':
-            return renderLessonPlan(content);
+            return <LessonPlanDisplay lessonPlan={content} />;
         case 'Worksheet':
             if (!content.aim) return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Worksheet content is missing the 'aim' property.</div>;
             return renderWorksheet(content);

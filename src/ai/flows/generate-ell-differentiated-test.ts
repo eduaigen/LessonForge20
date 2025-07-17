@@ -23,7 +23,7 @@ Your task is to revise the provided ELL test to make it even more accessible usi
 
 **Instructions for Differentiation:**
 1.  **Simplify Language Further:** Review all passages, questions, and prompts. Further simplify any complex sentences. Define key Tier 2 and Tier 3 vocabulary in parentheses directly within the text, perhaps adding a simple synonym (e.g., "The **enormous** (very big) whale...").
-2.  **Add Visual Cues:** In the `visualAidDescription` for the reading passage, add a description of a second visual aid that would help comprehension.
+2.  **Add Visual Cues:** In the 'visualAidDescription' for the reading passage, add a description of a second visual aid that would help comprehension.
 3.  **Enhance Scaffolds:**
     *   **Part 1 & 2 (Multiple Choice):** For two questions in each part, add a "Hint" field explaining a key concept or directing students to a specific part of the text.
     *   **Part 3 (Writing):** Add two more sentence starters to the existing list to provide more support for structuring the written response.
