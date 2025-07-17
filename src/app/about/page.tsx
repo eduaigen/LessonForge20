@@ -63,12 +63,13 @@ export default function AboutPage() {
           </ul>
         </AboutSection>
         
-        <AboutSection title="Accessibility Commitment" icon={<Accessibility className="h-6 w-6" />}>
-          <p>
-            Education should be accessible to everyone. We are committed to making our platform usable by as many people as possible, regardless of technology or ability. Our Accessibility Widget provides tools to adjust font sizes, contrast, and other display settings to meet your needs.
+        <AboutSection title="Accessibility & Equity Commitment" icon={<Accessibility className="h-6 w-6" />}>
+          <h4>WCAG 2.1 AA & CR-SE Alignment</h4>
+           <p>
+             Education should be accessible and equitable for everyone. We are committed to making our platform usable by as many people as possible, regardless of technology or ability, and strive to meet WCAG 2.1 Level AA standards. Our Accessibility Widget provides tools to adjust font sizes, contrast, and other display settings to meet your needs.
           </p>
           <p>
-            We are continuously working to improve the accessibility of our site. If you encounter any issues or have suggestions, please contact us.
+            Furthermore, we are dedicated to the principles of Culturally Responsive-Sustaining Education (CR-SE). Our AI prompts are designed to be culturally neutral, and we provide multilingual learner support through our translation features. We are continuously working to improve the accessibility and equity of our site. If you encounter any issues or have suggestions, please contact us.
           </p>
         </AboutSection>
 
