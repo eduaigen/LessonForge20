@@ -35,7 +35,7 @@ const prompt = ai.definePrompt({
     *   **Multiple Choice:** Exactly 3 questions.
     *   **Short Response:** Exactly 2 questions.
     *   **CER (Claim, Evidence, Reasoning):** Exactly 1 question.
-4.  **DOK Alignment:** Ensure all questions align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}).
+4.  **DOK Alignment:** You MUST ensure all questions strictly align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}). This is a critical requirement.
 5.  **Answer Key:** Create a detailed answer key for every question in the cluster.
 
 Your final output MUST be a single, complete JSON object that strictly follows the output schema. The root 'clusters' array must have a length of {{{clusterCount}}}.
