@@ -45,7 +45,7 @@ export function LanguageSelectionDialog({
             Choose Language for "{toolName}"
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Select the language for the generated content. "Bilingual" will provide both English and Spanish in the same document.
+            Select the language for the generated content. "Bilingual" will produce two identical documents: one in English and one in Spanish.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col sm:flex-col sm:space-x-0 gap-2">

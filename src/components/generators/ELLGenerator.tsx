@@ -77,6 +77,7 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   
@@ -99,6 +100,12 @@ const GeneratorContent = () => {
   const lessonPlan = useMemo(() => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as GenerateELLLessonOutput | null;
   }, [lessonPackage]);
+
+  useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
 
   const units = useMemo(() => Object.keys(ellCurriculum.units), []);
 
@@ -158,7 +165,9 @@ const GeneratorContent = () => {
         type: 'Lesson Plan',
       };
 
-      setLessonPackage([newLessonPlan]);
+      const newPackage = [newLessonPlan];
+      setLessonPackage(newPackage);
+
       setIsToolsInfoDialogOpen(true);
        form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
        setCurrentlySelectedLesson(null);
@@ -198,27 +207,25 @@ const GeneratorContent = () => {
         let contentType: GeneratedContent['type'] = toolName;
         let newContent: GeneratedContent | null = null;
         let resultTitle = title;
+        const input = { lessonPlanJson: JSON.stringify(lessonPlan), language: 'English' as const };
 
         if (toolName === 'Worksheet') {
-            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateWorksheet(input);
             resultTitle = 'Student Worksheet';
         } else if (toolName === 'Reading Material') {
-            result = await generateReadingMaterial(lessonPlan);
+            result = await generateReadingMaterial(input);
             resultTitle = result.title;
         } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
+            result = await generateTeacherCoach(input);
             resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`;
         } else if (toolName === 'Slideshow Outline') {
-            result = await generateSlideshowOutline(lessonPlan);
+            result = await generateSlideshowOutline(input);
             resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`;
         } else if (toolName === 'Question Cluster') {
-            result = await generateQuestionCluster({
-                lessonTopic: lessonPlan.lessonOverview.topic,
-                lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
-            });
+            result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') });
             resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`;
         } else if (toolName === 'Study Sheet') {
-            result = await generateStudySheet(lessonPlan);
+            result = await generateStudySheet(input);
             resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`;
         }
 
@@ -226,8 +233,8 @@ const GeneratorContent = () => {
 
         if (newContent) {
            setLessonPackage(prev => {
-                if (!prev) return null;
-                return [...prev, newContent!];
+              const newPackage = prev ? [...prev, newContent!] : [newContent!];
+              return newPackage;
            });
         }
 

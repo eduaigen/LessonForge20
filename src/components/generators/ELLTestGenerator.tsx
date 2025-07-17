@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Loader2, Sparkles, Wand2, Languages, FlaskConical } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Languages } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ellCurriculum } from '@/lib/ell-curriculum';
 import { generateELLTest } from '@/ai/flows/generate-ell-test';
@@ -24,6 +24,7 @@ import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { generateDifferentiatedELLTest } from '@/ai/flows/generate-ell-differentiated-test';
 import { generateEnhancedELLTest } from '@/ai/flows/generate-ell-enhanced-test';
 import { generateELLStudySheet } from '@/ai/flows/generate-ell-study-sheet';
+import { LanguageSelectionDialog, type LanguageOption } from '../common/LanguageSelectionDialog';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -64,11 +65,14 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
+  const [isLanguageDialogOpen, setIsLanguageDialogOpen] = useState(false);
+  const [selectedTool, setSelectedTool] = useState<ToolName | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -76,6 +80,12 @@ const GeneratorContent = () => {
   });
 
   const units = useMemo(() => Object.keys(ellCurriculum.units), []);
+
+  useEffect(() => {
+    if (testPackage) {
+      addToHistory(testPackage);
+    }
+  }, [testPackage, addToHistory]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -89,62 +99,73 @@ const GeneratorContent = () => {
     setIsToolsInfoDialogOpen(open);
     if (!open) setIsHighlightingTools(true);
   }
-
-  async function onSubmit(values: FormData) {
-    setIsLoading(true);
-    setTestPackage(null);
-    try {
-      const result = await generateELLTest(values);
-      const testContent: TestGeneratedContent = { id: `test-${Date.now()}`, title: result.testTitle, content: result, type: 'Test' };
-      const answerKeyContent: TestGeneratedContent = { id: `answer-key-${Date.now()}`, title: `Answer Key: ${result.testTitle}`, content: result, type: 'Answer Key' };
-      setTestPackage([testContent, answerKeyContent]);
-      setIsToolsInfoDialogOpen(true);
-    } catch (error) {
-      console.error('Test generation failed:', error);
-      toast({ title: 'Generation Failed', description: 'An error occurred while generating the test. Please try again.', variant: 'destructive' });
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  const handleToolClick = async (toolName: 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version') => {
+  
+  const executeToolGeneration = async (language: LanguageOption) => {
     const originalTestContent = testPackage?.find(item => item.type === 'Test');
-    if (!originalTestContent) {
-        toast({ title: "No Test Found", description: "Please generate a test first.", variant: "destructive" });
-        return;
+    if (!originalTestContent || !selectedTool) {
+      toast({ title: 'No Test Found', description: 'Please generate a test first.', variant: 'destructive' });
+      return;
     }
-    if (testPackage?.some(item => item.type === toolName)) {
-        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
-        return;
+    if (testPackage?.some(item => item.type === selectedTool)) {
+      toast({ title: 'Already Generated', description: `A ${selectedTool} has already been generated.`, variant: 'default' });
+      return;
     }
 
-    setIsToolLoading(toolName);
+    setIsToolLoading(selectedTool);
     try {
-        let result: any;
-        let newContent: TestGeneratedContent | null = null;
-        switch (toolName) {
-            case 'Study Sheet':
-                result = await generateELLStudySheet({ originalTest: originalTestContent.content });
-                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
-                break;
-            case 'Differentiated Version':
-                result = await generateDifferentiatedELLTest({ originalTest: originalTestContent.content });
-                newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
-                break;
-            case 'Enhanced Version':
-                result = await generateEnhancedELLTest({ originalTest: originalTestContent.content });
-                newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
-                break;
-        }
-        if (newContent) {
-            setTestPackage(prev => [...(prev || []), newContent!]);
-        }
+      let result: any;
+      let newContent: TestGeneratedContent | null = null;
+      const input = { originalTest: originalTestContent.content, language };
+
+      switch (selectedTool) {
+        case 'Study Sheet':
+          result = await generateELLStudySheet({ originalTest: originalTestContent.content });
+          newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
+          break;
+        case 'Differentiated Version':
+          result = await generateDifferentiatedELLTest({ originalTest: originalTestContent.content });
+          newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
+          break;
+        case 'Enhanced Version':
+          result = await generateEnhancedELLTest({ originalTest: originalTestContent.content });
+          newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
+          break;
+      }
+      if (newContent) {
+        setTestPackage(prev => [...(prev || []), newContent!]);
+      }
     } catch (error) {
-         console.error(`${toolName} generation failed:`, error);
-        toast({ title: "Generation Failed", description: `An error occurred while generating the ${toolName}.`, variant: "destructive" });
+      console.error(`${selectedTool} generation failed:`, error);
+      toast({ title: 'Generation Failed', description: `An error occurred while generating the ${selectedTool}.`, variant: 'destructive' });
     } finally {
-        setIsToolLoading(null);
+      setIsToolLoading(null);
+      setSelectedTool(null);
     }
+  };
+
+  const handleToolClick = (toolName: ToolName) => {
+      // For ELL, translation is core, so we always ask
+      setSelectedTool(toolName);
+      setIsLanguageDialogOpen(true);
+  };
+  
+  const handleTestGeneration = async (language: LanguageOption) => {
+      setIsLoading(true);
+      setTestPackage(null);
+      try {
+        const values = form.getValues();
+        const result = await generateELLTest({ lessons: values.lessons, language });
+        const testContent: TestGeneratedContent = { id: `test-${Date.now()}`, title: result.testTitle, content: result, type: 'Test' };
+        const answerKeyContent: TestGeneratedContent = { id: `answer-key-${Date.now()}`, title: `Answer Key: ${result.testTitle}`, content: result, type: 'Answer Key' };
+        const newPackage = [testContent, answerKeyContent];
+        setTestPackage(newPackage);
+        setIsToolsInfoDialogOpen(true);
+      } catch (error) {
+        console.error('Test generation failed:', error);
+        toast({ title: 'Generation Failed', description: 'An error occurred while generating the test. Please try again.', variant: 'destructive' });
+      } finally {
+        setIsLoading(false);
+      }
   };
 
   return (
@@ -167,10 +188,17 @@ const GeneratorContent = () => {
         </AlertDialogContent>
       </AlertDialog>
 
+      <LanguageSelectionDialog 
+        open={isLanguageDialogOpen}
+        onOpenChange={setIsLanguageDialogOpen}
+        onSelectLanguage={selectedTool ? executeToolGeneration : handleTestGeneration}
+        toolName={selectedTool || 'Test'}
+      />
+
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-12 relative">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(() => setIsLanguageDialogOpen(true))}>
               <Card className="w-full shadow-lg mb-8">
                 <CardHeader>
                   <div className="flex items-center gap-4">

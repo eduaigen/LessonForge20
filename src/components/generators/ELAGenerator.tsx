@@ -97,6 +97,7 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
   
@@ -115,6 +116,12 @@ const GeneratorContent = () => {
   const lessonPlan = useMemo(() => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as any | null;
   }, [lessonPackage]);
+
+  useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
 
   const currentCurriculum = curriculums[selectedGrade];
   const units = useMemo(() => Object.keys(currentCurriculum.units), [currentCurriculum]);
@@ -177,8 +184,10 @@ const GeneratorContent = () => {
         content: result,
         type: 'Lesson Plan',
       };
-
-      setLessonPackage([newLessonPlan]);
+      
+      const newPackage = [newLessonPlan];
+      setLessonPackage(newPackage);
+      
       setIsToolsInfoDialogOpen(true);
       form.reset({ unit: '', topic: '', lesson: '', additionalInfo: values.additionalInfo });
       setCurrentlySelectedLesson(null);
@@ -210,18 +219,22 @@ const GeneratorContent = () => {
         let result: any;
         let resultTitle = toolName;
         const lessonPlanJson = JSON.stringify(lessonPlan);
+        const input = { lessonPlanJson, language: 'English' as const }; // ELA is always English
 
         switch (toolName) {
-            case 'Worksheet': result = await generateWorksheet({ lessonPlanJson }); resultTitle = 'Student Worksheet'; break;
-            case 'Reading Material': result = await generateReadingMaterial(lessonPlan); resultTitle = result.title; break;
-            case 'Teacher Coach': result = await generateTeacherCoach({ lessonPlanJson }); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
-            case 'Slideshow Outline': result = await generateSlideshowOutline(lessonPlan); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
-            case 'Question Cluster': result = await generateQuestionCluster({ lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
-            case 'Study Sheet': result = await generateStudySheet(lessonPlan); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
+            case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
+            case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Question Cluster': result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
+            case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
         }
 
         const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
-        setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
+        setLessonPackage(prev => {
+          const newPackage = prev ? [...prev, newContent] : [newContent];
+          return newPackage;
+        });
 
     } catch (error) {
         console.error(`${toolName} generation failed:`, error);

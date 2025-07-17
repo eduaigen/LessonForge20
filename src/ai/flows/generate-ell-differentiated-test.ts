@@ -17,9 +17,9 @@ const prompt = ai.definePrompt({
 Your task is to revise the provided ELL test to make it even more accessible using research-based strategies.
 
 **Original Test:**
-\`\`\`json
+'''json
 {{{originalTest}}}
-\`\`\`
+'''
 
 **Instructions for Differentiation:**
 1.  **Simplify Language Further:** Review all passages, questions, and prompts. Further simplify any complex sentences. Define key Tier 2 and Tier 3 vocabulary in parentheses directly within the text, perhaps adding a simple synonym (e.g., "The **enormous** (very big) whale...").
