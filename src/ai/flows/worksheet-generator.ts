@@ -10,6 +10,32 @@ import {
   type GenerateWorksheetInput,
   type GenerateWorksheetOutput,
 } from '../schemas/worksheet-generator-schemas';
+import { JSON5_INVALID_CHAR_REGEX } from 'html-to-text/lib/constants';
+
+async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const result = await fn();
+      // Attempt to parse to see if it's valid JSON, if not, it will throw and retry
+      if (typeof result === 'string') {
+        JSON.parse(result);
+      }
+      return result;
+    } catch (err: any) {
+       if (err instanceof SyntaxError || err.message?.includes("503") || err.message?.includes("model is overloaded")) {
+        if (i === retries - 1) {
+          console.error("Final attempt failed:", err);
+          throw new Error("The AI model failed to generate a valid worksheet after multiple attempts. Please try again.");
+        }
+        await new Promise(res => setTimeout(res, delay * (i + 1)));
+      } else {
+        throw err; // Non-retryable error
+      }
+    }
+  }
+  throw new Error("Operation failed after multiple retries.");
+}
+
 
 const prompt = ai.definePrompt({
   name: 'worksheetGeneratorPrompt',
@@ -22,9 +48,10 @@ const prompt = ai.definePrompt({
 2.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
 3.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
 4.  **EXCLUDE TEACHER ACTIONS**: Do NOT include any content from fields named 'teacherActions' or 'expectedStudentOutputs'. The worksheet is for students only.
+5.  **Valid JSON Output**: Your final output must be a single, valid JSON object that strictly adheres to the 'GenerateWorksheetOutputSchema'.
 
 ---
-**WORKSHEET GENERATION INSTRUCTIONS**
+**WORKSHEET GENERATION INSTRUCTIONS (PART-BY-PART)**
 ---
 
 1.  **Header Section:**
@@ -60,10 +87,11 @@ const prompt = ai.definePrompt({
     *   Action:
         - Set the 'title' field to "Mini Lesson Notes (T-Chart)".
         - If 'miniLesson.readingPassage' exists, copy the ENTIRE passage into 'miniLesson.readingPassage'.
+        - If 'miniLesson.diagram' exists, set the 'diagramDescription' field to "Use the space below to draw and label the diagram or model from the lesson."
         - If 'miniLesson.conceptCheckQuestions' exists, copy ALL questions into 'miniLesson.conceptCheckQuestions'.
         - Populate 'miniLesson.notesTitle' with "Key Ideas or Terms | Notes, Definitions, or Examples".
         - Populate 'miniLesson.sentenceStarters' with: "“This reminds me of…”, “An example of this is…”, “This is important because…”".
-        - If 'miniLesson.diagram' exists, set the 'diagramDescription' field to "Use the space below to draw and label the diagram or model from the lesson."
+        
 
 7.  **Guided Practice Section:**
     *   Action:
@@ -90,8 +118,17 @@ const prompt = ai.definePrompt({
 11. **Homework Section:**
     *   Action:
         - Set 'title' to "Homework Assignment".
-        - Copy the 'homework.activity' content, which may include passages or questions, exactly into 'homework.activity'.`,
+        - Copy the 'homework.activity' content, which may include passages or questions, exactly into 'homework.activity'.
+---
+**Final Instruction**: Your response MUST be a single, valid JSON object that strictly follows the 'GenerateWorksheetOutputSchema'. Do not include any text, explanations, or markdown formatting outside of the JSON object.
+---
+**Lesson Plan Data:**
+\`\`\`json
+{{{lessonPlanJson}}}
+\`\`\`
+`,
 });
+
 
 const worksheetGeneratorFlow = ai.defineFlow(
   {
@@ -108,6 +145,7 @@ const worksheetGeneratorFlow = ai.defineFlow(
   }
 );
 
+
 export async function generateWorksheet(input: GenerateWorksheetInput): Promise<GenerateWorksheetOutput> {
-  return await worksheetGeneratorFlow(input);
+  return await withRetry(() => worksheetGeneratorFlow(input));
 }
