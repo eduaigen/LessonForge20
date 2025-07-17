@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
-import { Loader2, Sparkles, Wand2, FlaskConical, Orbit } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Orbit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { earthScienceCurriculum } from '@/lib/earth-science-curriculum';
 import { generateNVEarthScienceTest } from '@/ai/flows/generate-nv-earth-science-test';
@@ -77,7 +77,7 @@ const GeneratorContent = () => {
 
   const units = useMemo(() => Object.keys(earthScienceCurriculum.units), []);
 
-   useEffect(() => {
+  useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     if (isHighlightingTools) {
       timeoutId = setTimeout(() => {
@@ -172,23 +172,33 @@ const GeneratorContent = () => {
     }
   };
 
+
   return (
     <>
       <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2"><Wand2 className="h-6 w-6 text-primary" />Test Generated!</AlertDialogTitle>
-            <AlertDialogDescription>Your test and answer key are ready. Use the AI tools on the right sidebar to create aligned materials.</AlertDialogDescription>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Wand2 className="h-6 w-6 text-primary" />
+              Test Generated! What's Next?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+               Your test and answer key are ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+            </AlertDialogDescription>
             <div className="text-sm text-muted-foreground pt-4 text-left">
-              <span className="font-semibold text-foreground">Available Tools:</span>
+              <span className="font-semibold text-foreground">Here are the available tools:</span>
               <ul className="list-disc pl-5 mt-2 space-y-2">
-                  <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                  <li><strong>Differentiated Version:</strong> Generates a version with simplified language.</li>
-                  <li><strong>Enhanced Version:</strong> Creates a more rigorous version for advanced students.</li>
+                  <li><strong>Study Sheet:</strong> Creates a concise study guide based on the test content.</li>
+                  <li><strong>Differentiated Version:</strong> Generates a version of the test with simplified language and scaffolds.</li>
+                  <li><strong>Enhanced Version:</strong> Creates a more rigorous version of the test for advanced students.</li>
               </ul>
             </div>
           </AlertDialogHeader>
-          <AlertDialogFooter><AlertDialogAction onClick={() => handleDialogClose(false)}>Got it, thanks!</AlertDialogAction></AlertDialogFooter>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => handleDialogClose(false)}>
+              Got it, thanks!
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
@@ -290,7 +300,7 @@ const GeneratorContent = () => {
         </form>
       </Form>
 
-      {isLoading && <GeneratingAnimation />}
+      {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
       
       {testPackage?.map(item => (
         <CollapsibleSection key={item.id} title={item.title} contentItem={{...item, content: item.content as any}}>

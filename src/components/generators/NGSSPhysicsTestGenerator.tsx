@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
-import { Loader2, Sparkles, Wand2, FlaskConical, Magnet } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Magnet } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { physicsCurriculum } from '@/lib/physics-curriculum';
 import { generateNGSSPhysicsTest } from '@/ai/flows/generate-ngss-physics-test';
@@ -23,6 +23,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { generateDifferentiatedTest } from '@/ai/flows/generate-test-differentiated';
 import { generateEnhancedTest } from '@/ai/flows/generate-test-enhanced';
 import { generateTestStudySheet } from '@/ai/flows/generate-test-study-sheet';
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import type { TestGeneratedContent } from './NVBiologyTestGenerator';
 
 const formSchema = z.object({
   units: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -33,14 +35,6 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-export type TestGeneratedContent = {
-  id: string;
-  title: string;
-  content: any;
-  type: 'Test' | 'Answer Key' | 'Study Sheet' | 'Differentiated Version' | 'Enhanced Version';
-  sourceId?: string;
-};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -69,6 +63,8 @@ const GeneratorContent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [testPackage, setTestPackage] = useState<TestGeneratedContent[] | null>(null);
+  const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
+  const [isHighlightingTools, setIsHighlightingTools] = useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -80,6 +76,23 @@ const GeneratorContent = () => {
   });
 
   const units = useMemo(() => Object.keys(physicsCurriculum.units), []);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (isHighlightingTools) {
+      timeoutId = setTimeout(() => {
+        setIsHighlightingTools(false);
+      }, 10000); // Highlight for 10 seconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isHighlightingTools]);
+
+  const handleDialogClose = (open: boolean) => {
+    setIsToolsInfoDialogOpen(open);
+    if (!open) {
+        setIsHighlightingTools(true);
+    }
+  }
 
   async function onSubmit(values: FormData) {
     setIsLoading(true);
@@ -102,6 +115,7 @@ const GeneratorContent = () => {
       }
 
       setTestPackage([testContent, answerKeyContent]);
+      setIsToolsInfoDialogOpen(true);
       
     } catch (error) {
       console.error('Test generation failed:', error);
@@ -158,8 +172,36 @@ const GeneratorContent = () => {
     }
   };
 
+
   return (
     <>
+      <AlertDialog open={isToolsInfoDialogOpen} onOpenChange={handleDialogClose}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Wand2 className="h-6 w-6 text-primary" />
+              Test Generated! What's Next?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+               Your test and answer key are ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+            </AlertDialogDescription>
+            <div className="text-sm text-muted-foreground pt-4 text-left">
+              <span className="font-semibold text-foreground">Here are the available tools:</span>
+              <ul className="list-disc pl-5 mt-2 space-y-2">
+                  <li><strong>Study Sheet:</strong> Creates a concise study guide based on the test content.</li>
+                  <li><strong>Differentiated Version:</strong> Generates a version of the test with simplified language and scaffolds.</li>
+                  <li><strong>Enhanced Version:</strong> Creates a more rigorous version of the test for advanced students.</li>
+              </ul>
+            </div>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => handleDialogClose(false)}>
+              Got it, thanks!
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
       <div className="md:col-span-12 relative">
       <Form {...form}>
@@ -258,7 +300,7 @@ const GeneratorContent = () => {
         </form>
       </Form>
 
-      {isLoading && <GeneratingAnimation />}
+      {isLoading && <div className="mt-8"><GeneratingAnimation /></div>}
       
       {testPackage?.map(item => (
         <CollapsibleSection key={item.id} title={item.title} contentItem={{...item, content: item.content as any}}>
@@ -272,7 +314,7 @@ const GeneratorContent = () => {
         </CollapsibleSection>
       )}
 
-      {testPackage && <RightSidebar onToolClick={(toolName) => handleToolClick(toolName as any)} isGenerating={!!isToolLoading} isHighlighting={false} toolset="test" />}
+      {testPackage && <RightSidebar onToolClick={(toolName) => handleToolClick(toolName as any)} isGenerating={!!isToolLoading} isHighlighting={isHighlightingTools} toolset="test" />}
 
     </div>
     </div>
