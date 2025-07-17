@@ -57,7 +57,7 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
         <p>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></p>
         {q.options && (
           <ul className="list-[lower-alpha] pl-6 mt-2">
-            {q.options.map(opt => <li key={opt}>{opt}</li>)}
+            {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
              {q.answer && <li className="text-green-600 font-semibold mt-1">Correct Answer: {q.answer}</li>}
           </ul>
         )}
@@ -246,8 +246,6 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
 
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
-        <p className="italic text-muted-foreground mb-6">{worksheet.introduction}</p>
-
         <section className="mb-6">
             <h3>A. AIM & VOCABULARY</h3>
             <p className="mt-2"><strong>Aim / Essential Question:</strong> {worksheet.aim.essentialQuestion}</p>
@@ -334,7 +332,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                     <li key={i}>
                         <p>{mc.question}</p>
                         <ul className="list-[lower-alpha] pl-6 mt-2">
-                           {mc.options.map(opt => <li key={opt}>{opt}</li>)}
+                           {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
                         </ul>
                     </li>
                 ))}
@@ -363,18 +361,6 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             <div className="prose prose-lg max-w-none">
                 <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{worksheet.homework.activity}</Markdown>
             </div>
-            {worksheet.homework.extensionActivity && (
-                <div className="mt-4">
-                    <h4>Extension Activity</h4>
-                    <p>{worksheet.homework.extensionActivity}</p>
-                </div>
-            )}
-            {worksheet.homework.differentiation_support && (
-                 <div className="mt-4 p-4 border-l-4 border-accent bg-accent/10 rounded-r-lg">
-                    <h4>Support Materials</h4>
-                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{worksheet.homework.differentiation_support}</Markdown>
-                </div>
-            )}
         </section>
     </div>
 );
@@ -461,14 +447,14 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
                 <li>
                   <p>{cluster.questions.mcq1.question}</p>
                   <ul className="list-[lower-alpha] pl-6">
-                    {cluster.questions.mcq1.options.map((opt:string) => <li key={opt}>{opt}</li>)}
+                    {cluster.questions.mcq1.options.map((opt:string, index: number) => <li key={index}>{opt}</li>)}
                   </ul>
                   <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq1.answer}</em></p>
                 </li>
                 <li>
                   <p>{cluster.questions.mcq2.question}</p>
                   <ul className="list-[lower-alpha] pl-6">
-                    {cluster.questions.mcq2.options.map((opt:string) => <li key={opt}>{opt}</li>)}
+                    {cluster.questions.mcq2.options.map((opt:string, index: number) => <li key={index}>{opt}</li>)}
                   </ul>
                    <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq2.answer}</em></p>
                 </li>
@@ -554,6 +540,7 @@ const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMateria
         try {
             const result = await generateComprehensionQuestions({ 
                 articleContent: content.articleContent,
+                language: language as any,
              });
             setGeneratedQuestions(result);
             toast({ title: "Success", description: "Comprehension questions generated." });
@@ -614,7 +601,7 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
               <li key={i}>
                 <p>{q.question}</p>
                 <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                  {q.options.map(opt => <li key={opt}>{opt}</li>)}
+                  {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
                 </ul>
               </li>
             ))}
@@ -696,7 +683,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                         </div>
                         <p>{mc.question}</p>
                         <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                            {mc.options.map(opt => <li key={opt}>{opt}</li>)}
+                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
                         </ul>
                     </li>
                 ))}
@@ -769,8 +756,8 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
               <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
-                {mc.options.map(opt => (
-                  <li key={opt}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
+                {mc.options.map((opt, optIndex) => (
+                  <li key={optIndex}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
                 ))}
               </ul>
             </li>
@@ -981,9 +968,10 @@ const LabActivityDisplay = ({ lab }: { lab: GenerateLabActivityOutput }) => (
 type StyledContentDisplayProps = {
     content: any | null;
     type: string;
+    language?: 'English' | 'Spanish';
 };
 
-export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
+export default function StyledContentDisplay({ content, type, language }: StyledContentDisplayProps) {
     if (!content) return null;
     
     const isSocialStudiesTest = content.partI && content.partII?.sets;
@@ -1006,7 +994,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Question Cluster':
             return renderQuestionCluster(content);
         case 'Reading Material':
-            return <ReadingMaterialDisplay content={content} />;
+            return <ReadingMaterialDisplay content={content} language={language} />;
         case 'Lab Activity':
         case 'Differentiated Version':
              if (isLabActivity) return <LabActivityDisplay lab={content} />;
