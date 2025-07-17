@@ -26,9 +26,8 @@ const prompt = ai.definePrompt({
     *   **Student-Led Investigation:** The prompts for the 'testableQuestion', 'hypothesis', and 'variables' MUST guide the student to create their own, not provide them with a ready-made one. The hypothesis prompt MUST include a sentence starter like "If... then... because...".
 4.  **Safety First:** Clearly list essential and specific safety precautions.
 5.  **Accessible Materials:** Use materials commonly found in a high school Earth Science lab.
-6.  **Pre-Lab and Post-Lab:** Clearly state what students need to do before the lab and what can be assigned for homework.
-7.  **Rigorous Discussion:** Generate at least 5 high-level (DOK 3-4) discussion questions that encourage students to analyze their data, consider sources of error, and connect their findings to broader scientific concepts.
-8.  **Conclusion:** The conclusion prompt must ask students to explicitly state whether their hypothesis was supported or refuted by their data and to explain their reasoning.
+6.  **Rigorous Discussion:** Generate at least 5 high-level (DOK 3-4) discussion questions that encourage students to analyze their data, consider sources of error, and connect their findings to broader scientific concepts.
+7.  **Conclusion:** The conclusion prompt must ask students to explicitly state whether their hypothesis was supported or refuted by their data and to explain their reasoning.
 
 **Earth Science-Specific Guidelines:**
 - **Focus:** Design the lab around rapid observation, model interpretation, or simulation of Earth processes.
