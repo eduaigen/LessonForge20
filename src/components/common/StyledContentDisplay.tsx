@@ -211,7 +211,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             <h3>A. AIM & VOCABULARY</h3>
             <p className="mt-2"><strong>Aim / Essential Question:</strong> {worksheet.aim.essentialQuestion}</p>
             <p className="mt-2">{worksheet.aim.rewriteSpace}</p>
-            <div className="my-4 h-16 border-b border-dashed"></div>
+            <div className="my-4 h-24 border-b border-dashed"></div>
             
             <h4 className="mt-4">{worksheet.vocabulary.title}</h4>
             <ul className="list-disc pl-5 mt-2 space-y-2">
@@ -222,7 +222,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
         <section className="mb-6">
             <h3>{worksheet.doNow.title}</h3>
             <p>{worksheet.doNow.question}</p>
-            <div className="my-4 h-24 border-b border-dashed"></div>
+            <div className="my-4 h-32 border-b border-dashed"></div>
         </section>
 
         <section className="mb-6">
@@ -253,10 +253,10 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                         </tr>
                     </thead>
                     <tbody>
-                        {[...Array(5)].map((_, i) => (
+                        {[...Array(8)].map((_, i) => (
                             <tr key={i} className="border-b">
-                                <td className="p-2 h-16 align-top"></td>
-                                <td className="p-2 h-16 align-top"></td>
+                                <td className="p-2 h-20 align-top"></td>
+                                <td className="p-2 h-20 align-top"></td>
                             </tr>
                         ))}
                     </tbody>
@@ -270,7 +270,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                     {worksheet.miniLesson.conceptCheckQuestions.map((q, i) => (
                         <li key={i}>
                             {q.question}
-                            <div className="my-2 h-12 border-b border-dashed"></div>
+                            <div className="my-2 h-20 border-b border-dashed"></div>
                         </li>
                     ))}
                     </ol>
@@ -282,7 +282,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             <h3>{worksheet.guidedPractice.title}</h3>
             {Array.isArray(worksheet.guidedPractice.instructions) && worksheet.guidedPractice.instructions.map((inst, i) => <p key={i}>{inst}</p>)}
             {worksheet.guidedPractice.dataTable && renderTableFromObject(worksheet.guidedPractice.dataTable)}
-            <div className="my-4 h-24 border-b border-dashed"></div>
+            <div className="my-4 h-48 border-b border-dashed"></div>
         </section>
 
         <section className="mb-6">
@@ -298,7 +298,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                 ))}
                 <li>
                     <p>{worksheet.checkFoUnderstanding.shortResponse.question}</p>
-                    <div className="my-2 h-16 border-b border-dashed"></div>
+                    <div className="my-2 h-24 border-b border-dashed"></div>
                 </li>
             </ol>
         </section>
@@ -307,13 +307,13 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             <h3>{worksheet.independentPractice.title}</h3>
             <p>{worksheet.independentPractice.taskPrompt}</p>
             {worksheet.independentPractice.taskData && renderTableFromObject(worksheet.independentPractice.taskData)}
-            <div className="my-4 h-32 border-b border-dashed"></div>
+            <div className="my-4 h-64 border-b border-dashed"></div>
         </section>
 
         <section className="mb-6">
             <h3>{worksheet.closure.title}</h3>
             <p>{worksheet.closure.exitTicketQuestion}</p>
-            <div className="my-4 h-16 border-b border-dashed"></div>
+            <div className="my-4 h-24 border-b border-dashed"></div>
         </section>
 
         <section>
