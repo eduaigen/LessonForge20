@@ -26,6 +26,7 @@ import type { GenerateLabActivityOutput } from '@/ai/schemas/lab-activity-schema
 import EditSectionDialog from './EditSectionDialog';
 import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
+import type { LanguageOption } from './LanguageSelectionDialog';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -489,47 +490,58 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     );
   };
 
-const renderStudySheet = (studySheet: TestStudySheetOutput) => (
-    <div className="document-view">
-        <header className="text-center mb-8">
-            <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
-        </header>
+const renderStudySheet = (studySheet: TestStudySheetOutput) => {
+    if (!studySheet) {
+        return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Study sheet content is not available.</div>;
+    }
+    return (
+        <div className="document-view">
+            <header className="text-center mb-8">
+                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
+            </header>
 
-        <section className="mb-6">
-            <h2>Key Concepts</h2>
-            <ul className="list-disc pl-5 space-y-2">
-                {studySheet.keyConcepts.map((concept, index) => (
-                    <li key={index}>{concept}</li>
-                ))}
-            </ul>
-        </section>
+            {Array.isArray(studySheet.keyConcepts) && (
+                <section className="mb-6">
+                    <h2>Key Concepts</h2>
+                    <ul className="list-disc pl-5 space-y-2">
+                        {studySheet.keyConcepts?.map((concept, index) => (
+                            <li key={index}>{concept}</li>
+                        ))}
+                    </ul>
+                </section>
+            )}
 
-        <section className="mb-6">
-            <h2>Key Vocabulary</h2>
-            <ul className="list-disc pl-5 space-y-2">
-                {studySheet.vocabulary.map((item, index) => (
-                    <li key={index}>
-                        <strong>{item.term}:</strong> {item.definition}
-                    </li>
-                ))}
-            </ul>
-        </section>
-        
-        <section>
-            <h2>Essential Questions</h2>
-            <ol className="list-decimal pl-5 space-y-4">
-                {studySheet.essentialQuestions.map((q, index) => (
-                    <li key={index}>
-                        <p>{q}</p>
-                        <div className="my-2 h-12 border-b border-dashed"></div>
-                    </li>
-                ))}
-            </ol>
-        </section>
-    </div>
-);
+            {Array.isArray(studySheet.vocabulary) && (
+                <section className="mb-6">
+                    <h2>Key Vocabulary</h2>
+                    <ul className="list-disc pl-5 space-y-2">
+                        {studySheet.vocabulary?.map((item, index) => (
+                            <li key={index}>
+                                <strong>{item.term}:</strong> {item.definition}
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+            
+            {Array.isArray(studySheet.essentialQuestions) && (
+                <section>
+                    <h2>Essential Questions</h2>
+                    <ol className="list-decimal pl-5 space-y-4">
+                        {studySheet.essentialQuestions?.map((q, index) => (
+                            <li key={index}>
+                                <p>{q}</p>
+                                <div className="my-2 h-12 border-b border-dashed"></div>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+            )}
+        </div>
+    );
+};
 
-const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMaterialOutput, language?: string }) => {
+const ReadingMaterialDisplay = ({ content, language }: { content: ReadingMaterialOutput, language?: LanguageOption }) => {
     const { toast } = useToast();
     const [isGenerating, setIsGenerating] = useState(false);
     const [generatedQuestions, setGeneratedQuestions] = useState<ComprehensionQuestionOutput | null>(null);
@@ -1026,3 +1038,5 @@ export default function StyledContentDisplay({ content, type, language }: Styled
             }
     }
 }
+
+    
