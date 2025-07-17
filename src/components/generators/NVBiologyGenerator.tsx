@@ -68,7 +68,7 @@ const SubscriptionPrompt = () => (
             </CardHeader>
             <CardContent>
                 <Button size="lg" asChild>
-                    <Link href="/pricing">Subscribe to Science Tools</Link>
+                    <Link href="/pricing">Build Your Subscription</Link>
                 </Button>
             </CardContent>
         </Card>

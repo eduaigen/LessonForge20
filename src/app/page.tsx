@@ -13,8 +13,7 @@ import {
   FileText,
   TestTube,
   Lightbulb,
-  BrainCircuit,
-  BookOpenText,
+  FolderSync,
   PencilRuler,
   Check,
 } from 'lucide-react';
@@ -28,43 +27,43 @@ export default function Home() {
       icon: <FileText className="h-8 w-8" />,
       title: 'Lesson Plan Generation',
       description:
-        'Generate complete lesson plans with objectives aligned to NGSS, state, and culturally inclusive standards.',
+        'Generate complete 5E model lesson plans aligned to NGSS, state, and culturally inclusive standards.',
       color: 'text-primary',
     },
     {
       icon: <PencilRuler className="h-8 w-8" />,
-      title: 'Test Maker',
+      title: 'Test Generator',
       description:
-        'Automatically create comprehensive tests based on your selected units and topics, aligned with educational standards.',
+        'Automatically create comprehensive tests based on your selected units, topics, and question types.',
       color: 'text-accent',
     },
     {
       icon: <TestTube className="h-8 w-8" />,
       title: 'Lab Generator',
       description:
-        'For science subjects, instantly generate safe and effective lab experiments with procedures and safety guidelines.',
+        'Instantly generate safe, inquiry-based lab activities with procedures and materials lists.',
       color: 'text-green-500',
+    },
+    {
+      icon: <FolderSync className="h-8 w-8" />,
+      title: 'Curriculum Audit Tool',
+      description:
+        'Analyze your curriculum against educational standards to find gaps and get improvement suggestions.',
+      color: 'text-purple-500',
     },
     {
       icon: <Lightbulb className="h-8 w-8" />,
-      title: 'Learning Objective Refiner',
+      title: 'Free Teacher Tools',
       description:
-        'Refine your learning objectives to be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).',
-      color: 'text-accent',
+        'Access a suite of free tools like a Vocabulary Deep Dive, Learning Objective Refiner, and Concept Explainer.',
+      color: 'text-yellow-500',
     },
     {
-      icon: <BrainCircuit className="h-8 w-8" />,
-      title: 'Concept Explainer',
+      icon: <Check className="h-8 w-8" />,
+      title: 'Differentiated Content',
       description:
-        'Get clear, grade-appropriate explanations for any concept or question to help your students understand.',
-      color: 'text-green-500',
-    },
-    {
-      icon: <BookOpenText className="h-8 w-8" />,
-      title: 'Vocab Deep Dive',
-      description:
-        'Explore vocabulary with definitions, examples, common misconceptions, and real-world connections.',
-      color: 'text-primary',
+        'Generate worksheets, study sheets, and scaffolded materials tailored to diverse learning needs.',
+      color: 'text-blue-500',
     },
   ];
 

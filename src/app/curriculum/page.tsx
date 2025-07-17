@@ -12,10 +12,13 @@ import {
   Magnet,
   Orbit,
   HeartPulse,
+  Stethoscope,
   Sigma,
   Library,
   BookOpenText,
   History,
+  Landmark,
+  Languages
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -25,11 +28,12 @@ const offerings = {
     icon: <Microscope className="h-8 w-8 text-primary" />,
     courses: [
       { name: 'NV Biology', description: 'Aligns with NYS Living Environment curriculum, focusing on life processes, diversity, genetics, evolution, and ecology.', icon: <Dna /> },
-      { name: 'NGSS Biology (OpenSciEd)', description: 'Built around NGSS three dimensions for deep, inquiry-based understanding of biological phenomena.', icon: <Leaf /> },
-      { name: 'NGSS Chemistry (OpenSciEd)', description: 'Emphasizes foundational chemical principles, atomic structure, and reactions through an investigative, NGSS-aligned lens.', icon: <Atom /> },
-      { name: 'NGSS Physics (OpenSciEd)', description: 'Focuses on core concepts like motion, forces, energy, and waves, promoting hands-on inquiry.', icon: <Magnet /> },
-      { name: 'Earth and Space Science (New Vision)', description: 'Aligns with NYS Physical Setting curriculum, covering Earth\'s systems, astronomy, and geology.', icon: <Orbit /> },
-      { name: 'Health Class', description: 'Comprehensive modules promoting well-being, healthy choices, and civic health literacy.', icon: <HeartPulse /> },
+      { name: 'NV Earth Science', description: 'Aligns with NYS Physical Setting curriculum, covering Earth\'s systems, astronomy, and geology.', icon: <Orbit /> },
+      { name: 'AP Biology', description: 'Built around the College Board\'s curriculum for deep, inquiry-based understanding of biological phenomena.', icon: <Leaf /> },
+      { name: 'NGSS Chemistry', description: 'Emphasizes foundational chemical principles, atomic structure, and reactions through an investigative, NGSS-aligned lens.', icon: <Atom /> },
+      { name: 'NGSS Physics', description: 'Focuses on core concepts like motion, forces, energy, and waves, promoting hands-on inquiry.', icon: <Magnet /> },
+      { name: 'Health', description: 'Comprehensive modules promoting well-being, healthy choices, and civic health literacy.', icon: <HeartPulse /> },
+      { name: 'Anatomy & Physiology', description: 'Detailed explorations of the human body\'s systems, structures, and functions.', icon: <Stethoscope /> },
     ],
   },
   math: {
@@ -55,11 +59,18 @@ const offerings = {
     title: 'Social Studies Offerings',
     icon: <History className="h-8 w-8 text-primary" />,
     courses: [
-      { name: 'Global History and Geography I & II', description: 'Covers world history from ancient civilizations to the present day, focusing on global interactions.', icon: <History /> },
+      { name: 'Global History I & II', description: 'Covers world history from ancient civilizations to the present day, focusing on global interactions.', icon: <History /> },
       { name: 'United States History and Government', description: 'Explores American history, constitutional principles, and the nation\'s role in the world.', icon: <History /> },
-      { name: 'Participation in Government and Economics', description: 'Cultivates active and informed citizens through the study of government and economic principles.', icon: <History /> },
+      { name: 'Government & Economics', description: 'Cultivates active and informed citizens through the study of government and economic principles.', icon: <Landmark /> },
     ],
   },
+  ell: {
+    title: 'ELL / ENL Offerings',
+    icon: <Languages className="h-8 w-8 text-primary" />,
+    courses: [
+      { name: 'ELL / ENL Curriculum', description: 'Provides scaffolded, language-rich content across core subjects to support English Language Learners.', icon: <Languages /> },
+    ],
+  }
 };
 
 
@@ -89,7 +100,7 @@ export default function CurriculumPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-4">
               <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                <Link href="/signup">Get Started & Subscribe</Link>
+                <Link href="/pricing">Build Your Toolkit</Link>
               </Button>
             </div>
              <div className="mt-8 flex justify-center gap-x-6 text-sm font-semibold text-muted-foreground">
@@ -105,10 +116,10 @@ export default function CurriculumPage() {
               <div className="mx-auto max-w-3xl text-center">
                  <h2 className="text-base font-semibold leading-7 text-primary">Exclusive Subscriber Benefit</h2>
                 <p className="mt-2 font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                  Curriculum Audit Simplification Tool
+                  Curriculum Audit Tool
                 </p>
                 <p className="mt-6 text-lg text-muted-foreground">
-                  Take your existing curriculum documents—dense frameworks, lengthy unit plans, or complex pacing guides—and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, concepts, and assessment points. (Coming Soon)
+                  Take your existing curriculum documents and let our AI distill them into clear, concise, and actionable summaries. Instantly identify key objectives, find gaps against standards like NGSS or Common Core, and get suggestions for improvement.
                 </p>
                 <FolderSync className="mx-auto mt-8 h-16 w-16 text-primary" />
               </div>
@@ -125,7 +136,7 @@ export default function CurriculumPage() {
         </section>
 
 
-        {Object.entries(offerings).map(([key, subject], i) => (
+        {Object.values(offerings).map((subject, i) => (
           <section key={subject.title} className="py-16 sm:py-20 bg-background even:bg-muted/30">
             <div className="container mx-auto max-w-7xl px-4">
               <div className="mx-auto max-w-2xl text-center">
@@ -158,7 +169,7 @@ export default function CurriculumPage() {
                 </p>
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                        <Link href="/signup">Subscribe Now</Link>
+                        <Link href="/pricing">Build Your Subscription</Link>
                     </Button>
                 </div>
             </div>

@@ -14,37 +14,6 @@ import { Loader2 } from 'lucide-react';
 export function AppHeader() {
   const { isLoggedIn, logout, isSubscribed } = useAuth();
   const router = useRouter();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  };
-
-  const handleSubscribe = async () => {
-    setIsLoading(true);
-    toast({
-      title: 'Redirecting to checkout...',
-      description: 'Please wait while we prepare your secure checkout page.',
-    });
-    
-    const { url, error } = await createCheckoutSession();
-
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error,
-        variant: 'destructive',
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (url) {
-      router.push(url);
-    }
-  };
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -67,6 +36,12 @@ export function AppHeader() {
           >
             Curriculum
           </Link>
+           <Link
+            href="/pricing"
+            className="text-foreground/60 transition-colors hover:text-foreground/80"
+          >
+            Pricing
+          </Link>
            {isLoggedIn && (
             <Link
                 href="/dashboard"
@@ -80,14 +55,17 @@ export function AppHeader() {
           {isLoggedIn ? (
             <>
               {!isSubscribed && (
-                 <Button onClick={handleSubscribe} disabled={isLoading}>
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Subscribe'}
+                 <Button asChild>
+                    <Link href="/pricing">Subscribe</Link>
                 </Button>
               )}
               <Button variant="ghost" asChild>
                 <Link href="/auth-dashboard">Dashboard</Link>
               </Button>
-              <Button onClick={handleLogout}>Log Out</Button>
+              <Button onClick={() => {
+                  logout();
+                  router.push('/');
+              }}>Log Out</Button>
             </>
           ) : (
             <>
