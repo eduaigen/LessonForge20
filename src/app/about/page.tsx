@@ -31,7 +31,7 @@ export default function AboutPage() {
       <div className="space-y-8">
         <AboutSection title="Our Philosophy: For Educators, By Educators" icon={<Users className="h-6 w-6" />}>
           <p>
-            EduAiGen was founded by a team of educators and technologists who believe in the power of great teaching. We know the challenges of the modern classroom: the long hours of planning, the need to differentiate for diverse learners, and the constant pressure to create engaging, effective materials. Our goal is to put powerful AI tools into the hands of teachers to automate the tedious parts of the job, freeing you up to do what you do best: inspire students.
+            EduAiGen was founded by an educator with over 25 years of classroom experience—a passionate believer in the power of great teaching. We know the challenges of the modern classroom firsthand: the long hours of planning, the need to differentiate for diverse learners, and the constant pressure to create engaging, effective materials. Our goal is to put powerful AI tools into the hands of teachers to automate the tedious parts of the job, freeing you up to do what you do best: inspire students.
           </p>
           <p>
             We are committed to creating tools that are not just technologically advanced, but also pedagogically sound, aligned with standards, and genuinely helpful for the educators we serve.
