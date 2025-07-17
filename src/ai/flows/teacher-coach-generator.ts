@@ -29,6 +29,7 @@ Your task is to analyze the provided lesson plan JSON and generate detailed, act
 **Instructions:**
 First, populate the header information:
 - **lessonTitle**: Extract the 'lesson' title from the 'lessonOverview'.
+- **unitTitle**: Extract the 'unit' title from the 'lessonOverview'.
 - **teacherName**: "___________________" (as a placeholder for the teacher to write their name).
 - **date**: "___________________" (as a placeholder for the date).
 

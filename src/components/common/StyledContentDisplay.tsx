@@ -246,6 +246,15 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
 
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
+         <header className="mb-8 grid grid-cols-2 gap-x-8 gap-y-2 border-b-2 border-primary pb-4">
+            <h1 className="col-span-2 text-2xl font-bold font-headline text-primary">{worksheet.header.lessonTitle}</h1>
+            <p className="col-span-2 text-md text-muted-foreground">{worksheet.header.unitTitle}</p>
+            <div className="pt-4">{worksheet.header.name}</div>
+            <div>{worksheet.header.date}</div>
+            <div>{worksheet.header.class}</div>
+            <div>{worksheet.header.period}</div>
+        </header>
+
         <section className="mb-6">
             <h3>A. AIM & VOCABULARY</h3>
             <p className="mt-2"><strong>Aim / Essential Question:</strong> {worksheet.aim.essentialQuestion}</p>
@@ -383,7 +392,8 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
     return (
          <div className="document-view">
              <header className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 border-b pb-4">
-                <div><strong>Lesson Title:</strong> {advice.lessonTitle}</div>
+                <div><strong>Lesson:</strong> {advice.lessonTitle}</div>
+                <div><strong>Unit:</strong> {advice.unitTitle}</div>
                 <div><strong>Teacher:</strong> {advice.teacherName}</div>
                 <div><strong>Date:</strong> {advice.date}</div>
             </header>
@@ -417,6 +427,10 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
 const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
     return (
         <div className="document-view">
+            <header className="mb-8 border-b pb-4">
+                <h1 className="text-3xl font-bold font-headline text-primary">{outline.lessonTitle}</h1>
+                <p className="text-lg text-muted-foreground">{outline.unitTitle}</p>
+            </header>
             {outline.slides.map((slide, index) => (
                 <section key={index} className="mb-6 border-b pb-4">
                     <h3>Slide {index + 1}: {slide.title}</h3>
@@ -493,15 +507,23 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     );
   };
 
-const renderStudySheet = (studySheet: TestStudySheetOutput) => {
+const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
     if (!studySheet) {
         return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Study sheet content is not available.</div>;
     }
     return (
         <div className="document-view">
             <header className="text-center mb-8">
-                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
+                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.lessonTitle || studySheet.title}</h1>
+                 {studySheet.unitTitle && <p className="text-lg text-muted-foreground">{studySheet.unitTitle}</p>}
             </header>
+
+            {studySheet.essentialQuestion && (
+                 <section className="mb-6">
+                    <h2>Essential Question</h2>
+                    <p>{studySheet.essentialQuestion}</p>
+                </section>
+            )}
 
             {Array.isArray(studySheet.keyConcepts) && studySheet.keyConcepts.length > 0 && (
                 <section className="mb-6">
@@ -546,7 +568,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
 
 const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
     const { toast } = useToast();
-    const [isGenerating, setIsGenerating] = useState(false);
+    const [isGenerating, setIsLoading] = useState(false);
     const [generatedQuestions, setGeneratedQuestions] = useState<ComprehensionQuestionOutput | null>(null);
 
     const onGenerateQuestions = async () => {

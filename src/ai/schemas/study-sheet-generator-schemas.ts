@@ -7,6 +7,7 @@ export const StudySheetInputSchema = z.object({
 
 export const StudySheetOutputSchema = z.object({
   lessonTitle: z.string().describe("The main title of the lesson."),
+  unitTitle: z.string().describe("The main title of the unit."),
   essentialQuestion: z.string().describe("The main 'aim' or essential question of the lesson."),
   vocabulary: z.array(z.object({
     term: z.string(),

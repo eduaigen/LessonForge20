@@ -32,18 +32,19 @@ const prompt = ai.definePrompt({
 ---
 
 1.  **lessonTitle**: Extract the exact title from 'lessonOverview.lesson'.
-2.  **essentialQuestion**: Extract the exact question from 'lessonOverview.aim'.
-3.  **vocabulary**:
+2.  **unitTitle**: Extract the exact unit name from 'lessonOverview.unit'.
+3.  **essentialQuestion**: Extract the exact question from 'lessonOverview.aim'.
+4.  **vocabulary**:
     *   Iterate through the 'lessonOverview.vocabulary' array.
     *   For each object, create a new object in the output with the 'term' and 'definition'.
     *   If the source vocabulary is empty, output an empty array: \`"vocabulary": []\`.
-4.  **coreConcepts**:
+5.  **coreConcepts**:
     *   Carefully read the 'lessonOverview.objectives' and the 'miniLesson.readingPassage'.
     *   Synthesize this information into a bulleted list of the 3-5 most important concepts or "big ideas" from the lesson. These must be complete sentences summarizing key takeaways found ONLY in the lesson plan.
-5.  **keyDiagram**:
+6.  **keyDiagram**:
     *   If a 'miniLesson.diagram' description exists, summarize it in this field.
     *   Explain what the diagram or model illustrates, based on its description in the lesson plan. If it does not exist, omit this field.
-6.  **practiceQuestions**:
+7.  **practiceQuestions**:
     *   Create a list of key questions for students to review.
     *   You MUST pull these questions from the following sections of the lesson plan, in this order:
         - 'doNow.question'
@@ -51,7 +52,7 @@ const prompt = ai.definePrompt({
         - All 'multipleChoice' and 'shortResponse' questions from 'checkFoUnderstanding'
         - The 'closure.exitTicketQuestion'
     *   For each question you pull, create an object containing the 'question' text and a 'source' string indicating which section it came from (e.g., "Do Now", "Concept Check", "Check for Understanding", "Exit Ticket").
-7.  **activitiesAndData**:
+8.  **activitiesAndData**:
     *   Review the 'guidedPractice' and 'independentPractice' sections.
     *   For each section, create one summary object in the output array.
     *   Set 'activityTitle' to either "Guided Practice Activity" or "Independent Practice Task".

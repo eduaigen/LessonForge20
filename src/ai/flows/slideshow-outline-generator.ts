@@ -19,6 +19,7 @@ const prompt = ai.definePrompt({
 
 **CRITICAL INSTRUCTION:**
 1.  **Source Material**: Your ONLY source of information is the provided lesson plan JSON. Do not include any "teacherActions" or "sampleScript" content.
+2.  **Populate Header**: You MUST populate the 'lessonTitle' and 'unitTitle' fields with the corresponding values from the 'lessonOverview' section of the lesson plan.
 
 **Lesson Plan Data:**
 \`\`\`json

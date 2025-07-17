@@ -14,6 +14,7 @@ const coachingAdviceSchema = z.object({
 
 export const TeacherCoachGeneratorOutputSchema = z.object({
   lessonTitle: z.string().describe('The title of the lesson.'),
+  unitTitle: z.string().describe('The title of the unit.'),
   teacherName: z.string().describe('A placeholder for the teacher to write their name.'),
   date: z.string().describe('A placeholder for the date.'),
   doNow: coachingAdviceSchema.describe('Coaching advice for the Do Now section.'),

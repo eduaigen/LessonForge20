@@ -12,6 +12,8 @@ const slideSchema = z.object({
 });
 
 export const SlideshowOutlineOutputSchema = z.object({
+  lessonTitle: z.string().describe("The title of the lesson, extracted from the lesson plan."),
+  unitTitle: z.string().describe("The title of the unit, extracted from the lesson plan."),
   slides: z.array(slideSchema).describe('A list of slides representing the lesson presentation outline.'),
 });
 

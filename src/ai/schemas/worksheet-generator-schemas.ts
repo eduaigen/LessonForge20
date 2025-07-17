@@ -7,6 +7,8 @@ export const GenerateWorksheetInputSchema = z.object({
 });
 
 const headerSchema = z.object({
+    lessonTitle: z.string(),
+    unitTitle: z.string(),
     name: z.string(),
     date: z.string(),
     period: z.string(),

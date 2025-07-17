@@ -55,8 +55,10 @@ const prompt = ai.definePrompt({
 ---
 
 1.  **Header Section:**
-    *   Action: Populate the 'header' object fields as placeholders.
+    *   Action: Populate the 'header' object fields.
     *   Output:
+        - lessonTitle: Extract the exact title from 'lessonOverview.lesson'.
+        - unitTitle: Extract the exact unit name from 'lessonOverview.unit'.
         - name: "Name: ______________________"
         - date: "Date: _______________"
         - period: "Period: _______"
