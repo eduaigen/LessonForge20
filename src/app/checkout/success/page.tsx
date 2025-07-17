@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { CheckCircle2, Loader2 } from 'lucide-react';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 export default function CheckoutSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { subscribe } = useAuth();
+  const { subscribe, setShowDisclaimer } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,21 +19,25 @@ export default function CheckoutSuccessPage() {
     if (priceIdsParam) {
       const priceIds = priceIdsParam.split(',');
       subscribe(priceIds);
+      
+      // Don't show disclaimer to admins who get all access automatically
+      const isAdminUser = sessionStorage.getItem('isAdmin') === 'true';
+      if (!isAdminUser) {
+        sessionStorage.setItem('showDisclaimer', 'true');
+        setShowDisclaimer(true);
+      }
+      
       setLoading(false);
     } else {
-      // Handle case where price_ids are not in the URL, maybe redirect or show an error
-      // For now, let's just assume a generic success and redirect
-      console.warn("No price_ids found in success URL, subscribing to all for fallback.");
-      subscribe([]); // Fallback to all-access if no IDs are passed
+      console.warn("No price_ids found in success URL.");
       setLoading(false);
+      // Redirect or show an error if no price IDs are found
+      router.push('/pricing');
     }
 
-    const timer = setTimeout(() => {
-      router.push('/auth-dashboard');
-    }, 5000); // Redirect after 5 seconds
-
-    return () => clearTimeout(timer);
-  }, [router, subscribe, searchParams]);
+    // Instead of auto-redirecting, let the user click through
+    // or be redirected after the disclaimer is handled.
+  }, [router, subscribe, searchParams, setShowDisclaimer]);
 
   if (loading) {
     return (
@@ -52,7 +56,7 @@ export default function CheckoutSuccessPage() {
         <CheckCircle2 className="w-24 h-24 text-green-500 mb-6 animate-pulse" />
         <h1 className="text-4xl font-bold font-headline mb-4">Success! Your Toolkit is Ready.</h1>
         <p className="text-lg text-muted-foreground max-w-lg mb-8">
-            Thank you! Your selected tools are now available in your account. We're redirecting you to your personalized dashboard.
+            Thank you! Your selected tools are now available in your account. You will be redirected to your dashboard shortly.
         </p>
          <Button asChild>
             <Link href="/auth-dashboard">Go to Dashboard Now</Link>

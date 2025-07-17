@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, ReactNode, useEffect, useMe
 import type { GeneratedContent as LessonPackageContent } from '@/components/generators/NVBiologyGenerator';
 import type { TestGeneratedContent } from '@/components/generators/NVBiologyTestGenerator';
 import { allModules } from '@/lib/modules-data';
+import { useRouter } from 'next/navigation';
 
 type GeneratedContent = LessonPackageContent | TestGeneratedContent;
 
@@ -33,6 +34,9 @@ interface AuthContextType {
   login: (userInfo: { email: string; name?: string }) => void;
   logout: () => void;
   subscribe: (priceIds: string[]) => void;
+  showDisclaimer: boolean;
+  setShowDisclaimer: React.Dispatch<React.SetStateAction<boolean>>;
+  agreeToDisclaimer: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,11 +47,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [subscriptions, setSubscriptions] = useState<string[]>([]);
   const [generationHistory, setGenerationHistory] = useState<GeneratedContent[][]>([]);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     try {
         const loggedInStatus = sessionStorage.getItem('isLoggedIn') === 'true';
         const adminStatus = sessionStorage.getItem('isAdmin') === 'true';
+        const agreedToDisclaimer = localStorage.getItem('agreedToDisclaimer') === 'true';
+        const shouldShowDisclaimer = sessionStorage.getItem('showDisclaimer') === 'true';
+        
         const storedUser = sessionStorage.getItem('user');
         const storedSubscriptions = sessionStorage.getItem('subscriptions');
         const storedHistory = sessionStorage.getItem('generationHistory');
@@ -58,9 +67,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (storedSubscriptions) setSubscriptions(JSON.parse(storedSubscriptions));
         if (storedHistory) setGenerationHistory(JSON.parse(storedHistory));
 
+        if (loggedInStatus && shouldShowDisclaimer && !agreedToDisclaimer) {
+            setShowDisclaimer(true);
+        }
+
     } catch (error) {
         console.error("Error reading from session storage:", error);
         sessionStorage.clear();
+        localStorage.clear();
     }
   }, []);
 
@@ -91,6 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setSubscriptions([]);
     setGenerationHistory([]);
     sessionStorage.clear();
+    // Keep disclaimer agreement in localStorage
   };
 
   const subscribe = (priceIds: string[]) => {
@@ -112,6 +127,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return updatedHistory;
     });
   }, []);
+
+  const agreeToDisclaimer = () => {
+    setShowDisclaimer(false);
+    localStorage.setItem('agreedToDisclaimer', 'true');
+    sessionStorage.removeItem('showDisclaimer');
+    router.push('/auth-dashboard');
+  };
 
   const isSubscribed = isAdmin || subscriptions.length > 0;
   
@@ -139,7 +161,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription, hasPremiumTools, generationHistory, addToHistory, login, logout, subscribe }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription, hasPremiumTools, generationHistory, addToHistory, login, logout, subscribe, showDisclaimer, setShowDisclaimer, agreeToDisclaimer }}>
       {children}
     </AuthContext.Provider>
   );

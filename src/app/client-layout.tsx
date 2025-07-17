@@ -6,6 +6,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { AppHeader } from '@/components/common/AppHeader';
 import { Footer } from '@/components/common/Footer';
 import AccessibilityWidget from '@/components/common/AccessibilityWidget';
+import DisclaimerDialog from '@/components/common/DisclaimerDialog';
 
 export default function ClientLayout({
   children,
@@ -21,6 +22,7 @@ export default function ClientLayout({
       </div>
       <AccessibilityWidget />
       <Toaster />
+      <DisclaimerDialog />
     </AuthProvider>
   );
 }

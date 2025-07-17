@@ -16,6 +16,8 @@ import {
   FolderSync,
   PencilRuler,
   Check,
+  Home as HomeIcon,
+  GraduationCap
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -230,23 +232,22 @@ export default function Home() {
                         culturally inclusive frameworks.
                       </dd>
                     </div>
-                    <div className="relative pl-9">
+                     <div className="relative pl-9">
                       <dt className="inline font-semibold text-foreground">
-                        <Check className="absolute left-1 top-1 h-5 w-5 text-primary" />
-                        Differentiated Instruction.
+                        <HomeIcon className="absolute left-1 top-1 h-5 w-5 text-primary" />
+                        Homeschool Ready.
                       </dt>{' '}
                       <dd className="inline">
-                        Easily adapt content for different grade levels and
-                        learning needs.
+                        Empower your home learning environment with structured, high-quality lessons and activities suitable for diverse learners.
                       </dd>
                     </div>
                     <div className="relative pl-9">
                       <dt className="inline font-semibold text-foreground">
-                        <Check className="absolute left-1 top-1 h-5 w-5 text-primary" />
-                        Time-Saving.
+                        <GraduationCap className="absolute left-1 top-1 h-5 w-5 text-primary" />
+                        Future-Ready Curriculum.
                       </dt>{' '}
                       <dd className="inline">
-                        Cut down on planning time and reclaim your weekends.
+                        New materials are constantly being added, with Middle School and Junior High School curriculum coming soon.
                       </dd>
                     </div>
                   </dl>
