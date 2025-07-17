@@ -42,7 +42,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded. Chunked into smaller paragraphs."),
-  diagram: z.string().describe("A detailed text description of a graphic organizer, concept map, model, or flowchart for the teacher to generate. Not the SVG code itself."),
+  diagram: z.string().describe("A highly detailed text description of a graphic organizer, concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A T-Chart with two columns. The left column is titled 'Cause' and the right column is titled 'Effect'. All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 

@@ -37,7 +37,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded."),
-  diagram: z.string().describe("A detailed text description of a scientific concept map, model, or flowchart for the teacher to generate. Not the SVG code itself."),
+  diagram: z.string().describe("A highly detailed text description of a scientific concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A free-body diagram of a box on an inclined plane. The box is a rectangle. An arrow labeled 'Gravity' points straight down. An arrow labeled 'Normal Force' points perpendicular to the inclined plane. An arrow labeled 'Friction' points up the incline, parallel to the surface.' All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 

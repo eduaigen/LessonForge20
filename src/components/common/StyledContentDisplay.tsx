@@ -14,7 +14,7 @@ import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-genera
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, FileQuestion, Wand2, RefreshCw } from 'lucide-react';
+import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
@@ -24,6 +24,8 @@ import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
 import type { GenerateLabActivityOutput } from '@/ai/schemas/lab-activity-schemas';
 import EditSectionDialog from './EditSectionDialog';
+import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
+import Image from 'next/image';
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
     if (!tableData || !tableData.headers || !tableData.rows) return null;
@@ -64,6 +66,64 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
   </ol>
 );
 
+const DiagramGenerator = ({ description }: { description: string }) => {
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast();
+
+    const handleGenerate = async () => {
+        setIsLoading(true);
+        try {
+            const result = await generateDiagramImage({ description });
+            setImageUrl(result.imageUrl);
+            toast({ title: 'Diagram Generated', description: 'The diagram has been successfully created.' });
+        } catch (error) {
+            console.error('Diagram generation failed:', error);
+            toast({ title: 'Error', description: 'Failed to generate diagram.', variant: 'destructive' });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
+    const handleDelete = () => {
+        setImageUrl(null);
+    }
+
+    return (
+        <div className="mt-4 p-4 border rounded-md bg-muted/50">
+            <h4 className="font-semibold text-foreground mb-2">Diagram/Model Description</h4>
+            <p className="italic text-muted-foreground">{description}</p>
+            {!imageUrl && (
+                 <div className="mt-4">
+                    <Button onClick={handleGenerate} disabled={isLoading} size="sm">
+                        {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ImageIcon className="mr-2 h-4 w-4" />}
+                        {isLoading ? 'Generating...' : 'Generate Diagram'}
+                    </Button>
+                     <p className="text-xs text-amber-600 mt-2">
+                        <strong>Experimental Feature:</strong> AI image generation may not be perfect. Please review the output carefully.
+                     </p>
+                </div>
+            )}
+            {imageUrl && (
+                <div className="mt-4">
+                    <Image src={imageUrl} alt="Generated Diagram" width={500} height={500} className="rounded-md border" />
+                    <div className="flex gap-2 mt-2">
+                         <Button onClick={handleGenerate} disabled={isLoading} size="sm" variant="outline">
+                            {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+                            Regenerate
+                        </Button>
+                         <Button onClick={handleDelete} disabled={isLoading} size="sm" variant="destructive">
+                            <Trash2 className="mr-2 h-4 w-4" />
+                            Delete
+                        </Button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+
 const LessonSectionCard = ({ title, children, sectionName, sectionContent, onSectionUpdate }: { title: string; children: React.ReactNode, sectionName: string; sectionContent: any; onSectionUpdate: (sectionName: string, newContent: any) => void; }) => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
@@ -81,7 +141,7 @@ const LessonSectionCard = ({ title, children, sectionName, sectionContent, onSec
             </CardContent>
              <CardFooter className="bg-muted/50 p-2 flex justify-end gap-2">
                 <Button variant="ghost" size="sm" onClick={() => setIsEditDialogOpen(true)}>
-                    <Wand2 className="mr-2 h-4 w-4" /> Edit with AI
+                    <Wand2 className="mr-2 h-4 w-4" /> Edit Instructions
                 </Button>
             </CardFooter>
             <EditSectionDialog 
@@ -156,7 +216,7 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                        {section.name === 'doNow' && <div><h4>Question</h4><p>{sectionContent.question}</p></div>}
                        {section.name === 'miniLesson' && <>
                            <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.readingPassage}</Markdown></div>
-                           {sectionContent.diagram && <div className="mt-4 p-4 border rounded-md"><h4 className="font-semibold text-foreground mb-2">Diagram/Model Description</h4><p className="italic text-muted-foreground">{sectionContent.diagram}</p></div>}
+                           {sectionContent.diagram && <DiagramGenerator description={sectionContent.diagram} />}
                            <div><h4>Concept-Check Questions</h4>{leveledQuestions(sectionContent.conceptCheckQuestions)}</div>
                        </>}
                        {section.name === 'guidedPractice' && (typeof sectionContent.activityContent === 'string' 

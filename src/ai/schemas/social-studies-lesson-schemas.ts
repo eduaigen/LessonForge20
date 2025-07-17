@@ -38,7 +38,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded. If a specific primary source document is needed, its full content must be generated here."),
-  diagram: z.string().describe("A detailed text description of a historical map, political cartoon, or flowchart for the teacher to generate. **Do not generate SVG or image code.** Provide specific instructions for how to create the visual representation."),
+  diagram: z.string().describe("A highly detailed text description of a historical map, political cartoon, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A timeline of the Roman Empire. The timeline starts at 753 BCE with 'Founding of Rome'. A key event is at 44 BCE labeled 'Assassination of Julius Caesar'. The timeline ends at 476 CE with 'Fall of Western Roman Empire'. All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 
@@ -94,4 +94,3 @@ export const GenerateSocialStudiesLessonOutputSchema = z.object({
 
 
 export type GenerateSocialStudiesLessonOutput = z.infer<typeof GenerateSocialStudiesLessonOutputSchema>;
-
