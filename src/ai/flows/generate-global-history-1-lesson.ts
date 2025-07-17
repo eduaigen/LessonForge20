@@ -52,7 +52,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph).
 - "readingPassage": (String) A 300-500 word, grade-appropriate reading passage. If the lesson requires a specific primary source document, generate the full content here. Use Markdown bold (\`**word**\`) for key vocab.
-- "diagram": (String) A detailed text description of a historical map, political cartoon, or flowchart for the teacher to generate. **Do not generate SVG or image code.** Provide specific instructions for how to create the visual representation.
+- "diagram": (String) A highly detailed text description of a historical map, political cartoon, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A timeline of the Roman Empire. The timeline starts at 753 BCE with 'Founding of Rome'. A key event is at 44 BCE labeled 'Assassination of Julius Caesar'. The timeline ends at 476 CE with 'Fall of Western Roman Empire'. All text must be exactly as written here.'
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3). Ensure a mix of DOK levels.
 
 **C. "guidedPractice"** (Object, 15–20 min)

@@ -37,7 +37,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("A grade-appropriate passage explaining a core concept."),
-  diagram: z.string().describe("A detailed text description of a geometric concept map, model, or flowchart for the teacher to generate. Not the SVG code itself."),
+  diagram: z.string().describe("A highly detailed text description of a geometric concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A number line from -5 to 5. A closed circle is on the number 2. An arrow points to the right from the circle, indicating all numbers greater than or equal to 2 are included.' All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 

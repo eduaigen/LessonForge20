@@ -50,7 +50,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph).
 - "readingPassage": (String) A 300-500 word, grade-appropriate reading passage explaining the core concept.
-- "diagram": (String) A detailed text description of a geometric concept map, model, or flowchart for the teacher to generate. **Do not generate SVG or image code.** Provide specific instructions for how to create the visual representation.
+- "diagram": (String) A highly detailed text description of a geometric concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A number line from -5 to 5. A closed circle is on the number 2. An arrow points to the right from the circle, indicating all numbers greater than or equal to 2 are included.' All text must be exactly as written here.'
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3). Ensure a mix of DOK levels.
 
 **C. "guidedPractice"** (Object, 15–20 min)

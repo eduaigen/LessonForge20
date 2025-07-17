@@ -38,7 +38,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded. If a specific story, excerpt, or poem is required, its full content must be generated here."),
-  diagram: z.string().describe("A detailed text description of a literary concept map, model, or flowchart for the teacher to generate. **Do not generate SVG or image code.** Provide specific instructions for how to create the visual representation."),
+  diagram: z.string().describe("A highly detailed text description of a literary concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A Venn diagram with two overlapping circles. The left circle is labeled 'Character A'. The right circle is labeled 'Character B'. The overlapping section is labeled 'Shared Traits'. All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 

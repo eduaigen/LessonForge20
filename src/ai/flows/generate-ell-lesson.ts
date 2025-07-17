@@ -49,7 +49,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph with key vocabulary highlighted).
 - "readingPassage": (String) A 300-500 word, grade-appropriate reading passage. Use Markdown bold (\`**word**\`) for key vocab. The passage should be chunked into smaller paragraphs.
-- "diagram": (String) A detailed text description of a graphic organizer, concept map, model, or flowchart for the teacher to generate. **Do not generate SVG or image code.**
+- "diagram": (String) A highly detailed text description of a graphic organizer, concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A T-Chart with two columns. The left column is titled 'Cause' and the right column is titled 'Effect'. All text must be exactly as written here.'
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3).
 
 **C. "guidedPractice"** (Object, 15–20 min)

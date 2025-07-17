@@ -37,7 +37,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("300-500 words, grade-appropriate, aligned to topic, with key terms bolded."),
-  diagram: z.string().describe("A detailed text description of a scientific concept map, model, or flowchart for the teacher to generate. Not the SVG code itself."),
+  diagram: z.string().describe("A highly detailed text description of a scientific concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A flowchart with three boxes. Box 1 on the left contains the text 'Sunlight'. An arrow points from Box 1 to Box 2 in the center. Box 2 contains the text 'Photosynthesis in Chloroplast'. An arrow points from Box 2 to Box 3 on the right. Box 3 contains the text 'Glucose (Energy)'. All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 

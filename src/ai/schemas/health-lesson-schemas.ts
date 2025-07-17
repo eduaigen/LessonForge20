@@ -22,7 +22,7 @@ const lessonOverviewSchema = z.object({
 });
 
 const lessonSectionSchema = z.object({
-  teacherActions: z.array(z.string()).describe('Verbatim script for the teacher, including what to say and what to write on the board.'),
+  teacherActions: z.array(z.string()).describe('Verbatim script for the teacher, including what to say and write on the board.'),
   expectedStudentOutputs: z.array(z.string()).describe('A high-quality exemplar of the expected student work product for this section.'),
 });
 
@@ -37,7 +37,7 @@ const leveledQuestionSchema = z.object({
 
 const miniLessonSchema = lessonSectionSchema.extend({
   readingPassage: z.string().describe("A 300-500 word, grade-appropriate reading passage. Key terms should be bolded using Markdown."),
-  diagram: z.string().describe("A detailed text description of a health-related concept map, model, or flowchart for the teacher to generate. Not the SVG code itself."),
+  diagram: z.string().describe("A highly detailed text description of a health-related concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A flowchart showing the decision-making process. It starts with a box labeled 'Identify the Decision'. An arrow points to 'Gather Information'. Another arrow points to 'List the Options', and so on.' All text must be exactly as written here.'"),
   conceptCheckQuestions: z.array(leveledQuestionSchema).describe("A mix of DOK 1, 2, and 3 questions."),
 });
 
