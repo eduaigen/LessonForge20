@@ -12,52 +12,53 @@ import { allModules, type Module } from '@/lib/modules-data';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 
-type Step = 'subjects' | 'addons' | 'summary';
+type Step = 'courses' | 'addons' | 'summary';
 
-const subjects = [
-    { id: 'science', name: 'Science', icon: allModules.coursesBySubject.science[0].icon },
-    { id: 'math', name: 'Mathematics', icon: allModules.coursesBySubject.math[0].icon },
-    { id: 'ela', name: 'English Language Arts', icon: allModules.coursesBySubject.ela[0].icon },
-    { id: 'social studies', name: 'Social Studies', icon: allModules.coursesBySubject['social studies'][0].icon },
-    { id: 'ell', name: 'ELL / ENL', icon: allModules.coursesBySubject.ell[0].icon },
+const subjectsWithCourses = [
+    { name: 'Science', icon: allModules.coursesBySubject.science[0].icon, courses: allModules.coursesBySubject.science },
+    { name: 'Mathematics', icon: allModules.coursesBySubject.math[0].icon, courses: allModules.coursesBySubject.math },
+    { name: 'English Language Arts', icon: allModules.coursesBySubject.ela[0].icon, courses: allModules.coursesBySubject.ela },
+    { name: 'Social Studies', icon: allModules.coursesBySubject['social studies'][0].icon, courses: allModules.coursesBySubject['social studies'] },
+    { name: 'ELL / ENL', icon: allModules.coursesBySubject.ell[0].icon, courses: allModules.coursesBySubject.ell },
 ];
 
-const SelectionCard = ({ item, isSelected, onSelect, isMultiSelect = false }: { item: { id: string, name: string, icon: React.FC<any>}, isSelected: boolean, onSelect: (id: string) => void, isMultiSelect?: boolean }) => {
-    const Icon = item.icon;
+const CourseSelectionCard = ({ item, isSelected, onSelect }: { item: Module, isSelected: boolean, onSelect: (id: string) => void }) => {
     return (
         <Card 
-            className={cn("cursor-pointer transition-all duration-200 text-center", isSelected && "border-primary ring-2 ring-primary")}
+            className={cn("cursor-pointer transition-all duration-200 text-left flex flex-col", isSelected && "border-primary ring-2 ring-primary")}
             onClick={() => onSelect(item.id)}
         >
-            <CardHeader className="items-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary mb-2">
-                    <Icon className="h-8 w-8" />
+            <CardHeader className="flex-row items-start gap-4 space-y-0">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary flex-shrink-0">
+                    <item.icon className="h-6 w-6" />
                 </div>
-                <CardTitle>{item.name}</CardTitle>
+                <div className="flex-1">
+                    <CardTitle className="text-base">{item.name}</CardTitle>
+                    <CardDescription className="text-xs mt-1">{item.description}</CardDescription>
+                </div>
             </CardHeader>
-             {isMultiSelect && (
-                <CardContent>
-                    <div className={cn("mx-auto h-6 w-6 rounded-full border flex items-center justify-center", isSelected ? "bg-primary border-primary" : "bg-muted")}>
-                        {isSelected && <CheckCircle className="h-4 w-4 text-primary-foreground" />}
-                    </div>
-                </CardContent>
-             )}
+             <CardContent className="mt-auto flex justify-end pt-4">
+                <div className={cn("h-6 w-6 rounded-full border flex items-center justify-center", isSelected ? "bg-primary border-primary" : "bg-muted")}>
+                    {isSelected && <CheckCircle className="h-4 w-4 text-primary-foreground" />}
+                </div>
+            </CardContent>
         </Card>
     );
 };
+
 
 export default function ConversationalCheckoutPage() {
     const { toast } = useToast();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
-    const [step, setStep] = useState<Step>('subjects');
+    const [step, setStep] = useState<Step>('courses');
 
-    const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+    const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
     const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
-    const handleSelectSubject = (id: string) => {
-        setSelectedSubjects(prev =>
-            prev.includes(id) ? prev.filter(sId => sId !== id) : [...prev, id]
+    const handleSelectCourse = (id: string) => {
+        setSelectedCourses(prev =>
+            prev.includes(id) ? prev.filter(cId => cId !== id) : [...prev, id]
         );
     };
 
@@ -67,15 +68,20 @@ export default function ConversationalCheckoutPage() {
         );
     };
     
-    const showLabAddon = selectedSubjects.includes('science');
+    const showLabAddon = useMemo(() => {
+        const scienceCourseIds = allModules.coursesBySubject.science
+            .filter(c => c.name !== 'AP Biology Lesson Generator' && c.name !== 'Health Lesson Generator')
+            .map(c => c.id);
+        return selectedCourses.some(id => scienceCourseIds.includes(id));
+    }, [selectedCourses]);
+
     const addonTools = [
         { id: 'test_maker', name: 'Test Maker Suite', description: 'Unlock powerful test generators for all your selected subjects. Create Regents-style exams, NGSS-aligned cluster assessments, and scaffolded tests for all learners.', icon: allModules.assessment_tools[0].icon },
         ...(showLabAddon ? [{ id: 'lab_generator', name: 'Science Lab Generator Suite', description: 'Bring science to life! Generate hands-on, 45-minute, NGSS-aligned lab activities for Biology, Chemistry, Physics, and Earth Science. (AP Bio and Health not included).', icon: allModules.assessment_tools.find(t=>t.href?.includes('lab'))!.icon }] : []),
     ];
 
     const getPriceDetails = () => {
-        const courseModules = allModules.courses.filter(c => selectedSubjects.includes(c.subject));
-        const coursesCount = courseModules.length;
+        const coursesCount = selectedCourses.length;
         
         const hasTestMaker = selectedAddons.includes('test_maker');
         const hasLabGenerator = selectedAddons.includes('lab_generator');
@@ -91,20 +97,25 @@ export default function ConversationalCheckoutPage() {
         const totalPrice = coursePrice + testMakerPrice + labGeneratorPrice;
         
         const priceIds: string[] = [];
-        if (coursesCount > 0) priceIds.push(...courseModules.map(m => m.id));
+        if (coursesCount > 0) priceIds.push(...selectedCourses);
         if(hasTestMaker) {
-            priceIds.push(...allModules.assessment_tools.filter(t => t.href?.includes('test-generator')).map(t=>t.id));
+             const subjectSet = new Set(allModules.courses.filter(c => selectedCourses.includes(c.id)).map(c => c.subject));
+             const testMakerIds = allModules.assessment_tools.filter(t => t.href?.includes('test-generator') && subjectSet.has(t.subject)).map(t => t.id);
+             priceIds.push(...testMakerIds);
         }
         if(hasLabGenerator) {
             priceIds.push(...allModules.assessment_tools.filter(t => t.href?.includes('lab-generator')).map(t=>t.id));
         }
         // Always include premium tools like the audit tool with any subscription
-        priceIds.push(...allModules.premium_tools.map(t => t.id));
+        if (coursesCount > 0 || hasTestMaker || hasLabGenerator) {
+            priceIds.push(...allModules.premium_tools.map(t => t.id));
+        }
+
 
         return {
             totalPrice,
             selectedItems: [
-                ...courseModules.map(m => m.name),
+                ...allModules.courses.filter(c => selectedCourses.includes(c.id)).map(m => m.name),
                 ...(hasTestMaker ? ['Test Maker Suite'] : []),
                 ...(hasLabGenerator ? ['Science Lab Generator Suite'] : []),
             ],
@@ -136,14 +147,21 @@ export default function ConversationalCheckoutPage() {
 
     const renderStep = () => {
         switch (step) {
-            case 'subjects':
+            case 'courses':
                 return (
-                    <motion.div key="subjects" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }}>
+                    <motion.div key="courses" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }}>
                         <h2 className="text-2xl font-bold font-headline mb-2 text-center">Let's build your toolkit.</h2>
-                        <p className="text-muted-foreground text-center mb-8">Start by selecting the subject areas you teach. You can select more than one.</p>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                            {subjects.map(subject => (
-                                <SelectionCard key={subject.id} item={subject} isSelected={selectedSubjects.includes(subject.id)} onSelect={handleSelectSubject} isMultiSelect />
+                        <p className="text-muted-foreground text-center mb-8">Start by selecting the courses you teach. The first is $15.99, and each additional course is just $9.99.</p>
+                        <div className="space-y-8">
+                            {subjectsWithCourses.map(subject => (
+                                <div key={subject.name}>
+                                    <h3 className="text-xl font-semibold mb-4 flex items-center gap-3"><subject.icon className="h-6 w-6 text-primary" /> {subject.name}</h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {subject.courses.map(course => (
+                                            <CourseSelectionCard key={course.id} item={course} isSelected={selectedCourses.includes(course.id)} onSelect={handleSelectCourse} />
+                                        ))}
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </motion.div>
@@ -152,7 +170,7 @@ export default function ConversationalCheckoutPage() {
                 return (
                     <motion.div key="addons" initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 50 }}>
                         <h2 className="text-2xl font-bold font-headline mb-2 text-center">Supercharge your subjects with our tool suites.</h2>
-                        <p className="text-muted-foreground text-center mb-8">These powerful add-ons work across all the subjects you've selected.</p>
+                        <p className="text-muted-foreground text-center mb-8">These powerful add-ons work across all the subjects you've selected and are only $9.99 each when bundled with a course.</p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {addonTools.map(tool => (
                                 <Card key={tool.id} className={cn("flex flex-col cursor-pointer transition-all", selectedAddons.includes(tool.id) && "border-primary ring-2 ring-primary")} onClick={() => handleSelectAddon(tool.id)}>
@@ -204,17 +222,17 @@ export default function ConversationalCheckoutPage() {
     };
 
     const handleNext = () => {
-        if (step === 'subjects') setStep('addons');
+        if (step === 'courses') setStep('addons');
         if (step === 'addons') setStep('summary');
     };
 
     const handleBack = () => {
         if (step === 'summary') setStep('addons');
-        if (step === 'addons') setStep('subjects');
+        if (step === 'addons') setStep('courses');
     };
 
     return (
-        <div className="container mx-auto py-12 max-w-4xl">
+        <div className="container mx-auto py-12 max-w-5xl">
             <header className="text-center mb-12">
                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <Sparkles className="h-8 w-8" />
@@ -228,7 +246,7 @@ export default function ConversationalCheckoutPage() {
 
             <footer className="mt-12 flex items-center justify-between">
                 <div>
-                    {step !== 'subjects' && (
+                    {step !== 'courses' && (
                         <Button variant="ghost" onClick={handleBack}>
                             <ArrowLeft className="mr-2 h-4 w-4" /> Back
                         </Button>
@@ -245,7 +263,7 @@ export default function ConversationalCheckoutPage() {
                             {isLoading ? "Redirecting..." : "Proceed to Checkout"}
                         </Button>
                     ) : (
-                        <Button size="lg" onClick={handleNext} disabled={step === 'subjects' && selectedSubjects.length === 0}>
+                        <Button size="lg" onClick={handleNext} disabled={step === 'courses' && selectedCourses.length === 0}>
                             Next <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
                     )}
@@ -254,3 +272,4 @@ export default function ConversationalCheckoutPage() {
         </div>
     );
 }
+
