@@ -57,7 +57,10 @@ export default function EditSectionDialog({
         instructions,
       });
       
-      const revisedContent = JSON.parse(result.revisedContent);
+      // Sanitize the string to remove invalid control characters before parsing.
+      const sanitizedContent = result.revisedContent.replace(/\n/g, "\\n");
+      const revisedContent = JSON.parse(sanitizedContent);
+
       onSectionUpdate(revisedContent);
       toast({
         title: 'Section Updated',
