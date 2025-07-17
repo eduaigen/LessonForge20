@@ -113,7 +113,7 @@ export default function AuthenticatedAppLayout({
             </SheetContent>
           </Sheet>
         </header>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8">
+        <main className="flex-1 p-4 sm:px-6 sm:py-0 md:gap-8 pb-8">
           {children}
         </main>
       </div>
