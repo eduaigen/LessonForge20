@@ -16,17 +16,29 @@ import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/common/Logo';
 import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, users } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
   const [email, setEmail] = useState('');
   
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // For login, we don't have the user's name, so we just pass the email.
-    // The name can be derived from the email or defaulted in the context.
-    login({ email });
+    const existingUser = users.find(u => u.email === email);
+
+    if (!existingUser) {
+        toast({ title: 'Error', description: 'No account found with that email.', variant: 'destructive' });
+        return;
+    }
+
+    if (!existingUser.isVerified) {
+        toast({ title: 'Verification Required', description: 'Please verify your email address before logging in. If you just signed up, click the link on the signup confirmation page.', variant: 'destructive' });
+        return;
+    }
+    
+    login({ email: existingUser.email, name: existingUser.name });
     router.push('/auth-dashboard');
   };
   
@@ -65,7 +77,7 @@ export default function LoginPage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" required defaultValue="password123" />
             </div>
             <Button type="submit" className="w-full">
               Login
@@ -82,5 +94,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    

@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
 import type { GeneratedContent as LessonPackageContent } from '@/components/generators/NVBiologyGenerator';
 import type { TestGeneratedContent } from '@/components/generators/NVBiologyTestGenerator';
 import { allModules } from '@/lib/modules-data';
@@ -14,7 +14,8 @@ const MAX_HISTORY_LENGTH = 20;
 
 interface User {
     name: string | null;
-    email: string | null;
+    email: string;
+    isVerified: boolean;
 }
 
 interface AuthContextType {
@@ -22,6 +23,7 @@ interface AuthContextType {
   isAdmin: boolean;
   isSubscribed: boolean;
   user: User | null;
+  users: User[];
   subscriptions: string[];
   hasScienceSubscription: boolean;
   hasMathSubscription: boolean;
@@ -31,6 +33,8 @@ interface AuthContextType {
   hasPremiumTools: boolean;
   generationHistory: GeneratedContent[][];
   addToHistory: (newPackage: GeneratedContent[]) => void;
+  signup: (userInfo: { email: string; name?: string }) => void;
+  verifyUser: (email: string) => void;
   login: (userInfo: { email: string; name?: string }) => void;
   logout: () => void;
   subscribe: (priceIds: string[]) => void;
@@ -45,6 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]); // To simulate a user database
   const [subscriptions, setSubscriptions] = useState<string[]>([]);
   const [generationHistory, setGenerationHistory] = useState<GeneratedContent[][]>([]);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
@@ -58,12 +63,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const shouldShowDisclaimer = sessionStorage.getItem('showDisclaimer') === 'true';
         
         const storedUser = sessionStorage.getItem('user');
+        const storedUsers = sessionStorage.getItem('users');
         const storedSubscriptions = sessionStorage.getItem('subscriptions');
         const storedHistory = sessionStorage.getItem('generationHistory');
         
         if (loggedInStatus) setIsLoggedIn(true);
         if (adminStatus) setIsAdmin(true);
         if (storedUser) setUser(JSON.parse(storedUser));
+        if (storedUsers) setUsers(JSON.parse(storedUsers));
         if (storedSubscriptions) setSubscriptions(JSON.parse(storedSubscriptions));
         if (storedHistory) setGenerationHistory(JSON.parse(storedHistory));
 
@@ -78,10 +85,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const signup = ({ email, name }: { email: string; name?: string }) => {
+    const newUser: User = { name: name || email.split('@')[0], email, isVerified: false };
+    const updatedUsers = [...users, newUser];
+    setUsers(updatedUsers);
+    sessionStorage.setItem('users', JSON.stringify(updatedUsers));
+  };
+
+  const verifyUser = (email: string) => {
+    const updatedUsers = users.map(u => u.email === email ? { ...u, isVerified: true } : u);
+    setUsers(updatedUsers);
+    sessionStorage.setItem('users', JSON.stringify(updatedUsers));
+  };
+
+
   const login = ({ email, name }: { email: string; name?: string }) => {
     const isAdminUser = email.toLowerCase() === ADMIN_EMAIL;
-    const userName = name || (isAdminUser ? 'Admin' : email.split('@')[0]);
-    const currentUser: User = { name: userName, email };
+    const existingUser = users.find(u => u.email === email);
+
+    const currentUser: User = { 
+        name: name || existingUser?.name || email.split('@')[0], 
+        email,
+        isVerified: existingUser?.isVerified || isAdminUser
+    };
 
     setIsLoggedIn(true);
     setIsAdmin(isAdminUser);
@@ -104,11 +130,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setSubscriptions([]);
     setGenerationHistory([]);
     sessionStorage.clear();
-    // Keep disclaimer agreement in localStorage
   };
 
   const subscribe = (priceIds: string[]) => {
-    setIsLoggedIn(true); // A user must be logged in to subscribe
+    setIsLoggedIn(true);
     setSubscriptions(prev => {
         const newSubscriptions = [...new Set([...prev, ...priceIds])];
         sessionStorage.setItem('subscriptions', JSON.stringify(newSubscriptions));
@@ -155,13 +180,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const hasPremiumTools = useMemo(() => {
       if(isAdmin) return true;
-      // This logic can be expanded if there are more premium tools
       return allModules.premium_tools.some(tool => subscriptions.includes(tool.id));
   }, [subscriptions, isAdmin]);
 
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription, hasPremiumTools, generationHistory, addToHistory, login, logout, subscribe, showDisclaimer, setShowDisclaimer, agreeToDisclaimer }}>
+    <AuthContext.Provider value={{ isLoggedIn, isAdmin, user, users, isSubscribed, subscriptions, hasScienceSubscription, hasMathSubscription, hasELASubscription, hasSocialStudiesSubscription, hasELLSubscription, hasPremiumTools, generationHistory, addToHistory, signup, verifyUser, login, logout, subscribe, showDisclaimer, setShowDisclaimer, agreeToDisclaimer }}>
       {children}
     </AuthContext.Provider>
   );
