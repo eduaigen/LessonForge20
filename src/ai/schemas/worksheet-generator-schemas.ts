@@ -1,9 +1,11 @@
+
 import { z } from 'zod';
 import { dataTableSchema } from './nv-biology-lesson-schemas';
+import type { LanguageOption } from '@/components/common/LanguageSelectionDialog';
 
 export const GenerateWorksheetInputSchema = z.object({
   lessonPlanJson: z.string().describe('The complete lesson plan object as a JSON string.'),
-  language: z.enum(['English', 'Spanish', 'Bilingual']).optional().default('English').describe('The language for the generated worksheet.'),
+  language: z.custom<LanguageOption>().describe('The language for the generated worksheet.'),
 });
 
 const headerSchema = z.object({
@@ -79,8 +81,6 @@ const closureSchema = z.object({
 const homeworkSchema = z.object({
     title: z.string().default("Homework Assignment"),
     activity: z.string().describe("The full homework activity, including any embedded readings or data."),
-    extensionActivity: z.string().optional().describe("The extension activity from the differentiation section."),
-    differentiation_support: z.string().optional().describe("Support materials or strategies from the differentiation section."),
 });
 
 

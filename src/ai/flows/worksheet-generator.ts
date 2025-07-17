@@ -18,7 +18,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert curriculum developer. Your task is to transform a detailed, teacher-facing lesson plan JSON into a structured, student-facing worksheet in the specified language.
 
 **CRITICAL RULES:**
-1.  **Language**: Generate all text content in **{{{language}}}**. If the language is "Bilingual", provide the English text first, followed by an exact, word-for-word Spanish translation on a new line and in italics. **CRITICAL**: Do NOT translate any numerical data within data tables; only translate textual headers and titles.
+1.  **Language**: Generate all text content in **{{{language}}}**.
 2.  **Source Material**: Your ONLY source of information is the provided JSON lesson plan.
 3.  **Fidelity**: You MUST follow the instructions for each section below with 100% fidelity.
 4.  **No New Content**: Do NOT invent new content, questions, or activities. Your job is to reproduce and reformat existing content for a student audience.
@@ -36,12 +36,12 @@ const prompt = ai.definePrompt({
 **1. Header Section:**
 - **Action:** Populate the 'header' object fields as placeholders in the target language.
 - **Output:**
-    - name: "Name: ______________________" (and Spanish translation if bilingual)
-    - date: "Date: _______________" (and Spanish translation if bilingual)
-    - period: "Period: _______" (and Spanish translation if bilingual)
-    - grade: "Grade: _______" (and Spanish translation if bilingual)
-    - class: "Class: ___________________" (and Spanish translation if bilingual)
-    - teacher: "Teacher: ___________________" (and Spanish translation if bilingual)
+    - name: "Name: ______________________"
+    - date: "Date: _______________"
+    - period: "Period: _______"
+    - grade: "Grade: _______"
+    - class: "Class: ___________________"
+    - teacher: "Teacher: ___________________"
 
 **2. Aim & Essential Question Section:**
 - **Action:** Scan 'lessonOverview' in the lesson plan.
@@ -96,8 +96,6 @@ const prompt = ai.definePrompt({
 - **Action:**
     - Set 'title' to "Homework Assignment".
     - **CRITICAL:** Copy the 'homework.activity' content, which may include passages or questions, exactly into 'homework.activity'.
-    - Copy 'differentiation.extensionActivity' into 'homework.extensionActivity'.
-    - Copy 'differentiation.scaffoldedMaterials' into 'homework.differentiation_support'.
 
 **Final Check:** Review your generated JSON to ensure every instruction was followed precisely. The output must be a valid JSON object matching the 'GenerateWorksheetOutputSchema' and be in the correct language.
 `,
@@ -108,7 +106,6 @@ const worksheetGeneratorFlow = ai.defineFlow(
     name: 'worksheetGeneratorFlow',
     inputSchema: GenerateWorksheetInputSchema,
     outputSchema: GenerateWorksheetOutputSchema,
-    timeout: 120000, // 2 minutes
   },
   async (input) => {
     const { output } = await prompt(input);
