@@ -561,7 +561,9 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
                                 {q.options.map((opt, optIndex) => (
                                     <li key={optIndex} className="flex items-start">
                                         <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
-                                        <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                                        <div className="inline">
+                                            <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
@@ -1001,7 +1003,9 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
                 {mc.options.map((opt, optIndex) => (
                   <li key={`${index}-${optIndex}`} className="flex items-start">
                     <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
-                    <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                    <div className="inline">
+                       <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -1246,7 +1250,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Slideshow Outline':
             return renderSlideshowOutline(content);
         case 'Question Cluster':
-            return renderQuestionCluster(content);
+            return renderQuestionCluster(cluster);
         case 'Practice Questions':
             return <PracticeQuestionsDisplay content={content} />;
         case 'Reading Material':
