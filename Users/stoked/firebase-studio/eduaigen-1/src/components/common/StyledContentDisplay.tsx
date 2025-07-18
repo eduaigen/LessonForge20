@@ -557,13 +557,14 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
                     <li key={i}>
                         <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
                         {q.options && (
-                            <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                            <ul className="list-none pl-6 mt-2 space-y-1">
                                 {q.options.map((opt, optIndex) => (
-                                    <li key={optIndex}>
+                                    <li key={optIndex} className="flex items-start">
+                                        <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
                                         <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
                                     </li>
                                 ))}
-                            </ol>
+                            </ul>
                         )}
                         <AnimatePresence>
                             {showAnswers && (
@@ -576,7 +577,7 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
                                     <div className="font-semibold text-green-800">
                                         Answer: <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.answerKey[i].answer}</Markdown>
                                     </div>
-                                    <div className="text-sm text-green-700">
+                                    <div className="text-sm text-green-700 mt-1">
                                         <strong>Explanation:</strong> <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.answerKey[i].explanation}</Markdown>
                                     </div>
                                 </motion.div>
@@ -821,9 +822,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                        <ul className="list-none pl-6 mt-2 space-y-1">
                           {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ol>
+                        </ul>
                     </li>
                 ))}
             </ol>
@@ -903,9 +904,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                        <ul className="list-none pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ol>
+                        </ul>
                     </li>
                 ))}
             </ol>
@@ -962,6 +963,26 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
     </div>
 );
 
+const GraphingGrid = () => (
+    <div className="my-4 p-4 border-2 border-dashed rounded-lg bg-background flex items-center justify-center aspect-square max-w-sm mx-auto">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="hsl(var(--muted-foreground) / 0.3)" strokeWidth="0.5"/>
+                </pattern>
+                <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                    <rect width="50" height="50" fill="url(#smallGrid)"/>
+                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="hsl(var(--muted-foreground) / 0.5)" strokeWidth="1"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+            <line x1="0" y1="50%" x2="100%" y2="50%" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        </svg>
+    </div>
+);
+
+
 const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
     <div className="document-view">
       <header className="text-center mb-8">
@@ -978,8 +999,9 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
               <ul className="list-none pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
-                  <li key={`${index}-${optIndex}`}>
-                    {String.fromCharCode(65 + optIndex)}. <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                  <li key={`${index}-${optIndex}`} className="flex items-start">
+                    <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
+                    <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
                   </li>
                 ))}
               </ul>
@@ -995,6 +1017,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partII.questions.map((q, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+              {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
               <div className="my-2 h-24 border-b border-dashed"></div>
             </li>
           ))}
@@ -1008,6 +1031,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partIII.questions.map((q, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+              {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
               <div className="my-2 h-32 border-b border-dashed"></div>
             </li>
           ))}
@@ -1019,6 +1043,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
         <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIV.title}</h2>
         <div>
           <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{test.partIV.question.question}</Markdown>
+           {test.partIV.question.question.toLowerCase().includes('graph') && <GraphingGrid />}
           <div className="my-2 h-48 border-b border-dashed"></div>
         </div>
       </section>
@@ -1043,9 +1068,9 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
-                                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                                <ul className="list-none pl-6 mt-2 space-y-1">
                                     {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                                </ol>
+                                </ul>
                             </li>
                         ))}
                     </ol>
@@ -1257,3 +1282,4 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             }
     }
 }
+
