@@ -1198,7 +1198,7 @@ const SocialStudiesAnswerKeyDisplay = ({ test }: { test: GenerateSocialStudiesTe
                     <ol className="list-decimal pl-5 space-y-4">
                         {set.questions.map((q, qIndex) => (
                             <li key={qIndex}>
-                                <p><strong>Question:</strong> {q.question}</p>
+                                <div><strong>Question:</strong> {q.question}</div>
                                 <div><strong>Sample Answer:</strong> <Markdown>{q.sampleAnswer}</Markdown></div>
                             </li>
                         ))}
