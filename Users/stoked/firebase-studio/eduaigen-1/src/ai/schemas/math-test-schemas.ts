@@ -43,5 +43,3 @@ export const GenerateMathTestOutputSchema = z.object({
 
 export type GenerateMathTestInput = z.infer<typeof GenerateMathTestInputSchema>;
 export type GenerateMathTestOutput = z.infer<typeof GenerateMathTestOutputSchema>;
-
-    

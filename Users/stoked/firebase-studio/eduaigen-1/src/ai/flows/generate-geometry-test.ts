@@ -34,17 +34,17 @@ const prompt = ai.definePrompt({
   name: 'generateGeometryTestPrompt',
   input: { schema: GenerateMathTestInputSchema },
   output: { schema: GenerateMathTestOutputSchema },
-  prompt: `You are an expert high school Geometry teacher and assessment writer for the NYS Regents curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum lessons. Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$\\triangle ABC \\cong \\triangle DEF$$.
+  prompt: `You are an expert high school Geometry teacher and assessment writer for the NYS Regents curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum lessons.
 
 **CRITICAL INSTRUCTIONS:**
-1.  Generate a set of clear, student-facing instructions for taking the test.
-2.  Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
-3.  You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I. This is a non-negotiable requirement.
-4.  For multiple-choice questions, each answer option MUST contain only the text of the answer. DO NOT include any prefix like "A.", "B.", or "1.".
-5.  All generated content must be complete and fully written out. No placeholders.
-6.  Use LaTeX for all mathematical expressions, equations, and symbols.
-7.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
-8.  For ALL constructed response questions (Parts II, III, and IV), you MUST provide a detailed, step-by-step sample answer that clearly explains the solution process.
+1.  **Use LaTeX for ALL math**: Every mathematical expression, variable, symbol, and equation MUST be wrapped in double dollar signs, like $$\\triangle ABC \\cong \\triangle DEF$$. Do NOT escape backslashes (e.g., use $$\\frac{1}{2}$$, not $$\\frac{1}{2}$$).
+2.  **Generate a set of clear, student-facing instructions for taking the test.**
+3.  **Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.**
+4.  **You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I.** This is a non-negotiable requirement.
+5.  **For multiple-choice questions, each answer option MUST contain only the text of the answer.** DO NOT include any prefix like "A.", "B.", or "1.".
+6.  **All generated content must be complete and fully written out.** No placeholders.
+7.  **Do not generate questions that require a visual diagram to be understood.** Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
+8.  **For ALL constructed response questions (Parts II, III, and IV), you MUST provide a detailed, step-by-step sample answer that clearly explains the solution process.**
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
@@ -93,5 +93,3 @@ export async function generateGeometryTest(
 ): Promise<GenerateMathTestOutput> {
   return await generateGeometryTestFlow(input);
 }
-
-    
