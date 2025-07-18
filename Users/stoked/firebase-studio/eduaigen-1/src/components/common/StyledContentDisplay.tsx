@@ -46,7 +46,7 @@ const renderTableFromObject = (tableData: { title: string, headers: string[], ro
                 <tbody>
                     {tableData.rows.map((row, rowIndex) => (
                         <tr key={rowIndex} className="border-b last:border-b-0">
-                            {row.map((cell, cellIndex) => <td key={cellIndex} className="p-3 align-top">{cell}</td>)}
+                            {row.map((cell, cellIndex) => <td key={cellIndex} className="p-3 align-top"><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{String(cell)}</Markdown></td>)}
                         </tr>
                     ))}
                 </tbody>
@@ -62,7 +62,7 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
         <p>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></p>
         {q.options && (
           <ul className="list-none pl-6 mt-2 space-y-1">
-            {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
+            {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
           </ul>
         )}
         {q.answer && <div className="text-green-600 font-semibold mt-1">Correct Answer: {q.answer}</div>}
@@ -241,7 +241,7 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                            <div><h4>Extension Activity</h4><p>{sectionContent.extensionActivity}</p></div>
                        </>}
                        {sectionContent.teacherActions && <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{sectionContent.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>}
-                       {sectionContent.expectedStudentOutputs && <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{sectionContent.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>}
+                       {sectionContent.expectedStudentOutputs && <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{sectionContent.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>
                    </LessonSectionCard>
                 )
             })}
