@@ -18,14 +18,27 @@ import { useAuth } from '@/context/AuthContext';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
+const ADMIN_EMAIL = 'admin@eduaigen.org';
+const ADMIN_PASSWORD = 'Ev@788330';
+
 export default function LoginPage() {
   const { login, users } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Special admin login
+    if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      login({ email: ADMIN_EMAIL, name: 'Admin User' });
+      router.push('/auth-dashboard');
+      toast({ title: 'Admin Login Successful', description: 'Welcome! You have full access to all features.' });
+      return;
+    }
+
     const existingUser = users.find(u => u.email === email);
 
     if (!existingUser) {
@@ -38,6 +51,7 @@ export default function LoginPage() {
         return;
     }
     
+    // For prototype purposes, we are not checking passwords for regular users.
     login({ email: existingUser.email, name: existingUser.name });
     router.push('/auth-dashboard');
   };
@@ -71,7 +85,13 @@ export default function LoginPage() {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
               </div>
-              <Input id="password" type="password" required defaultValue="password123" />
+              <Input 
+                id="password" 
+                type="password" 
+                required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <Button type="submit" className="w-full">
               Login
