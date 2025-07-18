@@ -35,6 +35,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import type { GeneratedContent } from './NVBiologyGenerator';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -44,14 +45,6 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-export type GeneratedContent = {
-  id: string;
-  title: string;
-  content: any;
-  type: ToolName | 'Lesson Plan';
-  sourceId?: string;
-};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -77,8 +70,9 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
+  const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
   const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
@@ -99,6 +93,12 @@ const GeneratorContent = () => {
   const lessonPlan = useMemo(() => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as GenerateGeometryLessonOutput | null;
   }, [lessonPackage]);
+
+  useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
 
   const units = useMemo(() => Object.keys(geometryCurriculum.units), []);
 
@@ -246,7 +246,7 @@ const GeneratorContent = () => {
                Your lesson plan is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
             </AlertDialogDescription>
             <div className="text-sm text-muted-foreground pt-4 text-left">
-              <span className="font-semibold text-foreground">Here are the available tools:</span>
+              <span className="font-semibold text-foreground">Available Tools:</span>
               <ul className="list-disc pl-5 mt-2 space-y-2">
                   <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
                   <li><strong>Reading Material:</strong> Generates a student-facing article.</li>

@@ -40,7 +40,6 @@ const scienceLessonTools = [
 const nonScienceLessonTools = [
     ...lessonTools,
     { name: 'Practice Questions' as ToolName, icon: <FileQuestion className="h-5 w-5" />, disabled: false },
-    { name: 'Answer Key' as ToolName, icon: <Key className="h-5 w-5" />, disabled: false },
 ]
 
 const testTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [

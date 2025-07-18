@@ -30,7 +30,7 @@ import { useAuth } from '@/context/AuthContext';
 import CollapsibleSection from '../common/CollapsibleSection';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-
+import type { GeneratedContent } from './NVBiologyGenerator';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -40,14 +40,6 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-export type GeneratedContent = {
-  id: string;
-  title: string;
-  content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
-  sourceId?: string;
-};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -73,8 +65,9 @@ const SubscriptionPrompt = () => (
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
+  const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
   const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
@@ -90,6 +83,12 @@ const GeneratorContent = () => {
   const lessonPlan = useMemo(() => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as any | null;
   }, [lessonPackage]);
+
+  useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
 
   const units = useMemo(() => Object.keys(globalHistory1Curriculum.units), []);
 
