@@ -61,7 +61,7 @@ const prompt = ai.definePrompt({
 **Part II: Constructed-Response Questions (CRQs)**
 - Generate EXACTLY {{{crqCount}}} unique CRQ sets.
 - Each set must contain 1-2 fully-written, text-based documents. The document length should vary, from short quotes to longer passages of at least 200 words.
-- Each set must have exactly 3 scaffolded questions.
+- Each set must have exactly 3 scaffolded questions that assess skills like identifying cause/effect, analyzing point of view, and understanding historical context.
 - **Answer Key:** Provide a detailed, high-quality sample answer for each of the 3 questions in each CRQ set.
 
 **Part III: Document-Based Question (DBQ)**
