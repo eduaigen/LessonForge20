@@ -292,15 +292,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                     </div>
                 </>
             )}
-             {worksheet.miniLesson.diagramDescription && (
-                <div className="p-4 border-l-4 border-primary bg-muted/50 rounded-r-lg my-4">
-                    <h4 className="font-semibold">Diagram for Analysis</h4>
-                    <p className="italic">{worksheet.miniLesson.diagramDescription}</p>
-                    <div className="my-4 h-64 border-2 border-dashed rounded-lg bg-background flex items-center justify-center text-muted-foreground">
-                        <p>Space for Diagram</p>
-                    </div>
-                </div>
-            )}
+             {worksheet.miniLesson.diagramDescription && <DiagramGenerator description={worksheet.miniLesson.diagramDescription} />}
              <h4>{worksheet.miniLesson.notesTitle}</h4>
             <div className="overflow-x-auto my-4">
                 <table className="w-full border-collapse">
@@ -714,12 +706,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                 </section>
             )}
 
-            {studySheet.keyDiagram && (
-                 <section className="mb-6">
-                    <h2>Key Diagram / Model</h2>
-                    <p>{studySheet.keyDiagram}</p>
-                </section>
-            )}
+            {studySheet.keyDiagram && <DiagramGenerator description={studySheet.keyDiagram} />}
 
             {Array.isArray(studySheet.practiceQuestions) && studySheet.practiceQuestions.length > 0 && (
                 <section className="mb-6">
@@ -786,6 +773,7 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
     return (
         <div className="document-view">
             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.articleContent}</Markdown>
+            {content.keyDiagram && <DiagramGenerator description={content.keyDiagram} />}
 
             <div className="mt-8 border-t pt-6">
                 <Button onClick={onGenerateQuestions} disabled={isLoading}>
