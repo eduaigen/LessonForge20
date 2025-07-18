@@ -165,7 +165,7 @@ const GeneratorContent = () => {
             <AlertDialogTitle className="flex items-center gap-2"><Wand2 className="h-6 w-6 text-primary" />Test Generated!</AlertDialogTitle>
             <AlertDialogDescription>Your test and answer key are ready. Use the AI tools on the right sidebar to create aligned materials.</AlertDialogDescription>
             <div className="text-sm text-muted-foreground pt-4 text-left">
-              <span className="font-semibold text-foreground">Here are the available tools:</span>
+              <span className="font-semibold text-foreground">Available Tools:</span>
               <ul className="list-disc pl-5 mt-2 space-y-2">
                   <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
                   <li><strong>Differentiated Version:</strong> Generates a version with more scaffolds.</li>
