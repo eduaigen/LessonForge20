@@ -39,7 +39,8 @@ const scienceLessonTools = [
 
 const nonScienceLessonTools = [
     ...lessonTools,
-    { name: 'Practice Questions' as ToolName, icon: <FileQuestion className="h-5 w-5" />, disabled: false }
+    { name: 'Practice Questions' as ToolName, icon: <FileQuestion className="h-5 w-5" />, disabled: false },
+    { name: 'Answer Key' as ToolName, icon: <Key className="h-5 w-5" />, disabled: false },
 ]
 
 const testTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
@@ -98,7 +99,7 @@ export default function RightSidebar({ onToolClick, isGenerating, isHighlighting
 
   return (
     <aside className="fixed right-4 top-1/2 -translate-y-1/2 z-10">
-       <TooltipProvider>
+       <TooltipProvider delayDuration={0}>
         <div className={cn(
             "flex flex-col gap-2 p-2 bg-background/80 backdrop-blur-sm border rounded-lg shadow-lg transition-all duration-300",
             isHighlighting && "animate-temporary-glow"

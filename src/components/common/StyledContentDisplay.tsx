@@ -543,23 +543,34 @@ const renderPracticeQuestions = (content: GeneratePracticeQuestionsOutput) => (
         <ol className="list-decimal pl-5 space-y-6">
             {content.questions.map((q, i) => (
                 <li key={i}>
-                    <p className="font-semibold">{q.question}</p>
+                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
                     {q.options && (
                         <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                             {q.options.map((opt, optIndex) => (
-                                <li key={optIndex}>{opt}</li>
+                                <li key={optIndex}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
                             ))}
                         </ol>
                     )}
-                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
-                        <p className="text-sm"><strong>Answer:</strong> {q.answer}</p>
-                        <p className="text-xs text-muted-foreground"><strong>Explanation:</strong> {q.explanation}</p>
-                    </div>
                 </li>
             ))}
         </ol>
     </div>
 );
+
+const renderPracticeQuestionAnswerKey = (content: GeneratePracticeQuestionsOutput) => (
+    <div className="document-view">
+        <h2 className="text-2xl font-bold mb-4">{content.title} - Answer Key</h2>
+        <ol className="list-decimal pl-5 space-y-6">
+            {content.answerKey.map((ans, i) => (
+                <li key={i}>
+                    <p><strong>Answer:</strong> <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{ans.answer}</Markdown></p>
+                    <p className="text-sm text-muted-foreground"><strong>Explanation:</strong> <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{ans.explanation}</Markdown></p>
+                </li>
+            ))}
+        </ol>
+    </div>
+);
+
 
 const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     return (
@@ -579,7 +590,7 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
           <div className="space-y-6">
             <div>
               <h3>Multiple Choice</h3>
-              <ol className="list-decimal pl-5 space-y-4">
+              <ol className="list-decimal pl-5 space-y-6">
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
@@ -788,13 +799,13 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
           </Card>
           
           <h3 className="text-xl font-semibold mb-4">Multiple Choice Questions</h3>
-          <ol className="list-decimal pl-5 space-y-6">
+          <ol className="list-[upper-alpha] pl-5 space-y-6">
             {cluster.multipleChoiceQuestions.map((q, i) => (
               <li key={i}>
                 <p>{q.question}</p>
-                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                 <ul className="list-none pl-6 mt-2 space-y-1">
                   {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
-                </ol>
+                </ul>
               </li>
             ))}
           </ol>
@@ -874,9 +885,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                        <ul className="list-none pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => <li key={`${index}-${optIndex}`}>{opt}</li>)}
-                        </ol>
+                        </ul>
                     </li>
                 ))}
             </ol>
@@ -947,11 +958,11 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partI.questions.map((mc, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-              <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+              <ul className="list-none pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
                   <li key={`${index}-${optIndex}`}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
                 ))}
-              </ol>
+              </ul>
             </li>
           ))}
         </ol>
@@ -1012,9 +1023,9 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
-                                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                                <ul className="list-none pl-6 mt-2 space-y-1">
                                     {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{opt}</li>)}
-                                </ol>
+                                </ul>
                             </li>
                         ))}
                     </ol>
@@ -1174,6 +1185,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
     const isLabStudentSheet = content.phenomenonReading && content.testableQuestion;
     const isLessonTeacherCoach = content.doNow && content.doNow.pedagogicalRationale;
     const isLabTeacherCoach = content.introduction && content.introduction.pedagogicalRationale;
+    const isPracticeQuestions = content.questions && content.answerKey;
+
 
     switch (type) {
         case 'Lesson Plan':
@@ -1205,6 +1218,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (isELATest) return <ELATestDisplay test={content} />;
             return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
         case 'Answer Key':
+            if (isPracticeQuestions) return renderPracticeQuestionAnswerKey(content);
             if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
             if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
             if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
