@@ -26,7 +26,6 @@ import { generateDifferentiatedMathTest } from '@/ai/flows/generate-math-differe
 import { generateEnhancedMathTest } from '@/ai/flows/generate-math-enhanced-test';
 import { generateMathStudySheet } from '@/ai/flows/generate-math-study-sheet';
 import type { TestGeneratedContent } from './NVBiologyTestGenerator';
-import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 
 const formSchema = z.object({
   lessons: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -142,7 +141,7 @@ const GeneratorContent = () => {
         switch (toolName) {
             case 'Study Sheet':
                 result = await generateMathStudySheet({ originalTest: originalTestContent.content });
-                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result as TestStudySheetOutput, type: 'Study Sheet' };
+                newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
                 break;
             case 'Differentiated Version':
                 result = await generateDifferentiatedMathTest({ originalTest: originalTestContent.content });

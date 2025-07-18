@@ -548,19 +548,16 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
                     <li key={i}>
                         <div><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown></div>
                         {q.options && (
-                            <ul className="list-none pl-6 mt-2 space-y-1">
+                            <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                                 {q.options.map((opt, optIndex) => (
-                                    <li key={optIndex} className="flex items-start">
-                                        <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
-                                        <div className="inline">
-                                            <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
-                                        </div>
+                                    <li key={optIndex}>
+                                        <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
                                     </li>
                                 ))}
-                            </ul>
+                            </ol>
                         )}
                         <AnimatePresence>
-                            {showAnswers && content.answerKey && content.answerKey[i] && (
+                            {showAnswers && (
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -570,7 +567,7 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
                                     <div className="font-semibold text-green-800">
                                         Answer: <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.answerKey[i].answer}</Markdown>
                                     </div>
-                                    <div className="text-sm text-green-700 mt-1">
+                                    <div className="text-sm text-green-700">
                                         <strong>Explanation:</strong> <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.answerKey[i].explanation}</Markdown>
                                     </div>
                                 </motion.div>
@@ -1305,7 +1302,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
             if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
             if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
-            if (isMathTest) return <MathTestDisplay test={content} />;
+            if (isMathTest) return <MathTestDisplay test={content} />; // This should display the same test with answers visible
             return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);
