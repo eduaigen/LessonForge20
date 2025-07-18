@@ -41,7 +41,6 @@ const testTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] 
 
 const labTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Student Answer Sheet', icon: <ClipboardCheck className="h-5 w-5" />, disabled: false },
-  { name: 'Answer Key', icon: <Key className="h-5 w-5" />, disabled: false },
   { name: 'Differentiated Version', icon: <PencilRuler className="h-5 w-5" />, disabled: false },
   { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
 ];
