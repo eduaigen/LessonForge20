@@ -74,7 +74,6 @@ const PremiumDashboardContent = () => {
     { name: "Mathematics", icon: <Sigma />, tools: [...allModules.coursesBySubject.math, ...allModules.assessmentsBySubject.math], subscription: hasMathSubscription },
     { name: "English Language Arts", icon: <Library />, tools: [...allModules.coursesBySubject.ela, ...allModules.assessmentsBySubject.ela], subscription: hasELASubscription },
     { name: "Social Studies", icon: <History />, tools: [...allModules.coursesBySubject['social studies'], ...allModules.assessmentsBySubject['social studies']], subscription: hasSocialStudiesSubscription },
-    { name: "ELL / ENL", icon: <Languages />, tools: [...allModules.coursesBySubject.ell, ...allModules.assessmentsBySubject.ell], subscription: hasELLSubscription },
   ];
 
   return (

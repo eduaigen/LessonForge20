@@ -64,13 +64,6 @@ const offerings = {
       { name: 'Government & Economics', description: 'Cultivates active and informed citizens through the study of government and economic principles.', icon: <Landmark /> },
     ],
   },
-  ell: {
-    title: 'ELL / ENL Offerings',
-    icon: <Languages className="h-8 w-8 text-primary" />,
-    courses: [
-      { name: 'ELL / ENL Curriculum', description: 'Provides scaffolded, language-rich content across core subjects to support English Language Learners.', icon: <Languages /> },
-    ],
-  }
 };
 
 

@@ -66,11 +66,11 @@ const PremiumDashboardContent = () => {
   
   const subjects = [
     { name: "Advanced Tools", icon: <FolderSync />, tools: allModules.premium_tools, subscription: hasPremiumTools },
-    { name: "Science", icon: <Dna />, tools: [...allModules.coursesBySubject.science, ...allModules.assessmentsBySubject.science], subscription: hasScienceSubscription },
-    { name: "Mathematics", icon: <Sigma />, tools: [...allModules.coursesBySubject.math, ...allModules.assessmentsBySubject.math], subscription: hasMathSubscription },
-    { name: "English Language Arts", icon: <Library />, tools: [...allModules.coursesBySubject.ela, ...allModules.assessmentsBySubject.ela], subscription: hasELASubscription },
-    { name: "Social Studies", icon: <History />, tools: [...allModules.coursesBySubject['social studies'], ...allModules.assessmentsBySubject['social studies']], subscription: hasSocialStudiesSubscription },
-    { name: "ELL / ENL", icon: <Languages />, tools: [...allModules.coursesBySubject.ell, ...allModules.assessmentsBySubject.ell], subscription: hasELLSubscription },
+    { name: "Science", icon: <Dna />, tools: [...allModules.coursesBySubject.science, ...(allModules.assessmentsBySubject.science || [])], subscription: hasScienceSubscription },
+    { name: "Mathematics", icon: <Sigma />, tools: [...allModules.coursesBySubject.math, ...(allModules.assessmentsBySubject.math || [])], subscription: hasMathSubscription },
+    { name: "English Language Arts", icon: <Library />, tools: [...allModules.coursesBySubject.ela, ...(allModules.assessmentsBySubject.ela || [])], subscription: hasELASubscription },
+    { name: "Social Studies", icon: <History />, tools: [...allModules.coursesBySubject['social studies'], ...(allModules.assessmentsBySubject['social studies'] || [])], subscription: hasSocialStudiesSubscription },
+    { name: "ELL / ENL", icon: <Languages />, tools: [...(allModules.coursesBySubject.ell || [])], subscription: hasELLSubscription },
   ];
 
   return (
@@ -83,20 +83,23 @@ const PremiumDashboardContent = () => {
       </div>
 
        <div className="space-y-12">
-            {subjects.map(subject => (
-                <SubjectSection key={subject.name} title={subject.name} icon={subject.icon}>
-                    {subject.tools.map(tool => (
-                        <ToolCard 
-                            key={tool.id}
-                            title={tool.name}
-                            description={tool.description}
-                            icon={<tool.icon />}
-                            href={tool.href}
-                            isSubscribed={subject.subscription}
-                        />
-                    ))}
-                </SubjectSection>
-            ))}
+            {subjects.map(subject => {
+                if (!subject.tools || subject.tools.length === 0) return null;
+                return (
+                    <SubjectSection key={subject.name} title={subject.name} icon={subject.icon}>
+                        {subject.tools.map(tool => (
+                            <ToolCard 
+                                key={tool.id}
+                                title={tool.name}
+                                description={tool.description}
+                                icon={<tool.icon />}
+                                href={tool.href}
+                                isSubscribed={subject.subscription}
+                            />
+                        ))}
+                    </SubjectSection>
+                )
+            })}
        </div>
     </div>
   );

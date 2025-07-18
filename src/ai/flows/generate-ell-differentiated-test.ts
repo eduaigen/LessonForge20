@@ -5,7 +5,6 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { GenerateELLTestOutputSchema } from '../schemas/ell-test-schemas';
 import { DifferentiatedELLTestInputSchema } from '../schemas/ell-differentiated-test-schemas';
 
 const prompt = ai.definePrompt({

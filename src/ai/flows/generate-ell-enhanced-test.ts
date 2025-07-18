@@ -5,7 +5,7 @@
  */
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
-import { GenerateELLTestOutputSchema } from '../schemas/ell-test-schemas';
+// Assuming GenerateELLTestOutputSchema is no longer needed or defined elsewhere
 import { EnhancedELLTestInputSchema } from '../schemas/ell-enhanced-test-schemas';
 
 const prompt = ai.definePrompt({

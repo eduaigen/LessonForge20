@@ -852,7 +852,7 @@ const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }
              {cluster.answerKey.shortAnswer.map((ans, i) => (
                <li key={i}>
                  <p><strong>Question:</strong> {ans.question}</p>
-                 <p><strong>Sample Answer:</strong> {ans.sampleAnswer}</p>
+                 <div><strong>Sample Answer:</strong> <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{ans.sampleAnswer}</Markdown></div>
                </li>
              ))}
           </ol>
@@ -860,10 +860,11 @@ const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }
           <h3 className="text-xl font-semibold mt-8 mb-4">CER Sample Response</h3>
           <div>
               <p><strong>Claim:</strong> {cluster.answerKey.cer.sampleClaim}</p>
-              <p><strong>Evidence:</strong></p>
+              <div><strong>Evidence:</strong>
               <ul className="list-disc pl-6">
                 {cluster.answerKey.cer.sampleEvidence.map((ev, i) => <li key={i}>{ev}</li>)}
               </ul>
+              </div>
               <p><strong>Reasoning:</strong> {cluster.answerKey.cer.sampleReasoning}</p>
           </div>
         </section>
@@ -1003,7 +1004,8 @@ const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }
                         {showAnswers && mc.answer && (
                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
                                 <div className="font-semibold text-green-800">
-                                    Answer: <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.answer}</Markdown>
+                                    <span>Answer: </span>
+                                    <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.answer}</Markdown>
                                 </div>
                                 {mc.explanation && (
                                     <div className="text-sm text-green-700 mt-1">
@@ -1197,7 +1199,7 @@ const SocialStudiesAnswerKeyDisplay = ({ test }: { test: GenerateSocialStudiesTe
                         {set.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p><strong>Question:</strong> {q.question}</p>
-                                <p><strong>Sample Answer:</strong> <Markdown>{q.sampleAnswer}</Markdown></p>
+                                <div><strong>Sample Answer:</strong> <Markdown>{q.sampleAnswer}</Markdown></div>
                             </li>
                         ))}
                     </ol>

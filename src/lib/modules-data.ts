@@ -50,7 +50,6 @@ const assessment_tools: Module[] = [
     { id: 'price_1PjJrhRpWk9d9d2Fk1l2m3n4', name: 'Global History I Test Generator', href: '/global-history-1-test-generator', description: 'Regents-style tests for Global History I.', icon: FlaskConical, type: 'assessment_tool', subject: 'social studies' },
     { id: 'price_1PjJr_INVALID_nRpWk9d9d2Fo5p6q7r8', name: 'Global History II Test Generator', href: '/global-history-2-test-generator', description: 'Regents-style tests for Global History II.', icon: FlaskConical, type: 'assessment_tool', subject: 'social studies' },
     { id: 'price_1PjJs1RpWk9d9d2Fs9t0u1v2', name: 'U.S. History Test Generator', href: '/us-history-test-generator', description: 'Regents-style tests for U.S. History.', icon: FlaskConical, type: 'assessment_tool', subject: 'social studies' },
-    { id: 'price_1PjJs9RpWk9d9d2Fw3x4y5z6', name: 'Government Test Generator', href: '/government-test-generator', description: 'Regents-style tests for Government.', icon: FlaskConical, type: 'assessment_tool', subject: 'social studies' },
     { id: 'price_1PjJsGRpWk9d9d2Fa7b8c9d0', name: 'ELL/ENL Test Generator', href: '/ell-test-generator', description: 'Scaffolded tests for English Language Learners.', icon: FlaskConical, type: 'assessment_tool', subject: 'ell' },
     // Lab Generators
     { id: 'price_1PjJsNRpWk9d9d2Fe1f2g3h4', name: 'NV Biology Lab Generator', href: '/nv-biology-lab-generator', description: '45-minute NGSS-aligned labs for NV Biology.', icon: TestTube, type: 'assessment_tool', subject: 'science' },
