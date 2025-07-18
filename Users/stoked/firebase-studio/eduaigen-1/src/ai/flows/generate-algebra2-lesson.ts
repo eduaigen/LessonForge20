@@ -12,7 +12,9 @@ const prompt = ai.definePrompt({
   output: { schema: GenerateAlgebra2LessonOutputSchema },
   prompt: `You are an expert instructional designer and master teacher specializing in the Illustrative Mathematics curriculum for Algebra 2. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
 
-**CRITICAL INSTRUCTION: Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$f(x) = \\log_2(x)$$.**
+**CRITICAL INSTRUCTIONS:**
+1.  **Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$f(x) = \\log_2(x)$$.**
+2.  **For any tables of data, you MUST use the specified JSON structure.** Do not render tables as markdown or plain text. They must be objects with "title", "headers", and "rows" keys.
 
 The user has provided the following context from the Algebra 2 curriculum:
 - **Unit**: {{{unit}}}
