@@ -15,7 +15,9 @@ const prompt = ai.definePrompt({
   output: { schema: TestStudySheetOutputSchema },
   prompt: `You are an expert high school math teacher creating a study guide for an upcoming Regents-style test.
 
-Your task is to analyze the provided test and extract the most critical information to create a concise and effective study sheet for students. All mathematical expressions MUST be wrapped in LaTeX.
+Your task is to analyze the provided test and extract the most critical information to create a concise and effective study sheet for students.
+
+**CRITICAL INSTRUCTION: All mathematical expressions MUST be wrapped in LaTeX double dollar signs, like $$x^2 + 2x - 1 = 0$$. This includes all variables, numbers, and formulas.**
 
 **Original Test:**
 \`\`\`json
