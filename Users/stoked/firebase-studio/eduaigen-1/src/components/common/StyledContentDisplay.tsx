@@ -349,9 +349,9 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                 {worksheet.checkFoUnderstanding.multipleChoice.map((mc, i) => (
                     <li key={i}>
                         <p>{mc.question}</p>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
-                           {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ul>
+                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                           {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                        </ol>
                     </li>
                 ))}
                 <li>

@@ -24,23 +24,31 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     const [isDownloading, setIsDownloading] = useState(false);
 
     const getPrintableHTML = (element: HTMLElement) => {
-        const headerHtml = `
+        let headerHtml = `
             <div style="padding-bottom: 20px; border-bottom: 1px solid #ccc; margin-bottom: 20px; text-align: center;">
                 <h2 style="font-family: sans-serif; color: #333;">${title} - Created by EduAiGen</h2>
             </div>
-            <div style="margin-bottom: 20px;">
-                <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
-                    <tr>
-                        <td style="width: 60%; padding-bottom: 10px;"><strong>Name:</strong> ____________________________</td>
-                        <td style="width: 40%; padding-bottom: 10px;"><strong>Date:</strong> _________________</td>
-                    </tr>
-                     <tr>
-                        <td style="width: 60%; padding-bottom: 10px;"><strong>Class:</strong> _____________________________</td>
-                        <td style="width: 40%; padding-bottom: 10px;"><strong>Period:</strong> _________</td>
-                    </tr>
-                </table>
-            </div>
         `;
+
+        // If the content is NOT a worksheet, add the standard name/date header.
+        // Worksheets have this built-in.
+        if (contentItem.type !== 'Worksheet') {
+            headerHtml += `
+                <div style="margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; font-family: sans-serif;">
+                        <tr>
+                            <td style="width: 60%; padding-bottom: 10px;"><strong>Name:</strong> ____________________________</td>
+                            <td style="width: 40%; padding-bottom: 10px;"><strong>Date:</strong> _________________</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 60%; padding-bottom: 10px;"><strong>Class:</strong> _____________________________</td>
+                            <td style="width: 40%; padding-bottom: 10px;"><strong>Period:</strong> _________</td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+        }
+
         const footerHtml = `
             <div style="padding-top: 20px; border-top: 1px solid #ccc; margin-top: 20px; text-align: center; font-size: 10px; font-family: sans-serif; color: #666;">
                 <p>© ${new Date().getFullYear()} EduAiGen. All Rights Reserved.</p>
