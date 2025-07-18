@@ -80,7 +80,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "exitTicketQuestion": (String) One exit ticket item.
 
 **G. "homework"** (Object)
-- "activity": (String) A short, relevant assignment. If it needs content like a problem set, generate and embed that content here.
+- "activity": (String) A short, relevant assignment. **If the homework requires a reading passage, you MUST generate and embed that content directly. Do NOT refer to external textbooks.**
 
 **H. "differentiation"** (Object)
 - "supportActions": (Array of Strings) **Elaborate on specific strategies.**

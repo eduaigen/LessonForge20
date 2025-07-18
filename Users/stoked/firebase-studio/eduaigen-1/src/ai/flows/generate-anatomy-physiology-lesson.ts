@@ -1,24 +1,21 @@
 
 'use server';
 /**
- * @fileOverview An AI flow for generating a 5E lesson plan for Illustrative Math Geometry.
+ * @fileOverview An AI flow for generating a 5E lesson plan for Anatomy & Physiology.
  */
 import {ai} from '@/ai/genkit';
-import { GenerateGeometryLessonInputSchema, GenerateGeometryLessonOutputSchema, type GenerateGeometryLessonInput, type GenerateGeometryLessonOutput } from '../schemas/geometry-lesson-schemas';
+import { GenerateAnatomyPhysiologyLessonInputSchema, GenerateAnatomyPhysiologyLessonOutputSchema, type GenerateAnatomyPhysiologyLessonInput, type GenerateAnatomyPhysiologyLessonOutput } from '../schemas/anatomy-physiology-lesson-schemas';
 
 const prompt = ai.definePrompt({
-  name: 'generateGeometryLessonPrompt',
-  input: { schema: GenerateGeometryLessonInputSchema },
-  output: { schema: GenerateGeometryLessonOutputSchema },
-  prompt: `You are an expert instructional designer and master teacher specializing in the Illustrative Mathematics curriculum for Geometry. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
+  name: 'generateAnatomyPhysiologyLessonPrompt',
+  input: { schema: GenerateAnatomyPhysiologyLessonInputSchema },
+  output: { schema: GenerateAnatomyPhysiologyLessonOutputSchema },
+  prompt: `You are an expert instructional designer and master teacher specializing in Anatomy and Physiology. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
 
-**CRITICAL INSTRUCTIONS:**
-1.  **Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$\\triangle ABC \\cong \\triangle DEF$$.**
-2.  **For any tables of data, you MUST use the specified JSON structure.** Do not render tables as markdown or plain text. They must be objects with "title", "headers", and "rows" keys.
-
-The user has provided the following context from the Geometry curriculum:
+The user has provided the following context from the Anatomy & Physiology curriculum:
+- **Quarter**: {{{quarter}}}
 - **Unit**: {{{unit}}}
-- **Topic**: {{{topic}}}
+- **Week**: {{{week}}}
 - **Lesson**: {{{lesson}}}
 - **Additional Info**: {{{additionalInfo}}}
 
@@ -33,10 +30,10 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 
 **I. "lessonOverview"** (Object)
 - "unit": (String) The full Unit name: {{{unit}}}
-- "topic": (String) The full Topic name: {{{topic}}}
+- "topic": (String) The full Topic name: {{{week}}}
 - "lesson": (String) The full Lesson title: {{{lesson}}}
 - "lessonSummary": (String) A 2-3 sentence, teacher-facing summary of the lesson's flow and key learning outcomes.
-- "standards": (String) The relevant standard code and a short description (e.g., HSG.CO.A.1: Know precise definitions of angle, circle, perpendicular line...).
+- "standards": (String) The relevant standard code and a short description (e.g., HS-LS1-2: Develop and use a model to illustrate the hierarchical organization of interacting systems...).
 - "aim": (String) A deep, inquiry-based question that frames the lesson.
 - "essentialQuestion": (String) The same as "aim".
 - "objectives": (Array of Strings) 2-3 "SWBAT" objectives using Bloom’s verbs.
@@ -53,14 +50,14 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 **B. "miniLesson"** (Object, 10–15 min)
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph).
-- "readingPassage": (String) A 300-500 word, grade-appropriate reading passage explaining the core concept.
-- "diagram": (String) A highly detailed text description of a geometric concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A number line from -5 to 5. A closed circle is on the number 2. An arrow points to the right from the circle, indicating all numbers greater than or equal to 2 are included.' All text must be exactly as written here.'
+- "readingPassage": (String) A 300-500 word, grade-appropriate reading passage. Use Markdown bold (\`**word**\`) for key vocab.
+- "diagram": (String) A highly detailed text description of a scientific concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A flowchart with three boxes. Box 1 on the left contains the text 'Sunlight'. An arrow points from Box 1 to Box 2 in the center. Box 2 contains the text 'Photosynthesis in Chloroplast'. An arrow points from Box 2 to Box 3 on the right. Box 3 contains the text 'Glucose (Energy)'. All text must be exactly as written here.'
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3). Ensure a mix of DOK levels.
 
 **C. "guidedPractice"** (Object, 15–20 min)
 - "teacherActions": (Array of Strings) Verbatim script for launching and managing the activity.
-- "expectedStudentOutputs": (Array of Strings) An exemplar of a completed construction or proof.
-- "activityContent": (Object or String) If the activity uses a table of data, you MUST use the data table object (with "title", "headers", "rows"). If the activity does not involve a table (e.g., a set of construction steps or a proof to complete), use a string describing the activity.
+- "expectedStudentOutputs": (Array of Strings) An exemplar of a completed graphic organizer or collaborative output.
+- "activityContent": (Object or String) **EITHER** a data table object (with "title", "headers", "rows") **OR** a string describing a non-data-based activity.
 
 **D. "checkFoUnderstanding"** (Object, CFU)
 - "teacherActions": (Array of Strings) Script for administering the CFU.
@@ -70,9 +67,9 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 
 **E. "independentPractice"** (Object, Performance Task)
 - "teacherActions": (Array of Strings) Script for setting up the task.
-- "expectedStudentOutputs": (Array of Strings) A full, high-quality exemplar of a complete problem solution or proof.
-- "taskPrompt": (String) A rich problem-solving task, proof, or construction.
-- "taskData": (Object or null) If the task requires data, you MUST use the data table structure. Set to null if not applicable.
+- "expectedStudentOutputs": (Array of Strings) A full, high-quality exemplar of a complete CER response.
+- "taskPrompt": (String) One full CER (Claim, Evidence, Reasoning) prompt.
+- "taskData": (Object or null) Any necessary data for the task, using the same structure as "activityContent" data table.
 
 **F. "closure"** (Object, Exit Ticket)
 - "teacherActions": (Array of Strings) Script for the closure.
@@ -91,11 +88,11 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 **Final Instruction**: Review your entire response. Ensure every single section from A to H is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly.`,
 });
 
-const generateGeometryLessonFlow = ai.defineFlow(
+const generateAnatomyPhysiologyLessonFlow = ai.defineFlow(
   {
-    name: 'generateGeometryLessonFlow',
-    inputSchema: GenerateGeometryLessonInputSchema,
-    outputSchema: GenerateGeometryLessonOutputSchema,
+    name: 'generateAnatomyPhysiologyLessonFlow',
+    inputSchema: GenerateAnatomyPhysiologyLessonInputSchema,
+    outputSchema: GenerateAnatomyPhysiologyLessonOutputSchema,
     timeout: 180000,
   },
   async (input) => {
@@ -107,6 +104,6 @@ const generateGeometryLessonFlow = ai.defineFlow(
   }
 );
 
-export async function generateGeometryLesson(input: GenerateGeometryLessonInput): Promise<GenerateGeometryLessonOutput> {
-    return await generateGeometryLessonFlow(input);
+export async function generateAnatomyPhysiologyLesson(input: GenerateAnatomyPhysiologyLessonInput): Promise<GenerateAnatomyPhysiologyLessonOutput> {
+    return await generateAnatomyPhysiologyLessonFlow(input);
 }

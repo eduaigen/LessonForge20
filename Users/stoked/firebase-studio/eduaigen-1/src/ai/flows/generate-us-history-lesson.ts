@@ -1,22 +1,20 @@
 
 'use server';
 /**
- * @fileOverview An AI flow for generating a 5E lesson plan for Illustrative Math Geometry.
+ * @fileOverview An AI flow for generating a 5E lesson plan for US History & Government.
  */
 import {ai} from '@/ai/genkit';
-import { GenerateGeometryLessonInputSchema, GenerateGeometryLessonOutputSchema, type GenerateGeometryLessonInput, type GenerateGeometryLessonOutput } from '../schemas/geometry-lesson-schemas';
+import { GenerateSocialStudiesLessonInputSchema, GenerateSocialStudiesLessonOutputSchema } from '../schemas/social-studies-lesson-schemas';
+import type { GenerateSocialStudiesLessonOutput } from '../schemas/social-studies-lesson-schemas';
+import { z } from 'zod';
 
 const prompt = ai.definePrompt({
-  name: 'generateGeometryLessonPrompt',
-  input: { schema: GenerateGeometryLessonInputSchema },
-  output: { schema: GenerateGeometryLessonOutputSchema },
-  prompt: `You are an expert instructional designer and master teacher specializing in the Illustrative Mathematics curriculum for Geometry. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
+  name: 'generateUSHistoryLessonPrompt',
+  input: { schema: GenerateSocialStudiesLessonInputSchema },
+  output: { schema: GenerateSocialStudiesLessonOutputSchema },
+  prompt: `You are an expert instructional designer and master teacher specializing in 11th Grade US History & Government. Your task is to generate a comprehensive, standards-aligned, and engaging lesson plan based on the 5E instructional model that would be considered "Highly Effective" under the Danielson Framework.
 
-**CRITICAL INSTRUCTIONS:**
-1.  **Use LaTeX for all mathematical expressions by wrapping them in double dollar signs, like $$\\triangle ABC \\cong \\triangle DEF$$.**
-2.  **For any tables of data, you MUST use the specified JSON structure.** Do not render tables as markdown or plain text. They must be objects with "title", "headers", and "rows" keys.
-
-The user has provided the following context from the Geometry curriculum:
+The user has provided the following context from the US History & Government curriculum:
 - **Unit**: {{{unit}}}
 - **Topic**: {{{topic}}}
 - **Lesson**: {{{lesson}}}
@@ -24,7 +22,7 @@ The user has provided the following context from the Geometry curriculum:
 
 Based on this context, generate a complete and detailed lesson plan that is ready for a teacher to use in a classroom tomorrow.
 
-Your response MUST follow this exact JSON structure. Do not omit any section or field. All content, including reading passages, charts, and data tables referenced in the lesson, must be created and embedded directly within the response.
+Your response MUST follow this exact JSON structure. Do not omit any section or field. All content, including reading passages, primary source documents, charts, and data tables referenced in the lesson, must be created and embedded directly within the response.
 
 ---
 **JSON STRUCTURE:**
@@ -36,7 +34,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "topic": (String) The full Topic name: {{{topic}}}
 - "lesson": (String) The full Lesson title: {{{lesson}}}
 - "lessonSummary": (String) A 2-3 sentence, teacher-facing summary of the lesson's flow and key learning outcomes.
-- "standards": (String) The relevant standard code and a short description (e.g., HSG.CO.A.1: Know precise definitions of angle, circle, perpendicular line...).
+- "standards": (String) The relevant NYS Social Studies Framework standard code and a short description.
 - "aim": (String) A deep, inquiry-based question that frames the lesson.
 - "essentialQuestion": (String) The same as "aim".
 - "objectives": (Array of Strings) 2-3 "SWBAT" objectives using Bloom’s verbs.
@@ -53,14 +51,14 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 **B. "miniLesson"** (Object, 10–15 min)
 - "teacherActions": (Array of Strings) Verbatim script for the teacher.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of student work (e.g., an annotated paragraph).
-- "readingPassage": (String) A 300-500 word, grade-appropriate reading passage explaining the core concept.
-- "diagram": (String) A highly detailed text description of a geometric concept map, model, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A number line from -5 to 5. A closed circle is on the number 2. An arrow points to the right from the circle, indicating all numbers greater than or equal to 2 are included.' All text must be exactly as written here.'
+- "readingPassage": (String) A 300-500 word, grade-appropriate reading passage. If the lesson requires a specific primary source document, generate the full content here. Use Markdown bold (\`**word**\`) for key vocab.
+- "diagram": (String) A highly detailed text description of a historical map, political cartoon, or flowchart for the teacher to generate an image from. It should specify the layout, objects, labels, and connections. For example: 'A timeline of the Roman Empire. The timeline starts at 753 BCE with 'Founding of Rome'. A key event is at 44 BCE labeled 'Assassination of Julius Caesar'. The timeline ends at 476 CE with 'Fall of Western Roman Empire'. All text must be exactly as written here.'
 - "conceptCheckQuestions": (Array of Objects) 2-3 questions. Each object must have "question" (String) and "dok" (Number, 1, 2, or 3). Ensure a mix of DOK levels.
 
 **C. "guidedPractice"** (Object, 15–20 min)
 - "teacherActions": (Array of Strings) Verbatim script for launching and managing the activity.
-- "expectedStudentOutputs": (Array of Strings) An exemplar of a completed construction or proof.
-- "activityContent": (Object or String) If the activity uses a table of data, you MUST use the data table object (with "title", "headers", "rows"). If the activity does not involve a table (e.g., a set of construction steps or a proof to complete), use a string describing the activity.
+- "expectedStudentOutputs": (Array of Strings) An exemplar of a completed graphic organizer or collaborative output.
+- "activityContent": (Object or String) **EITHER** a data table object (with "title", "headers", "rows") **OR** a string describing a non-data-based activity (e.g., document analysis, Socratic seminar).
 
 **D. "checkFoUnderstanding"** (Object, CFU)
 - "teacherActions": (Array of Strings) Script for administering the CFU.
@@ -70,9 +68,9 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 
 **E. "independentPractice"** (Object, Performance Task)
 - "teacherActions": (Array of Strings) Script for setting up the task.
-- "expectedStudentOutputs": (Array of Strings) A full, high-quality exemplar of a complete problem solution or proof.
-- "taskPrompt": (String) A rich problem-solving task, proof, or construction.
-- "taskData": (Object or null) If the task requires data, you MUST use the data table structure. Set to null if not applicable.
+- "expectedStudentOutputs": (Array of Strings) A full, high-quality exemplar of a complete response.
+- "taskPrompt": (String) A full document-based question (DBQ) prompt or another analytical task.
+- "taskData": (Object or null) Any necessary data, graph, or map to be interpreted. Set to null if not applicable.
 
 **F. "closure"** (Object, Exit Ticket)
 - "teacherActions": (Array of Strings) Script for the closure.
@@ -80,7 +78,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "exitTicketQuestion": (String) One exit ticket item.
 
 **G. "homework"** (Object)
-- "activity": (String) A short, relevant assignment. **If the homework requires a reading passage, you MUST generate and embed that content directly. Do NOT refer to external textbooks.**
+- "activity": (String) A full description of the homework, including any passages or questions. **If the homework requires a reading passage, you MUST generate and embed that content directly. Do NOT refer to external textbooks.**
 
 **H. "differentiation"** (Object)
 - "supportActions": (Array of Strings) **Elaborate on specific strategies.**
@@ -91,11 +89,11 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 **Final Instruction**: Review your entire response. Ensure every single section from A to H is present and fully generated. **Do not use placeholders or refer to external materials that you have not created.** All content must be created and embedded directly.`,
 });
 
-const generateGeometryLessonFlow = ai.defineFlow(
+const generateUSHistoryLessonFlow = ai.defineFlow(
   {
-    name: 'generateGeometryLessonFlow',
-    inputSchema: GenerateGeometryLessonInputSchema,
-    outputSchema: GenerateGeometryLessonOutputSchema,
+    name: 'generateUSHistoryLessonFlow',
+    inputSchema: GenerateSocialStudiesLessonInputSchema,
+    outputSchema: GenerateSocialStudiesLessonOutputSchema,
     timeout: 180000,
   },
   async (input) => {
@@ -107,6 +105,6 @@ const generateGeometryLessonFlow = ai.defineFlow(
   }
 );
 
-export async function generateGeometryLesson(input: GenerateGeometryLessonInput): Promise<GenerateGeometryLessonOutput> {
-    return await generateGeometryLessonFlow(input);
+export async function generateUSHistoryLesson(input: z.infer<typeof GenerateSocialStudiesLessonInputSchema>): Promise<GenerateSocialStudiesLessonOutput> {
+    return await generateUSHistoryLessonFlow(input);
 }
