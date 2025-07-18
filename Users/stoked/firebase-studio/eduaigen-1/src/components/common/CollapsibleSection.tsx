@@ -1,15 +1,15 @@
 
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Printer, Download, FileDown, Loader2 } from 'lucide-react';
+import { Printer, Download, FileDown, Loader2, Languages } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
-import StyledContentDisplay from './StyledContentDisplay';
+import TranslationDialog from './TranslationDialog';
 
 type CollapsibleSectionProps = {
   title: string;
@@ -20,8 +20,11 @@ type CollapsibleSectionProps = {
 export default function CollapsibleSection({ title, children, contentItem }: CollapsibleSectionProps) {
     const { toast } = useToast();
     const [isDownloading, setIsDownloading] = useState(false);
+    const [isTranslationDialogOpen, setIsTranslationDialogOpen] = useState(false);
 
-    const getPrintableHTML = (element: HTMLElement) => {
+
+    const getPrintableHTML = (element: HTMLElement | null) => {
+        if (!element) return '';
         let headerHtml = `
             <div style="padding-bottom: 20px; border-bottom: 1px solid #ccc; margin-bottom: 20px; text-align: center;">
                 <h2 style="font-family: sans-serif; color: #333;">${title} - Created by EduAiGen</h2>
@@ -146,6 +149,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     };
       
   return (
+    <>
     <Card className="mt-6 shadow-md">
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" className="border-b-0">
@@ -154,6 +158,10 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     <h3 className="text-xl font-headline">{title}</h3>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 ml-4 flex-wrap">
+                    <Button variant="outline" size="icon" onClick={() => setIsTranslationDialogOpen(true)} title="Translate to Spanish">
+                        <Languages className="h-4 w-4" />
+                        <span className="sr-only">Translate</span>
+                    </Button>
                     <Button variant="outline" size="icon" onClick={handlePrint} title="Print">
                         <Printer className="h-4 w-4" />
                         <span className="sr-only">Print</span>
@@ -178,5 +186,11 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
         </AccordionItem>
       </Accordion>
     </Card>
+     <TranslationDialog
+        open={isTranslationDialogOpen}
+        onOpenChange={setIsTranslationDialogOpen}
+        contentItem={contentItem}
+      />
+    </>
   );
 }

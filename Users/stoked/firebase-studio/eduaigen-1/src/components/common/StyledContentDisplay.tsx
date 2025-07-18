@@ -25,6 +25,7 @@ import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
 import type { GenerateLabActivityOutput, LabAnswerKeyOutputSchema, LabStudentSheetOutputSchema, LabTeacherCoachOutputSchema } from '@/ai/schemas/lab-activity-schemas';
 import EditSectionDialog from './EditSectionDialog';
+import ManualEditDialog from './ManualEditDialog';
 import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
 import type { z } from 'zod';
@@ -130,6 +131,7 @@ const DiagramGenerator = ({ description }: { description: string }) => {
 
 const LessonSectionCard = ({ title, children, sectionName, sectionContent, onSectionUpdate }: { title: string; children: React.ReactNode, sectionName: string; sectionContent: any; onSectionUpdate: (sectionName: string, newContent: any) => void; }) => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [isManualEditDialogOpen, setIsManualEditDialogOpen] = useState(false);
 
     const handleUpdate = (newContent: any) => {
         onSectionUpdate(sectionName, newContent);
@@ -145,12 +147,22 @@ const LessonSectionCard = ({ title, children, sectionName, sectionContent, onSec
             </CardContent>
              <CardFooter className="bg-muted/50 p-2 flex justify-end gap-2">
                 <Button variant="ghost" size="sm" onClick={() => setIsEditDialogOpen(true)}>
-                    <Wand2 className="mr-2 h-4 w-4" /> Edit Instructions
+                    <Wand2 className="mr-2 h-4 w-4" /> Edit with AI
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => setIsManualEditDialogOpen(true)}>
+                    <PencilRuler className="mr-2 h-4 w-4" /> Manual Edit
                 </Button>
             </CardFooter>
             <EditSectionDialog 
                 open={isEditDialogOpen}
                 onOpenChange={setIsEditDialogOpen}
+                sectionName={sectionName}
+                sectionContent={sectionContent}
+                onSectionUpdate={handleUpdate}
+            />
+            <ManualEditDialog
+                open={isManualEditDialogOpen}
+                onOpenChange={setIsManualEditDialogOpen}
                 sectionName={sectionName}
                 sectionContent={sectionContent}
                 onSectionUpdate={handleUpdate}
@@ -228,13 +240,13 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                            : renderTableFromObject(sectionContent.activityContent as any)
                        )}
                        {section.name === 'checkFoUnderstanding' && leveledQuestions([...sectionContent.multipleChoice, sectionContent.shortResponse])}
-                       {section.name === 'independentPractice' && <><p>
+                       {section.name === 'independentPractice' && <>
                            <div><h4>Task Prompt</h4><p>{sectionContent.taskPrompt}</p></div>
                            {renderTableFromObject(sectionContent.taskData)}
                        </>}
                        {section.name === 'closure' && <div><h4>Exit Ticket Question</h4><p>{sectionContent.exitTicketQuestion}</p></div>}
                        {section.name === 'homework' && <div><h4>Activity</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.activity}</Markdown></div>}
-                       {section.name === 'differentiation' && <><p>
+                       {section.name === 'differentiation' && <>
                            <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{sectionContent.supportActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>
                            <div className="mt-4 p-4 border rounded-md"><h4 className="font-semibold text-foreground mb-2">Scaffolded Materials</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.scaffoldedMaterials}</Markdown></div>
                            <div><h4>Extension Activity</h4><p>{sectionContent.extensionActivity}</p></div>

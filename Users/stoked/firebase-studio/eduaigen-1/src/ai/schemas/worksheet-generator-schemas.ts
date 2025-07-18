@@ -17,7 +17,7 @@ const headerSchema = z.object({
 
 const aimSchema = z.object({
     essentialQuestion: z.string().describe("Copied from the lesson plan's Aim and Essential Question."),
-    rewriteSpace: z.string().describe("A space for students to rewrite the aim in their own words."),
+    rewriteSpace: z.string().describe("A prompt for students to rewrite the aim in their own words, e.g., 'In my own words, the aim of today's lesson is:'"),
 });
 
 const vocabularySchema = z.object({
@@ -25,7 +25,7 @@ const vocabularySchema = z.object({
     terms: z.array(z.object({
         term: z.string(),
         definition: z.string(),
-    })).describe("List of vocabulary terms and their student-friendly definitions as complete sentences."),
+    })).describe("List of vocabulary terms and their student-friendly definitions."),
 });
 
 const doNowSchema = z.object({

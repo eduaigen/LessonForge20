@@ -10,7 +10,6 @@ import {
   type GenerateWorksheetInput,
   type GenerateWorksheetOutput,
 } from '../schemas/worksheet-generator-schemas';
-import { JSON5_INVALID_CHAR_REGEX } from 'html-to-text/lib/constants';
 
 async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
   for (let i = 0; i < retries; i++) {
@@ -63,16 +62,16 @@ const prompt = ai.definePrompt({
     *   Action: Scan 'lessonOverview' in the lesson plan.
     *   Output:
         - Copy 'aim' into 'aim.essentialQuestion'.
-        - Copy 'essentialQuestion' into 'aim.rewriteSpace' (leave it as the question).
+        - Set 'aim.rewriteSpace' to "In my own words, the aim of today's lesson is:".
 
 3.  **Introduction Summary:**
     *   Action: Write a brief, 1-2 sentence summary for the student based on 'lessonOverview.lessonSummary'.
     *   Format: "📘 Today’s Lesson Overview: In today’s lesson, you will learn about [topic from lesson summary]. You will explore [key skill or idea from lesson summary], and practice applying it through guided examples and independent work."
 
 4.  **Vocabulary Section:**
-    *   Action: Scan 'lessonOverview.vocabulary'. If it exists and has terms, rewrite each term and its definition into a complete, student-friendly sentence inside the 'terms' array.
-    *   Output: Populate the 'vocabulary.terms' array.
-    *   Example: For a term "Photosynthesis" with definition "The process...", the output sentence is "Photosynthesis is the process...".
+    *   Action: Scan 'lessonOverview.vocabulary'. If it exists and has terms, rewrite each term and its definition into the 'terms' array.
+    *   Output: Populate the 'vocabulary.terms' array with objects containing 'term' and 'definition' keys.
+    *   Example: For a term "Photosynthesis" with definition "The process...", the output object is \`{"term": "Photosynthesis", "definition": "The process..."}\`.
     *   IMPORTANT: If the source 'lessonOverview.vocabulary' is empty or missing, you MUST still include the 'vocabulary' key in your output with an empty 'terms' array. e.g., \`"vocabulary": { "title": "Vocabulary", "terms": [] }\`.
 
 5.  **Do Now Section:**
@@ -82,10 +81,10 @@ const prompt = ai.definePrompt({
     *   Action:
         - Set the 'title' field to "Mini Lesson Notes (T-Chart)".
         - If 'miniLesson.readingPassage' exists, copy the ENTIRE passage into 'miniLesson.readingPassage'.
-        - If 'miniLesson.diagram' exists, set the 'diagramDescription' field to "Use the space below to draw and label the diagram or model from the lesson."
+        - If 'miniLesson.diagram' exists, copy its exact text description into 'diagramDescription'.
         - If 'miniLesson.conceptCheckQuestions' exists, copy ALL questions into 'miniLesson.conceptCheckQuestions'.
         - Populate 'miniLesson.notesTitle' with "Key Ideas or Terms | Notes, Definitions, or Examples".
-        - Populate 'miniLesson.sentenceStarters' with: "“This reminds me of…”, “An example of this is…”, “This is important because…”".
+        - Populate 'miniLesson.sentenceStarters' with an array of strings: ["“This reminds me of…”", ““An example of this is…””, ““This is important because…””].
         
 
 7.  **Guided Practice Section:**
