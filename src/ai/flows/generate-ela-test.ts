@@ -43,17 +43,11 @@ const prompt = ai.definePrompt({
 4.  You MUST create a complete and thorough answer key for all parts of the test.
 5.  For Part 1, you MUST generate EXACTLY {{{passageCount}}} passages, and each passage MUST have EXACTLY 8 multiple-choice questions. This is a non-negotiable requirement.
 
-**User Provided Context:**
-- **Lessons**: {{{lessons}}}
-- **Number of Reading Passages**: {{{passageCount}}} (Generate 8 MCQs per passage)
-- **Number of Argument Essay Sources**: {{{sourceCount}}}
-
----
-
 **Part 1: Reading Comprehension**
 - Generate EXACTLY {{{passageCount}}} unique reading passages.
 - **Passage Types:** Create a mix of literary text (e.g., short story excerpt), a poem, and informational text (e.g., article, essay).
 - For EACH passage, generate EXACTLY EIGHT multiple-choice questions, for a total of {{{passageCount}}} * 8 questions.
+- Each multiple-choice question must have four complete answer options.
 - The questions should assess a range of skills: word meaning, literary devices, central idea, author's purpose, and inference.
 - The answer key for this section must contain the correct letter for each multiple-choice question.
 

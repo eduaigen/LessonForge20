@@ -43,12 +43,6 @@ const prompt = ai.definePrompt({
 4.  All generated content must be complete and fully written out. No placeholders.
 5.  Use LaTeX for all mathematical expressions, equations, and variables.
 
-**User Provided Context:**
-- **Lessons**: {{{lessons}}}
-- **Number of Part I Questions (Multiple Choice)**: {{{partICount}}}
-- **Number of Part II Questions (2-Credit Open Response)**: {{{partIICount}}}
-- **Number of Part III Questions (4-Credit Open Response)**: {{{partIIICount}}}
-
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
 - Each question must have four complete answer options.

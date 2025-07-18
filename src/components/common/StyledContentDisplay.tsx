@@ -22,7 +22,7 @@ import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
-import type { GenerateLabActivityOutput, LabStudentSheetOutputSchema, LabTeacherCoachOutputSchema } from '@/ai/schemas/lab-activity-schemas';
+import type { GenerateLabActivityOutput, LabAnswerKeyOutputSchema, LabStudentSheetOutputSchema, LabTeacherCoachOutputSchema } from '@/ai/schemas/lab-activity-schemas';
 import EditSectionDialog from './EditSectionDialog';
 import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
@@ -248,12 +248,12 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
 const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     <div className="document-view">
          <header className="mb-8 grid grid-cols-2 gap-x-8 gap-y-2 border-b-2 border-primary pb-4">
-            <h1 className="col-span-2 text-2xl font-bold font-headline text-primary">{worksheet.header.lessonTitle}</h1>
-            <p className="col-span-2 text-md text-muted-foreground">{worksheet.header.unitTitle}</p>
-            <div className="pt-4">{worksheet.header.name}</div>
-            <div>{worksheet.header.date}</div>
-            <div>{worksheet.header.class}</div>
-            <div>{worksheet.header.period}</div>
+            <h1 className="col-span-2 text-2xl font-bold font-headline text-primary">{worksheet.header?.lessonTitle}</h1>
+            <p className="col-span-2 text-md text-muted-foreground">{worksheet.header?.unitTitle}</p>
+            <div className="pt-4">{worksheet.header?.name}</div>
+            <div>{worksheet.header?.date}</div>
+            <div>{worksheet.header?.class}</div>
+            <div>{worksheet.header?.period}</div>
         </header>
 
         <section className="mb-6">
@@ -379,49 +379,48 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
     </div>
 );
 
-const renderLabStudentSheet = (sheet: z.infer<typeof LabStudentSheetOutputSchema>) => {
-    return (
-        <div className="document-view">
-            <header className="mb-8 grid grid-cols-2 gap-x-8 gap-y-2 border-b-2 border-primary pb-4">
-                <h1 className="col-span-2 text-2xl font-bold font-headline text-primary">{sheet.title}</h1>
-            </header>
-            
-            <section className="mb-6"><h3>Phenomenon Reading</h3><p>{sheet.phenomenonReading}</p></section>
+const renderLabStudentSheet = (sheet: z.infer<typeof LabStudentSheetOutputSchema>) => (
+    <div className="document-view">
+        <header className="mb-8 grid grid-cols-2 gap-x-8 gap-y-2 border-b-2 border-primary pb-4">
+            <h1 className="col-span-2 text-2xl font-bold font-headline text-primary">{sheet.title}</h1>
+        </header>
+        
+        <section className="mb-6"><h3>Phenomenon Reading</h3><p>{sheet.phenomenonReading}</p></section>
 
-            <section className="mb-6"><h3>Pre-Lab Questions</h3><ol className="list-decimal pl-5 space-y-4">
-                {sheet.preLabQuestions.map((q, i) => <li key={i}><p>{q}</p><div className="my-2 h-16 border-b border-dashed"></div></li>)}
-            </ol></section>
+        <section className="mb-6"><h3>Pre-Lab Questions</h3><ol className="list-decimal pl-5 space-y-4">
+            {sheet.preLabQuestions.map((q, i) => <li key={i}><p>{q}</p><div className="my-2 h-16 border-b border-dashed"></div></li>)}
+        </ol></section>
 
-            <section className="mb-6"><h3>Testable Question</h3><p>{sheet.testableQuestion.prompt}</p><div className="my-2 h-16 border-b border-dashed"></div></section>
-            <section className="mb-6"><h3>Hypothesis</h3><p>{sheet.hypothesis.prompt}</p><div className="my-2 h-24 border-b border-dashed"></div></section>
-            
-            <section className="mb-6"><h3>Variables</h3>
-                <p><strong>Independent Variable:</strong> {sheet.variables.independentPrompt}</p><div className="my-2 h-12 border-b border-dashed"></div>
-                <p><strong>Dependent Variable:</strong> {sheet.variables.dependentPrompt}</p><div className="my-2 h-12 border-b border-dashed"></div>
-                <p><strong>Controlled Variables:</strong> {sheet.variables.controlledPrompt}</p><div className="my-2 h-20 border-b border-dashed"></div>
-            </section>
-            
-            <section className="mb-6"><h3>Materials & Procedure</h3>
-                <h4>Materials:</h4><ul className="list-disc pl-5">
-                    {sheet.materials.map((m, i) => <li key={i}>{m}</li>)}
-                </ul>
-                <h4 className="mt-4">Procedure:</h4><p>{sheet.procedure.prompt}</p><div className="my-2 h-48 border-2 border-dashed rounded-md"></div>
-            </section>
-            
-            <section className="mb-6"><h3>Data Collection & Analysis</h3>
-                <p>{sheet.dataCollection.description}</p>
-                {sheet.dataCollection.dataTable ? renderTableFromObject(sheet.dataCollection.dataTable) : <div className="my-4 h-64 border-2 border-dashed rounded-lg bg-background flex items-center justify-center text-muted-foreground"><p>Space for Data Table/Graph</p></div>}
-                <h4 className="mt-4">Data Analysis:</h4><div className="my-2 h-48 border-b border-dashed"></div>
-            </section>
+        <section className="mb-6"><h3>Testable Question</h3><p>{sheet.testableQuestion.prompt}</p><div className="my-2 h-16 border-b border-dashed"></div></section>
+        <section className="mb-6"><h3>Hypothesis</h3><p>{sheet.hypothesis.prompt}</p><div className="my-2 h-24 border-b border-dashed"></div></section>
+        
+        <section className="mb-6"><h3>Variables</h3>
+            <p><strong>Independent Variable:</strong> {sheet.variables.independentPrompt}</p><div className="my-2 h-12 border-b border-dashed"></div>
+            <p><strong>Dependent Variable:</strong> {sheet.variables.dependentPrompt}</p><div className="my-2 h-12 border-b border-dashed"></div>
+            <p><strong>Controlled Variables:</strong> {sheet.variables.controlledPrompt}</p><div className="my-2 h-20 border-b border-dashed"></div>
+        </section>
+        
+        <section className="mb-6"><h3>Materials & Procedure</h3>
+            <h4>Materials:</h4><ul className="list-disc pl-5">
+                {sheet.materials.map((m, i) => <li key={i}>{m}</li>)}
+            </ul>
+            <h4 className="mt-4">Procedure:</h4><p>{sheet.procedure.prompt}</p><div className="my-2 h-48 border-2 border-dashed rounded-md"></div>
+        </section>
+        
+        <section className="mb-6"><h3>Data Collection & Analysis</h3>
+            <p>{sheet.dataCollection.description}</p>
+            {sheet.dataCollection.dataTable ? renderTableFromObject(sheet.dataCollection.dataTable) : <div className="my-4 h-64 border-2 border-dashed rounded-lg bg-background flex items-center justify-center text-muted-foreground"><p>Space for Data Table/Graph</p></div>}
+            <h4 className="mt-4">Data Analysis:</h4><div className="my-2 h-48 border-b border-dashed"></div>
+        </section>
 
-            <section className="mb-6"><h3>Conclusion</h3><p>{sheet.conclusion.prompt}</p><div className="my-2 h-48 border-b border-dashed"></div></section>
-            
-            <section className="mb-6"><h3>Discussion Questions</h3><ol className="list-decimal pl-5 space-y-4">
-                {sheet.discussionQuestions.map((q, i) => <li key={i}><p>{q}</p><div className="my-2 h-16 border-b border-dashed"></div></li>)}
-            </ol></section>
-        </div>
-    );
-};
+        <section className="mb-6"><h3>Conclusion</h3><p>{sheet.conclusion.prompt}</p><div className="my-2 h-48 border-b border-dashed"></div></section>
+        
+        <section className="mb-6"><h3>Discussion Questions</h3><ol className="list-decimal pl-5 space-y-4">
+            {sheet.discussionQuestions.map((q, i) => <li key={i}><p>{q}</p><div className="my-2 h-16 border-b border-dashed"></div></li>)}
+        </ol></section>
+    </div>
+);
+
 
 const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
     const sections = [
@@ -765,9 +764,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
             {cluster.multipleChoiceQuestions.map((q, i) => (
               <li key={i}>
                 <p>{q.question}</p>
-                <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                <ol className="list-[lower-alpha] pl-6 mt-2 space-y-1">
                   {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
-                </ul>
+                </ol>
               </li>
             ))}
           </ol>
@@ -847,9 +846,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                        <ol className="list-[lower-alpha] pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => <li key={`${index}-${optIndex}`}>{opt}</li>)}
-                        </ul>
+                        </ol>
                     </li>
                 ))}
             </ol>
@@ -920,11 +919,11 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partI.questions.map((mc, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-              <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+              <ol className="list-[lower-alpha] pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
                   <li key={`${index}-${optIndex}`}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
                 ))}
-              </ul>
+              </ol>
             </li>
           ))}
         </ol>
@@ -985,9 +984,9 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
-                                <ul className="list-[lower-alpha] pl-6 mt-2 space-y-1">
+                                <ol className="list-[lower-alpha] pl-6 mt-2 space-y-1">
                                     {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{opt}</li>)}
-                                </ul>
+                                </ol>
                             </li>
                         ))}
                     </ol>
