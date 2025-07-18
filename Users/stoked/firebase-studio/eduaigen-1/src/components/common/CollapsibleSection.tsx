@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -147,9 +147,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
       
   return (
     <Card className="mt-6 shadow-md">
-       <div id={`printable-content-container-${contentItem.id}`} className="print-only" style={{ display: 'none' }}>
-            <StyledContentDisplay content={contentItem.content} type={contentItem.type} />
-        </div>
       <Accordion type="single" collapsible defaultValue="item-1">
         <AccordionItem value="item-1" className="border-b-0">
             <CardHeader className="flex flex-row items-center justify-between p-4 flex-wrap gap-4">
