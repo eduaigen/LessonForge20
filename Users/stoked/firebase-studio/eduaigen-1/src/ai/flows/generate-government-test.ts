@@ -82,7 +82,7 @@ const generateGovernmentTestFlow = ai.defineFlow(
   },
   async (input) => {
     const result = await withRetry(() => prompt(input));
-    const { output } = result;
+    const { output } prone to
     if (!output) {
       throw new Error('The AI failed to generate a test. Please try again.');
     }
