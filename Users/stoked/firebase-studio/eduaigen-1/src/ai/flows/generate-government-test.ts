@@ -41,8 +41,9 @@ const prompt = ai.definePrompt({
 2.  **COMPLETE CONTENT:** All generated content must be complete and fully written out. No placeholders.
 3.  **MATCH QUESTION COUNTS:** Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.
 4.  **You MUST generate EXACTLY {{{mcqCount}}} multiple-choice questions for Part I.** This is a non-negotiable requirement.
-5.  **Generate a set of clear, student-facing instructions for taking the test.**
-6.  **You MUST create a complete and thorough answer key for all parts of the test.**
+5.  **For multiple-choice questions, each question object MUST contain four complete answer options in the 'options' field.** DO NOT include any prefix like "A.", "B.", or "1.". The 'answer' field must contain the full text of the correct option.
+6.  **Generate a set of clear, student-facing instructions for taking the test.**
+7.  **You MUST create a complete and thorough answer key for all parts of the test.**
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
@@ -53,7 +54,7 @@ const prompt = ai.definePrompt({
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.
-- Each question must have a unique, text-based stimulus and four complete answer options. Each option should be the text of the answer, without any prefix like "A." or "1.".
+- Each question must have a unique, text-based stimulus and four complete answer options.
 - The answer key for this section must contain the correct letter for each question.
 
 **Part II: Constructed-Response Questions (CRQs)**
