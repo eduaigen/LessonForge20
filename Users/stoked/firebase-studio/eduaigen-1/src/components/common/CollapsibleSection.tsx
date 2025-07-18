@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -9,7 +9,6 @@ import { Printer, Download, FileDown, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '../ui/scroll-area';
 import type { GeneratedContent } from '../generators/NVBiologyGenerator';
-import jsPDF from 'jspdf';
 import StyledContentDisplay from './StyledContentDisplay';
 
 type CollapsibleSectionProps = {
@@ -29,8 +28,6 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
             </div>
         `;
 
-        // If the content is NOT a worksheet, add the standard name/date header.
-        // Worksheets have this built-in.
         if (contentItem.type !== 'Worksheet' && contentItem.type !== 'Student Answer Sheet') {
             headerHtml += `
                 <div style="margin-bottom: 20px;">
@@ -66,7 +63,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     }
 
     const handlePrint = () => {
-        const printableContent = document.getElementById(`printable-content-${contentItem.id}`);
+        const printableContent = document.getElementById(`content-${contentItem.id}`);
 
         if (printableContent) {
             const printWindow = window.open('', '', 'height=800,width=1000');
@@ -116,7 +113,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
     };
 
     const handleDownloadDoc = () => {
-        const content = document.getElementById(`printable-content-${contentItem.id}`);
+        const content = document.getElementById(`content-${contentItem.id}`);
         if (!content) return;
 
         toast({
@@ -140,47 +137,17 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
         URL.revokeObjectURL(url);
     };
 
-    const handleDownloadPdf = async () => {
-        const contentElement = document.getElementById(`printable-content-${contentItem.id}`);
-        if (!contentElement) {
-          toast({ title: 'Error', description: 'Content to print not found.', variant: 'destructive' });
-          return;
-        }
-    
-        setIsDownloading(true);
-        toast({ title: 'Generating PDF...', description: 'Please wait, this may take a moment.' });
-    
-        try {
-            const pdf = new jsPDF('p', 'pt', 'a4');
-    
-            await pdf.html(getPrintableHTML(contentElement), {
-                callback: function (doc) {
-                    doc.save(`${title.replace(/ /g, '_')}.pdf`);
-                    toast({ title: 'Success', description: 'PDF has been downloaded.' });
-                },
-                x: 10,
-                y: 10,
-                html2canvas: {
-                    scale: 0.75
-                },
-                autoPaging: 'text',
-            });
-    
-        } catch (error) {
-          console.error('PDF Generation Error:', error);
-          toast({
-            title: 'PDF Generation Failed',
-            description: 'An unexpected error occurred. Please try again.',
-            variant: 'destructive',
-          });
-        } finally {
-          setIsDownloading(false);
-        }
-      };
+    const handleDownloadPdf = () => {
+        toast({
+            title: 'Preparing PDF...',
+            description: 'Your browser\'s print dialog will open. Please select "Save as PDF".',
+        });
+        handlePrint();
+    };
       
   return (
     <Card className="mt-6 shadow-md">
-       <div id={`printable-content-${contentItem.id}`} className="print-only" style={{ display: 'none' }}>
+       <div id={`printable-content-container-${contentItem.id}`} className="print-only" style={{ display: 'none' }}>
             <StyledContentDisplay content={contentItem.content} type={contentItem.type} />
         </div>
       <Accordion type="single" collapsible defaultValue="item-1">
