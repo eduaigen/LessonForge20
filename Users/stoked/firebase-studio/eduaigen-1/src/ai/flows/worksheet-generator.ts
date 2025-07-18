@@ -122,7 +122,7 @@ const prompt = ai.definePrompt({
 {{{lessonPlanJson}}}
 \`\`\`
 `,
-});
+  });
 
 
 const worksheetGeneratorFlow = ai.defineFlow(

@@ -1077,14 +1077,14 @@ const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }
                 {test.partI.questions.map((mc, index) => (
                     <li key={index}>
                         <div><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown></div>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
+                        <ol className="list-none pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => (
                                 <li key={optIndex} className="flex items-start">
                                     <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
                                     <div><Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></div>
                                 </li>
                             ))}
-                        </ul>
+                        </ol>
                      <AnimatePresence>
                         {showAnswers && mc.answer && (
                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
