@@ -121,26 +121,3 @@ const prompt = ai.definePrompt({
 \`\`\`json
 {{{lessonPlanJson}}}
 \`\`\`
-`,
-  });
-
-
-const worksheetGeneratorFlow = ai.defineFlow(
-  {
-    name: 'worksheetGeneratorFlow',
-    inputSchema: GenerateWorksheetInputSchema,
-    outputSchema: GenerateWorksheetOutputSchema,
-  },
-  async (input) => {
-    const { output } = await prompt(input);
-    if (!output) {
-      throw new Error('The AI failed to generate the worksheet. Please try again.');
-    }
-    return output;
-  }
-);
-
-
-export async function generateWorksheet(input: GenerateWorksheetInput): Promise<GenerateWorksheetOutput> {
-  return await withRetry(() => worksheetGeneratorFlow(input));
-}
