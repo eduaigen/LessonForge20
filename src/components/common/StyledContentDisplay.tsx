@@ -572,12 +572,12 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
                                     exit={{ opacity: 0, y: -10 }}
                                     className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md"
                                 >
-                                    <p className="font-semibold text-green-800">
+                                    <div className="font-semibold text-green-800">
                                         Answer: <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.answerKey[i].answer}</Markdown>
-                                    </p>
-                                    <p className="text-sm text-green-700">
+                                    </div>
+                                    <div className="text-sm text-green-700">
                                         <strong>Explanation:</strong> <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.answerKey[i].explanation}</Markdown>
-                                    </p>
+                                    </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -816,13 +816,13 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
           </Card>
           
           <h3 className="text-xl font-semibold mb-4">Multiple Choice Questions</h3>
-           <ol className="list-[upper-alpha] pl-5 space-y-6">
+           <ol className="list-decimal pl-5 space-y-6">
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
-                          {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
-                        </ul>
+                        <ol type="A" className="list-none pl-6 mt-2 space-y-1">
+                          {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
+                        </ol>
                     </li>
                 ))}
             </ol>
@@ -902,8 +902,8 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                        <ol type="A" className="list-none pl-6 mt-2 space-y-1">
+                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                         </ol>
                     </li>
                 ))}
@@ -975,9 +975,11 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partI.questions.map((mc, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-              <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+              <ol type="A" className="list-none pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
-                  <li key={`${index}-${optIndex}`}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
+                  <li key={`${index}-${optIndex}`}>
+                    {String.fromCharCode(65 + optIndex)}. <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                  </li>
                 ))}
               </ol>
             </li>
@@ -1040,8 +1042,8 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
-                                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                                    {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{opt}</li>)}
+                                <ol type="A" className="list-none pl-6 mt-2 space-y-1">
+                                    {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                                 </ol>
                             </li>
                         ))}
