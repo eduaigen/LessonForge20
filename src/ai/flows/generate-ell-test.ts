@@ -41,6 +41,7 @@ const prompt = ai.definePrompt({
 2.  **Provide Scaffolding:** Build in scaffolds like sentence starters, visual aid descriptions, and clear vocabulary support.
 3.  All generated content must be complete and fully written out. No placeholders.
 4.  Your final output MUST be a single, complete JSON object that strictly follows the output schema.
+5. For multiple-choice questions, each option should be the text of the answer, without any prefix like "A." or "1.".
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}

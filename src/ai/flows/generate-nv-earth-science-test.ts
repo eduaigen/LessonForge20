@@ -41,7 +41,7 @@ const prompt = ai.definePrompt({
 **CRITICAL INSTRUCTIONS:**
 1.  Your primary task is to generate a JSON object where the 'clusters' array contains EXACTLY {{{clusterCount}}} unique cluster objects. Do not generate more or less than this number.
 2.  For EACH cluster, you MUST generate a mix of questions with the following precise counts:
-    *   **Multiple Choice:** Exactly 3 questions. Each must have four complete answer options.
+    *   **Multiple Choice:** Exactly 3 questions. Each must have four complete answer options. Each option should be the text of the answer, without any prefix like "A." or "1.".
     *   **Short Response:** Exactly 2 questions.
     *   **CER (Claim, Evidence, Reasoning):** Exactly 1 question.
 3.  You MUST ensure all questions strictly align with the specified Depth of Knowledge (DOK) level ({{{dokLevel}}}). This is a critical requirement.

@@ -52,7 +52,7 @@ const prompt = ai.definePrompt({
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
-- Each question must have four complete answer options.
+- Each question must have four complete answer options. Each option should be the text of the answer, without any prefix like "A." or "1.".
 
 **Part II: 2-Credit Constructed Response**
 - Generate EXACTLY {{{partIICount}}} unique constructed-response questions.

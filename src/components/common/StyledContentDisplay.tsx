@@ -57,11 +57,11 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
       <li key={i}>
         <p>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></p>
         {q.options && (
-          <div className="mt-2 space-y-1">
-            {q.options.map((opt, optIndex) => <div key={`${i}-${optIndex}`}>{opt}</div>)}
-             {q.answer && <div className="text-green-600 font-semibold mt-1">Correct Answer: {q.answer}</div>}
-          </div>
+          <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+            {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
+          </ol>
         )}
+        {q.answer && <div className="text-green-600 font-semibold mt-1">Correct Answer: {q.answer}</div>}
       </li>
     ))}
   </ol>
@@ -345,9 +345,9 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                 {worksheet.checkFoUnderstanding.multipleChoice.map((mc, i) => (
                     <li key={i}>
                         <p>{mc.question}</p>
-                        <div className="mt-2 space-y-1">
-                           {mc.options.map((opt, optIndex) => <div key={optIndex}>{opt}</div>)}
-                        </div>
+                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                           {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                        </ol>
                     </li>
                 ))}
                 <li>
@@ -557,16 +557,16 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
               <ol className="list-decimal pl-5 space-y-4">
                 <li>
                   <p>{cluster.questions.mcq1.question}</p>
-                  <div className="mt-2 space-y-1">
-                    {cluster.questions.mcq1.options.map((opt:string, index: number) => <div key={index}>{opt}</div>)}
-                  </div>
+                  <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                    {cluster.questions.mcq1.options.map((opt:string, index: number) => <li key={index}>{opt}</li>)}
+                  </ol>
                   <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq1.answer}</em></p>
                 </li>
                 <li>
                   <p>{cluster.questions.mcq2.question}</p>
-                  <div className="mt-2 space-y-1">
-                    {cluster.questions.mcq2.options.map((opt:string, index: number) => <div key={index}>{opt}</div>)}
-                  </div>
+                  <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                    {cluster.questions.mcq2.options.map((opt:string, index: number) => <li key={index}>{opt}</li>)}
+                  </ol>
                    <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq2.answer}</em></p>
                 </li>
               </ol>
@@ -764,9 +764,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
             {cluster.multipleChoiceQuestions.map((q, i) => (
               <li key={i}>
                 <p>{q.question}</p>
-                <div className="mt-2 space-y-1">
-                  {q.options.map((opt, optIndex) => <div key={`${i}-${optIndex}`}>{opt}</div>)}
-                </div>
+                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                  {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
+                </ol>
               </li>
             ))}
           </ol>
@@ -846,9 +846,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <div className="mt-2 space-y-1">
-                            {mc.options.map((opt, optIndex) => <div key={`${index}-${optIndex}`}>{opt}</div>)}
-                        </div>
+                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                            {mc.options.map((opt, optIndex) => <li key={`${index}-${optIndex}`}>{opt}</li>)}
+                        </ol>
                     </li>
                 ))}
             </ol>
@@ -919,11 +919,11 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partI.questions.map((mc, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-              <div className="mt-2 space-y-1">
+              <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
-                  <div key={`${index}-${optIndex}`}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></div>
+                  <li key={`${index}-${optIndex}`}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></li>
                 ))}
-              </div>
+              </ol>
             </li>
           ))}
         </ol>
@@ -984,9 +984,9 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
-                                <div className="mt-2 space-y-1">
-                                    {q.options.map((opt, optIndex) => <div key={`${qIndex}-${optIndex}`}>{opt}</div>)}
-                                </div>
+                                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                                    {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{opt}</li>)}
+                                </ol>
                             </li>
                         ))}
                     </ol>

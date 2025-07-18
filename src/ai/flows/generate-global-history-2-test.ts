@@ -53,7 +53,7 @@ const prompt = ai.definePrompt({
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{mcqCount}}} stimulus-based multiple-choice questions.
-- Each question must have a unique, text-based stimulus and four complete answer options.
+- Each question must have a unique, text-based stimulus and four complete answer options. Each option should be the text of the answer, without any prefix like "A." or "1.".
 - The answer key for this section must contain the correct letter for each question.
 
 **Part II: Constructed-Response Questions (CRQs)**

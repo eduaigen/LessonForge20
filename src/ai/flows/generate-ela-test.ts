@@ -47,7 +47,7 @@ const prompt = ai.definePrompt({
 - Generate EXACTLY {{{passageCount}}} unique reading passages.
 - **Passage Types:** Create a mix of literary text (e.g., short story excerpt), a poem, and informational text (e.g., article, essay).
 - For EACH passage, generate EXACTLY EIGHT multiple-choice questions, for a total of {{{passageCount}}} * 8 questions.
-- Each multiple-choice question must have four complete answer options.
+- Each multiple-choice question must have four complete answer options. Each option should be the text of the answer, without any prefix like "A." or "1.".
 - The questions should assess a range of skills: word meaning, literary devices, central idea, author's purpose, and inference.
 - The answer key for this section must contain the correct letter for each multiple-choice question.
 
