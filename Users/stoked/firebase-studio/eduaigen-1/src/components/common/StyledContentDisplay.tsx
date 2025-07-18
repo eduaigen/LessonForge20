@@ -775,9 +775,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                          {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
-                        </ol>
+                        <ul className="list-none pl-6 mt-2 space-y-1">
+                          {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
+                        </ul>
                     </li>
                 ))}
             </ol>
@@ -1291,3 +1291,5 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             }
     }
 }
+
+    
