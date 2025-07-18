@@ -46,6 +46,12 @@ export default function ConversationalCheckoutPage() {
     const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
     const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
 
+    const subjectsWithCourses = Object.values(allModules.coursesBySubject).map(courses => ({
+        name: courses[0].subject.charAt(0).toUpperCase() + courses[0].subject.slice(1),
+        icon: courses[0].icon,
+        courses: courses,
+    })).sort((a,b) => a.name.localeCompare(b.name));
+
     const handleSelectCourse = (id: string) => {
         setSelectedCourses(prev =>
             prev.includes(id) ? prev.filter(cId => cId !== id) : [...prev, id]
@@ -64,12 +70,6 @@ export default function ConversationalCheckoutPage() {
             .map(c => c.id);
         return selectedCourses.some(id => scienceCourseIds.includes(id));
     }, [selectedCourses]);
-
-    const subjectsWithCourses = Object.values(allModules.coursesBySubject).map(courses => ({
-        name: courses[0].subject.charAt(0).toUpperCase() + courses[0].subject.slice(1),
-        icon: courses[0].icon,
-        courses: courses,
-    })).sort((a,b) => a.name.localeCompare(b.name));
 
     const addonTools = [
         ...allModules.premium_tools.map(tool => ({ ...tool, priceId: tool.id })),
