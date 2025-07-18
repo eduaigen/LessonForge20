@@ -10,7 +10,7 @@ export const GenerateMathTestInputSchema = z.object({
 
 const multipleChoiceQuestionSchema = z.object({
   question: z.string().describe("A multiple-choice question, potentially with LaTeX for equations."),
-  options: z.array(z.string()).length(4).describe("Four answer choices."),
+  options: z.array(z.string()).length(4).describe("Four answer choices, without any letter prefixes."),
   answer: z.string().describe("The correct answer choice."),
   explanation: z.string().optional().describe("A brief explanation for the correct answer."),
 });
