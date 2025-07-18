@@ -831,9 +831,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                        <ul className="list-none pl-6 mt-2 space-y-1">
                           {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ol>
+                        </ul>
                     </li>
                 ))}
             </ol>
@@ -1053,17 +1053,15 @@ const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }
                 <ol className="list-decimal pl-5 space-y-8">
                 {test.partI.questions.map((mc, index) => (
                     <li key={index}>
-                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-                    <ul className="list-none pl-6 mt-2 space-y-1">
-                        {mc.options.map((opt, optIndex) => (
-                            <li key={`${index}-${optIndex}`} className="flex items-start">
-                                <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
-                                <div className="inline">
-                                    <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                        <div><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown></div>
+                        <ul className="list-none pl-6 mt-2 space-y-1">
+                            {mc.options.map((opt, optIndex) => (
+                                <li key={optIndex} className="flex items-start">
+                                    <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
+                                    <div><Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown></div>
+                                </li>
+                            ))}
+                        </ul>
                      <AnimatePresence>
                         {showAnswers && mc.answer && (
                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
