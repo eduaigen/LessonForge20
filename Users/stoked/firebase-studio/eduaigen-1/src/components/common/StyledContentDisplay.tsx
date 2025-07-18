@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -611,9 +612,9 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ol className="list-none pl-6 mt-2 space-y-1">
+                        <ul className="list-none pl-6 mt-2 space-y-1">
                           {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ol>
+                        </ul>
                     </li>
                 ))}
               </ol>
@@ -902,7 +903,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                         </ol>
                     </li>
@@ -975,13 +976,13 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
           {test.partI.questions.map((mc, index) => (
             <li key={index}>
               <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-              <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+              <ul className="list-none pl-6 mt-2 space-y-1">
                 {mc.options.map((opt, optIndex) => (
-                  <li key={optIndex}>
-                     <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                  <li key={`${index}-${optIndex}`}>
+                    {String.fromCharCode(65 + optIndex)}. <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
                   </li>
                 ))}
-              </ol>
+              </ul>
             </li>
           ))}
         </ol>
@@ -1042,7 +1043,7 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
                                 <p>{q.question}</p>
-                                <ol className="list-none pl-6 mt-2 space-y-1">
+                                <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                                     {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                                 </ol>
                             </li>
