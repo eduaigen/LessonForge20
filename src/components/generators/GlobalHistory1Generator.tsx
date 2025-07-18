@@ -20,7 +20,7 @@ import { generateGlobalHistory1Lesson } from '@/ai/flows/generate-global-history
 import { generateReadingMaterial } from '@/ai/flows/reading-material-generator';
 import { generateTeacherCoach } from '@/ai/flows/teacher-coach-generator';
 import { generateSlideshowOutline } from '@/ai/flows/slideshow-outline-generator';
-import { generateQuestionCluster } from '@/ai/flows/question-cluster-generator';
+import { generatePracticeQuestions } from '@/ai/flows/practice-questions-generator';
 import { generateStudySheet } from '@/ai/flows/study-sheet-generator';
 import { generateWorksheet } from '@/ai/flows/worksheet-generator';
 
@@ -177,14 +177,15 @@ const GeneratorContent = () => {
         let result: any;
         let resultTitle = toolName;
         const lessonPlanJson = JSON.stringify(lessonPlan);
+        const input = { lessonPlanJson, subject: "Social Studies" };
 
         switch (toolName) {
-            case 'Worksheet': result = await generateWorksheet({ lessonPlanJson }); resultTitle = 'Student Worksheet'; break;
-            case 'Reading Material': result = await generateReadingMaterial({ lessonPlanJson }); resultTitle = result.title; break;
-            case 'Teacher Coach': result = await generateTeacherCoach({ lessonPlanJson }); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
-            case 'Slideshow Outline': result = await generateSlideshowOutline({ lessonPlanJson }); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
-            case 'Question Cluster': result = await generateQuestionCluster({ lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
-            case 'Study Sheet': result = await generateStudySheet({ lessonPlanJson }); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
+            case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
+            case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Practice Questions': result = await generatePracticeQuestions(input); resultTitle = result.title; break;
+            case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
         }
 
         const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
@@ -211,7 +212,7 @@ const GeneratorContent = () => {
                 <li><strong>Worksheet:</strong> Creates a student-facing worksheet.</li>
                 <li><strong>Reading Material:</strong> Generates a student-facing article.</li>
                 <li><strong>Study Sheet:</strong> Creates a concise study guide.</li>
-                <li><strong>Question Cluster:</strong> Builds NGSS-style assessment questions.</li>
+                <li><strong>Practice Questions:</strong> Generates a set of practice questions for the lesson.</li>
                 <li><strong>Slideshow Outline:</strong> Generates a presentation outline.</li>
                 <li><strong>Teacher Coach:</strong> Provides pedagogical advice for the lesson.</li>
               </ul>

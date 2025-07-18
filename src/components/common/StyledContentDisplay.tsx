@@ -11,6 +11,7 @@ import { type SlideshowOutlineOutput } from '@/ai/schemas/slideshow-outline-gene
 import type { QuestionClusterOutput } from '@/ai/schemas/question-cluster-generator-schemas';
 import type { GenerateWorksheetOutput } from '@/ai/schemas/worksheet-generator-schemas';
 import type { ReadingMaterialOutput } from '@/ai/schemas/reading-material-generator-schemas';
+import type { GeneratePracticeQuestionsOutput } from '@/ai/schemas/practice-questions-generator-schemas';
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card';
 import { Button } from '@/components/ui/button';
@@ -536,6 +537,30 @@ const renderSlideshowOutline = (outline: SlideshowOutlineOutput) => {
     );
 };
 
+const renderPracticeQuestions = (content: GeneratePracticeQuestionsOutput) => (
+    <div className="document-view">
+        <h2 className="text-2xl font-bold mb-4">{content.title}</h2>
+        <ol className="list-decimal pl-5 space-y-6">
+            {content.questions.map((q, i) => (
+                <li key={i}>
+                    <p className="font-semibold">{q.question}</p>
+                    {q.options && (
+                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                            {q.options.map((opt, optIndex) => (
+                                <li key={optIndex}>{opt}</li>
+                            ))}
+                        </ol>
+                    )}
+                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
+                        <p className="text-sm"><strong>Answer:</strong> {q.answer}</p>
+                        <p className="text-xs text-muted-foreground"><strong>Explanation:</strong> {q.explanation}</p>
+                    </div>
+                </li>
+            ))}
+        </ol>
+    </div>
+);
+
 const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     return (
       <div className="document-view">
@@ -546,7 +571,7 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
         <section className="mb-6">
           <h2>Stimulus Material</h2>
           <div className="my-4">
-             {renderTableFromObject(cluster.stimulus.visual)}
+             {renderTableFromObject(cluster.dataTable)}
           </div>
         </section>
         <section className="mb-6">
@@ -555,43 +580,35 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
             <div>
               <h3>Multiple Choice</h3>
               <ol className="list-decimal pl-5 space-y-4">
-                <li>
-                  <p>{cluster.questions.mcq1.question}</p>
-                  <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                    {cluster.questions.mcq1.options.map((opt:string, index: number) => <li key={index}>{opt}</li>)}
-                  </ol>
-                  <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq1.answer}</em></p>
-                </li>
-                <li>
-                  <p>{cluster.questions.mcq2.question}</p>
-                  <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                    {cluster.questions.mcq2.options.map((opt:string, index: number) => <li key={index}>{opt}</li>)}
-                  </ol>
-                   <p className="text-sm"><em>Correct Answer: {cluster.questions.mcq2.answer}</em></p>
-                </li>
+                {cluster.multipleChoiceQuestions.map((q, i) => (
+                    <li key={i}>
+                        <p>{q.question}</p>
+                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                            {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                        </ol>
+                    </li>
+                ))}
               </ol>
             </div>
             <div>
               <h3>Short Response</h3>
               <ol className="list-decimal pl-5 space-y-6">
-                <li>
-                    <p>{cluster.questions.shortResponse1}</p>
-                    <div className="my-2 h-20 border-b border-dashed"></div>
-                </li>
-                <li>
-                    <p>{cluster.questions.shortResponse2}</p>
-                    <div className="my-2 h-20 border-b border-dashed"></div>
-                </li>
+                {cluster.shortAnswerQuestions.map((q, i) => (
+                    <li key={i}>
+                        <p>{q.question}</p>
+                        <div className="my-2 h-20 border-b border-dashed"></div>
+                    </li>
+                ))}
               </ol>
             </div>
             <div>
-              <h3>Modeling</h3>
-              <p>{cluster.questions.modeling}</p>
+              <h3>Claim-Evidence-Reasoning</h3>
+              <p>{cluster.cerQuestion.question}</p>
               <div className="my-2 h-32 border-b border-dashed"></div>
             </div>
-            <div>
-              <h3>Prediction</h3>
-              <p>{cluster.questions.prediction}</p>
+             <div>
+              <h3>Modeling</h3>
+              <p>{cluster.modelingQuestion.question}</p>
               <div className="my-2 h-32 border-b border-dashed"></div>
             </div>
           </div>
@@ -623,6 +640,17 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                     <h2>Core Concepts</h2>
                      <ul className="list-disc pl-5 space-y-2">
                          {studySheet.coreConcepts.map((concept, index) => (
+                             <li key={index}>{concept}</li>
+                         ))}
+                     </ul>
+                </section>
+            )}
+
+            {Array.isArray(studySheet.keyConcepts) && studySheet.keyConcepts.length > 0 && (
+                 <section className="mb-6">
+                    <h2>Key Concepts</h2>
+                     <ul className="list-disc pl-5 space-y-2">
+                         {studySheet.keyConcepts.map((concept, index) => (
                              <li key={index}>{concept}</li>
                          ))}
                      </ul>
@@ -1161,6 +1189,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             return renderSlideshowOutline(content);
         case 'Question Cluster':
             return renderQuestionCluster(content);
+        case 'Practice Questions':
+            return renderPracticeQuestions(content);
         case 'Reading Material':
             return <ReadingMaterialDisplay content={content} />;
         case 'Lab Activity':

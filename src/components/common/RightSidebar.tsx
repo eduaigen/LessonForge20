@@ -22,16 +22,25 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
-export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Slideshow Outline' | 'Teacher Coach' | 'Differentiated Version' | 'Enhanced Version' | 'Student Answer Sheet' | 'Answer Key';
+export type ToolName = 'Worksheet' | 'Reading Material' | 'Study Sheet' | 'Question Cluster' | 'Practice Questions' | 'Slideshow Outline' | 'Teacher Coach' | 'Differentiated Version' | 'Enhanced Version' | 'Student Answer Sheet' | 'Answer Key';
 
 const lessonTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
   { name: 'Worksheet', icon: <FileText className="h-5 w-5" />, disabled: false },
   { name: 'Reading Material', icon: <BookOpen className="h-5 w-5" />, disabled: false },
   { name: 'Study Sheet', icon: <FileQuestion className="h-5 w-5" />, disabled: false },
-  { name: 'Question Cluster', icon: <FileQuestion className="h-5 w-5" />, disabled: false },
   { name: 'Slideshow Outline', icon: <Presentation className="h-5 w-5" />, disabled: false },
   { name: 'Teacher Coach', icon: <Bot className="h-5 w-5" />, disabled: false },
 ];
+
+const scienceLessonTools = [
+    ...lessonTools,
+    { name: 'Question Cluster' as ToolName, icon: <FileQuestion className="h-5 w-5" />, disabled: false }
+]
+
+const nonScienceLessonTools = [
+    ...lessonTools,
+    { name: 'Practice Questions' as ToolName, icon: <FileQuestion className="h-5 w-5" />, disabled: false }
+]
 
 const testTools: { name: ToolName; icon: React.ReactNode; disabled: boolean }[] = [
     { name: 'Study Sheet', icon: <BookOpen className="h-5 w-5" />, disabled: false },
@@ -49,7 +58,7 @@ type RightSidebarProps = {
   onToolClick: (toolName: ToolName) => void;
   isGenerating: boolean;
   isHighlighting: boolean;
-  toolset?: 'lesson' | 'test' | 'lab';
+  toolset?: 'lesson' | 'test' | 'lab' | 'science_lesson';
 };
 
 export default function RightSidebar({ onToolClick, isGenerating, isHighlighting, toolset = 'lesson' }: RightSidebarProps) {
@@ -58,13 +67,15 @@ export default function RightSidebar({ onToolClick, isGenerating, isHighlighting
   const getTools = () => {
     switch (toolset) {
       case 'lesson':
-        return lessonTools;
+        return nonScienceLessonTools;
+      case 'science_lesson':
+        return scienceLessonTools;
       case 'test':
         return testTools;
       case 'lab':
         return labTools;
       default:
-        return lessonTools;
+        return nonScienceLessonTools;
     }
   }
   const tools = getTools();

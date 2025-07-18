@@ -30,6 +30,7 @@ export * from './flows/comprehension-question-generator';
 export * from './flows/teacher-coach-generator';
 export * from './flows/slideshow-outline-generator';
 export * from './flows/question-cluster-generator';
+export * from './flows/practice-questions-generator';
 export * from './flows/study-sheet-generator';
 export * from './flows/worksheet-generator';
 export * from './flows/lesson-section-refiner';
