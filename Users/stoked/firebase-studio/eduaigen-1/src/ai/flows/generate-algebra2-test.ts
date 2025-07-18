@@ -37,13 +37,14 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert high school Algebra 2 teacher and assessment writer for the NYS Regents curriculum. Your task is to generate a comprehensive, multi-part test based on specific curriculum lessons.
 
 **CRITICAL INSTRUCTIONS:**
-1.  **Use LaTeX for ALL math**: Every mathematical expression, variable, number, and equation MUST be wrapped in double dollar signs, like $$f(x) = \\log_2(x)$$. Do NOT escape backslashes (e.g., use $$\\frac{1}{2}$$, not $$\\frac{1}{2}$$).
-2.  **Generate a set of clear, student-facing instructions for taking the test.**
-3.  **Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.**
-4.  **You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I.** This is a non-negotiable requirement.
-5.  **For multiple-choice questions, each answer option MUST contain only the text of the answer.** DO NOT include any prefix like "A.", "B.", or "1.".
-6.  **All generated content must be complete and fully written out.** No placeholders.
-7.  **DO NOT GENERATE AN ANSWER KEY.** The output schema does not include fields for answers or sample responses. Only generate the questions.
+1.  **Use LaTeX for math expressions ONLY**: Every mathematical expression, variable, number, and equation MUST be wrapped in double dollar signs, like $$f(x) = \\log_2(x)$$.
+2.  **CRITICAL: Do NOT wrap non-mathematical text or currency values (like prices) in LaTeX.** This is a common error to avoid.
+3.  **Generate a set of clear, student-facing instructions for taking the test.**
+4.  **Your primary task is to generate a JSON object that precisely matches the specified counts for each part of the test. Do not deviate.**
+5.  **You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I.** This is a non-negotiable requirement.
+6.  **For multiple-choice questions, each answer option MUST contain only the text of the answer.** DO NOT include any prefix like "A.", "B.", or "1.".
+7.  **All generated content must be complete and fully written out.** No placeholders.
+8.  **DO NOT GENERATE AN ANSWER KEY.** The output schema does not include fields for answers or sample responses. Only generate the questions.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
