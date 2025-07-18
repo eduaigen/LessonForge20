@@ -1002,7 +1002,30 @@ const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }
     const handleGenerateKey = async () => {
         setIsGeneratingKey(true);
         try {
-            const result = await generateMathAnswerKey(test);
+            // The AI schema expects the test object without the answer fields.
+            const testForApiKeyGen = {
+                testTitle: test.testTitle,
+                instructions: test.instructions,
+                partI: {
+                    title: test.partI.title,
+                    questions: test.partI.questions.map(({ question, options }) => ({ question, options })),
+                },
+                partII: {
+                    title: test.partII.title,
+                    questions: test.partII.questions.map(({ question }) => ({ question })),
+                },
+                partIII: {
+                    title: test.partIII.title,
+                    questions: test.partIII.questions.map(({ question }) => ({ question })),
+                },
+                partIV: {
+                    title: test.partIV.title,
+                    question: { question: test.partIV.question.question },
+                },
+            };
+
+            const result = await generateMathAnswerKey(testForApiKeyGen as any);
+            
             setTest(prevTest => {
                 const newTest = JSON.parse(JSON.stringify(prevTest)); // Deep copy
                 newTest.partI.questions.forEach((q: any, i: number) => {
