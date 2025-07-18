@@ -239,7 +239,7 @@ const GeneratorContent = () => {
                     <FormItem>
                     <div className="mb-4">
                         <FormLabel className="text-base">Select Units</FormLabel>
-                        <FormMessage />
+                        <p className="text-sm text-muted-foreground">Choose one or more units to include in the test.</p>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {units.map((unit) => (

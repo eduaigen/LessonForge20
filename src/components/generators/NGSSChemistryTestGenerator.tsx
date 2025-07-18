@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Slider } from '@/components/ui/slider';
-import { Loader2, Sparkles, Wand2, FlaskConical, Atom } from 'lucide-react';
+import { Loader2, Sparkles, Wand2, Atom } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { chemistryCurriculum } from '@/lib/chemistry-curriculum';
 import { generateNGSSChemistryTest } from '@/ai/flows/generate-ngss-chemistry-test';
