@@ -44,7 +44,7 @@ const prompt = ai.definePrompt({
 5.  **For multiple-choice questions, each answer option MUST contain only the text of the answer.** DO NOT include any prefix like "A.", "B.", or "1.".
 6.  **All generated content must be complete and fully written out.** No placeholders.
 7.  **Do not generate questions that require a visual diagram to be understood.** Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
-8.  **For ALL constructed response questions (Parts II, III, and IV), you MUST provide a detailed, step-by-step sample answer that clearly explains the solution process.**
+8.  **DO NOT GENERATE AN ANSWER KEY.** The output schema does not include fields for answers or sample responses. Only generate the questions.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
@@ -55,7 +55,6 @@ const prompt = ai.definePrompt({
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
 - Each question must have four complete answer options.
-- The answer key must contain the correct answer option text and a brief explanation.
 
 **Part II: 2-Credit Constructed Response**
 - Generate EXACTLY {{{partIICount}}} unique constructed-response questions.

@@ -22,6 +22,7 @@ import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-s
 import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
+import { generateMathAnswerKey } from '@/ai/flows/generate-math-answer-key';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
 import type { GenerateLabActivityOutput, LabAnswerKeyOutputSchema, LabStudentSheetOutputSchema, LabTeacherCoachOutputSchema } from '@/ai/schemas/lab-activity-schemas';
 import EditSectionDialog from './EditSectionDialog';
@@ -348,9 +349,9 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
                 {worksheet.checkFoUnderstanding.multipleChoice.map((mc, i) => (
                     <li key={i}>
                         <p>{mc.question}</p>
-                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                           {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
-                        </ol>
+                        <ul className="list-none pl-6 mt-2 space-y-1">
+                           {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
+                        </ul>
                     </li>
                 ))}
                 <li>
@@ -728,12 +729,12 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                             <li key={index}>
                                 {q.question ? (
                                     <>
-                                        <p><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown> <em className="text-sm text-muted-foreground">({q.source})</em></p>
+                                        <div><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown> <em className="text-sm text-muted-foreground">({q.source})</em></div>
                                         <div className="my-2 h-12 border-b border-dashed"></div>
                                     </>
                                 ) : (
                                      <>
-                                        <p><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q}</Markdown></p>
+                                        <div><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q}</Markdown></div>
                                         <div className="my-2 h-12 border-b border-dashed"></div>
                                      </>
                                 )}
@@ -991,8 +992,41 @@ const GraphingGrid = () => (
 );
 
 
-const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
+const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }) => {
+    const { toast } = useToast();
+    const [test, setTest] = useState(initialTest);
+    const [isGeneratingKey, setIsGeneratingKey] = useState(false);
     const [showAnswers, setShowAnswers] = useState(false);
+    const hasAnswerKey = test.partI.questions.some(q => q.answer);
+
+    const handleGenerateKey = async () => {
+        setIsGeneratingKey(true);
+        try {
+            const result = await generateMathAnswerKey(test);
+            setTest(prevTest => {
+                const newTest = JSON.parse(JSON.stringify(prevTest)); // Deep copy
+                newTest.partI.questions.forEach((q: any, i: number) => {
+                    q.answer = result.partI[i].answer;
+                    q.explanation = result.partI[i].explanation;
+                });
+                newTest.partII.questions.forEach((q: any, i: number) => {
+                    q.sampleAnswer = result.partII[i].sampleAnswer;
+                });
+                newTest.partIII.questions.forEach((q: any, i: number) => {
+                    q.sampleAnswer = result.partIII[i].sampleAnswer;
+                });
+                newTest.partIV.question.sampleAnswer = result.partIV.sampleAnswer;
+                return newTest;
+            });
+            setShowAnswers(true);
+            toast({ title: 'Answer Key Generated' });
+        } catch (error) {
+            console.error('Answer key generation failed:', error);
+            toast({ title: 'Error', description: 'Failed to generate answer key.', variant: 'destructive' });
+        } finally {
+            setIsGeneratingKey(false);
+        }
+    };
 
     return (
         <div className="document-view">
@@ -1001,13 +1035,19 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                     <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
                     {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
                 </div>
-                <Button variant="outline" onClick={() => setShowAnswers(prev => !prev)}>
-                    <Key className="mr-2 h-4 w-4" />
-                    {showAnswers ? 'Hide' : 'Show'} Answer Key
-                </Button>
+                {hasAnswerKey ? (
+                    <Button variant="outline" onClick={() => setShowAnswers(prev => !prev)}>
+                        <Key className="mr-2 h-4 w-4" />
+                        {showAnswers ? 'Hide' : 'Show'} Answer Key
+                    </Button>
+                ) : (
+                    <Button variant="outline" onClick={handleGenerateKey} disabled={isGeneratingKey}>
+                        {isGeneratingKey ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Key className="mr-2 h-4 w-4" />}
+                        {isGeneratingKey ? 'Generating...' : 'Generate Answer Key'}
+                    </Button>
+                )}
             </header>
             
-            {/* Part I: Multiple Choice */}
             <section className="mb-12">
                 <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partI.title}</h2>
                 <ol className="list-decimal pl-5 space-y-8">
@@ -1025,7 +1065,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                         ))}
                     </ul>
                      <AnimatePresence>
-                        {showAnswers && (
+                        {showAnswers && mc.answer && (
                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
                                 <div className="font-semibold text-green-800">
                                     Answer: <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.answer}</Markdown>
@@ -1043,7 +1083,6 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                 </ol>
             </section>
         
-            {/* Part II: 2-Credit Constructed Response */}
             <section className="mb-12">
                 <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partII.title}</h2>
                 <ol className="list-decimal pl-5 space-y-8">
@@ -1053,7 +1092,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                     {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
                     <div className="my-2 h-24 border-b border-dashed"></div>
                     <AnimatePresence>
-                        {showAnswers && (
+                        {showAnswers && q.sampleAnswer && (
                              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
                                  <div className="font-semibold text-green-800">Answer:</div>
                                  <div className="text-sm text-green-700 mt-1">
@@ -1067,7 +1106,6 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                 </ol>
             </section>
         
-            {/* Part III: 4-Credit Constructed Response */}
             <section className="mb-12">
                 <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIII.title}</h2>
                 <ol className="list-decimal pl-5 space-y-8">
@@ -1077,7 +1115,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                     {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
                     <div className="my-2 h-32 border-b border-dashed"></div>
                      <AnimatePresence>
-                        {showAnswers && (
+                        {showAnswers && q.sampleAnswer && (
                              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
                                  <div className="font-semibold text-green-800">Answer:</div>
                                  <div className="text-sm text-green-700 mt-1">
@@ -1091,7 +1129,6 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                 </ol>
             </section>
         
-            {/* Part IV: 6-Credit Constructed Response */}
             <section>
                 <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIV.title}</h2>
                 <div>
@@ -1099,7 +1136,7 @@ const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
                 {test.partIV.question.question.toLowerCase().includes('graph') && <GraphingGrid />}
                 <div className="my-2 h-48 border-b border-dashed"></div>
                  <AnimatePresence>
-                        {showAnswers && (
+                        {showAnswers && test.partIV.question.sampleAnswer && (
                              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
                                  <div className="font-semibold text-green-800">Answer:</div>
                                  <div className="text-sm text-green-700 mt-1">
@@ -1346,5 +1383,3 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             }
     }
 }
-
-    
