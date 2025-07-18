@@ -158,7 +158,7 @@ export default function CollapsibleSection({ title, children, contentItem }: Col
                     <h3 className="text-xl font-headline">{title}</h3>
                 </AccordionTrigger>
                 <div className="flex items-center gap-2 ml-4 flex-wrap">
-                    <Button variant="outline" size="icon" onClick={() => setIsTranslationDialogOpen(true)} title="Translate to Spanish">
+                    <Button variant="outline" size="icon" onClick={() => setIsTranslationDialogOpen(true)} title="Translate">
                         <Languages className="h-4 w-4" />
                         <span className="sr-only">Translate</span>
                     </Button>

@@ -16,7 +16,6 @@ import { useToast } from '@/hooks/use-toast';
 import { translateContent } from '@/ai/flows/translate-content';
 import StyledContentDisplay from './StyledContentDisplay';
 import type { GeneratedContent } from '@/components/generators/NVBiologyGenerator';
-import { ScrollArea } from '../ui/scroll-area';
 
 interface TranslationDialogProps {
   open: boolean;
@@ -91,6 +90,8 @@ export default function TranslationDialog({ open, onOpenChange, contentItem }: T
                 body { font-family: sans-serif; padding: 2rem; } 
                 .document-view { max-width: 100%; } 
                 h1,h2,h3 { color: #333; }
+                table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+                th { font-weight: bold; }
              </style>`);
              printWindow.document.write('</head><body>');
              printWindow.document.write(printableContent.innerHTML);

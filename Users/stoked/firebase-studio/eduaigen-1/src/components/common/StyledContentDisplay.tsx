@@ -15,7 +15,7 @@ import type { GeneratePracticeQuestionsOutput } from '@/ai/schemas/practice-ques
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon, Key } from 'lucide-react';
+import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon, Key, PencilRuler } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';

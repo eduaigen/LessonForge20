@@ -197,7 +197,7 @@ const GeneratorContent = () => {
         return;
     }
 
-    if (lessonPackage.some(sec => sec.title.startsWith(toolName))) {
+    if (lessonPackage.some(sec => sec.type === toolName)) {
         toast({ title: "Already Generated", description: `A ${toolName} has already been generated.` });
         return;
     }
@@ -213,7 +213,7 @@ const GeneratorContent = () => {
         case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
         case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
         case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
-        case 'Question Cluster': result = await generateQuestionCluster({ ...input, dokLevel: 2, lessonTopics: lessonPlan.lessonOverview.topic }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
+        case 'Question Cluster': result = await generateQuestionCluster({ lessonTopics: lessonPlan.lessonOverview.topic, dokLevel: 2 }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
         case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
       }
 
