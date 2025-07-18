@@ -43,6 +43,7 @@ const prompt = ai.definePrompt({
 4.  All generated content must be complete and fully written out. No placeholders.
 5.  Use LaTeX for all mathematical expressions, equations, and symbols.
 6.  Do not generate questions that require a visual diagram to be understood. Instead, describe the geometric figure in words (e.g., "In right triangle ABC, the right angle is at C...").
+7.  For ALL constructed response questions (Parts II, III, and IV), you MUST provide a detailed, step-by-step sample answer that clearly explains the solution process.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
@@ -52,7 +53,8 @@ const prompt = ai.definePrompt({
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
-- Each question must have four complete answer options. For each option, provide ONLY the text of the answer. DO NOT include any prefix like "A.", "B.", or "1.".
+- Each question must have four complete answer options. Provide ONLY the text of the answer. DO NOT include any prefix like "A.", "B.", or "1.".
+- The answer key must contain the correct answer option text and a brief explanation.
 
 **Part II: 2-Credit Constructed Response**
 - Generate EXACTLY {{{partIICount}}} unique constructed-response questions.

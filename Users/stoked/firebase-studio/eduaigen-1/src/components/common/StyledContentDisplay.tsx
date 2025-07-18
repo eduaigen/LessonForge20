@@ -19,6 +19,7 @@ import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon, Ke
 import { useToast } from '@/hooks/use-toast';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
+import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
@@ -28,7 +29,6 @@ import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
 import type { z } from 'zod';
 import { AnimatePresence, motion } from 'framer-motion';
-import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
@@ -554,7 +554,7 @@ const PracticeQuestionsDisplay = ({ content }: { content: GeneratePracticeQuesti
             <ol className="list-decimal pl-5 space-y-8">
                 {content.questions.map((q, i) => (
                     <li key={i}>
-                        <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+                        <div><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown></div>
                         {q.options && (
                             <ul className="list-none pl-6 mt-2 space-y-1">
                                 {q.options.map((opt, optIndex) => (
@@ -857,9 +857,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
-                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
-                        </ol>
+                        <ul className="list-none pl-6 mt-2 space-y-1">
+                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
+                        </ul>
                     </li>
                 ))}
             </ol>
@@ -936,74 +936,128 @@ const GraphingGrid = () => (
 );
 
 
-const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => (
-    <div className="document-view">
-      <header className="text-center mb-8">
-        <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
-        {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
-      </header>
-  
-      {/* Part I: Multiple Choice */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partI.title}</h2>
-        <ol className="list-decimal pl-5 space-y-8">
-          {test.partI.questions.map((mc, index) => (
-            <li key={index}>
-              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
-              <ul className="list-none pl-6 mt-2 space-y-1">
-                {mc.options.map((opt, optIndex) => (
-                  <li key={`${index}-${optIndex}`} className="flex items-start">
-                    <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
-                    <div className="inline">
-                       <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
-                    </div>
-                  </li>
+const MathTestDisplay = ({ test }: { test: GenerateMathTestOutput }) => {
+    const [showAnswers, setShowAnswers] = useState(false);
+
+    return (
+        <div className="document-view">
+            <header className="flex justify-between items-center mb-8 border-b pb-4">
+                <div className="text-center flex-grow">
+                    <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
+                    {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
+                </div>
+                <Button variant="outline" onClick={() => setShowAnswers(prev => !prev)}>
+                    <Key className="mr-2 h-4 w-4" />
+                    {showAnswers ? 'Hide' : 'Show'} Answer Key
+                </Button>
+            </header>
+            
+            {/* Part I: Multiple Choice */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partI.title}</h2>
+                <ol className="list-decimal pl-5 space-y-8">
+                {test.partI.questions.map((mc, index) => (
+                    <li key={index}>
+                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.question}</Markdown>
+                    <ul className="list-none pl-6 mt-2 space-y-1">
+                        {mc.options.map((opt, optIndex) => (
+                            <li key={`${index}-${optIndex}`} className="flex items-start">
+                                <span className="mr-2">{String.fromCharCode(65 + optIndex)}.</span>
+                                <div className="inline">
+                                    <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{opt}</Markdown>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                     <AnimatePresence>
+                        {showAnswers && (
+                            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                                <div className="font-semibold text-green-800">
+                                    Answer: <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.answer}</Markdown>
+                                </div>
+                                {mc.explanation && (
+                                    <div className="text-sm text-green-700 mt-1">
+                                        <strong>Explanation:</strong> <Markdown className="inline" remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{mc.explanation}</Markdown>
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                    </li>
                 ))}
-              </ul>
-            </li>
-          ))}
-        </ol>
-      </section>
-  
-      {/* Part II: 2-Credit Constructed Response */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partII.title}</h2>
-        <ol className="list-decimal pl-5 space-y-8">
-          {test.partII.questions.map((q, index) => (
-            <li key={index}>
-              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
-              {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
-              <div className="my-2 h-24 border-b border-dashed"></div>
-            </li>
-          ))}
-        </ol>
-      </section>
-  
-      {/* Part III: 4-Credit Constructed Response */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIII.title}</h2>
-        <ol className="list-decimal pl-5 space-y-8">
-          {test.partIII.questions.map((q, index) => (
-            <li key={index}>
-              <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
-              {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
-              <div className="my-2 h-32 border-b border-dashed"></div>
-            </li>
-          ))}
-        </ol>
-      </section>
-  
-      {/* Part IV: 6-Credit Constructed Response */}
-      <section>
-        <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIV.title}</h2>
-        <div>
-          <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{test.partIV.question.question}</Markdown>
-           {test.partIV.question.question.toLowerCase().includes('graph') && <GraphingGrid />}
-          <div className="my-2 h-48 border-b border-dashed"></div>
+                </ol>
+            </section>
+        
+            {/* Part II: 2-Credit Constructed Response */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partII.title}</h2>
+                <ol className="list-decimal pl-5 space-y-8">
+                {test.partII.questions.map((q, index) => (
+                    <li key={index}>
+                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+                    {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
+                    <div className="my-2 h-24 border-b border-dashed"></div>
+                    <AnimatePresence>
+                        {showAnswers && (
+                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                                 <div className="font-semibold text-green-800">Answer:</div>
+                                 <div className="text-sm text-green-700 mt-1">
+                                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.sampleAnswer}</Markdown>
+                                 </div>
+                             </motion.div>
+                        )}
+                    </AnimatePresence>
+                    </li>
+                ))}
+                </ol>
+            </section>
+        
+            {/* Part III: 4-Credit Constructed Response */}
+            <section className="mb-12">
+                <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIII.title}</h2>
+                <ol className="list-decimal pl-5 space-y-8">
+                {test.partIII.questions.map((q, index) => (
+                    <li key={index}>
+                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown>
+                    {q.question.toLowerCase().includes('graph') && <GraphingGrid />}
+                    <div className="my-2 h-32 border-b border-dashed"></div>
+                     <AnimatePresence>
+                        {showAnswers && (
+                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                                 <div className="font-semibold text-green-800">Answer:</div>
+                                 <div className="text-sm text-green-700 mt-1">
+                                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.sampleAnswer}</Markdown>
+                                 </div>
+                             </motion.div>
+                        )}
+                    </AnimatePresence>
+                    </li>
+                ))}
+                </ol>
+            </section>
+        
+            {/* Part IV: 6-Credit Constructed Response */}
+            <section>
+                <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.partIV.title}</h2>
+                <div>
+                <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{test.partIV.question.question}</Markdown>
+                {test.partIV.question.question.toLowerCase().includes('graph') && <GraphingGrid />}
+                <div className="my-2 h-48 border-b border-dashed"></div>
+                 <AnimatePresence>
+                        {showAnswers && (
+                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                                 <div className="font-semibold text-green-800">Answer:</div>
+                                 <div className="text-sm text-green-700 mt-1">
+                                    <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{test.partIV.question.sampleAnswer}</Markdown>
+                                 </div>
+                             </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </section>
         </div>
-      </section>
-    </div>
-);
+    );
+}
 
 const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
     <div className="document-view">
@@ -1221,8 +1275,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
             if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
             if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
-            // Add Math Answer Key Display when available
-            return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
+            // The math answer key is now rendered within the MathTestDisplay component.
+            return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented or is shown with the test.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);
         case 'Student Answer Sheet':

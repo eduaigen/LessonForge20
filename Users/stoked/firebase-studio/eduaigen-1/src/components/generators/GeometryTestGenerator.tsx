@@ -108,13 +108,7 @@ const GeneratorContent = () => {
         content: result,
         type: 'Test',
       };
-      const answerKeyContent: TestGeneratedContent = {
-          id: `answer-key-${Date.now()}`,
-          title: `Answer Key: ${result.testTitle}`,
-          content: result,
-          type: 'Answer Key',
-      }
-      setTestPackage([testContent, answerKeyContent]);
+      setTestPackage([testContent]);
       setIsToolsInfoDialogOpen(true);
     } catch (error) {
       console.error('Test generation failed:', error);
@@ -182,7 +176,7 @@ const GeneratorContent = () => {
               Test Generated! What's Next?
             </AlertDialogTitle>
             <AlertDialogDescription>
-               Your test and answer key are ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
+               Your test is ready. Now you can use our AI tools to instantly create aligned materials. The tools are available on the right-hand sidebar.
             </AlertDialogDescription>
             <div className="text-sm text-muted-foreground pt-4 text-left">
               <span className="font-semibold text-foreground">Here are the available tools:</span>

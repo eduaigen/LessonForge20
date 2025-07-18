@@ -42,10 +42,12 @@ const prompt = ai.definePrompt({
 3.  You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I. This is a non-negotiable requirement.
 4.  All generated content must be complete and fully written out. No placeholders.
 5.  Use LaTeX for all mathematical expressions, equations, and variables.
+6.  For ALL constructed response questions (Parts II, III, and IV), you MUST provide a detailed, step-by-step sample answer that clearly explains the solution process.
 
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
-- Each question must have four complete answer options. For each option, provide ONLY the text of the answer. DO NOT include any prefix like "A.", "B.", or "1.".
+- Each question must have four complete answer options. Provide ONLY the text of the answer. DO NOT include any prefix like "A.", "B.", or "1.".
+- The answer key must contain the correct answer option text and a brief explanation.
 
 **Part II: 2-Credit Constructed Response**
 - Generate EXACTLY {{{partIICount}}} unique constructed-response questions.
