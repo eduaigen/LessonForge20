@@ -56,7 +56,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 **C. "guidedPractice"** (Object, 15–20 min)
 - "teacherActions": (Array of Strings) Verbatim script for launching and managing the activity.
 - "expectedStudentOutputs": (Array of Strings) An exemplar of a completed graphic organizer or collaborative output.
-- "activityContent": (Object or String) **EITHER** a data table object (with "title", "headers", "rows") **OR** a string describing a non-data-based activity (e.g., a set of practice problems).
+- "activityContent": (Object or String) If the activity uses a table of data, you MUST use the data table object (with "title", "headers", "rows"). If the activity does not involve a table (e.g., a set of practice problems to solve), use a string describing the activity.
 
 **D. "checkFoUnderstanding"** (Object, CFU)
 - "teacherActions": (Array of Strings) Script for administering the CFU.
@@ -68,7 +68,7 @@ The root object should have the following keys: "lessonOverview", "doNow", "mini
 - "teacherActions": (Array of Strings) Script for setting up the task.
 - "expectedStudentOutputs": (Array of Strings) A full, high-quality exemplar of a complete problem solution.
 - "taskPrompt": (String) A rich problem-solving task or set of practice problems.
-- "taskData": (Object or null) Any necessary data for the task, using the same structure as "activityContent" data table.
+- "taskData": (Object or null) If the task requires data, you MUST use the data table structure. Set to null if not applicable.
 
 **F. "closure"** (Object, Exit Ticket)
 - "teacherActions": (Array of Strings) Script for the closure.
