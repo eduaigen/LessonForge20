@@ -1,51 +1,49 @@
 
 'use server';
 /**
- * @fileOverview An AI flow for generating NGSS-style question clusters.
+ * @fileOverview An AI flow for generating a single NGSS-style question cluster.
  */
 import { ai } from '@/ai/genkit';
+import { z } from 'zod';
 import {
-  QuestionClusterInputSchema,
-  QuestionClusterOutputSchema,
-  type QuestionClusterInput,
+  GenerateQuestionClusterInputSchema,
+  QuestionClusterSchema,
+  type GenerateQuestionClusterInput,
   type QuestionClusterOutput,
 } from '../schemas/question-cluster-generator-schemas';
 
 const prompt = ai.definePrompt({
-  name: 'questionClusterGeneratorPrompt',
-  input: { schema: QuestionClusterInputSchema },
-  output: { schema: QuestionClusterOutputSchema },
-  prompt: `You are an expert in science assessment design, specializing in creating three-dimensional, NGSS-aligned question clusters. Your task is to generate a 6-question cluster based on the provided lesson plan topic.
+  name: 'singleQuestionClusterGeneratorPrompt',
+  input: { schema: GenerateQuestionClusterInputSchema },
+  output: { schema: QuestionClusterSchema },
+  prompt: `You are an expert in science assessment design, specializing in creating three-dimensional, NGSS-aligned question clusters. Your task is to generate a single 6-question cluster based on the provided lesson topics and Depth of Knowledge (DOK) level.
 
-**Source Material**: Use the lesson topic and objective as the primary inspiration.
+**Curriculum Context:**
+-   **Topics**: {{{lessonTopics}}}
+-   **DOK Level**: {{{dokLevel}}}
 
-**Lesson Plan Context:**
----
-Topic: {{{lessonTopic}}}
-Lesson Objective: {{{lessonObjective}}}
----
+**Instructions for Generating ONE Cluster:**
+1.  **Develop a Phenomenon:** Create a compelling, real-world phenomenon related to the lesson topics. This should be an informative passage (150-200 words) that provides background information.
+2.  **Create Stimulus Material:** If relevant, create a data table that students will need to interpret. The data must be directly related to the phenomenon and passage.
+3.  **Generate 6 Questions:** Based on the phenomenon and stimulus, create exactly six questions that align with the specified DOK level.
+    *   **Multiple Choice Question 1:** A straightforward comprehension or identification question. Provide 4 answer choices but DO NOT include the letters (A, B, C, D).
+    *   **Multiple Choice Question 2:** A more analytical multiple-choice question that requires students to make an inference. Provide 4 answer choices but DO NOT include the letters.
+    *   **Short Response Question 1:** A question requiring students to explain a concept from the stimulus.
+    *   **Short Response Question 2:** A question asking students to use evidence from the stimulus to support a claim.
+    *   **CER Question:** A full Claim, Evidence, Reasoning prompt.
+    *   **Modeling Question:** A prompt that asks students to draw, label, or complete a model to explain a process or relationship.
+4.  **Create Answer Key:** Provide a detailed answer key for every question in the cluster.
 
-**Instructions:**
-1.  **Develop a Phenomenon:** Create a compelling, real-world phenomenon related to the lesson topic. This should be an informative passage (150-200 words) that provides background information.
-2.  **Create Stimulus Material:**
-    *   **Visual Data Table:** Create a relevant data table that students will need to interpret. The data must be directly related to the phenomenon and passage. **You must format this as a structured JSON object with a 'title', 'headers' array, and 'rows' array of arrays.**
-3.  **Generate a 6-Question Cluster:** Based on the stimulus material, create exactly six questions that align with different cognitive tasks.
-
-    *   **Multiple Choice Question 1:** A straightforward comprehension or identification question based on the stimulus. Provide 4 answer choices.
-    *   **Multiple Choice Question 2:** A more analytical multiple-choice question that requires students to make an inference or connection. Provide 4 answer choices.
-    *   **Short Response Question 1:** A question that requires students to explain a concept or relationship from the stimulus in their own words (2-3 sentences).
-    *   **Short Response Question 2:** A question that asks students to use evidence from the stimulus to support a claim.
-    *   **Modeling Question:** A prompt that asks students to draw, label, or complete a model or diagram to explain a process or relationship.
-    *   **Prediction Question:** A question that asks students to predict an outcome if a variable in the phenomenon were to change, and to justify their prediction.
-
-Ensure all questions are clear, concise, and directly tied to the provided stimulus materials.`,
+Your final output MUST be a single, valid JSON object representing one question cluster that strictly follows the output schema.
+`,
 });
 
-const questionClusterGeneratorFlow = ai.defineFlow(
+const generateQuestionClusterFlow = ai.defineFlow(
   {
-    name: 'questionClusterGeneratorFlow',
-    inputSchema: QuestionClusterInputSchema,
-    outputSchema: QuestionClusterOutputSchema,
+    name: 'generateQuestionClusterFlow',
+    inputSchema: GenerateQuestionClusterInputSchema,
+    outputSchema: QuestionClusterSchema,
+    timeout: 120000,
   },
   async (input) => {
     const { output } = await prompt(input);
@@ -57,7 +55,7 @@ const questionClusterGeneratorFlow = ai.defineFlow(
 );
 
 export async function generateQuestionCluster(
-  input: QuestionClusterInput
+  input: GenerateQuestionClusterInput
 ): Promise<QuestionClusterOutput> {
-  return await questionClusterGeneratorFlow(input);
+  return await generateQuestionClusterFlow(input);
 }
