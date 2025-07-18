@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import React, { useState } from 'react';
@@ -20,7 +19,6 @@ import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon, Ke
 import { useToast } from '@/hooks/use-toast';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
-import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
@@ -30,6 +28,7 @@ import { generateDiagramImage } from '@/ai/flows/generate-diagram-image';
 import Image from 'next/image';
 import type { z } from 'zod';
 import { AnimatePresence, motion } from 'framer-motion';
+import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 
 
 const renderTableFromObject = (tableData: { title: string, headers: string[], rows: (string | number)[][] } | null | undefined) => {
@@ -649,51 +648,29 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     );
   };
 
-const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
-    if (!studySheet) {
-        return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Study sheet content is not available.</div>;
-    }
+const renderStudySheet = (studySheet: TestStudySheetOutput) => {
     return (
         <div className="document-view">
             <header className="text-center mb-8">
-                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.lessonTitle || studySheet.title}</h1>
-                 {studySheet.unitTitle && <p className="text-lg text-muted-foreground">{studySheet.unitTitle}</p>}
+                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
             </header>
 
-            {studySheet.essentialQuestion && (
+            {studySheet.keyConcepts && studySheet.keyConcepts.length > 0 && (
                  <section className="mb-6">
-                    <h2>Essential Question</h2>
-                    <p>{studySheet.essentialQuestion}</p>
-                </section>
-            )}
-
-            {Array.isArray(studySheet.coreConcepts) && studySheet.coreConcepts.length > 0 && (
-                 <section className="mb-6">
-                    <h2>Core Concepts</h2>
-                     <ul className="list-disc pl-5 space-y-2">
-                         {studySheet.coreConcepts.map((concept, index) => (
-                             <li key={index}>{concept}</li>
-                         ))}
-                     </ul>
-                </section>
-            )}
-
-            {Array.isArray(studySheet.keyConcepts) && studySheet.keyConcepts.length > 0 && (
-                 <section className="mb-6">
-                    <h2>Key Concepts</h2>
+                    <h2>Key Concepts & Formulas</h2>
                      <ul className="list-disc pl-5 space-y-2">
                          {studySheet.keyConcepts.map((concept, index) => (
-                             <li key={index}>{concept}</li>
+                             <li key={index}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{concept}</Markdown></li>
                          ))}
                      </ul>
                 </section>
             )}
 
-            {Array.isArray(studySheet.vocabulary) && studySheet.vocabulary.length > 0 && (
+            {studySheet.vocabulary && studySheet.vocabulary.length > 0 && (
                 <section className="mb-6">
                     <h2>Key Vocabulary</h2>
                     <ul className="list-disc pl-5 space-y-2">
-                        {studySheet.vocabulary?.map((item, index) => (
+                        {studySheet.vocabulary.map((item, index) => (
                             <li key={index}>
                                 <strong>{item.term}:</strong> {item.definition}
                             </li>
@@ -702,52 +679,26 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                 </section>
             )}
             
-            {Array.isArray(studySheet.essentialQuestions) && studySheet.essentialQuestions.length > 0 && (
+            {studySheet.workedExample && (
                 <section className="mb-6">
-                    <h2>Essential Questions</h2>
-                    <ol className="list-decimal pl-5 space-y-4">
-                        {studySheet.essentialQuestions?.map((q, index) => (
-                            <li key={index}>
-                                <p>{q}</p>
-                                <div className="my-2 h-12 border-b border-dashed"></div>
-                            </li>
-                        ))}
-                    </ol>
+                    <h2>Worked Example</h2>
+                    <div className="p-4 border rounded-md bg-muted/50">
+                        <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{studySheet.workedExample}</Markdown>
+                    </div>
                 </section>
             )}
 
-            {studySheet.keyDiagram && (
-                 <section className="mb-6">
-                    <h2>Key Diagram / Model</h2>
-                    <p>{studySheet.keyDiagram}</p>
-                </section>
-            )}
-
-            {Array.isArray(studySheet.practiceQuestions) && studySheet.practiceQuestions.length > 0 && (
+            {studySheet.practiceQuestions && studySheet.practiceQuestions.length > 0 && (
                 <section className="mb-6">
                     <h2>Practice Questions</h2>
                     <ol className="list-decimal pl-5 space-y-4">
                         {studySheet.practiceQuestions.map((q, index) => (
                             <li key={index}>
-                                <p>{q.question} <em className="text-sm text-muted-foreground">({q.source})</em></p>
+                                <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q}</Markdown>
                                 <div className="my-2 h-12 border-b border-dashed"></div>
                             </li>
                         ))}
                     </ol>
-                </section>
-            )}
-
-            {Array.isArray(studySheet.activitiesAndData) && studySheet.activitiesAndData.length > 0 && (
-                <section className="mb-6">
-                    <h2>Key Activities & Data</h2>
-                    <div className="space-y-4">
-                        {studySheet.activitiesAndData.map((activity, index) => (
-                            <div key={index}>
-                                <h4>{activity.activityTitle}</h4>
-                                <p>{activity.summary}</p>
-                            </div>
-                        ))}
-                    </div>
                 </section>
             )}
         </div>
@@ -824,9 +775,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
-                          {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ul>
+                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                          {q.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                        </ol>
                     </li>
                 ))}
             </ol>
@@ -906,9 +857,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
-                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ul>
+                        <ol className="list-[upper-alpha] pl-6 mt-2 space-y-1">
+                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
+                        </ol>
                     </li>
                 ))}
             </ol>
@@ -1250,7 +1201,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
         case 'Slideshow Outline':
             return renderSlideshowOutline(content);
         case 'Question Cluster':
-            return renderQuestionCluster(cluster);
+            return renderQuestionCluster(content);
         case 'Practice Questions':
             return <PracticeQuestionsDisplay content={content} />;
         case 'Reading Material':
@@ -1286,4 +1237,3 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             }
     }
 }
-
