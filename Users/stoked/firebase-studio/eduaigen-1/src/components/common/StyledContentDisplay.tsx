@@ -218,7 +218,7 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                  return (
                     <LessonSectionCard key={section.name} title={section.title} sectionName={section.name} sectionContent={sectionContent} onSectionUpdate={handleSectionUpdate}>
                        {section.name === 'doNow' && <div><h4>Question</h4><p>{sectionContent.question}</p></div>}
-                       {section.name === 'miniLesson' && <>
+                       {section.name === 'miniLesson' && <><p>
                            <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.readingPassage}</Markdown></div>
                            {sectionContent.diagram && <DiagramGenerator description={sectionContent.diagram} />}
                            <div><h4>Concept-Check Questions</h4>{leveledQuestions(sectionContent.conceptCheckQuestions)}</div>
@@ -228,13 +228,13 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                            : renderTableFromObject(sectionContent.activityContent as any)
                        )}
                        {section.name === 'checkFoUnderstanding' && leveledQuestions([...sectionContent.multipleChoice, sectionContent.shortResponse])}
-                       {section.name === 'independentPractice' && <>
+                       {section.name === 'independentPractice' && <><p>
                            <div><h4>Task Prompt</h4><p>{sectionContent.taskPrompt}</p></div>
                            {renderTableFromObject(sectionContent.taskData)}
                        </>}
                        {section.name === 'closure' && <div><h4>Exit Ticket Question</h4><p>{sectionContent.exitTicketQuestion}</p></div>}
                        {section.name === 'homework' && <div><h4>Activity</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.activity}</Markdown></div>}
-                       {section.name === 'differentiation' && <>
+                       {section.name === 'differentiation' && <><p>
                            <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{sectionContent.supportActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>
                            <div className="mt-4 p-4 border rounded-md"><h4 className="font-semibold text-foreground mb-2">Scaffolded Materials</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.scaffoldedMaterials}</Markdown></div>
                            <div><h4>Extension Activity</h4><p>{sectionContent.extensionActivity}</p></div>
@@ -851,7 +851,7 @@ const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }
           <ol className="list-decimal pl-5 space-y-4">
              {cluster.answerKey.shortAnswer.map((ans, i) => (
                <li key={i}>
-                 <p><strong>Question:</strong> {ans.question}</p>
+                 <div><strong>Question:</strong> {ans.question}</div>
                  <div><strong>Sample Answer:</strong> <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{ans.sampleAnswer}</Markdown></div>
                </li>
              ))}
@@ -1320,5 +1320,7 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             }
     }
 }
+
+    
 
     
