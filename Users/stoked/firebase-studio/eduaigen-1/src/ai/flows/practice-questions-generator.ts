@@ -29,7 +29,9 @@ const prompt = ai.definePrompt({
 
 **CRITICAL INSTRUCTIONS:**
 1.  **Analyze the Lesson:** Carefully review the entire lesson plan, including the objectives, vocabulary, reading passages, activities, and essential questions.
-2.  **Generate 5-7 Questions:** Based on the lesson content, create a list of 5-7 practice questions.
+2.  **Generate Questions:**
+    *   If the subject is 'ELA', generate exactly 4-6 questions.
+    *   For all other subjects, generate exactly 5-7 questions.
 3.  **Separate Questions and Answers:** Your output must have two distinct top-level keys: "questions" and "answerKey". The questions and their corresponding answers must be in separate arrays.
 4.  **Vary Question Types:** The questions should be a mix of the following types, appropriate for the specified subject:
     *   **Multiple-Choice:** Create at least two multiple-choice questions. Each must have four plausible answer choices. The choices themselves should NOT contain letters (e.g., A., B., C.).
