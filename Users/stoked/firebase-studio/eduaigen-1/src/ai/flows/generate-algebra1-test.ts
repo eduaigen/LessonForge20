@@ -45,6 +45,12 @@ const prompt = ai.definePrompt({
 6.  **All generated content must be complete and fully written out.** No placeholders.
 7.  **For ALL constructed response questions (Parts II, III, and IV), you MUST provide a detailed, step-by-step sample answer that clearly explains the solution process.**
 
+**User Provided Context:**
+- **Lessons**: {{{lessons}}}
+- **Number of Part I Questions (Multiple Choice)**: {{{partICount}}}
+- **Number of Part II Questions (2-Credit Open Response)**: {{{partIICount}}}
+- **Number of Part III Questions (4-Credit Open Response)**: {{{partIIICount}}}
+
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
 - Each question must have four complete answer options.

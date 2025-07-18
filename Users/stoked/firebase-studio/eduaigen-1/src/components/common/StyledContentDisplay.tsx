@@ -648,29 +648,40 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
     );
   };
 
-const renderStudySheet = (studySheet: TestStudySheetOutput) => {
+const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
+    if (!studySheet) {
+        return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Study sheet content is not available.</div>;
+    }
     return (
         <div className="document-view">
             <header className="text-center mb-8">
-                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.title}</h1>
+                <h1 className="text-3xl font-bold font-headline text-primary">{studySheet.lessonTitle || studySheet.title}</h1>
+                 {studySheet.unitTitle && <p className="text-lg text-muted-foreground">{studySheet.unitTitle}</p>}
             </header>
 
-            {studySheet.keyConcepts && studySheet.keyConcepts.length > 0 && (
+            {studySheet.essentialQuestion && (
+                 <section className="mb-6">
+                    <h2>Essential Question</h2>
+                    <p>{studySheet.essentialQuestion}</p>
+                </section>
+            )}
+
+            {(Array.isArray(studySheet.coreConcepts) || Array.isArray(studySheet.keyConcepts)) && (
                  <section className="mb-6">
                     <h2>Key Concepts & Formulas</h2>
                      <ul className="list-disc pl-5 space-y-2">
-                         {studySheet.keyConcepts.map((concept, index) => (
+                         {(studySheet.coreConcepts || studySheet.keyConcepts).map((concept: string, index: number) => (
                              <li key={index}><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{concept}</Markdown></li>
                          ))}
                      </ul>
                 </section>
             )}
 
-            {studySheet.vocabulary && studySheet.vocabulary.length > 0 && (
+            {Array.isArray(studySheet.vocabulary) && studySheet.vocabulary.length > 0 && (
                 <section className="mb-6">
                     <h2>Key Vocabulary</h2>
                     <ul className="list-disc pl-5 space-y-2">
-                        {studySheet.vocabulary.map((item, index) => (
+                        {studySheet.vocabulary?.map((item: {term: string, definition: string}, index: number) => (
                             <li key={index}>
                                 <strong>{item.term}:</strong> {item.definition}
                             </li>
@@ -678,7 +689,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
                     </ul>
                 </section>
             )}
-            
+
             {studySheet.workedExample && (
                 <section className="mb-6">
                     <h2>Worked Example</h2>
@@ -687,18 +698,62 @@ const renderStudySheet = (studySheet: TestStudySheetOutput) => {
                     </div>
                 </section>
             )}
-
-            {studySheet.practiceQuestions && studySheet.practiceQuestions.length > 0 && (
+            
+            {Array.isArray(studySheet.essentialQuestions) && studySheet.essentialQuestions.length > 0 && (
                 <section className="mb-6">
-                    <h2>Practice Questions</h2>
+                    <h2>Essential Questions</h2>
                     <ol className="list-decimal pl-5 space-y-4">
-                        {studySheet.practiceQuestions.map((q, index) => (
+                        {studySheet.essentialQuestions?.map((q: string, index: number) => (
                             <li key={index}>
-                                <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q}</Markdown>
+                                <p>{q}</p>
                                 <div className="my-2 h-12 border-b border-dashed"></div>
                             </li>
                         ))}
                     </ol>
+                </section>
+            )}
+
+            {studySheet.keyDiagram && (
+                 <section className="mb-6">
+                    <h2>Key Diagram / Model</h2>
+                    <p>{studySheet.keyDiagram}</p>
+                </section>
+            )}
+
+            {Array.isArray(studySheet.practiceQuestions) && studySheet.practiceQuestions.length > 0 && (
+                <section className="mb-6">
+                    <h2>Practice Questions</h2>
+                    <ol className="list-decimal pl-5 space-y-4">
+                        {studySheet.practiceQuestions.map((q: any, index: number) => (
+                            <li key={index}>
+                                {q.question ? (
+                                    <>
+                                        <p><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q.question}</Markdown> <em className="text-sm text-muted-foreground">({q.source})</em></p>
+                                        <div className="my-2 h-12 border-b border-dashed"></div>
+                                    </>
+                                ) : (
+                                     <>
+                                        <p><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{q}</Markdown></p>
+                                        <div className="my-2 h-12 border-b border-dashed"></div>
+                                     </>
+                                )}
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+            )}
+
+            {Array.isArray(studySheet.activitiesAndData) && studySheet.activitiesAndData.length > 0 && (
+                <section className="mb-6">
+                    <h2>Key Activities & Data</h2>
+                    <div className="space-y-4">
+                        {studySheet.activitiesAndData.map((activity, index) => (
+                            <div key={index}>
+                                <h4>{activity.activityTitle}</h4>
+                                <p>{activity.summary}</p>
+                            </div>
+                        ))}
+                    </div>
                 </section>
             )}
         </div>
@@ -775,9 +830,9 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
                         <p>{q.question}</p>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
+                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                           {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ul>
+                        </ol>
                     </li>
                 ))}
             </ol>
@@ -857,9 +912,9 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
                         <p>{mc.question}</p>
-                        <ul className="list-none pl-6 mt-2 space-y-1">
+                        <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
-                        </ul>
+                        </ol>
                     </li>
                 ))}
             </ol>
