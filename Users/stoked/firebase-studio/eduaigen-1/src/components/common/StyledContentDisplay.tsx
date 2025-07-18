@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -15,7 +15,7 @@ import type { GeneratePracticeQuestionsOutput } from '@/ai/schemas/practice-ques
 import type { GenerateNVBiologyLessonOutput } from '@/ai/flows/generate-nv-biology-lesson';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon, Key, PencilRuler } from 'lucide-react';
+import { Loader2, FileQuestion, Wand2, RefreshCw, Trash2, Image as ImageIcon, Key, PencilRuler, Printer, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateComprehensionQuestions, type ComprehensionQuestionOutput } from '@/ai/flows/comprehension-question-generator';
 import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-schemas';
@@ -59,7 +59,7 @@ const leveledQuestions = (questions: { question: string; dok: number; options?: 
   <ol className="list-decimal pl-5 space-y-4">
     {questions.map((q, i) => (
       <li key={i}>
-        <p>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></p>
+        <div>{q.question} <span className="text-xs text-muted-foreground">(DOK {q.dok})</span></div>
         {q.options && (
           <ul className="list-none pl-6 mt-2 space-y-1">
             {q.options.map((opt, optIndex) => <li key={`${i}-${optIndex}`}>{opt}</li>)}
@@ -216,9 +216,9 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
             </header>
 
             <LessonSectionCard title="I. Lesson Overview" sectionName="lessonOverview" sectionContent={lessonOverview} onSectionUpdate={handleSectionUpdate}>
-                <div><strong>Summary:</strong> <p>{lessonOverview.lessonSummary}</p></div>
-                <div><strong>Standards:</strong> <p>{lessonOverview.standards}</p></div>
-                <div><strong>Aim/Essential Question:</strong> <p>{lessonOverview.aim}</p></div>
+                <div><strong>Summary:</strong> <div>{lessonOverview.lessonSummary}</div></div>
+                <div><strong>Standards:</strong> <div>{lessonOverview.standards}</div></div>
+                <div><strong>Aim/Essential Question:</strong> <div>{lessonOverview.aim}</div></div>
                 <div><strong>Objectives:</strong> <ul className="list-disc pl-5">{lessonOverview.objectives.map((o, i) => <li key={i}>{o}</li>)}</ul></div>
                 <div><strong>Key Vocabulary:</strong> <ul className="list-disc pl-5">{lessonOverview.vocabulary.map((v, i) => <li key={i}><strong>{v.term}:</strong> {v.definition}</li>)}</ul></div>
                 <div><strong>Materials Needed:</strong> <ul className="list-disc pl-5">{lessonOverview.materials.map((m, i) => <li key={i}>{m}</li>)}</ul></div>
@@ -229,27 +229,27 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                  const sectionContent = section.content as any;
                  return (
                     <LessonSectionCard key={section.name} title={section.title} sectionName={section.name} sectionContent={sectionContent} onSectionUpdate={handleSectionUpdate}>
-                       {section.name === 'doNow' && <div><h4>Question</h4><p>{sectionContent.question}</p></div>}
-                       {section.name === 'miniLesson' && <><p>
+                       {section.name === 'doNow' && <div><h4>Question</h4><div>{sectionContent.question}</div></div>}
+                       {section.name === 'miniLesson' && <>
                            <div><h4>Reading Passage</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.readingPassage}</Markdown></div>
                            {sectionContent.diagram && <DiagramGenerator description={sectionContent.diagram} />}
                            <div><h4>Concept-Check Questions</h4>{leveledQuestions(sectionContent.conceptCheckQuestions)}</div>
                        </>}
                        {section.name === 'guidedPractice' && (typeof sectionContent.activityContent === 'string' 
-                           ? <div><h4>Activity Description</h4><p>{sectionContent.activityContent}</p></div>
+                           ? <div><h4>Activity Description</h4><div>{sectionContent.activityContent}</div></div>
                            : renderTableFromObject(sectionContent.activityContent as any)
                        )}
                        {section.name === 'checkFoUnderstanding' && leveledQuestions([...sectionContent.multipleChoice, sectionContent.shortResponse])}
                        {section.name === 'independentPractice' && <>
-                           <div><h4>Task Prompt</h4><p>{sectionContent.taskPrompt}</p></div>
+                           <div><h4>Task Prompt</h4><div>{sectionContent.taskPrompt}</div></div>
                            {renderTableFromObject(sectionContent.taskData)}
                        </>}
-                       {section.name === 'closure' && <div><h4>Exit Ticket Question</h4><p>{sectionContent.exitTicketQuestion}</p></div>}
+                       {section.name === 'closure' && <div><h4>Exit Ticket Question</h4><div>{sectionContent.exitTicketQuestion}</div></div>}
                        {section.name === 'homework' && <div><h4>Activity</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.activity}</Markdown></div>}
                        {section.name === 'differentiation' && <>
                            <div><h4>Teacher Actions for Support</h4><ul className="list-disc pl-5">{sectionContent.supportActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>
                            <div className="mt-4 p-4 border rounded-md"><h4 className="font-semibold text-foreground mb-2">Scaffolded Materials</h4><Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{sectionContent.scaffoldedMaterials}</Markdown></div>
-                           <div><h4>Extension Activity</h4><p>{sectionContent.extensionActivity}</p></div>
+                           <div><h4>Extension Activity</h4><div>{sectionContent.extensionActivity}</div></div>
                        </>}
                        {sectionContent.teacherActions && <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{sectionContent.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>}
                        {sectionContent.expectedStudentOutputs && <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{sectionContent.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>}
@@ -289,7 +289,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
 
         <section className="mb-6">
             <h3>{worksheet.doNow.title}</h3>
-            <p>{worksheet.doNow.question}</p>
+            <div>{worksheet.doNow.question}</div>
             <div className="my-4 h-32 border-b border-dashed"></div>
         </section>
 
@@ -341,7 +341,7 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
         
         <section className="mb-6">
             <h3>{worksheet.guidedPractice.title}</h3>
-            {Array.isArray(worksheet.guidedPractice.instructions) && worksheet.guidedPractice.instructions.map((inst, i) => <p key={i}>{inst}</p>)}
+            {Array.isArray(worksheet.guidedPractice.instructions) && worksheet.guidedPractice.instructions.map((inst, i) => <div key={i}>{inst}</div>)}
             {worksheet.guidedPractice.dataTable && renderTableFromObject(worksheet.guidedPractice.dataTable)}
             <div className="my-4 h-48 border-b border-dashed"></div>
         </section>
@@ -351,14 +351,14 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
             <ol className="list-decimal pl-5 space-y-4">
                 {worksheet.checkFoUnderstanding.multipleChoice.map((mc, i) => (
                     <li key={i}>
-                        <p>{mc.question}</p>
+                        <div>{mc.question}</div>
                         <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                            {mc.options.map((opt, optIndex) => <li key={optIndex}>{opt}</li>)}
                         </ol>
                     </li>
                 ))}
                 <li>
-                    <p>{worksheet.checkFoUnderstanding.shortResponse.question}</p>
+                    <div>{worksheet.checkFoUnderstanding.shortResponse.question}</div>
                     <div className="my-2 h-24 border-b border-dashed"></div>
                 </li>
             </ol>
@@ -366,14 +366,14 @@ const renderWorksheet = (worksheet: GenerateWorksheetOutput) => (
 
         <section className="mb-6">
             <h3>{worksheet.independentPractice.title}</h3>
-            <p>{worksheet.independentPractice.taskPrompt}</p>
+            <div>{worksheet.independentPractice.taskPrompt}</div>
             {worksheet.independentPractice.taskData && renderTableFromObject(worksheet.independentPractice.taskData)}
             <div className="my-4 h-64 border-b border-dashed"></div>
         </section>
 
         <section className="mb-6">
             <h3>{worksheet.closure.title}</h3>
-            <p>{worksheet.closure.exitTicketQuestion}</p>
+            <div>{worksheet.closure.exitTicketQuestion}</div>
             <div className="my-4 h-24 border-b border-dashed"></div>
         </section>
 
@@ -392,14 +392,14 @@ const renderLabStudentSheet = (sheet: z.infer<typeof LabStudentSheetOutputSchema
             <h1 className="col-span-2 text-2xl font-bold font-headline text-primary">{sheet.title}</h1>
         </header>
         
-        <section className="mb-6"><h3>Phenomenon Reading</h3><p>{sheet.phenomenonReading}</p></section>
+        <section className="mb-6"><h3>Phenomenon Reading</h3><div>{sheet.phenomenonReading}</div></section>
 
         <section className="mb-6"><h3>Pre-Lab Questions</h3><ol className="list-decimal pl-5 space-y-4">
-            {sheet.preLabQuestions.map((q, i) => <li key={i}><p>{q}</p><div className="my-2 h-16 border-b border-dashed"></div></li>)}
+            {sheet.preLabQuestions.map((q, i) => <li key={i}><div>{q}</div><div className="my-2 h-16 border-b border-dashed"></div></li>)}
         </ol></section>
 
-        <section className="mb-6"><h3>Testable Question</h3><p>{sheet.testableQuestion.prompt}</p><div className="my-2 h-16 border-b border-dashed"></div></section>
-        <section className="mb-6"><h3>Hypothesis</h3><p>{sheet.hypothesis.prompt}</p><div className="my-2 h-24 border-b border-dashed"></div></section>
+        <section className="mb-6"><h3>Testable Question</h3><div>{sheet.testableQuestion.prompt}</div><div className="my-2 h-16 border-b border-dashed"></div></section>
+        <section className="mb-6"><h3>Hypothesis</h3><div>{sheet.hypothesis.prompt}</div><div className="my-2 h-24 border-b border-dashed"></div></section>
         
         <section className="mb-6"><h3>Variables</h3>
             <p><strong>Independent Variable:</strong> {sheet.variables.independentPrompt}</p><div className="my-2 h-12 border-b border-dashed"></div>
@@ -411,19 +411,19 @@ const renderLabStudentSheet = (sheet: z.infer<typeof LabStudentSheetOutputSchema
             <h4>Materials:</h4><ul className="list-disc pl-5">
                 {sheet.materials.map((m, i) => <li key={i}>{m}</li>)}
             </ul>
-            <h4 className="mt-4">Procedure:</h4><p>{sheet.procedure.prompt}</p><div className="my-2 h-48 border-2 border-dashed rounded-md"></div>
+            <h4 className="mt-4">Procedure:</h4><div>{sheet.procedure.prompt}</div><div className="my-2 h-48 border-2 border-dashed rounded-md"></div>
         </section>
         
         <section className="mb-6"><h3>Data Collection & Analysis</h3>
-            <p>{sheet.dataCollection.description}</p>
-            {sheet.dataCollection.dataTable ? renderTableFromObject(sheet.dataCollection.dataTable) : <div className="my-4 h-64 border-2 border-dashed rounded-lg bg-background flex items-center justify-center text-muted-foreground"><p>Space for Data Table/Graph</p></div>}
+            <div>{sheet.dataCollection.description}</div>
+            {sheet.dataCollection.dataTable ? renderTableFromObject(sheet.dataCollection.dataTable) : <div className="my-4 h-64 border-2 border-dashed rounded-lg bg-background flex items-center justify-center text-muted-foreground"><div>Space for Data Table/Graph</div></div>}
             <h4 className="mt-4">Data Analysis:</h4><div className="my-2 h-48 border-b border-dashed"></div>
         </section>
 
-        <section className="mb-6"><h3>Conclusion</h3><p>{sheet.conclusion.prompt}</p><div className="my-2 h-48 border-b border-dashed"></div></section>
+        <section className="mb-6"><h3>Conclusion</h3><div>{sheet.conclusion.prompt}</div><div className="my-2 h-48 border-b border-dashed"></div></section>
         
         <section className="mb-6"><h3>Discussion Questions</h3><ol className="list-decimal pl-5 space-y-4">
-            {sheet.discussionQuestions.map((q, i) => <li key={i}><p>{q}</p><div className="my-2 h-16 border-b border-dashed"></div></li>)}
+            {sheet.discussionQuestions.map((q, i) => <li key={i}><div>{q}</div><div className="my-2 h-16 border-b border-dashed"></div></li>)}
         </ol></section>
     </div>
 );
@@ -456,7 +456,7 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
                         <div className="space-y-4">
                             <div>
                                 <h4>Pedagogical Rationale</h4>
-                                <p>{sec.advice.pedagogicalRationale}</p>
+                                <div>{sec.advice.pedagogicalRationale}</div>
                             </div>
                             <div>
                                 <h4>Sample Teacher Script / Talk Moves</h4>
@@ -464,11 +464,11 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
                             </div>
                             <div>
                                 <h4>Danielson Framework Connection</h4>
-                                <p>{sec.advice.danielsonConnection}</p>
+                                <div>{sec.advice.danielsonConnection}</div>
                             </div>
                             <div>
                                 <h4>CRSE / UDL Check</h4>
-                                <p>{sec.advice.crseUdlCheck}</p>
+                                <div>{sec.advice.crseUdlCheck}</div>
                             </div>
                         </div>
                     </section>
@@ -501,7 +501,7 @@ const renderLabCoachingAdvice = (advice: z.infer<typeof LabTeacherCoachOutputSch
                         <div className="space-y-4">
                             <div>
                                 <h4>Pedagogical Rationale</h4>
-                                <p>{sec.advice.pedagogicalRationale}</p>
+                                <div>{sec.advice.pedagogicalRationale}</div>
                             </div>
                             {sec.advice.sampleScript && (
                                 <div>
@@ -512,7 +512,7 @@ const renderLabCoachingAdvice = (advice: z.infer<typeof LabTeacherCoachOutputSch
                             {sec.advice.facilitationTip && (
                                 <div>
                                     <h4>Facilitation Tip</h4>
-                                    <p>{sec.advice.facilitationTip}</p>
+                                    <div>{sec.advice.facilitationTip}</div>
                                 </div>
                             )}
                         </div>
@@ -614,7 +614,7 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
               <ol className="list-decimal pl-5 space-y-6">
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
-                        <p>{q.question}</p>
+                        <div>{q.question}</div>
                         <ul className="list-none pl-6 mt-2 space-y-1">
                           {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                         </ul>
@@ -627,7 +627,7 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
               <ol className="list-decimal pl-5 space-y-6">
                 {cluster.shortAnswerQuestions.map((q, i) => (
                     <li key={i}>
-                        <p>{q.question}</p>
+                        <div>{q.question}</div>
                         <div className="my-2 h-20 border-b border-dashed"></div>
                     </li>
                 ))}
@@ -635,12 +635,12 @@ const renderQuestionCluster = (cluster: QuestionClusterOutput) => {
             </div>
             <div>
               <h3>Claim-Evidence-Reasoning</h3>
-              <p>{cluster.cerQuestion.question}</p>
+              <div>{cluster.cerQuestion.question}</div>
               <div className="my-2 h-32 border-b border-dashed"></div>
             </div>
              <div>
               <h3>Modeling</h3>
-              <p>{cluster.modelingQuestion.question}</p>
+              <div>{cluster.modelingQuestion.question}</div>
               <div className="my-2 h-32 border-b border-dashed"></div>
             </div>
           </div>
@@ -663,7 +663,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
             {studySheet.essentialQuestion && (
                  <section className="mb-6">
                     <h2>Essential Question</h2>
-                    <p>{studySheet.essentialQuestion}</p>
+                    <div>{studySheet.essentialQuestion}</div>
                 </section>
             )}
 
@@ -697,7 +697,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                     <ol className="list-decimal pl-5 space-y-4">
                         {studySheet.essentialQuestions?.map((q: string, index: number) => (
                             <li key={index}>
-                                <p>{q}</p>
+                                <div>{q}</div>
                                 <div className="my-2 h-12 border-b border-dashed"></div>
                             </li>
                         ))}
@@ -737,7 +737,7 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                         {studySheet.activitiesAndData.map((activity, index) => (
                             <div key={index}>
                                 <h4>{activity.activityTitle}</h4>
-                                <p>{activity.summary}</p>
+                                <div>{activity.summary}</div>
                             </div>
                         ))}
                     </div>
@@ -817,7 +817,7 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
            <ol className="list-decimal pl-5 space-y-6">
                 {cluster.multipleChoiceQuestions.map((q, i) => (
                     <li key={i}>
-                        <p>{q.question}</p>
+                        <div>{q.question}</div>
                         <ul className="list-none pl-6 mt-2 space-y-1">
                           {q.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                         </ul>
@@ -829,14 +829,14 @@ const ScienceTestDisplay = ({ test, type }: { test: GenerateNVBiologyTestOutput,
           <ol className="list-decimal pl-5 space-y-6">
             {cluster.shortAnswerQuestions.map((q, i) => (
               <li key={i}>
-                <p>{q.question}</p>
+                <div>{q.question}</div>
                 <div className="my-2 h-24 border-b border-dashed"></div>
               </li>
             ))}
           </ol>
 
           <h3 className="text-xl font-semibold mt-8 mb-4">Claim-Evidence-Reasoning</h3>
-           <p>{cluster.cerQuestion.question}</p>
+           <div>{cluster.cerQuestion.question}</div>
            <div className="my-2 h-32 border-b border-dashed"></div>
         </section>
       ))}
@@ -871,13 +871,13 @@ const ScienceAnswerKeyDisplay = ({ test }: { test: GenerateNVBiologyTestOutput }
 
           <h3 className="text-xl font-semibold mt-8 mb-4">CER Sample Response</h3>
           <div>
-              <p><strong>Claim:</strong> {cluster.answerKey.cer.sampleClaim}</p>
+              <div><strong>Claim:</strong> {cluster.answerKey.cer.sampleClaim}</div>
               <div><strong>Evidence:</strong>
               <ul className="list-disc pl-6">
                 {cluster.answerKey.cer.sampleEvidence.map((ev, i) => <li key={i}>{ev}</li>)}
               </ul>
               </div>
-              <p><strong>Reasoning:</strong> {cluster.answerKey.cer.sampleReasoning}</p>
+              <div><strong>Reasoning:</strong> {cluster.answerKey.cer.sampleReasoning}</div>
           </div>
         </section>
       ))}
@@ -900,7 +900,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                         <div className="p-4 border border-dashed rounded-md mb-2">
                           <Markdown>{mc.stimulus}</Markdown>
                         </div>
-                        <p>{mc.question}</p>
+                        <div>{mc.question}</div>
                         <ol type="A" className="list-[upper-alpha] pl-6 mt-2 space-y-1">
                             {mc.options.map((opt, optIndex) => <li key={optIndex}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                         </ol>
@@ -924,7 +924,7 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
                     <ol className="list-decimal pl-5 space-y-6">
                         {crqSet.questions.map((q, qIndex) => (
                             <li key={qIndex}>
-                                <p>{q.question}</p>
+                                <div>{q.question}</div>
                                 <div className="my-2 h-24 border-b border-dashed"></div>
                             </li>
                         ))}
@@ -939,11 +939,11 @@ const SocialStudiesTestDisplay = ({ test }: { test: GenerateSocialStudiesTestOut
              <div className="space-y-6">
                 <div>
                     <h3 className="font-semibold">Historical Context:</h3>
-                    <p>{test.partIII.dbq.historicalContext}</p>
+                    <div>{test.partIII.dbq.historicalContext}</div>
                 </div>
                 <div>
                     <h3 className="font-semibold">Task:</h3>
-                    <p>{test.partIII.dbq.task}</p>
+                    <div>{test.partIII.dbq.task}</div>
                 </div>
                  <div>
                     <h3 className="font-semibold">Documents:</h3>
@@ -1117,7 +1117,7 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
                     <ol className="list-decimal pl-5 space-y-6">
                         {p.questions.map((q, qIndex) => (
                             <li key={qIndex}>
-                                <p>{q.question}</p>
+                                <div>{q.question}</div>
                                 <ul className="list-none pl-6 mt-2 space-y-1">
                                     {q.options.map((opt, optIndex) => <li key={`${qIndex}-${optIndex}`}>{String.fromCharCode(65 + optIndex)}. {opt}</li>)}
                                 </ul>
@@ -1132,7 +1132,7 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
         <section className="mb-12">
             <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.part2.title}</h2>
             <h3 className="font-semibold">Directions:</h3>
-            <p className="mb-4">{test.part2.argumentEssay.prompt}</p>
+            <div className="mb-4">{test.part2.argumentEssay.prompt}</div>
             <h3 className="font-semibold">Sources:</h3>
             {test.part2.argumentEssay.sources.map((source, sIndex) => (
                  <div key={sIndex} className="p-4 border rounded-md mt-4 bg-muted/30">
@@ -1147,7 +1147,7 @@ const ELATestDisplay = ({ test }: { test: GenerateELATestOutput }) => (
         <section>
             <h2 className="text-2xl font-bold font-headline text-primary mb-4 border-b pb-2">{test.part3.title}</h2>
             <h3 className="font-semibold">Directions:</h3>
-            <p className="mb-4">{test.part3.textAnalysis.prompt}</p>
+            <div className="mb-4">{test.part3.textAnalysis.prompt}</div>
             <h3 className="font-semibold">Text:</h3>
             <Card className="bg-muted/30 mb-4 p-4"><Markdown>{test.part3.textAnalysis.passage.content}</Markdown></Card>
             <div className="my-4 h-64 border-b border-dashed"></div>
@@ -1269,7 +1269,40 @@ type StyledContentDisplayProps = {
 };
 
 export default function StyledContentDisplay({ content, type }: StyledContentDisplayProps) {
+    useEffect(() => {
+        const addScript = () => {
+          const script = document.createElement('script');
+          script.src = `//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit`;
+          script.async = true;
+          document.body.appendChild(script);
+        };
+        
+        (window as any).googleTranslateElementInit = () => {
+          new (window as any).google.translate.TranslateElement({
+              pageLanguage: 'en',
+              layout: (window as any).google.translate.TranslateElement.InlineLayout.SIMPLE
+          }, 'google_translate_element');
+        };
+    
+        addScript();
+      }, []);
+
     if (!content) return null;
+
+    const handleDownload = () => {
+        const contentToSave = document.getElementById('content-to-print')?.innerText || '';
+        const blob = new Blob([contentToSave], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'content.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    const handlePrint = () => {
+        window.print();
+    };
     
     const isSocialStudiesTest = content.partI && content.partII?.sets;
     const isMathTest = content.partI && content.partII?.questions && content.partIV?.question;
@@ -1282,53 +1315,71 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
     const isLabTeacherCoach = content.introduction && content.introduction.pedagogicalRationale;
     const isPracticeQuestions = content.questions && content.answerKey;
 
-
-    switch (type) {
-        case 'Lesson Plan':
-            return <LessonPlanDisplay lessonPlan={content} />;
-        case 'Worksheet':
-            if (isWorksheet) return renderWorksheet(content);
-            return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Invalid worksheet content.</div>;
-        case 'Teacher Coach':
-            if(isLessonTeacherCoach) return renderCoachingAdvice(content);
-            if(isLabTeacherCoach) return renderLabCoachingAdvice(content);
-            return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown Teacher Coach structure.</div>;
-        case 'Slideshow Outline':
-            return renderSlideshowOutline(content);
-        case 'Question Cluster':
-            return renderQuestionCluster(content);
-        case 'Practice Questions':
-            return <PracticeQuestionsDisplay content={content} />;
-        case 'Reading Material':
-            return <ReadingMaterialDisplay content={content} />;
-        case 'Lab Activity':
-        case 'Differentiated Version':
-             if (isLabActivity) return <LabActivityDisplay lab={content} />;
-             // Fallthrough for differentiated tests
-        case 'Test':
-        case 'Enhanced Version':
-            if (isScienceTest) return <ScienceTestDisplay test={content} type={type} />;
-            if (isSocialStudiesTest) return <SocialStudiesTestDisplay test={content} />;
-            if (isMathTest) return <MathTestDisplay test={content} />;
-            if (isELATest) return <ELATestDisplay test={content} />;
-            return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
-        case 'Answer Key':
-            if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
-            if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
-            if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
-            if (isMathTest) return <MathTestDisplay test={content} />; // This should display the same test with answers visible
-            return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
-        case 'Study Sheet':
-            return renderStudySheet(content);
-        case 'Student Answer Sheet':
-             if(isLabStudentSheet) return renderLabStudentSheet(content);
-             return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Invalid student answer sheet content.</div>;
-        default:
-            try {
-                const jsonString = JSON.stringify(content, null, 2);
-                return <pre className="whitespace-pre-wrap text-xs bg-muted p-4 rounded-md"><code>{jsonString}</code></pre>
-            } catch (e) {
-                return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
-            }
+    const renderContent = () => {
+        switch (type) {
+            case 'Lesson Plan':
+                return <LessonPlanDisplay lessonPlan={content} />;
+            case 'Worksheet':
+                if (isWorksheet) return renderWorksheet(content);
+                return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Invalid worksheet content.</div>;
+            case 'Teacher Coach':
+                if(isLessonTeacherCoach) return renderCoachingAdvice(content);
+                if(isLabTeacherCoach) return renderLabCoachingAdvice(content);
+                return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown Teacher Coach structure.</div>;
+            case 'Slideshow Outline':
+                return renderSlideshowOutline(content);
+            case 'Question Cluster':
+                return renderQuestionCluster(content);
+            case 'Practice Questions':
+                return <PracticeQuestionsDisplay content={content} />;
+            case 'Reading Material':
+                return <ReadingMaterialDisplay content={content} />;
+            case 'Lab Activity':
+            case 'Differentiated Version':
+                 if (isLabActivity) return <LabActivityDisplay lab={content} />;
+                 // Fallthrough for differentiated tests
+            case 'Test':
+            case 'Enhanced Version':
+                if (isScienceTest) return <ScienceTestDisplay test={content} type={type} />;
+                if (isSocialStudiesTest) return <SocialStudiesTestDisplay test={content} />;
+                if (isMathTest) return <MathTestDisplay test={content} />;
+                if (isELATest) return <ELATestDisplay test={content} />;
+                return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unknown test structure.</div>;
+            case 'Answer Key':
+                if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
+                if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
+                if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
+                if (isMathTest) return <MathTestDisplay test={content} />; // This should display the same test with answers visible
+                return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
+            case 'Study Sheet':
+                return renderStudySheet(content);
+            case 'Student Answer Sheet':
+                 if(isLabStudentSheet) return renderLabStudentSheet(content);
+                 return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Invalid student answer sheet content.</div>;
+            default:
+                try {
+                    const jsonString = JSON.stringify(content, null, 2);
+                    return <pre className="whitespace-pre-wrap text-xs bg-muted p-4 rounded-md"><code>{jsonString}</code></pre>
+                } catch (e) {
+                    return <div className="p-4 bg-red-100 text-red-800 rounded-md">Error: Unsupported content type.</div>;
+                }
+        }
     }
+
+    return (
+        <div>
+            <div id="google_translate_element"></div>
+            <div className="flex gap-2 mb-4">
+                <Button onClick={handlePrint} variant="outline" size="sm">
+                    <Printer className="mr-2 h-4 w-4" /> Print
+                </Button>
+                <Button onClick={handleDownload} variant="outline" size="sm">
+                    <Download className="mr-2 h-4 w-4" /> Download as .txt
+                </Button>
+            </div>
+            <div id="content-to-print">
+                {renderContent()}
+            </div>
+        </div>
+    );
 }
