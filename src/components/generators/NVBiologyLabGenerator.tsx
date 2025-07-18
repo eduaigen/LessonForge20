@@ -70,6 +70,7 @@ const GeneratorContent = () => {
   const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
+
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -151,7 +152,6 @@ const GeneratorContent = () => {
         toast({ title: "No Lab Found", description: "Please generate a lab first.", variant: "destructive" });
         return;
     }
-
     if (labPackage?.some(item => item.type === toolName)) {
         toast({ title: "Already Generated", description: `A ${toolName} has already been generated.`, variant: "default"});
         return;
@@ -343,7 +343,7 @@ const GeneratorContent = () => {
             )}
             
             {isToolLoading && (
-              <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+              <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Lab Activity'}}>
                   <GeneratingAnimation />
               </CollapsibleSection>
             )}

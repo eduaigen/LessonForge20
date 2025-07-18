@@ -38,7 +38,7 @@ export type GeneratedContent = {
   id: string;
   title: string;
   content: any;
-  type: ToolName;
+  type: ToolName | 'Lab Activity';
 };
 
 const SubscriptionPrompt = () => (
@@ -161,21 +161,23 @@ const GeneratorContent = () => {
     try {
         let result: any;
         let newContent: GeneratedContent | null = null;
+        const input = { originalLab: originalLab.content };
+
         switch (toolName) {
             case 'Student Answer Sheet':
-                result = await generateLabStudentSheet({ originalLab: originalLab.content });
+                result = await generateLabStudentSheet(input);
                 newContent = { id: `studentsheet-${Date.now()}`, title: result.title, content: result, type: 'Student Answer Sheet' };
                 break;
             case 'Answer Key':
-                result = await generateLabAnswerKey({ originalLab: originalLab.content });
+                result = await generateLabAnswerKey(input);
                 newContent = { id: `answerkey-${Date.now()}`, title: result.title, content: result, type: 'Answer Key' };
                 break;
             case 'Differentiated Version':
-                result = await generateDifferentiatedLab({ originalLab: originalLab.content });
+                result = await generateDifferentiatedLab(input);
                 newContent = { id: `differentiated-${Date.now()}`, title: result.labTitle, content: result, type: 'Differentiated Version' };
                 break;
             case 'Teacher Coach':
-                result = await generateLabTeacherCoach({ originalLab: originalLab.content });
+                result = await generateLabTeacherCoach(input);
                 newContent = { id: `coach-${Date.now()}`, title: result.title, content: result, type: 'Teacher Coach' };
                 break;
         }
@@ -234,7 +236,7 @@ const GeneratorContent = () => {
                         name="lessons"
                         render={() => (
                           <FormItem>
-                              <div className="mb-4">
+                               <div className="mb-4">
                                   <FormLabel className="text-base">Select Units, Topics, or Lessons</FormLabel>
                                   <p className="text-sm text-muted-foreground">Select one or more items to base your lab activity on.</p>
                               </div>
@@ -337,9 +339,9 @@ const GeneratorContent = () => {
                   <p className="text-muted-foreground">Select one or more lessons to create your AI-powered lab activity.</p>
               </div>
             )}
-
+            
             {isToolLoading && (
-              <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Worksheet'}}>
+              <CollapsibleSection title={`Generating ${isToolLoading}...`} contentItem={{id: 'loading', title: `Generating ${isToolLoading}...`, content: '', type: 'Lab Activity'}}>
                   <GeneratingAnimation />
               </CollapsibleSection>
             )}
