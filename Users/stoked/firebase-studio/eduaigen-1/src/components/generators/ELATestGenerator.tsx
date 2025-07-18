@@ -21,8 +21,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import RightSidebar, { type ToolName } from '../common/RightSidebar';
-import { generateDifferentiatedELATest } from '@/ai/flows/generate-ela-differentiated-test';
-import { generateEnhancedELATest } from '@/ai/flows/generate-ela-enhanced-test';
+import { generateDifferentiatedELLTest } from '@/ai/flows/generate-ell-differentiated-test';
+import { generateEnhancedELLTest } from '@/ai/flows/generate-ell-enhanced-test';
 import { generateELAStudySheet } from '@/ai/flows/generate-ela-study-sheet';
 import { Slider } from '../ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
@@ -148,11 +148,11 @@ const GeneratorContent = () => {
                 newContent = { id: `study-sheet-${Date.now()}`, title: result.title, content: result, type: 'Study Sheet' };
                 break;
             case 'Differentiated Version':
-                result = await generateDifferentiatedELATest({ originalTest: originalTestContent.content });
+                result = await generateDifferentiatedELLTest({ originalTest: originalTestContent.content });
                 newContent = { id: `differentiated-${Date.now()}`, title: result.testTitle, content: result, type: 'Differentiated Version' };
                 break;
             case 'Enhanced Version':
-                result = await generateEnhancedELATest({ originalTest: originalTestContent.content });
+                result = await generateEnhancedELLTest({ originalTest: originalTestContent.content });
                 newContent = { id: `enhanced-${Date.now()}`, title: result.testTitle, content: result, type: 'Enhanced Version' };
                 break;
         }

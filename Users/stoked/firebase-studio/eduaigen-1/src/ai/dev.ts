@@ -52,7 +52,6 @@ export * from './flows/generate-social-studies-study-sheet';
 export * from './flows/generate-algebra1-test';
 export * from './flows/generate-algebra2-test';
 export * from './flows/generate-geometry-test';
-export * from './flows/generate-math-answer-key';
 export * from './flows/generate-ela-test';
 export * from './flows/generate-ela-differentiated-test';
 export * from './flows/generate-ela-enhanced-test';
