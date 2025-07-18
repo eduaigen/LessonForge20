@@ -22,7 +22,6 @@ import type { GenerateNVBiologyTestOutput } from '@/ai/schemas/nv-biology-test-s
 import type { TestStudySheetOutput } from '@/ai/schemas/test-study-sheet-schemas';
 import type { GenerateSocialStudiesTestOutput } from '@/ai/schemas/social-studies-test-schemas';
 import type { GenerateMathTestOutput } from '@/ai/schemas/math-test-schemas';
-import { generateMathAnswerKey } from '@/ai/flows/generate-math-answer-key';
 import type { GenerateELATestOutput } from '@/ai/schemas/ela-test-schemas';
 import type { GenerateLabActivityOutput, LabAnswerKeyOutputSchema, LabStudentSheetOutputSchema, LabTeacherCoachOutputSchema } from '@/ai/schemas/lab-activity-schemas';
 import EditSectionDialog from './EditSectionDialog';
@@ -241,7 +240,7 @@ const LessonPlanDisplay = ({ lessonPlan: initialLessonPlan }: { lessonPlan: Gene
                            <div><h4>Extension Activity</h4><p>{sectionContent.extensionActivity}</p></div>
                        </>}
                        {sectionContent.teacherActions && <div><h4>Teacher Actions</h4><ul className="list-disc pl-5">{sectionContent.teacherActions.map((a: string, i: number) => <li key={i}>{a}</li>)}</ul></div>}
-                       {sectionContent.expectedStudentOutputs && <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{sectionContent.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>
+                       {sectionContent.expectedStudentOutputs && <div><h4>Expected Student Outputs</h4><ul className="list-disc pl-5">{sectionContent.expectedStudentOutputs.map((o: string, i: number) => <li key={i}>{o}</li>)}</ul></div>}
                    </LessonSectionCard>
                 )
             })}
@@ -682,15 +681,6 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
                     </ul>
                 </section>
             )}
-
-            {studySheet.workedExample && (
-                <section className="mb-6">
-                    <h2>Worked Example</h2>
-                    <div className="p-4 border rounded-md bg-muted/50">
-                        <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{studySheet.workedExample}</Markdown>
-                    </div>
-                </section>
-            )}
             
             {Array.isArray(studySheet.essentialQuestions) && studySheet.essentialQuestions.length > 0 && (
                 <section className="mb-6">
@@ -983,61 +973,7 @@ const GraphingGrid = () => (
 const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }) => {
     const { toast } = useToast();
     const [test, setTest] = useState(initialTest);
-    const [isGeneratingKey, setIsGeneratingKey] = useState(false);
     const [showAnswers, setShowAnswers] = useState(false);
-    const hasAnswerKey = test.partI.questions.some(q => q.answer);
-
-    const handleGenerateKey = async () => {
-        setIsGeneratingKey(true);
-        try {
-            // The AI schema expects the test object without the answer fields.
-            const testForApiKeyGen = {
-                testTitle: test.testTitle,
-                instructions: test.instructions,
-                partI: {
-                    title: test.partI.title,
-                    questions: test.partI.questions.map(({ question, options }) => ({ question, options })),
-                },
-                partII: {
-                    title: test.partII.title,
-                    questions: test.partII.questions.map(({ question }) => ({ question })),
-                },
-                partIII: {
-                    title: test.partIII.title,
-                    questions: test.partIII.questions.map(({ question }) => ({ question })),
-                },
-                partIV: {
-                    title: test.partIV.title,
-                    question: { question: test.partIV.question.question },
-                },
-            };
-
-            const result = await generateMathAnswerKey(testForApiKeyGen as any);
-            
-            setTest(prevTest => {
-                const newTest = JSON.parse(JSON.stringify(prevTest)); // Deep copy
-                newTest.partI.questions.forEach((q: any, i: number) => {
-                    q.answer = result.partI[i].answer;
-                    q.explanation = result.partI[i].explanation;
-                });
-                newTest.partII.questions.forEach((q: any, i: number) => {
-                    q.sampleAnswer = result.partII[i].sampleAnswer;
-                });
-                newTest.partIII.questions.forEach((q: any, i: number) => {
-                    q.sampleAnswer = result.partIII[i].sampleAnswer;
-                });
-                newTest.partIV.question.sampleAnswer = result.partIV.sampleAnswer;
-                return newTest;
-            });
-            setShowAnswers(true);
-            toast({ title: 'Answer Key Generated' });
-        } catch (error) {
-            console.error('Answer key generation failed:', error);
-            toast({ title: 'Error', description: 'Failed to generate answer key.', variant: 'destructive' });
-        } finally {
-            setIsGeneratingKey(false);
-        }
-    };
 
     return (
         <div className="document-view">
@@ -1046,17 +982,10 @@ const MathTestDisplay = ({ test: initialTest }: { test: GenerateMathTestOutput }
                     <h1 className="text-3xl font-bold font-headline text-primary">{test.testTitle}</h1>
                     {test.instructions && <p className="text-muted-foreground mt-4">{test.instructions}</p>}
                 </div>
-                {hasAnswerKey ? (
-                    <Button variant="outline" onClick={() => setShowAnswers(prev => !prev)}>
-                        <Key className="mr-2 h-4 w-4" />
-                        {showAnswers ? 'Hide' : 'Show'} Answer Key
-                    </Button>
-                ) : (
-                    <Button variant="outline" onClick={handleGenerateKey} disabled={isGeneratingKey}>
-                        {isGeneratingKey ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Key className="mr-2 h-4 w-4" />}
-                        {isGeneratingKey ? 'Generating...' : 'Generate Answer Key'}
-                    </Button>
-                )}
+                <Button variant="outline" onClick={() => setShowAnswers(prev => !prev)}>
+                    <Key className="mr-2 h-4 w-4" />
+                    {showAnswers ? 'Hide' : 'Show'} Answer Key
+                </Button>
             </header>
             
             <section className="mb-12">
@@ -1376,8 +1305,8 @@ export default function StyledContentDisplay({ content, type }: StyledContentDis
             if (isScienceTest) return <ScienceAnswerKeyDisplay test={content} />;
             if (isSocialStudiesTest) return <SocialStudiesAnswerKeyDisplay test={content} />;
             if (isELATest) return <ELAAnswerKeyDisplay test={content} />;
-            // The math answer key is now rendered within the MathTestDisplay component.
-            return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented or is shown with the test.</div>;
+            if (isMathTest) return <MathTestDisplay test={content} />;
+            return <div className="p-4 bg-yellow-100 text-yellow-800 rounded-md">Answer Key display for this test type is not yet implemented.</div>;
         case 'Study Sheet':
             return renderStudySheet(content);
         case 'Student Answer Sheet':

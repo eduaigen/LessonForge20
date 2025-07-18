@@ -44,7 +44,7 @@ const prompt = ai.definePrompt({
 5.  **You MUST generate EXACTLY {{{partICount}}} multiple-choice questions for Part I.** This is a non-negotiable requirement.
 6.  **For multiple-choice questions, each answer option MUST contain only the text of the answer.** DO NOT include any prefix like "A.", "B.", or "1.".
 7.  **All generated content must be complete and fully written out.** No placeholders.
-8.  **DO NOT GENERATE AN ANSWER KEY.** The output schema does not include fields for answers or sample responses. Only generate the questions.
+8.  **You MUST generate a complete answer key**, including step-by-step solutions for all constructed-response questions.
 
 **User Provided Context:**
 - **Lessons**: {{{lessons}}}
@@ -55,18 +55,22 @@ const prompt = ai.definePrompt({
 **Part I: Multiple Choice**
 - Generate EXACTLY {{{partICount}}} multiple-choice questions.
 - Each question must have four complete answer options.
+- The 'answer' field for each question must contain the full text of the correct option.
 
 **Part II: 2-Credit Constructed Response**
 - Generate EXACTLY {{{partIICount}}} unique constructed-response questions.
 - Each question must require students to show their work and should be solvable in 2-4 steps.
+- The 'sampleAnswer' field must contain a detailed, step-by-step solution.
 
 **Part III: 4-Credit Constructed Response**
 - Generate EXACTLY {{{partIIICount}}} unique, multi-step constructed-response questions.
 - These questions should be more complex than Part II and may require graphing or interpreting complex scenarios.
+- The 'sampleAnswer' field must contain a detailed, step-by-step solution.
 
 **Part IV: 6-Credit Constructed Response**
 - Generate ONE high-complexity, multi-part question that requires students to synthesize multiple concepts from the selected lessons.
 - This could be a modeling problem or a complex real-world application.
+- The 'sampleAnswer' field must contain a detailed, step-by-step solution.
 
 Your final output MUST be a single, complete JSON object that strictly follows the output schema.`,
 });

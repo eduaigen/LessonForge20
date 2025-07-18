@@ -11,13 +11,13 @@ export const GenerateMathTestInputSchema = z.object({
 const multipleChoiceQuestionSchema = z.object({
   question: z.string().describe("A multiple-choice question, potentially with LaTeX for equations."),
   options: z.array(z.string()).length(4).describe("Four answer choices, without any letter prefixes."),
-  answer: z.string().optional().describe("The correct answer choice."),
+  answer: z.string().describe("The correct answer choice."),
   explanation: z.string().optional().describe("A brief explanation for the correct answer."),
 });
 
 const constructedResponseQuestionSchema = z.object({
   question: z.string().describe("A constructed-response question requiring students to show their work. It may include LaTeX."),
-  sampleAnswer: z.string().optional().describe("A detailed, step-by-step sample answer and explanation."),
+  sampleAnswer: z.string().describe("A detailed, step-by-step sample answer and explanation."),
 });
 
 export const GenerateMathTestOutputSchema = z.object({
