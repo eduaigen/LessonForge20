@@ -442,34 +442,37 @@ const renderCoachingAdvice = (advice: TeacherCoachGeneratorOutput) => {
                 <div><strong>Teacher:</strong> {advice.teacherName}</div>
                 <div><strong>Date:</strong> {advice.date}</div>
             </header>
-            {sections.map(sec => (
-                <section key={sec.title} className="mb-8">
-                    <h2>{sec.title}</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <h4>Pedagogical Rationale</h4>
-                            <p>{sec.advice.pedagogicalRationale}</p>
+            {sections.map(sec => {
+                if (!sec.advice) return null;
+                return (
+                    <section key={sec.title} className="mb-8">
+                        <h2>{sec.title}</h2>
+                        <div className="space-y-4">
+                            <div>
+                                <h4>Pedagogical Rationale</h4>
+                                <p>{sec.advice.pedagogicalRationale}</p>
+                            </div>
+                            <div>
+                                <h4>Sample Teacher Script / Talk Moves</h4>
+                                <blockquote className="whitespace-pre-wrap">{sec.advice.sampleScript}</blockquote>
+                            </div>
+                            <div>
+                                <h4>Danielson Framework Connection</h4>
+                                <p>{sec.advice.danielsonConnection}</p>
+                            </div>
+                            <div>
+                                <h4>CRSE / UDL Check</h4>
+                                <p>{sec.advice.crseUdlCheck}</p>
+                            </div>
                         </div>
-                        <div>
-                            <h4>Sample Teacher Script / Talk Moves</h4>
-                            <blockquote className="whitespace-pre-wrap">{sec.advice.sampleScript}</blockquote>
-                        </div>
-                        <div>
-                            <h4>Danielson Framework Connection</h4>
-                            <p>{sec.advice.danielsonConnection}</p>
-                        </div>
-                        <div>
-                            <h4>CRSE / UDL Check</h4>
-                            <p>{sec.advice.crseUdlCheck}</p>
-                        </div>
-                    </div>
-                </section>
-            ))}
+                    </section>
+                )
+            })}
         </div>
     );
 };
 
-const renderLabCoachingAdvice = (advice: LabTeacherCoachOutputSchema) => {
+const renderLabCoachingAdvice = (advice: z.infer<typeof LabTeacherCoachOutputSchema>) => {
     const sections = [
         { title: "Introduction/Phenomenon", advice: advice.introduction },
         { title: "Pre-Lab", advice: advice.preLab },
@@ -694,11 +697,11 @@ const renderStudySheet = (studySheet: TestStudySheetOutput | any) => {
 
 const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput }) => {
     const { toast } = useToast();
-    const [isGenerating, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [generatedQuestions, setGeneratedQuestions] = useState<ComprehensionQuestionOutput | null>(null);
 
     const onGenerateQuestions = async () => {
-        setIsGenerating(true);
+        setIsLoading(true);
         setGeneratedQuestions(null);
         try {
             const result = await generateComprehensionQuestions({ 
@@ -710,7 +713,7 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
             console.error(error);
             toast({ title: "Error", description: "Failed to generate questions.", variant: "destructive" });
         } finally {
-            setIsGenerating(false);
+            setIsLoading(false);
         }
     };
     
@@ -719,9 +722,9 @@ const ReadingMaterialDisplay = ({ content }: { content: ReadingMaterialOutput })
             <Markdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>{content.articleContent}</Markdown>
 
             <div className="mt-8 border-t pt-6">
-                <Button onClick={onGenerateQuestions} disabled={isGenerating}>
-                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileQuestion className="mr-2 h-4 w-4" />}
-                    {isGenerating ? 'Generating...' : 'Generate Comprehension Questions'}
+                <Button onClick={onGenerateQuestions} disabled={isLoading}>
+                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileQuestion className="mr-2 h-4 w-4" />}
+                    {isLoading ? 'Generating...' : 'Generate Comprehension Questions'}
                 </Button>
             </div>
 
