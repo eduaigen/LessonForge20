@@ -65,6 +65,12 @@ export default function ConversationalCheckoutPage() {
         return selectedCourses.some(id => scienceCourseIds.includes(id));
     }, [selectedCourses]);
 
+    const subjectsWithCourses = Object.values(allModules.coursesBySubject).map(courses => ({
+        name: courses[0].subject.charAt(0).toUpperCase() + courses[0].subject.slice(1),
+        icon: courses[0].icon,
+        courses: courses,
+    })).sort((a,b) => a.name.localeCompare(b.name));
+
     const addonTools = [
         ...allModules.premium_tools.map(tool => ({ ...tool, priceId: tool.id })),
         { id: 'price_1PjJrTRpWk9d9d2Fc3d4e5f6', name: 'Test Maker Suite', description: 'Unlock powerful test generators for all your selected subjects. Create Regents-style exams, NGSS-aligned cluster assessments, and scaffolded tests for all learners.', icon: allModules.assessment_tools[0].icon },
@@ -121,12 +127,6 @@ export default function ConversationalCheckoutPage() {
 
     const { totalPrice, selectedItems, priceIds, showSiteLicensePrompt } = getPriceDetails();
     
-    const subjectsWithCourses = Object.values(allModules.coursesBySubject).map(courses => ({
-        name: courses[0].subject.charAt(0).toUpperCase() + courses[0].subject.slice(1),
-        icon: courses[0].icon,
-        courses: courses,
-    })).sort((a,b) => a.name.localeCompare(b.name));
-
     const getUpsellMessage = () => {
         const courseCount = selectedCourses.length;
         if (courseCount === 1) return "Great choice! Add a second course for just $9.99/mo and unlock our powerful tool suites for the same discounted price.";
