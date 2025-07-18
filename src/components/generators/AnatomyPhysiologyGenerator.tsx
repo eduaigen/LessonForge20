@@ -35,6 +35,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Link from 'next/link';
+import type { GeneratedContent } from './NVBiologyGenerator';
+
 
 const formSchema = z.object({
   quarter: z.string().min(1, { message: 'Please select a quarter.' }),
@@ -45,13 +47,6 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-export type GeneratedContent = {
-  id: string;
-  title: string;
-  content: any;
-  type: ToolName | 'Lesson Plan';
-};
 
 const SubscriptionPrompt = () => (
     <div className="flex flex-1 items-center justify-center">
@@ -180,7 +175,7 @@ const GeneratorContent = () => {
         return;
     }
     
-    if (lessonPackage.some(sec => sec.title === toolName)) {
+    if (lessonPackage.some(item => item.type === toolName)) {
         toast({ title: "Already Generated", description: `A ${toolName} has already been generated.` });
         return;
     }

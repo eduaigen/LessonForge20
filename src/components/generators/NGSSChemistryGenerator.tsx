@@ -34,8 +34,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { createCheckoutSession } from '@/actions/stripe';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import type { GeneratedContent } from './NVBiologyGenerator';
 
 const formSchema = z.object({
   unit: z.string().min(1, { message: 'Please select a unit.' }),
@@ -46,43 +46,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export type GeneratedContent = {
-  id: string;
-  title: string;
-  content: any;
-  type: ToolName | 'Lesson Plan' | 'Comprehension Questions';
-  sourceId?: string;
-};
-
 const SubscriptionPrompt = () => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubscribe = async () => {
-    setIsLoading(true);
-    toast({
-      title: 'Redirecting to checkout...',
-      description: 'Please wait while we prepare your secure checkout page.',
-    });
-    
-    const { url, error } = await createCheckoutSession();
-
-    if (error) {
-      toast({
-        title: 'Error',
-        description: error,
-        variant: 'destructive',
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (url) {
-      router.push(url);
-    }
-  };
-
   return (
     <div className="flex flex-1 items-center justify-center p-4">
       <Card className="max-w-2xl text-center p-8 shadow-lg">
@@ -96,8 +60,8 @@ const SubscriptionPrompt = () => {
               </CardDescription>
           </CardHeader>
           <CardContent>
-              <Button size="lg" onClick={handleSubscribe} disabled={isLoading}>
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Subscribe to All-Access'}
+              <Button size="lg" asChild>
+                  <Link href="/pricing">Subscribe to Science Tools</Link>
               </Button>
           </CardContent>
       </Card>
@@ -108,13 +72,11 @@ const SubscriptionPrompt = () => {
 
 const GeneratorContent = () => {
   const { toast } = useToast();
+  const { addToHistory } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [isToolLoading, setIsToolLoading] = useState<string | null>(null);
-  
+  const [isToolLoading, setIsToolLoading] = useState<ToolName | null>(null);
   const [lessonPackage, setLessonPackage] = useState<GeneratedContent[] | null>(null);
   const [currentlySelectedLesson, setCurrentlySelectedLesson] = useState<string | null>(null);
-
-
   const [isToolsInfoDialogOpen, setIsToolsInfoDialogOpen] = useState(false);
   const [isHighlightingTools, setIsHighlightingTools] = useState(false);
   
@@ -132,6 +94,11 @@ const GeneratorContent = () => {
     return lessonPackage?.find(item => item.type === 'Lesson Plan')?.content as GenerateNGSSChemistryLessonOutput | null;
   }, [lessonPackage]);
 
+  useEffect(() => {
+    if (lessonPackage) {
+      addToHistory(lessonPackage);
+    }
+  }, [lessonPackage, addToHistory]);
 
   const units = useMemo(() => Object.keys(chemistryCurriculum.units), []);
   
@@ -140,7 +107,7 @@ const GeneratorContent = () => {
     if (isHighlightingTools) {
       timeoutId = setTimeout(() => {
         setIsHighlightingTools(false);
-      }, 10000); // Highlight for 10 seconds
+      }, 10000);
     }
     return () => clearTimeout(timeoutId);
   }, [isHighlightingTools]);
@@ -165,7 +132,7 @@ const GeneratorContent = () => {
       form.setValue('unit', unitKey);
       form.setValue('topic', topicKey);
       form.setValue('lesson', lessonTitle);
-      setLessonPackage(null); // Clear previous generations
+      setLessonPackage(null);
     }
   };
 
@@ -212,59 +179,32 @@ const GeneratorContent = () => {
 
   const handleToolClick = async (toolName: ToolName) => {
     if (!lessonPlan || !lessonPackage) {
-        toast({
-            title: "No Lesson Plan",
-            description: "Please generate a lesson plan first before using AI tools.",
-            variant: "destructive"
-        });
+        toast({ title: "No Lesson Plan", description: "Please generate a lesson plan first.", variant: "destructive" });
         return;
     }
 
-    const title = toolName;
-    if (lessonPackage.some(sec => sec.title.startsWith(title))) {
-        toast({ title: "Already Generated", description: `A ${title} has already been generated for this lesson plan.` });
+    if (lessonPackage.some(item => item.type === toolName)) {
+        toast({ title: "Already Generated", description: `A ${toolName} has already been generated.` });
         return;
     }
 
-    setIsToolLoading(title);
-
+    setIsToolLoading(toolName);
     try {
         let result: any;
-        let contentType: GeneratedContent['type'] = toolName;
-        let newContent: GeneratedContent | null = null;
-        let resultTitle = title;
+        let resultTitle = toolName;
+        const input = { lessonPlanJson: JSON.stringify(lessonPlan) };
 
-        if (toolName === 'Worksheet') {
-            result = await generateWorksheet({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            resultTitle = 'Student Worksheet';
-        } else if (toolName === 'Reading Material') {
-            result = await generateReadingMaterial(lessonPlan);
-            resultTitle = result.title;
-        } else if (toolName === 'Teacher Coach') {
-            result = await generateTeacherCoach({ lessonPlanJson: JSON.stringify(lessonPlan) });
-            resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`;
-        } else if (toolName === 'Slideshow Outline') {
-            result = await generateSlideshowOutline(lessonPlan);
-            resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`;
-        } else if (toolName === 'Question Cluster') {
-            result = await generateQuestionCluster({
-                lessonTopic: lessonPlan.lessonOverview.topic,
-                lessonObjective: lessonPlan.lessonOverview.objectives.join('; ')
-            });
-            resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`;
-        } else if (toolName === 'Study Sheet') {
-            result = await generateStudySheet(lessonPlan);
-            resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`;
+        switch (toolName) {
+            case 'Worksheet': result = await generateWorksheet(input); resultTitle = 'Student Worksheet'; break;
+            case 'Reading Material': result = await generateReadingMaterial(input); resultTitle = result.title; break;
+            case 'Teacher Coach': result = await generateTeacherCoach(input); resultTitle = `Teacher Coach: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Slideshow Outline': result = await generateSlideshowOutline(input); resultTitle = `Slideshow Outline: ${lessonPlan.lessonOverview.lesson}`; break;
+            case 'Question Cluster': result = await generateQuestionCluster({ ...input, lessonTopic: lessonPlan.lessonOverview.topic, lessonObjective: lessonPlan.lessonOverview.objectives.join('; ') }); resultTitle = `Question Cluster: ${lessonPlan.lessonOverview.topic}`; break;
+            case 'Study Sheet': result = await generateStudySheet(input); resultTitle = `Study Sheet: ${lessonPlan.lessonOverview.lesson}`; break;
         }
 
-        newContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: contentType };
-
-        if (newContent) {
-           setLessonPackage(prev => {
-                if (!prev) return null;
-                return [...prev, newContent!];
-           });
-        }
+        const newContent: GeneratedContent = { id: `${toolName}-${Date.now()}`, title: resultTitle, content: result, type: toolName };
+        setLessonPackage(prev => prev ? [...prev, newContent] : [newContent]);
 
     } catch (error) {
         console.error(`${toolName} generation failed:`, error);
