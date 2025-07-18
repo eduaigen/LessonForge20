@@ -6,6 +6,24 @@
 import {ai} from '@/ai/genkit';
 import { GenerateELA9LessonInputSchema, GenerateELA9LessonOutputSchema, type GenerateELA9LessonInput, type GenerateELA9LessonOutput } from '../schemas/ela9-lesson-schemas';
 
+async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 1000): Promise<T> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      if (err.message?.includes("503") || err.message?.includes("model is overloaded") || err.message?.includes("An unexpected response was received from the server")) {
+        if (i === retries - 1) {
+          throw new Error("The AI model is temporarily overloaded. Please try again in a few moments.");
+        }
+        await new Promise(res => setTimeout(res, delay * (i + 1)));
+      } else {
+        throw err; // Non-retryable error
+      }
+    }
+  }
+  throw new Error("Operation failed after multiple retries.");
+}
+
 const prompt = ai.definePrompt({
   name: 'generateELA9LessonPrompt',
   input: { schema: GenerateELA9LessonInputSchema },
@@ -95,7 +113,8 @@ const generateELA9LessonFlow = ai.defineFlow(
     timeout: 180000,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const result = await withRetry(() => prompt(input));
+    const { output } = result;
     if (!output) {
       throw new Error('The AI failed to generate a lesson plan. Please try again.');
     }
